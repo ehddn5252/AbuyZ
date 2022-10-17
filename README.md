@@ -8,7 +8,7 @@
 
 ♻️ `:recycle:` / 코드 리팩토링 refactor
 
-✅ `:check:` / 테스트 test
+✅ `:white_check_mark:` / 테스트 test
 
 👽 `:alien:` / API 변경
 
@@ -23,8 +23,6 @@
 💎 `:gem:` / 새로운 배포
 
 ⚓ `:anchor:` / 이 외 커밋
-
-
 
 - ':이모지태그: 내용' 형태 이며, : 뒤에 SPACE
 
