@@ -60,7 +60,12 @@ public class Users {
     @Column(nullable = false)
     private Role userRoles;
 
-
+    public void updateStatus(){
+        this.status = 1;
+    }
+    public void updatepassword(String password){
+        this.password = password;
+    }
     public UserDto toDto(){
         return UserDto.builder()
                 .email(this.email)
