@@ -46,7 +46,7 @@ export default function AdminSideNav() {
             href="/admin/dashboard"
             sx={{ textDecoration: "none", color: "#8E8E8E" }}
           >
-            통계
+            대시보드
           </Link>
         </Typography>
       </Card>
