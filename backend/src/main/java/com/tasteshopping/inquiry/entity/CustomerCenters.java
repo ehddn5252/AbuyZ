@@ -28,12 +28,12 @@ public class CustomerCenters {
     @JoinColumn(name="users_uid")
     private Users user;
 
-    // 부모 정의
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_CENTERS_UID")
-    private CustomerCenters parent;
-
-    // 자식 정의
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "parent")
-    private CustomerCenters children;
+//    // 부모 정의
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "CUSTOMER_CENTERS_UID")
+//    private CustomerCenters parent;
+//
+//    // 자식 정의
+//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "parent")
+//    private CustomerCenters children;
 }

@@ -1,5 +1,7 @@
 package com.tasteshopping.product.entity;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +13,8 @@ public class Products {
     @Column(nullable = false, columnDefinition = "varchar(30) default 'base_product'")
     String name;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(nullable = false)
+    @ColumnDefault("0")
     Integer price;
 
     @Column(name="description_img", columnDefinition = "varchar(100)")
@@ -26,7 +29,8 @@ public class Products {
     @Column(columnDefinition = "varchar(50)")
     String producer;
 
-    @Column(name="discount_rate",nullable = false, columnDefinition = "float default 0.0")
+    @Column(name="discount_rate",nullable = false)
+    @ColumnDefault("0")
     Float discountRate;
 
     @Column(name="review_rate")

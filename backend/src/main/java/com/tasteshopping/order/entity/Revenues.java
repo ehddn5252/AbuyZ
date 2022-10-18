@@ -1,6 +1,7 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.user.entity.Users;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -17,7 +18,8 @@ public class Revenues {
     @Temporal(TemporalType.TIMESTAMP)
     Date date;
 
-    @Column(name="daily_revenue",nullable = false, columnDefinition = "default 0")
+    @Column(name="daily_revenue",nullable = false)
+    @ColumnDefault("0")
     Integer dailyRevenue;
 
     @ManyToOne(fetch = FetchType.LAZY)
