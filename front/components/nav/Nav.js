@@ -1,24 +1,77 @@
 import React from "react";
-import Link from "next/link";
+
+import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Paper from "@mui/material/Paper";
+import InputBase from "@mui/material/InputBase";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+import EventIcon from "@mui/icons-material/Event";
+import PersonIcon from "@mui/icons-material/Person";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 
 export default function Nav() {
   return (
     <NavContainer>
       <UserBox>
-        <Link href="/login">로그인</Link>
-        <Link href="/service">고객센터</Link>
+        <UserLink href="/login">로그인</UserLink>
+        <UserLink href="/service">고객센터</UserLink>
       </UserBox>
       <SearchBox>
-        <Link href="/">ITDA</Link>
-        <Link href="/search">상품 검색</Link>
-        <Link href="/event">이벤트</Link>
-        <Link href="/mypage">마이페이지</Link>
-        <Link href="/basket">장바구니</Link>
+        <LogoLink href="/">ITDA</LogoLink>
+        <Paper
+          component="form"
+          sx={{
+            p: "2px 4px",
+            display: "flex",
+            alignItems: "center",
+            width: 600,
+            height: 50,
+            margin: "0.5rem",
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="찾으시는 상품을 검색해주세요"
+            inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
+          />
+          <IconButton
+            href="/search"
+            type="button"
+            sx={{ p: "10px" }}
+            aria-label="search"
+          >
+            <SearchIcon />
+          </IconButton>
+        </Paper>
+        <IconBox>
+          <Link href="/event">
+            <EventIcon fontSize="large" sx={{ color: "black" }} />
+          </Link>
+          <Link href="/event">
+            <IconTitle>이벤트</IconTitle>
+          </Link>
+        </IconBox>
+        <IconBox>
+          <Link href="/mypage">
+            <PersonIcon fontSize="large" sx={{ color: "black" }} />
+          </Link>
+          <Link href="/mypage">
+            <IconTitle>마이페이지</IconTitle>
+          </Link>
+        </IconBox>
+        <IconBox>
+          <Link href="/basket">
+            <ShoppingBasketIcon fontSize="large" sx={{ color: "black" }} />
+          </Link>
+          <Link href="/basket">
+            <IconTitle>장바구니</IconTitle>
+          </Link>
+        </IconBox>
       </SearchBox>
       <CategoryBox>
         <PopupState variant="popover" popupId="popup-menu">
@@ -169,14 +222,50 @@ const NavContainer = styled.div`
 `;
 
 const UserBox = styled.div`
-  height: 10%;
+  display: flex;
+  justify-content: flex-end;
+  width: 120rem;
+  margin-top: 0.5rem;
 `;
-const SearchBox = styled.div``;
 
+const UserLink = styled(Link)`
+  text-decoration: none;
+  margin-left: 2rem;
+  color: #aaaaaa;
+`;
+const SearchBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border-width: 0 0 0.1rem 0;
+  border-style: solid;
+  border-color: #eaeaea;
+`;
+const LogoLink = styled(Link)`
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: bold;
+  color: red;
+  padding-right: 2rem;
+`;
+const IconBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+`;
+
+const IconTitle = styled.p`
+  padding: 0;
+  margin: 0;
+  color: black;
+`;
 const CategoryBox = styled.div`
   display: flex;
   width: 100%;
-  padding: 1rem;
+  padding: 1.5rem;
   justify-content: center;
   border-width: 0 0 0.5rem 0;
   border-style: solid;
