@@ -43,11 +43,8 @@ public class UserServiceImpl implements UserService{
 
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         TokenDto tokenDto = new TokenDto(tokenProvider.createToken(authentication));
         ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공");
 
@@ -77,10 +74,14 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public ResponseDto changePassword(String email, PasswordChangeDto passwordChangeDto) {
         ResponseDto responseDto;
-        Optional<Users> findUser = userRepository.findByEmail(email);
-        if(!findUser.get().getPassword().equals(passwordEncoder.encode(passwordChangeDto.getPassword()))){
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(email, passwordChangeDto.getPassword());
+        authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        if(authenticationToken==null){
             responseDto = new ResponseDto(new ResultDto(false),"기존 비밀번호가 틀림");
         }else{
+            Optional<Users> findUser = userRepository.findByEmail(email);
             findUser.get().updatepassword(passwordEncoder.encode(passwordChangeDto.getNew_password()));
             userRepository.save(findUser.get());
             responseDto = new ResponseDto(new ResultDto(true),"비밀 번호 변경 완료");
