@@ -4,9 +4,15 @@ import EventList from "../../components/event/EventList";
 export default function Event() {
   return (
     <div>
-      <h1> Event 페이지</h1>
-      <br></br>
-      <br></br>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <h1> 이벤트 몰</h1>
+      </div>
+
       <EventList />
     </div>
   );
