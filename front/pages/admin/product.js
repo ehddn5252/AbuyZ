@@ -1,13 +1,20 @@
 import React from "react";
+import styled from "styled-components";
 import SaleProductSearch from "../../components/admin/product/SaleProductSearch";
-import SaleProductList from "../../components/admin/product/SaleProductList";
+import AddProduct from "../../components/admin/product/AddProduct";
 
 export default function Product() {
   return (
-    <div>
-      <h1> 상품 관리 페이지</h1>
-      <SaleProductSearch />
-      <SaleProductList />
-    </div>
+    <ProductPage>
+      <AddProduct></AddProduct>
+      {/* <SaleProductSearch /> */}
+    </ProductPage>
   );
 }
+
+const ProductPage = styled.div`
+  background: #edf0f5;
+  padding: 2rem;
+  /* width: 100vw;
+  height: 100vh; */
+`;
