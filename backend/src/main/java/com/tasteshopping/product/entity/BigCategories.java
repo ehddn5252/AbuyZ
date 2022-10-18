@@ -1,10 +1,13 @@
 package com.tasteshopping.product.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class BigCategories {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer uid;
+
+    @Column(name="category_name",nullable = false, columnDefinition = "varchar(30) default 'basic'")
+    String categoryName;
 }
