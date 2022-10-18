@@ -1,13 +1,50 @@
 import React from "react";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { Container } from "@mui/system";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+  <button
+    {...props}
+    className={
+      "slick-prev slick-arrow" + (currentSlide === 0 ? " slick-disabled" : "")
+    }
+    aria-hidden="true"
+    aria-disabled={currentSlide === 0 ? true : false}
+    type="button"
+  />
+);
+
+const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+  <button
+    {...props}
+    className={
+      "slick-next slick-arrow" +
+      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+    }
+    aria-hidden="true"
+    aria-disabled={currentSlide === slideCount - 1 ? true : false}
+    type="button"
+  />
+);
+
 export default function EventCarousel() {
   // 나중에 array 지우면 될 듯
   const array = [1, 2, 3, 4, 5];
+
+  const settings = {
+    centerPadding: "0px", // 0px 하면 슬라이드 끝쪽 이미지가 안잘림
+    centerMode: true, // 1번이 가운데서 시작 하게 함
+    dots: true, // 슬라이드 밑에 점 보이게
+    infinite: true, // 무한으로 반복
+    speed: 500, // 넘어가는 속도
+    slidesToShow: 3, // n장씩 보이게
+    slidesToScroll: 1, // 1장씩 뒤로 넘어가게
+    prevArrow: <SlickArrowLeft />,
+    nextArrow: <SlickArrowRight />,
+  };
 
   return (
     <Container sx={{ mb: 10 }}>
@@ -26,17 +63,6 @@ export default function EventCarousel() {
     </Container>
   );
 }
-const settings = {
-  centerPadding: "0px", // 0px 하면 슬라이드 끝쪽 이미지가 안잘림
-  centerMode: true, // 1번이 가운데서 시작 하게 함
-  dots: true, // 슬라이드 밑에 점 보이게
-  infinite: true, // 무한으로 반복
-  speed: 500, // 넘어가는 속도
-  slidesToShow: 3, // n장씩 보이게
-  slidesToScroll: 1, // 1장씩 뒤로 넘어가게
-  nextArrow: <img src="/images/right-arrow.png" width="10rem" />,
-  prevArrow: <img src="/images/left-arrow.png" width="10rem" />,
-};
 
 const TitleBox = styled.div`
   display: flex;
@@ -62,6 +88,7 @@ const StyledSlider = styled(Slider)`
     height: 100%;
     margin: 0 auto;
     background: blue; */
+    margin-left: 1rem;
   }
 
   .slick-slide div {
@@ -79,6 +106,29 @@ const StyledSlider = styled(Slider)`
   .slick-track {
     //이건 잘 모르겠음
     width: 100%;
+  }
+
+  .slick-prev {
+    /* left: 30px; */
+
+    &:before {
+      /* font-family: "FontAwesome";
+      font-weight: 900;
+      content: "\f054"; */
+      color: black;
+      font-size: xx-large;
+      margin-right: 4;
+    }
+  }
+
+  .slick-next {
+    /* right: 30px; */
+
+    &:before {
+      /* content: "\f054"; */
+      color: black;
+      font-size: xx-large;
+    }
   }
 `;
 
