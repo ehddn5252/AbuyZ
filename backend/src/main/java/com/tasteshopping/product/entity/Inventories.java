@@ -1,10 +1,22 @@
 package com.tasteshopping.product.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Inventories {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Integer uid;
+
+    @Column
+    Integer count;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="products_uid")
+    Products product;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="options_uid")
+    ProductOptions productOptions;
+
 }
