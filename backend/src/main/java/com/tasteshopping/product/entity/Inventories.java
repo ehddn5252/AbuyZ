@@ -16,7 +16,7 @@ public class Inventories {
     Products product;
 
     @OneToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="options_uid")
-    ProductOptions productOptions;
+    @JoinColumn(name="product_options_uid")
+    ProductOptions productOption;
 
 }

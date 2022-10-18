@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class OrderLists {
@@ -14,7 +15,7 @@ public class OrderLists {
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    Timestamp date;
+    Date date;
 
     @Column(nullable = false)
     Integer totalPrice;
