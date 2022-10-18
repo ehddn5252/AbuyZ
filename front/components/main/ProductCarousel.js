@@ -51,6 +51,7 @@ export default function ProductCarousel() {
     </Container>
   );
 }
+
 const settings = {
   centerPadding: "0px", // 0px 하면 슬라이드 끝쪽 이미지가 안잘림
   // centerMode: true, // 1번이 가운데서 시작 하게 함
