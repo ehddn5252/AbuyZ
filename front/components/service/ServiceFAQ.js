@@ -35,72 +35,110 @@ export default function ServiceFAQ() {
   };
   return (
     <div>
-      <h1>쇼핑 FAQ</h1>
-      <hr></hr>
       <div>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <h1>쇼핑 FAQ</h1>
+      </div>
+
+      <ColoredLine color="red"></ColoredLine>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: 7 }}>
           <span>
             <button style={buttonStyle} onClick={changeFaq1}>
               point를 어디서 사용할 수 있나요?
             </button>
           </span>
-          <img
-            style={{ height: 30, width: 30 }}
-            src={"/images/carrot.png"}
-          ></img>
         </div>
+        <div style={{ flex: 1 }}>
+          <button style={buttonStyle} onClick={changeFaq1}>
+            <img
+              style={{ height: 20, width: 20 }}
+              src={"/images/bottom-arrow.png"}
+            ></img>
+          </button>
+        </div>
+      </div>
+      {faq1 == 1 ? (
+        <div style={spanStyle}>
+          <span>어디서 사용할 수 있습니다</span>
+        </div>
+      ) : null}
 
-        {faq1 == 1 ? (
-          <div style={spanStyle}>
-            <span>어디서 사용할 수 있습니다</span>
-          </div>
-        ) : null}
-      </div>
       <hr></hr>
-      <div>
-        <span>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: 7 }}>
+          <span>
+            <button style={buttonStyle} onClick={changeFaq2}>
+              비밀번호 변경을 어떻게 하나요?
+            </button>
+          </span>
+        </div>
+        <div style={{ flex: 1 }}>
           <button style={buttonStyle} onClick={changeFaq2}>
-            비밀번호 변경을 어떻게 하나요?
+            <img
+              style={{ height: 20, width: 20 }}
+              src={"/images/bottom-arrow.png"}
+            ></img>
           </button>
-          <hr></hr>
-        </span>
-        {faq2 == 1 ? (
-          <div style={spanStyle}>
-            <span>어디서 사용할 수 있습니다</span>
-          </div>
-        ) : null}
+        </div>
       </div>
-      <div>
-        <span>
+      {faq2 == 1 ? (
+        <div style={spanStyle}>
+          <span>어디서 사용할 수 있습니다</span>
+        </div>
+      ) : null}
+
+      <hr></hr>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: 7 }}>
+          <span>
+            <button style={buttonStyle} onClick={changeFaq3}>
+              상품을 받은 후 반품접수는 어떻게 하나요?
+            </button>
+          </span>
+        </div>
+        <div style={{ flex: 1 }}>
           <button style={buttonStyle} onClick={changeFaq3}>
-            상품을 받은 후 반품접수는 어떻게 하나요?
+            <img
+              style={{ height: 20, width: 20 }}
+              src={"/images/bottom-arrow.png"}
+            ></img>
           </button>
-          <hr></hr>
-        </span>
-        {faq3 == 1 ? (
-          <div style={spanStyle}>
-            <span>어디서 사용할 수 있습니다</span>
-          </div>
-        ) : null}
+        </div>
       </div>
-      <div>
-        <span>
+      {faq3 == 1 ? (
+        <div style={spanStyle}>
+          <span>어디서 사용할 수 있습니다</span>
+        </div>
+      ) : null}
+
+      <hr></hr>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: 7 }}>
+          <span>
+            <button style={buttonStyle} onClick={changeFaq4}>
+              회원탈퇴는 어떻게 하나요?
+            </button>
+          </span>
+        </div>
+        <div style={{ flex: 1 }}>
           <button style={buttonStyle} onClick={changeFaq4}>
-            회원탈퇴는 어떻게 하나요?
+            <img
+              style={{ height: 20, width: 20 }}
+              src={"/images/bottom-arrow.png"}
+            ></img>
           </button>
-          <hr></hr>
-        </span>
-        {faq4 == 1 ? (
-          <div style={spanStyle}>
-            <span>
-              마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증
-              진행/완료 후 가능하십니다. <br></br>
-              <br></br>답변이 충분하지 않으셨다면 1:1 문의하기 또는 고객센터
-              전화상담을 이용해주시기 바랍니다. 감사합니다.
-            </span>
-          </div>
-        ) : null}
+        </div>
       </div>
+      {faq4 == 1 ? (
+        <div style={spanStyle}>
+          <span>
+            마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증
+            진행/완료 후 가능하십니다. <br></br>
+            <br></br>답변이 충분하지 않으셨다면 1:1 문의하기 또는 고객센터
+            전화상담을 이용해주시기 바랍니다. <br></br>감사합니다.
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -115,3 +153,13 @@ const spanStyle = {
   backgroundColor: "#E0E0E0",
   padding: "3rem",
 };
+
+const ColoredLine = ({ color }) => (
+  <hr
+    style={{
+      color: color,
+      backgroundColor: color,
+      height: 5,
+    }}
+  />
+);
