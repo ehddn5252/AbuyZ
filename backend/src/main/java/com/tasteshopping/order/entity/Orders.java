@@ -3,6 +3,8 @@ package com.tasteshopping.order.entity;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.coupon.entity.Coupons;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,10 +13,12 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer uid;
 
-    @Column(nullable = false, columnDefinition = "default 0")
+    @Column(nullable = false)
+    @ColumnDefault("0")
     Integer count;
 
-    @Column(nullable = false, columnDefinition = "default 0")
+    @Column(nullable = false)
+    @ColumnDefault("0")
     Integer price;
 
     @ManyToOne(fetch= FetchType.LAZY)
