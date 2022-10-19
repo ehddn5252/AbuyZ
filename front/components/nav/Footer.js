@@ -1,6 +1,11 @@
+// React
 import React from "react";
-import styled from "@emotion/styled";
+
+// MUI
 import Grid from "@mui/material/Grid";
+
+// StyledComponents
+import styled from "@emotion/styled";
 
 export default function Footer() {
   return (
