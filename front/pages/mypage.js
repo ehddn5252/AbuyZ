@@ -11,6 +11,7 @@ import MyInfoChange from "../components/mypage/MyInfoChange";
 import MyComplainList from "../components/mypage/MyComplainList";
 import MyCouponList from "../components/mypage/MyCouponList";
 import MyOrderList from "../components/mypage/MyOrderList";
+import MyWishList from "../components/mypage/MyWishList";
 
 export default function Mypage() {
   const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
@@ -20,9 +21,10 @@ export default function Mypage() {
       <MyDiv>
         <MyInfo />
         {tap === 0 ? <MyOrderList /> : null}
-        {tap === 1 ? <MyComplainList /> : null}
-        {tap === 2 ? <MyCouponList /> : null}
-        {tap === 3 ? <MyInfoChange /> : null}
+        {tap === 1 ? <MyWishList /> : null}
+        {tap === 2 ? <MyComplainList /> : null}
+        {tap === 3 ? <MyCouponList /> : null}
+        {tap === 4 ? <MyInfoChange /> : null}
       </MyDiv>
     </MypageContainer>
   );

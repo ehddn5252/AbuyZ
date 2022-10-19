@@ -6,7 +6,7 @@ import AdminSideNav from "../components/nav/AdminSideNav.js";
 import Footer from "../components/nav/Footer.js";
 import styled from "@emotion/styled";
 function MyApp({ Component, pageProps }) {
-  const [adminCheck, setAdminCheck] = useState(false); // eslint-disable-line no-unused-vars
+  const [adminCheck, setAdminCheck] = useState(false);
   const [isNav, setIsNav] = useState(false);
 
   useEffect(() => {
