@@ -51,8 +51,8 @@ public class ReviewServiceImpl implements ReviewService {
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //        Date date = new Date();
 //        System.out.println("reviewWrite" + dateFormat.format(date));
-        Users user = userRepository.getReferenceById(1);
-        Reviews review = dto.toEntity(dto, user, product.get());
+//        Users user = userRepository.getReferenceById(1);
+        Reviews review = dto.toEntity(dto, findUser.get(), product.get());
         reviewRepository.save(review);
         return new BaseRes(200,"리뷰 작성 성공", null);
     }
