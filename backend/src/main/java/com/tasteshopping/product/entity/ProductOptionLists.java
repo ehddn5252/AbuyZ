@@ -1,8 +1,15 @@
 package com.tasteshopping.product.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductOptionLists {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +19,7 @@ public class ProductOptionLists {
     String name;
 
     @Column(columnDefinition = "varchar(100)")
-    String description;
+    String value;
 
     @Column(name="option_price")
     Integer optionPrice;

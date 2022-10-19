@@ -1,6 +1,15 @@
 package com.tasteshopping.product.dto;
 
+import com.tasteshopping.product.entity.Brands;
+import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.entity.SmallCategories;
+import com.tasteshopping.user.dto.LoginType;
+import com.tasteshopping.user.dto.Role;
+import com.tasteshopping.user.entity.Users;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -11,33 +20,24 @@ import lombok.*;
 public class ProductDto {
 
     private String name;
-    private String price;
-    private String big_category_name;
-    private String small_category_name;
-    private String description_img;
-    private String origin;
-    private String brand_name;
+    private Integer price;
+    private Integer discountRate;
+    private String descriptionImg;
     private String producer;
-    private Float discount_rate;
-    private Float review_rate;
+    private Float reviewRate;
 
-//    public Users toEntity(LoginType loginType){
-//
-//        return Users.builder()
-//                .email(this.email)
-//                .password(this.password)
-//                .address(this.address)
-//                .detailAddress(this.detailAddress)
-//                .name(this.name)
-//                .nickname(this.nickname)
-//                .phoneNumber(this.phoneNumber)
-//                .gender(this.gender)
-//                .birth(this.birth)
-//                .mileage(this.mileage)
-//                .status(this.status)
-//                .loginType(loginType)
-//                .userRoles(Role.USER)
-//                .build();
-//
-//    }
+    //
+    private Integer uid;
+
+    private String origin;
+
+    private String status;
+
+    private Integer deliveryFee;
+
+    private String smallCategoryName;
+
+    private String brandName;
+
+
 }

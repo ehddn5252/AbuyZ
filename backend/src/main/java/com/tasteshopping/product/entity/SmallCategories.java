@@ -1,8 +1,14 @@
 package com.tasteshopping.product.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class SmallCategories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
