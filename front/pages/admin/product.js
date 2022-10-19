@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import SaleProductSearch from "../../components/admin/product/SaleProductSearch";
-import AddProduct from "../../components/admin/product/AddProduct";
+import InquireProduct from "../../components/admin/product/inquire/InquireProduct";
+import AddProduct from "../../components/admin/product/addEdit/AddProduct";
 
 export default function Product() {
   return (
     <ProductPage>
-      <AddProduct></AddProduct>
-      {/* <SaleProductSearch /> */}
+      {/* <AddProduct /> */}
+      <InquireProduct />
     </ProductPage>
   );
 }
