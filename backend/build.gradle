@@ -46,7 +46,6 @@ dependencies {
 
 	//mail
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
-}
 
 	// Swagger https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
