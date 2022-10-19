@@ -8,12 +8,7 @@ public class ProductOptions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-    @Column(columnDefinition = "varchar(50)")
-    String name;
-
-    @Column(columnDefinition = "varchar(100)")
-    String description;
-
-    @Column(name="option_price")
-    Integer optionPrice;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="products_uid")
+    Products product;
 }

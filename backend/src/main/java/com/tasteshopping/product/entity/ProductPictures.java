@@ -8,7 +8,7 @@ public class ProductPictures {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-    @Column(name="img_url",columnDefinition = "varchar(100)")
+    @Column(name="img_url",columnDefinition = "varchar(500)")
     String imgUrl;
 
     @ManyToOne(fetch= FetchType.LAZY)

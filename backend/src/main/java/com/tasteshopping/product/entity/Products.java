@@ -10,23 +10,23 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-    @Column(nullable = false, columnDefinition = "varchar(30) default 'base_product'")
+    @Column(nullable = false, columnDefinition = "varchar(150) default 'base_product'")
     String name;
 
     @Column(nullable = false)
     @ColumnDefault("0")
     Integer price;
 
-    @Column(name="description_img", columnDefinition = "varchar(100)")
+    @Column(name="description_img", columnDefinition = "varchar(500)")
     String descriptionImg;
 
-    @Column(columnDefinition = "varchar(30)")
+    @Column(columnDefinition = "varchar(200)")
     String origin;
 
-    @Column(columnDefinition = "varchar(30)")
+    @Column(columnDefinition = "varchar(40)")
     String status;
 
-    @Column(columnDefinition = "varchar(50)")
+    @Column(columnDefinition = "varchar(200)")
     String producer;
 
     @Column(name="discount_rate",nullable = false)
@@ -35,10 +35,6 @@ public class Products {
 
     @Column(name="review_rate")
     Float reviewRate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_options")
-    ProductOptions productOption;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="small_categories_uid")
