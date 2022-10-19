@@ -26,6 +26,10 @@ export default function MypageSideNav(setTap) {
     setTap.setTap(3);
     SetActiveTap(3);
   };
+  const tap4Change = () => {
+    setTap.setTap(4);
+    SetActiveTap(4);
+  };
   return (
     <NavContainer>
       <SidebarWrapper>
@@ -53,7 +57,7 @@ export default function MypageSideNav(setTap) {
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                문의 내역
+                찜한 상품내역
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>
@@ -65,7 +69,7 @@ export default function MypageSideNav(setTap) {
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                쿠폰함
+                문의 내역
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>
@@ -73,6 +77,18 @@ export default function MypageSideNav(setTap) {
                 onClick={tap3Change}
                 style={
                   activeTap === 3
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
+              >
+                쿠폰함
+              </TagButton>
+            </SidebarListItem>
+            <SidebarListItem>
+              <TagButton
+                onClick={tap4Change}
+                style={
+                  activeTap === 4
                     ? { color: "black" }
                     : { color: "rgb(197, 197, 197)" }
                 }

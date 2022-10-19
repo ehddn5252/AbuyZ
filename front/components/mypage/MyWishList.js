@@ -2,15 +2,16 @@
 import React, { useEffect, useState } from "react";
 
 // MUI
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import Button from "@mui/material/Button";
+
 // StyledComponents
 import styled from "styled-components";
 
 // 하위 Components
-import MyOrderItem from "./MyOrderItem";
+import MyWishItem from "./MyWishItem";
 
-export default function MyOrderList() {
+export default function MyWishList() {
   const [productList, setProductList] = useState([
     {
       productName: "제주 햇 감귤 4.5kg",
@@ -19,7 +20,7 @@ export default function MyOrderList() {
       dateOfPurchase: "2022.10.19",
     },
   ]); // eslint-disable-line no-unused-vars
-  // const [productList, setProductList] = useState([]);
+  // const [productList, setProductList] = useState([]);const [productList, setProductList] = useState([]);
   useEffect(() => {
     setProductList([
       {
@@ -32,20 +33,20 @@ export default function MyOrderList() {
   }, []);
   return (
     <MyOrderContainer>
-      <MajorTitle>주문/리뷰 내역</MajorTitle>
+      <MajorTitle>찜한 상품 내역</MajorTitle>
       <hr style={{ height: "0.5rem", background: "#000" }} />
-      {productList.length === 0 ? (
-        <BlankBox>
-          <ShoppingCartOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>구매하신 상품이 없습니다</p>
-        </BlankBox>
-      ) : (
+      {productList.length ? (
         <ProductListBox>
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
+          <MyWishItem product={productList[0]} />
+          <MyWishItem product={productList[0]} />
+          <MyWishItem product={productList[0]} />
+          <MyWishItem product={productList[0]} />
         </ProductListBox>
+      ) : (
+        <BlankBox>
+          <FavoriteBorderOutlinedIcon sx={{ fontSize: "6rem" }} />
+          <p>찜한 상품이 없습니다</p>
+        </BlankBox>
       )}
       {productList.length < 4 ? null : (
         <ButtonDiv>
@@ -72,6 +73,12 @@ const MajorTitle = styled.h1`
   font-size: 3rem;
 `;
 
+const ProductListBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 3rem;
+`;
+
 const BlankBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -81,12 +88,6 @@ const BlankBox = styled.div`
   font-size: 3rem;
   font-weight: bolder;
   color: #aaaaaa;
-`;
-
-const ProductListBox = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  margin-top: 3rem;
 `;
 
 const ButtonDiv = styled.div`

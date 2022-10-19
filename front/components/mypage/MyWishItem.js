@@ -1,13 +1,10 @@
 // React
 import React from "react";
 
-// MUI
-import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
-
 // StyledComponents
 import styled from "styled-components";
 
-export default function MyOrderItem(product) {
+export default function MyWishItem(product) {
   return (
     <ItemContainer>
       <ProductImg src="/images/carrot.png" />
@@ -18,7 +15,6 @@ export default function MyOrderItem(product) {
 
       <ProductIntro>{product.product.productName}</ProductIntro>
       <ProductIntro>{product.product.price}</ProductIntro>
-      <WriteIcon />
     </ItemContainer>
   );
 }
@@ -49,12 +45,4 @@ const ProductIntro = styled.p`
   font-size: 1.5rem;
   font-weight: bolder;
   padding-top: 1rem;
-`;
-
-const WriteIcon = styled(RateReviewOutlinedIcon)`
-  position: relative;
-  top: -37%;
-  left: -37%;
-  font-size: 3rem;
-  color: red;
 `;

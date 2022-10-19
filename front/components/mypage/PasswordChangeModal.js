@@ -39,7 +39,6 @@ export default function PasswordChangeModal({ setModalOpen }) {
         label="새 비밀번호를 입력해주세요."
         name="newPassword"
         autoComplete="newPassword"
-        autoFocus
       ></TextField>
       <TextField
         margin="normal"
@@ -50,7 +49,6 @@ export default function PasswordChangeModal({ setModalOpen }) {
         name="newPasswordConfirm"
         autoComplete="newPasswordConfirm"
         sx={{ marginBottom: "2rem" }}
-        autoFocus
       ></TextField>
       <ChangeButton
         fullWidth
