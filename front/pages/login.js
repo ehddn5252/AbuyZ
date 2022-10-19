@@ -1,3 +1,4 @@
+// React
 import React from "react";
 
 // MUI
@@ -9,30 +10,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+// StyledComponent
+import styled from "styled-components";
+
 export default function Login() {
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          marginTop: "1rem",
-          padding: "1rem",
-          width: "100%",
-          height: "auto",
-          borderRadius: "1rem",
-          backgroundColor: "#F5F5F5",
-        }}
-      >
+    <LoginContainer component="main">
+      <LoginBox>
         <Typography component="h1" variant="h3" sx={{ color: "#EF2A23" }}>
           로그인
         </Typography>
@@ -58,57 +42,62 @@ export default function Login() {
           autoComplete="current-password"
           sx={{ backgroundColor: "white" }}
         />
-        <Button
-          fullWidth
-          href="/"
-          color="error"
-          variant="contained"
-          sx={{ height: "3rem", marginTop: "1rem", fontSize: "1rem" }}
-        >
+        <LoginButton fullWidth href="/" color="error" variant="contained">
           로그인
-        </Button>
+        </LoginButton>
         <Grid
           container
           justifyContent="flex-end"
           sx={{ margin: "1rem", marginLeft: 0 }}
         >
-          <Link
-            href="/pwf"
-            sx={{
-              color: "#AAAAAA",
-              marginRight: "0.5rem",
-              textDecorationLine: "none",
-              fontSize: "1rem",
-            }}
-          >
-            PW 찾기
-          </Link>
-          <Link
-            href="/signup"
-            sx={{
-              color: "#AAAAAA",
-              textDecorationLine: "none",
-              fontSize: "1rem",
-            }}
-          >
-            회원가입
-          </Link>
+          <LoginLink href="/pwf">PW 찾기</LoginLink>
+          <LoginLink href="/signup">회원가입</LoginLink>
         </Grid>
-        <button
-          style={{
-            height: "3rem",
-            width: "100%",
-            backgroundColor: "#FEE500",
-            border: "none",
-            borderRadius: "0.5rem",
-            fontSize: "1rem",
-            cursor: "pointer",
-            marginTop: "3rem",
-          }}
-        >
-          카카오로 시작하기
-        </button>
-      </Box>
-    </Container>
+        <KakaoButton>카카오로 시작하기</KakaoButton>
+      </LoginBox>
+    </LoginContainer>
   );
 }
+
+const LoginContainer = styled(Container)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rem;
+  height: 100vh;
+`;
+
+const LoginBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 3rem;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  background-color: #f5f5f5;
+`;
+
+const LoginLink = styled(Link)`
+  color: #aaaaaa;
+  text-decoration-line: none;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+`;
+
+const LoginButton = styled(Button)`
+  height: 3rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+`;
+
+const KakaoButton = styled.button`
+  height: 3rem;
+  width: 100%;
+  background-color: #fee500;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 3rem;
+`;
