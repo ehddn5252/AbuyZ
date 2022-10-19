@@ -240,7 +240,7 @@ const SearchPaper = styled(Paper)`
   display: flex;
   align-items: center;
   width: 600px;
-  height: 50px;
+  height: 50;
   margin: 0.5rem;
 `;
 
@@ -266,7 +266,7 @@ const IconTitle = styled.p`
 `;
 const CategoryBox = styled.div`
   display: flex;
-  width: 100%;
+  width: auto;
   padding: 1.5rem;
   justify-content: center;
   border-width: 0 0 0.5rem 0;
