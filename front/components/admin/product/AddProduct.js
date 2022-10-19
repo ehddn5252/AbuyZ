@@ -20,7 +20,7 @@ export default function AddProduct() {
   );
 }
 
-const Title = styled.p`
+export const Title = styled.p`
   font-size: xxx-large;
   font-weight: 1000;
   padding-top: 3rem;

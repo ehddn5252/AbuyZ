@@ -26,24 +26,29 @@ export default function SaleProductCategory() {
   const smallCategoryList = {
     대분류: [],
     식품: ["과일", "채소", "고기", "과자", "생수"],
-    생활건강: ["의류", "언더웨어", "신발", "가방", "악세서리"],
-    가구인테리어: [
+    "생활, 건강": ["의류", "언더웨어", "신발", "가방", "악세서리"],
+    "가구, 인테리어": [
       "주방가구",
       "거실가구",
       "커튼/블라인드",
       "학생/사무가구",
       "침실가구",
     ],
-    반려도서취미: ["도서", "노트/다이어리", "사료", "필기류", "반려동물용품"],
-
+    "반려, 도서, 취미": [
+      "도서",
+      "노트/다이어리",
+      "사료",
+      "필기류",
+      "반려동물 용품",
+    ],
     뷰티: ["스킨케어", "향수", "헤어/바디", "메이크업", "네일"],
   };
 
   return (
-    <CategoryContainer>
+    <ContainerBox>
       <h1 style={{ paddingLeft: "2rem" }}>카테고리</h1>
       <hr style={{ background: "#ff9494", width: "95%" }}></hr>
-      <ClassificationBox>
+      <ContentBox>
         <CategoryBox>
           <Title>대분류</Title>
           <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
@@ -62,9 +67,9 @@ export default function SaleProductCategory() {
                 <em>대분류</em>
               </MenuItem>
               <MenuItem value={"식품"}>식품</MenuItem>
-              <MenuItem value={"생활건강"}>생활/건강</MenuItem>
-              <MenuItem value={"가구인테리어"}>가구/인테리어</MenuItem>
-              <MenuItem value={"반려도서취미"}>반려/도서/취미</MenuItem>
+              <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
+              <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
+              <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
               <MenuItem value={"뷰티"}>뷰티</MenuItem>
             </Select>
           </FormControl>
@@ -87,33 +92,33 @@ export default function SaleProductCategory() {
                 <em>소분류</em>
               </MenuItem>
               {smallCategoryList[bigCategory]?.map((data, idx) => (
-                <MenuItem key={idx} value={data.replace(/\//g, "")}>
+                <MenuItem key={idx} value={data.replace(/\//g, ", ")}>
                   {data}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </CategoryBox>
-      </ClassificationBox>
-    </CategoryContainer>
+      </ContentBox>
+    </ContainerBox>
   );
 }
 
-const CategoryContainer = styled.div`
+export const ContainerBox = styled.div`
   border: 0.3rem solid #ff9494;
   border-radius: 1rem;
   margin-bottom: 3rem;
+  padding-bottom: 2rem;
 `;
 
-const ClassificationBox = styled.div`
+export const ContentBox = styled.div`
   display: flex;
-  padding-left: 2rem;
+  padding-left: 4rem;
 `;
 
 const CategoryBox = styled.div`
   display: flex;
   width: 100%;
-  justify-content: center;
   align-items: center;
 `;
 
