@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ContainerBox } from "../addEdit/SaleProductCategory";
 import { SearchTitle } from "./InquireProduct";
 
 export default function SearchWord() {
@@ -93,7 +92,7 @@ export default function SearchWord() {
     </SearchContainer>
   );
 }
-const SearchContainer = styled.div`
+export const SearchContainer = styled.div`
   display: flex;
 `;
 

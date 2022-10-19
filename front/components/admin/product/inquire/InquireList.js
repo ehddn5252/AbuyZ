@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { ContainerBox } from "../addEdit/SaleProductCategory";
 
-export default function SaleProductList() {
+export default function InquireList() {
   return (
     <ContainerBox>
       <h1 style={{ paddingLeft: "2rem" }}>상품 목록</h1>
