@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import MyShippingSelectModal from "./MyShippingSelectModal";
 
 export default function ProductSaleInfo() {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const showModal = () => {
+    setModalOpen(true);
+  };
   return (
     <div>
       <h1>할인 및 쿠폰 정보</h1>
@@ -27,9 +33,12 @@ export default function ProductSaleInfo() {
           <span>쿠폰 사용</span>
         </LeftDiv>
         <RightDiv>
-          <span>-90원</span>
+          <div>
+            <SelectButton onClick={showModal}>쿠폰 사용하기</SelectButton>
+          </div>
         </RightDiv>
       </AllDiv>
+
       <AllDiv>
         <LeftDiv>
           <span>배송비</span>
@@ -47,6 +56,11 @@ export default function ProductSaleInfo() {
           <span>3810원</span>
         </RightDiv>
       </AllDiv>
+      {modalOpen && (
+        <MyShippingSelectModal
+          setModalOpen={setModalOpen}
+        ></MyShippingSelectModal>
+      )}
     </div>
   );
 }
@@ -75,4 +89,11 @@ const LastLeftDiv = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   margin-left: 2rem;
+`;
+
+const SelectButton = styled.button`
+  background-color: white;
+  padding: 0.7rem 0.8rem 0.7rem 0.8rem;
+  border: 1px solid #ff7171;
+  border-radius: 10px;
 `;

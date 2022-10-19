@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DaumPostcode from "react-daum-postcode";
 import styled from "styled-components";
 export default function MyShippingInfo() {
   const [address, setAddress] = useState(0);
   const [openPostcode, setOpenPostcode] = useState(false);
   const [realAddress, setRealAddress] = useState("");
+  const [realDetailAddress, setRealDetailAddress] = useState("");
   const [realNumber, setRealNumber] = useState("");
+  const [cellphone, setCellphone] = useState("");
 
   const handle = {
     clickButton: () => {
@@ -13,15 +15,35 @@ export default function MyShippingInfo() {
     },
 
     selectAddress: (data) => {
-      setRealAddress(data.address);
+      let fullAddr = data.address;
+      let extraAddr = "";
+
+      if (data.addressType === "R") {
+        if (data.bname !== "") {
+          extraAddr += data.bname;
+        }
+        if (data.buildingName !== "") {
+          extraAddr +=
+            extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+        }
+        fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
+      }
+      setRealAddress(fullAddr);
       setRealNumber(data.zonecode);
-      // console.log(`
-      // 주소: ${data.address},
-      // 우편번호: ${data.zonecode}
-      // `);
       setOpenPostcode(false);
     },
   };
+
+  // useEffect(() => {
+  //   if (cellphone.length === 10) {
+  //     setCellphone(cellphone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3"));
+  //   }
+  //   if (cellphone.length === 13) {
+  //     setCellphone(
+  //       cellphone.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
+  //     );
+  //   }
+  // }, [cellphone]);
   return (
     <div>
       <h1>배송정보</h1>
@@ -80,8 +102,8 @@ export default function MyShippingInfo() {
             </TwoFlexDiv>
             <EightFlexDiv>
               <input
-                style={{ width: 300 }}
                 placeholder="받으실 분의 이름을 입력하세요."
+                style={{ width: "60%", padding: "0.7rem" }}
               ></input>
             </EightFlexDiv>
           </ShipDiv>
@@ -91,29 +113,34 @@ export default function MyShippingInfo() {
             </TwoFlexDiv>
             <EightFlexDiv>
               <button onClick={handle.clickButton}>주소 찾기</button>
-            </EightFlexDiv>
-          </ShipDiv>
-          <ShipDiv>
-            <AddressDiv>
               {openPostcode && (
                 <DaumPostcode
+                  style={postCodeStyle}
                   onComplete={handle.selectAddress} // 값을 선택할 경우 실행되는 이벤트
                   autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
                 />
               )}
-              <div>
-                <span>도로명 주소: {realAddress}</span>
-                <br></br>
-                <br></br>
-                <span>우편번호: {realNumber}</span>
+              <div style={{ marginTop: "3rem" }}>
+                {realNumber == "" ? null : (
+                  <div>
+                    <span>[{realNumber}]</span>
+                  </div>
+                )}
+                {realAddress == "" ? null : (
+                  <div>
+                    <br></br>
+                    <br></br>
+                    <span>{realAddress}</span>
+                  </div>
+                )}
                 <br></br>
                 <br></br>
                 <input
-                  style={{ width: 300 }}
+                  style={{ width: "60%", padding: "0.7rem" }}
                   placeholder="상세 주소를 입력하세요"
                 ></input>
               </div>
-            </AddressDiv>
+            </EightFlexDiv>
           </ShipDiv>
           <ShipDiv>
             <TwoFlexDiv>
@@ -121,7 +148,8 @@ export default function MyShippingInfo() {
             </TwoFlexDiv>
             <EightFlexDiv>
               <input
-                style={{ width: 300 }}
+                type="text"
+                style={{ width: "60%", padding: "0.7rem" }}
                 placeholder="휴대폰 번호를 입력하세요"
               ></input>
             </EightFlexDiv>
@@ -160,5 +188,15 @@ const FiveFlexDiv = styled.div`
 `;
 
 const AddressDiv = styled.div`
-  margin-left: 25%;
+  margin-left: 20%;
+  width: 50%;
 `;
+
+const postCodeStyle = {
+  display: "block",
+  position: "relative",
+  top: "0%",
+  width: "100%",
+  height: "400px",
+  padding: "7px",
+};
