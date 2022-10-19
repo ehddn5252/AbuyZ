@@ -16,14 +16,44 @@ export default function AddProduct() {
       <SaleProductOption />
       <SaleProductImage />
       <SaleProductMore />
+      <ButtonBox>
+        <CancelButton>취소</CancelButton>
+        <AddButton>등록</AddButton>
+      </ButtonBox>
     </Container>
   );
 }
 
-export const Title = styled.p`
+const Title = styled.p`
   font-size: xxx-large;
   font-weight: 1000;
   padding-top: 3rem;
   padding-bottom: 3rem;
   margin: 0;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CancelButton = styled.button`
+  background-color: #ffffff;
+  color: gray;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  height: 3rem;
+  width: 5rem;
+  font-size: 1.3rem;
+`;
+
+const AddButton = styled.button`
+  background-color: #ff7171;
+  color: white;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  margin-left: 1rem;
+  height: 3rem;
+  width: 7rem;
+  font-size: 1.5rem;
 `;
