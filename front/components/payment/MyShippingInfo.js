@@ -1,46 +1,66 @@
 import React from "react";
-
+import styled from "styled-components";
 export default function MyShippingInfo() {
   return (
-    <div>
-      <div style={{ marginTop: "3rem", display: "flex" }}>
-        <div style={{ flex: 5 }}>
-          <span style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
-            배송정보
-          </span>
-        </div>
-        <div style={{ flex: 5 }}>
-          <span>
-            받는 분, 배송지, 전화번호를 변경하시려면 마이페이지 > 내 정보
-            관리에서 수정해주세요.
-          </span>
-        </div>
-      </div>
+    <RelativeDiv>
+      <h1>배송정보</h1>
       <hr></hr>
-      <div style={{ marginTop: "3rem", display: "flex" }}>
-        <div style={{ flex: 2 }}>
+      <InfoDiv>
+        <span>
+          받는 분, 배송지, 휴대폰 번호를 변경하시려면 마이페이지 > 내 정보
+          관리에서 변경해주세요.
+        </span>
+      </InfoDiv>
+      <ShipDiv>
+        <TwoFlexDiv>
           <span>받는 분</span>
-        </div>
-        <div style={{ flex: 8 }}>
+        </TwoFlexDiv>
+        <EightFlexDiv>
+          {/* 사용자의 이름 */}
           <span>최지은</span>
-        </div>
-      </div>
-      <div style={{ marginTop: "3rem", display: "flex" }}>
-        <div style={{ flex: 2 }}>
-          <span>받는 분</span>
-        </div>
-        <div style={{ flex: 8 }}>
-          <span>최지은</span>
-        </div>
-      </div>
-      <div style={{ marginTop: "3rem", display: "flex" }}>
-        <div style={{ flex: 2 }}>
-          <span>주문메모</span>
-        </div>
-        <div style={{ flex: 8 }}>
+        </EightFlexDiv>
+      </ShipDiv>
+      <ShipDiv>
+        <TwoFlexDiv>
+          <span>배송지</span>
+        </TwoFlexDiv>
+        <EightFlexDiv>
+          {/* 사용자의 주소 */}
+          <span>부산 강서구 송정동 1627-5 000호</span>
+        </EightFlexDiv>
+      </ShipDiv>
+      <ShipDiv>
+        <TwoFlexDiv>
+          <span>휴대폰 번호</span>
+        </TwoFlexDiv>
+        <EightFlexDiv>
+          {/* 사용자의 핸드폰번호 */}
           <span>010-0000-1234</span>
-        </div>
-      </div>
-    </div>
+        </EightFlexDiv>
+      </ShipDiv>
+    </RelativeDiv>
   );
 }
+
+const RelativeDiv = styled.div`
+  position: relative;
+`;
+
+const InfoDiv = styled.div`
+  position: absolute;
+  top: 12%;
+  right: 0%;
+`;
+
+const ShipDiv = styled.div`
+  margin-top: 3rem;
+  display: flex;
+`;
+
+const TwoFlexDiv = styled.div`
+  flex: 2;
+`;
+
+const EightFlexDiv = styled.div`
+  flex: 8;
+`;

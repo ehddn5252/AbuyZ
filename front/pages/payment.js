@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import MyShippingInfo from "../components/payment/MyShippingInfo";
 import PaymentProcess from "../components/payment/PaymentProcess";
 import ProductSaleInfo from "../components/payment/ProductSaleInfo";
@@ -7,31 +8,47 @@ import ProductSimpleInfo from "../components/payment/ProductSimpleInfo";
 export default function Payment() {
   return (
     <div>
-      <div style={center}>
+      <Center>
         <h1> 주문 / 결제</h1>
-      </div>
-      <div style={card}>
+      </Center>
+      <Card>
         <MyShippingInfo />
-      </div>
-      <div style={card}>
+      </Card>
+      <Card>
         <ProductSimpleInfo />
-      </div>
-      <div style={card}>
+      </Card>
+      <Card>
         <ProductSaleInfo />
-      </div>
-      <div style={card}>
+      </Card>
+      <Card>
         <PaymentProcess />
-      </div>
+      </Card>
+      <ButtonDiv>
+        <Button>결제하기</Button>
+      </ButtonDiv>
     </div>
   );
 }
 
-const center = {
-  display: "flex",
-  justifyContent: "center",
-  marginTop: "3rem",
-};
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+`;
 
-const card = {
-  padding: "5rem 20rem 5rem 20rem",
-};
+const Card = styled.div`
+  padding: 5rem 20rem 5rem 20rem;
+`;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  background-color: #ff7171;
+  padding: 1rem 2rem 1rem 2rem;
+  border: none;
+  border-radius: 10px;
+  margin-left: 3rem;
+`;
