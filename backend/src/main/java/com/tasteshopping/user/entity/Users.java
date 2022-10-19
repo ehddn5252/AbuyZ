@@ -33,13 +33,13 @@ public class Users {
     @Column
     private String detailAddress;
 
-    @Column(nullable = false)
+    @Column
     private String phoneNumber;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String gender;
 
     @Column
@@ -90,6 +90,7 @@ public class Users {
                 .mileage(this.mileage)
                 .loginType(this.loginType.toString())
                 .role(this.userRoles.toString())
+                .status(this.status)
                 .build();
     }
 }

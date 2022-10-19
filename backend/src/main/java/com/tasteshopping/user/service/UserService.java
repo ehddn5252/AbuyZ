@@ -3,7 +3,7 @@ package com.tasteshopping.user.service;
 import com.tasteshopping.user.dto.*;
 
 public interface UserService {
-    ResponseDto siginUp(UserDto userDto);
+    ResponseDto signUp(UserDto userDto,LoginType loginType);
     ResponseDto login(LoginDto loginDto);
     ResponseDto withdrawal(String email);
     ResponseDto changePassword(String email, PasswordChangeDto passwordChangeDto);
@@ -11,7 +11,6 @@ public interface UserService {
     ResponseDto checkNickname(String nickname);
     ResponseDto sendEmail(String email);
     ResponseDto authenticationNumber(String authentication_number);
-    ResponseDto kakaoLogin(String access_token);
     ResponseDto sendTempPassword(String email,String name);
     ResponseDto getInfo(String email);
     ResponseDto changeInfo(String email, UserModificationDto userModificationDto);

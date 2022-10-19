@@ -1,6 +1,7 @@
 package com.tasteshopping.user.controller;
 
 import com.tasteshopping.user.dto.*;
+import com.tasteshopping.user.service.KakaoUserService;
 import com.tasteshopping.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserServiceImpl userService;
+    private final KakaoUserService kakaoUserService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> signup(@RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userService.siginUp(userDto), HttpStatus.OK);
+    public ResponseEntity<ResponseDto> signUp(@RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.signUp(userDto,LoginType.BUYZ), HttpStatus.OK);
     }
     @PostMapping("/login")
     public ResponseEntity<ResponseDto> login(@RequestBody LoginDto loginDto) {
@@ -50,5 +52,10 @@ public class UserController {
     public ResponseEntity<ResponseDto>changeInfo(@AuthenticationPrincipal String email,
                                                  @RequestBody UserModificationDto userModificationDto){
         return new ResponseEntity<>(userService.changeInfo(email,userModificationDto), HttpStatus.OK);
+    }
+    @PostMapping("/kakao-login")
+    public ResponseEntity<ResponseDto>kakaoLogin(@RequestBody TokenDto tokenDto){
+        kakaoUserService.getUserInfoByAccessToken(tokenDto.getAccess_token());
+        return new ResponseEntity<>(kakaoUserService.login(tokenDto.getAccess_token()),HttpStatus.OK);
     }
 }

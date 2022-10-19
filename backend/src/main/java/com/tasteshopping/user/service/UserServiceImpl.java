@@ -21,6 +21,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -28,9 +29,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public ResponseDto siginUp(UserDto userDto) {
+    public ResponseDto signUp(UserDto userDto, LoginType loginType) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Users user = userDto.toEntity(LoginType.BUYZ);
+        Users user = userDto.toEntity(loginType);
         userRepository.save(user);
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료");
         return responseDto;
@@ -120,11 +121,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseDto kakaoLogin(String access_token) {
-        return null;
-    }
-
-    @Override
     public ResponseDto sendTempPassword(String email, String name) {
         return null;
     }
@@ -146,6 +142,4 @@ public class UserServiceImpl implements UserService{
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공");
         return responseDto;
     }
-
-
 }
