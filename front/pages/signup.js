@@ -11,19 +11,28 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import Box from "@mui/material/Box";
 
 export default function Signup() {
   return (
-    <div>
-      <Container
-        component="main"
-        maxWidth="xs"
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Box
         sx={{
-          padding: "3rem",
           display: "flex",
-          height: "80vh",
           flexDirection: "column",
           backgroundColor: "#F5F5F5",
+          borderRadius: "1rem",
+          width: "100%",
+          padding: 4,
+          paddingTop: 0,
         }}
       >
         <Typography component="h1" variant="h3" sx={{ color: "#EF2A23" }}>
@@ -161,7 +170,7 @@ export default function Signup() {
         >
           회원가입
         </Button>
-      </Container>
-    </div>
+      </Box>
+    </Container>
   );
 }

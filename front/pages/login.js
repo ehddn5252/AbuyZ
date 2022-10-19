@@ -11,16 +11,26 @@ import Typography from "@mui/material/Typography";
 
 export default function Login() {
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
           marginTop: "1rem",
           padding: "1rem",
-          height: "100vh",
-          borderRadius: "2rem",
+          width: "100%",
+          height: "auto",
+          borderRadius: "1rem",
+          backgroundColor: "#F5F5F5",
         }}
       >
         <Typography component="h1" variant="h3" sx={{ color: "#EF2A23" }}>
@@ -35,7 +45,7 @@ export default function Login() {
           name="email"
           autoComplete="email"
           autoFocus
-          sx={{ backgroundColor: "#F5F5F5" }}
+          sx={{ backgroundColor: "white" }}
         />
         <TextField
           margin="normal"
@@ -46,7 +56,7 @@ export default function Login() {
           type="password"
           id="password"
           autoComplete="current-password"
-          sx={{ backgroundColor: "#F5F5F5" }}
+          sx={{ backgroundColor: "white" }}
         />
         <Button
           fullWidth
@@ -57,7 +67,11 @@ export default function Login() {
         >
           로그인
         </Button>
-        <Grid container justifyContent="flex-end" sx={{ margin: "1rem" }}>
+        <Grid
+          container
+          justifyContent="flex-end"
+          sx={{ margin: "1rem", marginLeft: 0 }}
+        >
           <Link
             href="/pwf"
             sx={{
