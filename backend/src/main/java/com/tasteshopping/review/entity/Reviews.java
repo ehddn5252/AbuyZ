@@ -28,13 +28,13 @@ public class Reviews {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;             //작성날짜
 
-    @Column
+    @Column(columnDefinition = "varchar(500)")
     private String content;             //작성내용
 
     @Column(nullable = false)
     private Float rating;               //평점
 
-    @Column
+    @Column(columnDefinition = "varchar(100)")
     private String img_url;             //첨부사진
 
     @ManyToOne(fetch = FetchType.LAZY)
