@@ -25,20 +25,6 @@ public class ReviewReqDto {
                 .content(dto.getContent())
                 .rating(dto.getRating())
                 .user(user)
-                .report(false)
-//                .img_url()
-                .build();
-    }
-
-    public static Reviews toEntityParent(ReviewReqDto dto,Users user, Products product, Reviews parent){
-        return Reviews.builder()
-                .product(product)
-//                .date(date)
-                .parentReview(parent)
-                .content(dto.getContent())
-                .rating(dto.getRating())
-                .user(user)
-                .report(false)
 //                .img_url()
                 .build();
     }

@@ -2,6 +2,7 @@ package com.tasteshopping.review.service;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.review.dto.ReplyReqDto;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
 import com.tasteshopping.review.entity.Reviews;
@@ -14,8 +15,8 @@ public interface ReviewService {
     BaseRes reviewDelete(String email, int review_uid);
     BaseRes reviewLike(String email, int review_uid);
     BaseRes reviewLikeDelete(String email, int review_uid);
-    BaseRes reviewReply();
-    BaseRes reviewReplyDelete();
+    BaseRes reviewReply(String email, ReplyReqDto dto);
+    BaseRes reviewReplyDelete(String email, int review_uid);
     BaseRes productReviewList();
     BaseRes reviewReport();
 }

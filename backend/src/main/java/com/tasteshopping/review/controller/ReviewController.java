@@ -3,6 +3,7 @@ package com.tasteshopping.review.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.review.dto.ReplyReqDto;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
 import com.tasteshopping.review.dto.ReviewUIdDto;
@@ -54,21 +55,20 @@ public class ReviewController {
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email,  @RequestBody ReviewUIdDto dto){
+    public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
         int review_uid = dto.getReviewUid();
         return new ResponseEntity<>(reviewService.reviewLikeDelete(email, review_uid), HttpStatus.OK);
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<BaseRes> reviewReply(@AuthenticationPrincipal String email){
-        // 관리자만
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewReply(@AuthenticationPrincipal String email, @RequestBody ReplyReqDto dto){
+        return new ResponseEntity<>(reviewService.reviewReply(email, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/reply")
-    public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email){
-        // 관리자만
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
+        int review_uid = dto.getReviewUid();
+        return new ResponseEntity<>(reviewService.reviewReplyDelete(email, review_uid), HttpStatus.OK);
     }
 
     @GetMapping("/{product_id}")
