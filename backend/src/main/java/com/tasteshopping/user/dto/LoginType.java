@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum LoginType {
-    KAKAO, ITDA
+    KAKAO, BUYZ
 }
