@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 export default function ServiceSideNav(props) {
   const tap0Change = () => {
     props.setServiceTap(0);
@@ -9,59 +10,61 @@ export default function ServiceSideNav(props) {
 
   return (
     <div>
-      <div style={sidebarWrapper}>
-        <div style={sidebarMenu}>
-          <h3 style={sidebarTitle}>고객센터</h3>
-          <ul style={sidebarList}>
-            <li style={sidebarListItem}>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
-                onClick={tap0Change}
-              >
-                쇼핑 FAQ
-              </button>
-            </li>
-            <li style={sidebarListItem}>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
-                onClick={tap1Change}
-              >
-                1:1문의
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <span>잇다 고객센터</span>
-      <span>1899 - 7000</span>
+      <SidebarWrapper>
+        <SidebarMenu>
+          <SidebarTitle>고객센터</SidebarTitle>
+          <SidebarList>
+            <SidebarListItem>
+              <ButtonDiv onClick={tap0Change}>쇼핑 FAQ</ButtonDiv>
+            </SidebarListItem>
+            <SidebarListItem>
+              <ButtonDiv onClick={tap1Change}>1:1문의</ButtonDiv>
+            </SidebarListItem>
+          </SidebarList>
+        </SidebarMenu>
+      </SidebarWrapper>
     </div>
   );
 }
 
-const sidebarWrapper = {
-  padding: "20px",
-  color: "black",
-};
+const SidebarWrapper = styled.div`
+  padding: 20px;
+  color: black;
+`;
 
-const sidebarMenu = {
-  marginBottom: "2rem",
-};
+const SidebarMenu = styled.div`
+  margin-bottom: 2rem;
+`;
 
-const sidebarTitle = {
-  fontSize: "3rem",
-  color: "rgb(197, 197, 197)",
-};
+const SidebarTitle = styled.span`
+  font-size: 3rem;
+  font-weight: bold;
+  color: black;
+`;
 
-const sidebarList = {
-  listStyle: "none",
-  padding: "0.5rem",
-};
+const SidebarList = styled.ul`
+  list-style: none;
+  padding: 0.5rem;
+`;
 
-const sidebarListItem = {
-  padding: "1rem",
-  cursor: "pointer",
-  display: "flex",
-  alignItems: "center",
-  borderRadius: "10px",
-  fontSize: "2rem",
-};
+const SidebarListItem = styled.li`
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 10%;
+  font-size: 2rem;
+`;
+
+const ButtonDiv = styled.button`
+  border: 1px red solid;
+  background-color: white;
+  border-radius: 10px;
+  width: 8rem;
+  height: 4rem;
+
+  &:hover {
+    background-color: #ff7171;
+    color: white;
+  }
+`;

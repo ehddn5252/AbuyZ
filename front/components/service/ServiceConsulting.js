@@ -24,7 +24,7 @@ export default function ServiceConsulting() {
     <div>
       <h1>1 : 1 문의하기</h1>
       <ColoredLine color="red" />
-      <div style={{ padding: "2rem", display: "flex", flexDirection: "row" }}>
+      <AllDiv>
         <div style={{ flex: 1 }}>
           <span>카테고리</span>
         </div>
@@ -42,48 +42,50 @@ export default function ServiceConsulting() {
             </SelectOptions>
           </SelectBox>
         </div>
-      </div>
+      </AllDiv>
       {isExchange == true ? (
-        <div style={{ padding: "2rem", display: "flex", flexDirection: "row" }}>
+        <AllDiv>
           <div style={{ flex: 1 }}>
             <span>상품 선택</span>
           </div>
           <div style={{ flex: 3 }}>
-            <button style={select} onClick={showModal}>
-              상품 선택
-            </button>
+            <SelectButton onClick={showModal}>상품 선택</SelectButton>
             {modalOpen && (
               <ProductSelectModal
                 setModalOpen={setModalOpen}
               ></ProductSelectModal>
             )}
           </div>
-        </div>
+        </AllDiv>
       ) : null}
 
-      <div style={{ padding: "2rem", display: "flex", flexDirection: "row" }}>
+      <AllDiv>
         <div style={{ flex: 1 }}>
           <span>문의 제목</span>
         </div>
         <div style={{ flex: 3 }}>
           <input
             placeholder="문의 제목을 입력해주세요."
-            style={{ width: "80%" }}
+            style={{ width: "80%", padding: "0.7rem" }}
           ></input>
         </div>
-      </div>
-      <div style={{ padding: "2rem", display: "flex", flexDirection: "row" }}>
+      </AllDiv>
+      <AllDiv>
         <div style={{ flex: 1 }}>
           <span>문의 내용</span>
         </div>
         <div style={{ flex: 3 }}>
           <input
             placeholder="문의 내용을 입력해주세요."
-            style={{ width: "80%", height: 300 }}
+            style={{
+              width: "80%",
+              height: 300,
+              padding: "0.7rem",
+            }}
           ></input>
         </div>
-      </div>
-      <div style={{ padding: "2rem", display: "flex", flexDirection: "row" }}>
+      </AllDiv>
+      <AllDiv>
         <div style={{ flex: 1 }}>
           <span>사진 첨부</span>
           <br></br>
@@ -92,20 +94,15 @@ export default function ServiceConsulting() {
         <div style={{ flex: 3 }}>
           <input type="file" multiple={true} id="fileUpload" />
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "5rem",
-        }}
-      >
-        <button style={no}>취소</button>
-        <button style={yes}>등록하기</button>
-      </div>
+      </AllDiv>
+      <ButtonDiv>
+        <NoButton>취소</NoButton>
+        <YesButton>등록하기</YesButton>
+      </ButtonDiv>
     </div>
   );
 }
+
 const ColoredLine = ({ color }) => (
   <hr
     style={{
@@ -115,6 +112,12 @@ const ColoredLine = ({ color }) => (
     }}
   />
 );
+
+const AllDiv = styled.div`
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+`;
 const Label = styled.label`
   font-size: 14px;
   margin-left: 4px;
@@ -163,24 +166,30 @@ const SelectOptions = styled.ul`
   color: #fefefe;
 `;
 
-const no = {
-  backgroundColor: "white",
-  padding: "1rem 2rem 1rem 2rem",
-  border: "1px solid #616161",
-  borderRadius: "10px",
-};
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+`;
 
-const yes = {
-  backgroundColor: "#FF7171",
-  padding: "1rem 2rem 1rem 2rem",
-  border: "none",
-  borderRadius: "10px",
-  marginLeft: "3rem",
-};
+const NoButton = styled.button`
+  background-color: white;
+  padding: 1rem 2rem 1rem 2rem;
+  border: 1px solid #616161;
+  border-radius: 10px;
+`;
 
-const select = {
-  backgroundColor: "white",
-  padding: "0.7rem 0.8rem 0.7rem 0.8rem",
-  border: "1px solid #FF7171",
-  borderRadius: "10px",
-};
+const YesButton = styled.button`
+  background-color: #ff7171;
+  padding: 1rem 2rem 1rem 2rem;
+  border: none;
+  border-radius: 10px;
+  margin-left: 3rem;
+`;
+
+const SelectButton = styled.button`
+  background-color: white;
+  padding: 0.7rem 0.8rem 0.7rem 0.8rem;
+  border: 1px solid #ff7171;
+  border-radius: 10px;
+`;
