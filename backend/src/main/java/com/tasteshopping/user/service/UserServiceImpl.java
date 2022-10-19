@@ -136,10 +136,15 @@ public class UserServiceImpl implements UserService{
         ResponseDto responseDto = new ResponseDto(userDto,"회원 정보 조회 성공");
         return responseDto;
     }
-
+    
     @Override
-    public ResponseDto changeInfo() {
-        return null;
+    @Transactional
+    public ResponseDto changeInfo(String email, UserModificationDto userModificationDto) {
+        Users user = userRepository.findByEmail(email).get();
+        user.modifyInfo(userModificationDto);
+        userRepository.save(user);
+        ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공");
+        return responseDto;
     }
 
 

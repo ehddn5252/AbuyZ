@@ -1,9 +1,6 @@
 package com.tasteshopping.user.service;
 
-import com.tasteshopping.user.dto.LoginDto;
-import com.tasteshopping.user.dto.PasswordChangeDto;
-import com.tasteshopping.user.dto.ResponseDto;
-import com.tasteshopping.user.dto.UserDto;
+import com.tasteshopping.user.dto.*;
 
 public interface UserService {
     ResponseDto siginUp(UserDto userDto);
@@ -17,6 +14,6 @@ public interface UserService {
     ResponseDto kakaoLogin(String access_token);
     ResponseDto sendTempPassword(String email,String name);
     ResponseDto getInfo(String email);
-    ResponseDto changeInfo();
+    ResponseDto changeInfo(String email, UserModificationDto userModificationDto);
 
 }

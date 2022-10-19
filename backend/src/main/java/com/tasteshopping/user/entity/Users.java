@@ -3,6 +3,7 @@ package com.tasteshopping.user.entity;
 import com.tasteshopping.user.dto.LoginType;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.dto.UserDto;
+import com.tasteshopping.user.dto.UserModificationDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -66,6 +67,15 @@ public class Users {
     }
     public void updatepassword(String password){
         this.password = password;
+    }
+    public void modifyInfo(UserModificationDto userModificationDto){
+        this.address = userModificationDto.getAddress();
+        this.detailAddress = userModificationDto.getDetailAddress();
+        this.phoneNumber = userModificationDto.getPhoneNumber();
+        this.name = userModificationDto.getName();
+        this.gender = userModificationDto.getGender();
+        this.birth = userModificationDto.getBirth();
+        this.nickname = userModificationDto.getNickname();
     }
     public UserDto toDto(){
         return UserDto.builder()

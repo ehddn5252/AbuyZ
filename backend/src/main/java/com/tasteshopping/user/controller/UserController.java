@@ -1,9 +1,6 @@
 package com.tasteshopping.user.controller;
 
-import com.tasteshopping.user.dto.LoginDto;
-import com.tasteshopping.user.dto.PasswordChangeDto;
-import com.tasteshopping.user.dto.ResponseDto;
-import com.tasteshopping.user.dto.UserDto;
+import com.tasteshopping.user.dto.*;
 import com.tasteshopping.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,5 +45,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ResponseDto>getInfo(@AuthenticationPrincipal String email){
         return new ResponseEntity<>(userService.getInfo(email),HttpStatus.OK);
+    }
+    @PutMapping("/change-info")
+    public ResponseEntity<ResponseDto>changeInfo(@AuthenticationPrincipal String email,
+                                                 @RequestBody UserModificationDto userModificationDto){
+        return new ResponseEntity<>(userService.changeInfo(email,userModificationDto), HttpStatus.OK);
     }
 }
