@@ -9,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewUIdDto {
-    private int reviewUid;
+    private int review_uid;
 }

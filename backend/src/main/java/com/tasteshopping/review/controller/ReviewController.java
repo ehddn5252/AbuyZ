@@ -7,7 +7,6 @@ import com.tasteshopping.review.dto.ReplyReqDto;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
 import com.tasteshopping.review.dto.ReviewUIdDto;
-import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -44,19 +41,19 @@ public class ReviewController {
 
     @DeleteMapping()
     public ResponseEntity<BaseRes> reviewDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
-        int review_uid = dto.getReviewUid();
+        int review_uid = dto.getReview_uid();
         return new ResponseEntity<>(reviewService.reviewDelete(email, review_uid), HttpStatus.OK);
     }
 
     @PostMapping("/like")
     public ResponseEntity<BaseRes> reviewLike(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
-        int review_uid = dto.getReviewUid();
+        int review_uid = dto.getReview_uid();
         return new ResponseEntity<>(reviewService.reviewLike(email, review_uid), HttpStatus.OK);
     }
 
     @DeleteMapping("/like")
     public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
-        int review_uid = dto.getReviewUid();
+        int review_uid = dto.getReview_uid();
         return new ResponseEntity<>(reviewService.reviewLikeDelete(email, review_uid), HttpStatus.OK);
     }
 
@@ -67,7 +64,7 @@ public class ReviewController {
 
     @DeleteMapping("/reply")
     public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
-        int review_uid = dto.getReviewUid();
+        int review_uid = dto.getReview_uid();
         return new ResponseEntity<>(reviewService.reviewReplyDelete(email, review_uid), HttpStatus.OK);
     }
 
@@ -77,9 +74,9 @@ public class ReviewController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
-    @GetMapping("/report/{review_id}")
+    @PostMapping("/report")
     public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
-        int review_uid = dto.getReviewUid();
+        int review_uid = dto.getReview_uid();
         return new ResponseEntity<>(reviewService.reviewReport(email, review_uid), HttpStatus.OK);
     }
 

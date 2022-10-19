@@ -44,26 +44,25 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public BaseRes reviewWrite(String email, ReviewReqDto dto) {
 //        상품과 회원 완료되면 변경
-//        Optional<Users> findUser = userRepository.findByEmail(email);
-//        Products product = productRepository.find~(product_uid);
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        Optional<Products> product = productRepository.findById(dto.getProduct_uid());
 //        Reviews review = dto.toEntity(dto, findUser.get(), product);
-        Products product = new Products();
 //        임시 날짜
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //        Date date = new Date();
 //        System.out.println("reviewWrite" + dateFormat.format(date));
         Users user = userRepository.getReferenceById(1);
-        Reviews review = dto.toEntity(dto, user, product);
+        Reviews review = dto.toEntity(dto, user, product.get());
         reviewRepository.save(review);
         return new BaseRes(200,"리뷰 작성 성공", null);
     }
 
     @Override
     public BaseRes reviewDelete(String email, int review_uid) {
-        Optional<Users> findUser = userRepository.findByEmail(email);
+        Users user = userRepository.findByEmail(email).get();
         Reviews target = reviewRepository.getReferenceById(review_uid);
         // 리뷰작성자와 유저가 같은지 확인
-        if(findUser.get() == target.getUser()){
+        if(user == target.getUser()){
             // 답글 삭제
             Reviews reply = reviewRepository.findByParentReview(target);
             if(reply != null) reviewRepository.delete(reply);
