@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 // MUI
 import Button from "@mui/material/Button";
-
+import TextField from "@mui/material/TextField";
 // StyledComponents
 import styled from "styled-components";
 
@@ -43,7 +43,15 @@ export default function MyinfoChange() {
       <hr />
       <ContentDiv>
         <SubTitle>전화번호 변경</SubTitle>
-        {checkPhoneNumber ? null : <SubContent>010-0592-3142</SubContent>}
+        {checkPhoneNumber ? (
+          <TextField
+            variant="filled"
+            size="small"
+            sx={{ marginRight: "1rem" }}
+          />
+        ) : (
+          <SubContent>010-0592-3142</SubContent>
+        )}
         {checkPhoneNumber ? (
           <SubButton
             variant="outlined"
