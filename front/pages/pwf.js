@@ -19,11 +19,10 @@ export default function PasswordFind() {
       }}
     >
       <Box
-        boxShadow={2}
         sx={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "white",
+          backgroundColor: "#F5F5F5",
           borderRadius: "1rem",
           padding: 4,
           paddingTop: 0,
@@ -47,6 +46,7 @@ export default function PasswordFind() {
             label="이메일을 입력해주세요."
             name="email"
             autoComplete="email"
+            sx={{ backgroundColor: "white" }}
           />
           <TextField
             margin="normal"
@@ -56,6 +56,7 @@ export default function PasswordFind() {
             label="이름을 입력해주세요."
             id="name"
             autoComplete="name"
+            sx={{ backgroundColor: "white" }}
           />
 
           <Button
