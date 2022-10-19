@@ -70,7 +70,6 @@ public class Users {
     public UserDto toDto(){
         return UserDto.builder()
                 .email(this.email)
-                .password(this.password)
                 .address(this.address)
                 .detailAddress(this.detailAddress)
                 .phoneNumber(this.phoneNumber)
@@ -79,7 +78,6 @@ public class Users {
                 .birth(this.birth)
                 .nickname(this.nickname)
                 .mileage(this.mileage)
-                .status(this.status)
                 .loginType(this.loginType.toString())
                 .role(this.userRoles.toString())
                 .build();

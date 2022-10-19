@@ -6,8 +6,6 @@ import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.user.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -32,7 +30,7 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public ResponseDto siginUp(UserDto userDto) {
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        Users user = userDto.toEntity(LoginType.ITDA);
+        Users user = userDto.toEntity(LoginType.BUYZ);
         userRepository.save(user);
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료");
         return responseDto;
@@ -133,7 +131,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseDto getInfo(String email) {
-        return null;
+        Users user = userRepository.findByEmail(email).get();
+        UserDto userDto = user.toDto();
+        ResponseDto responseDto = new ResponseDto(userDto,"회원 정보 조회 성공");
+        return responseDto;
     }
 
     @Override
