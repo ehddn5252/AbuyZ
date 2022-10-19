@@ -1,12 +1,15 @@
 import { Container } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
-import SaleProductList from "./InquireList";
+import InquireList from "./InquireList";
 import { ContainerBox } from "../addEdit/SaleProductCategory";
 import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 import SearchWord from "./SearchWord";
+import SaleStatus from "./SaleStatus";
+import Category from "./Category";
+import Period from "./Period";
 
 export default function SaleProductSearch() {
   const status = [
@@ -43,7 +46,7 @@ export default function SaleProductSearch() {
               sx={{
                 margin: "2rem",
                 marginRight: "1rem",
-                fontSize: "4rem",
+                fontSize: "3.5rem",
                 color: "#ffffff",
                 background: "#ff9494",
                 borderRadius: "50%",
@@ -60,7 +63,7 @@ export default function SaleProductSearch() {
               sx={{
                 margin: "2rem",
                 marginRight: "1rem",
-                fontSize: "4rem",
+                fontSize: "3.5rem",
                 color: "#ffffff",
                 background: "#ff9494",
                 borderRadius: "50%",
@@ -78,20 +81,21 @@ export default function SaleProductSearch() {
         <SearchWord />
         <hr style={{ background: "#ff9494", width: "95%" }}></hr>
         {/* 판매상태 */}
-        <SaleStatus>
-          <SearchTitle
-            style={{
-              paddingLeft: "4rem",
-              marginTop: "1rem",
-              fontSize: "2.5rem",
-            }}
-          >
-            판매상태
-          </SearchTitle>
-        </SaleStatus>
+        <SaleStatus />
+        <hr style={{ background: "#ff9494", width: "95%" }}></hr>
+        {/* 카테고리 */}
+        <Category />
+        <hr style={{ background: "#ff9494", width: "95%" }}></hr>
+        {/* 기간 */}
+        <Period />
+        <hr style={{ background: "#ff9494", width: "95%" }}></hr>
+        <ButtonBox>
+          <ResetButton>초기화</ResetButton>
+          <SearchButton>검색</SearchButton>
+        </ButtonBox>
       </ContainerBox>
       {/* 상품 목록 */}
-      <SaleProductList />
+      <InquireList />
     </Container>
   );
 }
@@ -134,6 +138,29 @@ const StatusCount = styled.p`
   /* padding-left: 1.5rem; */
 `;
 
-const SaleStatus = styled.div`
+const ButtonBox = styled.div`
   display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
+const ResetButton = styled.button`
+  background-color: #ffffff;
+  color: gray;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  height: 3rem;
+  width: 5rem;
+  font-size: 1.3rem;
+`;
+
+const SearchButton = styled.button`
+  background-color: #ff7171;
+  color: white;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  margin-left: 1rem;
+  height: 3rem;
+  width: 7rem;
+  font-size: 1.5rem;
 `;
