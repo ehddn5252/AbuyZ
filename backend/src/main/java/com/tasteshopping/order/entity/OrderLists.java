@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 public class OrderLists {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @CreatedDate

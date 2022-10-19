@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class PaymentMethods {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(columnDefinition = "varchar(60) default 'base_payment_methods'")
