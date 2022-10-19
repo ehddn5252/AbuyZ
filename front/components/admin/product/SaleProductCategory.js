@@ -11,13 +11,13 @@ export default function SaleProductCategory() {
   // 소분류
   const [smallCategory, setSmallCategory] = useState("");
 
-  // 대분류 셀렉트 하면
+  // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
     setSmallCategory("");
     setBigCategory(event.target.value);
   };
 
-  // 소분류 셀렉트 하면
+  // 소분류 셀렉트 했을 때
   const smallHandleChange = (event) => {
     setSmallCategory(event.target.value);
   };

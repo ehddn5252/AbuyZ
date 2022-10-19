@@ -84,7 +84,7 @@ export default function SaleProductInfo() {
         <InfoBox>
           <TitleBox>
             <Title>할인</Title>
-            <div>(%)</div>
+            <p style={{ margin: 0 }}>(%)</p>
           </TitleBox>
           <InputContainer>
             <Input
@@ -102,7 +102,7 @@ export default function SaleProductInfo() {
         <InfoBox>
           <TitleBox>
             <Title>판매가</Title>
-            <div>(원)</div>
+            <p style={{ margin: 0 }}>(원)</p>
           </TitleBox>
           <InputContainer>
             <Input
@@ -117,7 +117,7 @@ export default function SaleProductInfo() {
         <InfoBox>
           <TitleBox>
             <Title>배송비</Title>
-            <div>(원)</div>
+            <p style={{ margin: 0 }}>(원)</p>
           </TitleBox>
           <InputContainer>
             <Input
@@ -153,6 +153,7 @@ const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
   margin-right: 2rem;
+  width: 7rem;
 `;
 
 const Title = styled.div`
@@ -184,6 +185,6 @@ const Input = styled.input`
 const Description = styled.div`
   font-size: 0.9rem;
   padding-top: 0.5rem;
-  padding-left: 1rem;
+  padding-left: 0.8rem;
   color: gray;
 `;
