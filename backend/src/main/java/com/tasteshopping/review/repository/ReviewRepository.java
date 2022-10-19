@@ -8,5 +8,5 @@ import javax.transaction.Transactional;
 @Repository
 @Transactional
 public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
-    Reviews findByParent_review(Reviews review);
+    Reviews findByParentReview(Reviews parentReview);
 }

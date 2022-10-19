@@ -22,7 +22,7 @@ public class Reviews {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="reviews_uid")
-    private Reviews parent_review;        //구매자 리뷰 유아이디
+    private Reviews parentReview;        //구매자 리뷰 유아이디
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,8 +34,8 @@ public class Reviews {
     @Column(nullable = false)
     private Float rating;               //평점
 
-    @Column(columnDefinition = "varchar(100)")
-    private String img_url;             //첨부사진
+    @Column(name="img_url",columnDefinition = "varchar(100)")
+    private String imgUrl;             //첨부사진
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_uid")

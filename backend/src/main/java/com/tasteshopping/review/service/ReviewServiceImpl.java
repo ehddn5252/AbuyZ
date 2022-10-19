@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
     public BaseRes reviewDelete(int review_uid) {
         Reviews target = reviewRepository.getReferenceById(review_uid);
         // 답글 삭제
-        Reviews reply = reviewRepository.findByParent_review(target);
+        Reviews reply = reviewRepository.findByParentReview(target);
         if(reply != null) reviewRepository.delete(reply);
         // 도움이돼요 삭제
         List<Likes> likeList = likeRepository.findAllByReview(target);

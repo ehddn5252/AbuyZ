@@ -34,7 +34,7 @@ public class ReviewReqDto {
         return Reviews.builder()
                 .product(product)
 //                .date(date)
-                .parent_review(parent)
+                .parentReview(parent)
                 .content(dto.getContent())
                 .rating(dto.getRating())
                 .user(user)
