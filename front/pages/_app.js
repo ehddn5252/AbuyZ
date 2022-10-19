@@ -22,7 +22,6 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAdminCheck(false);
     }
-    console.log(adminCheck);
   }, []);
   return (
     <MainContainer>
