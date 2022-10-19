@@ -3,8 +3,13 @@ package com.tasteshopping.review.entity;
 import com.tasteshopping.user.entity.Users;
 
 import javax.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

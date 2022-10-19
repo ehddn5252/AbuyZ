@@ -5,8 +5,15 @@ import com.tasteshopping.user.entity.Users;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+
+import lombok.*;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reviews {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +24,8 @@ public class Reviews {
     private Reviews parent_review;        //구매자 리뷰 유아이디
 
     @Column(nullable = false)
-    private Timestamp date;             //작성날짜
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;             //작성날짜
 
     @Column
     private String content;             //작성내용
