@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { ContainerBox } from "../addEdit/SaleProductCategory";
 
 export default function SaleProductList() {
   return (
-    <ListContainer>
-      <Title>상품 목록</Title>
-    </ListContainer>
+    <ContainerBox>
+      <h1 style={{ paddingLeft: "2rem" }}>상품 목록</h1>
+      <hr style={{ background: "#ff9494", width: "95%" }}></hr>
+    </ContainerBox>
   );
 }
 
