@@ -1,6 +1,6 @@
 package com.tasteshopping.order.controller;
 
-import com.tasteshopping.order.dto.BaseRes;
+import com.tasteshopping.common.dto.BaseRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
 
-    @PostMapping()
+    @PostMapping("/register")
     public ResponseEntity<BaseRes> test() {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
