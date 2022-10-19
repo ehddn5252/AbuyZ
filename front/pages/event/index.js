@@ -1,19 +1,20 @@
 import React from "react";
+import styled from "styled-components";
 import EventList from "../../components/event/EventList";
 
 export default function Event() {
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <AllDiv>
         <h1> 이벤트 몰</h1>
-      </div>
+      </AllDiv>
 
       <EventList />
     </div>
   );
 }
+
+const AllDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`;

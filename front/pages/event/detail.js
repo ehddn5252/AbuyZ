@@ -3,64 +3,26 @@ import styled from "styled-components";
 export default function Detail() {
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alginItems: "center",
-        }}
-      >
+      <AllDiv>
         <h1>이벤트 몰</h1>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
+      </AllDiv>
+      <TitleDiv>
         <h3>이벤트 이름</h3>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
+      </TitleDiv>
+      <DateDiv>
         <br></br>
         <h5>이벤트 시작 일자: 2022.10.31 - 2022.12.25</h5>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alginItems: "center",
-        }}
-      >
+      </DateDiv>
+      <ImgDiv>
         {/* 진짜 파일 이미지 */}
-        <img src={"/images/event.png"} width="900"></img>
-      </div>
-      <div
-        style={{
-          marginTop: "5rem",
-          display: "flex",
-          justifyContent: "center",
-          alginItems: "center",
-        }}
-      >
+        <img src={"/images/event.png"} style={{ width: "900" }}></img>
+      </ImgDiv>
+      <ButtonDiv>
         <StyledButton>쿠폰 받기</StyledButton>
-      </div>
-      <div
-        style={{
-          marginBottom: "5rem",
-          display: "flex",
-          justifyContent: "center",
-          alginItems: "center",
-        }}
-      >
+      </ButtonDiv>
+      <ButtonDateDiv>
         <h5>쿠폰 지급 일자: 2022.11.03</h5>
-      </div>
+      </ButtonDateDiv>
     </div>
   );
 }
@@ -74,4 +36,42 @@ const StyledButton = styled.button`
   width: 8rem;
   color: white;
   background: rgba(255, 99, 71, 0.6);
+`;
+
+const AllDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TitleDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const DateDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+
+const ImgDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonDiv = styled.div`
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ButtonDateDiv = styled.div`
+  margin-bottom: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
