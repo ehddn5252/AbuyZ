@@ -11,7 +11,7 @@ public interface UserService {
     ResponseDto checkNickname(String nickname);
     ResponseDto sendEmail(String email);
     ResponseDto authenticationNumber(String authentication_number);
-    ResponseDto sendTempPassword(String email,String name);
+    ResponseDto sendTempPassword(CheckUserInfoDto checkUserInfoDto);
     ResponseDto getInfo(String email);
     ResponseDto changeInfo(String email, UserModificationDto userModificationDto);
 

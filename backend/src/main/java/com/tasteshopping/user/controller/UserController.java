@@ -58,4 +58,8 @@ public class UserController {
         kakaoUserService.getUserInfoByAccessToken(tokenDto.getAccess_token());
         return new ResponseEntity<>(kakaoUserService.login(tokenDto.getAccess_token()),HttpStatus.OK);
     }
+    @PostMapping("/find-pw")
+    public ResponseEntity<ResponseDto>sendTempPassword(@RequestBody CheckUserInfoDto checkUserInfoDto){
+        return new ResponseEntity<>(userService.sendTempPassword(checkUserInfoDto),HttpStatus.OK);
+    }
 }

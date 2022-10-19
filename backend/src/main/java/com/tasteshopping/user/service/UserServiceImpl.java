@@ -6,6 +6,10 @@ import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.user.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -14,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -26,6 +32,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+    private final JavaMailSenderImpl mailSender;
 
     @Override
     @Transactional
@@ -112,6 +119,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseDto sendEmail(String email) {
+
         return null;
     }
 
@@ -121,8 +129,49 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseDto sendTempPassword(String email, String name) {
-        return null;
+    @Transactional
+    public ResponseDto sendTempPassword(CheckUserInfoDto checkUserInfoDto) {
+        ResponseDto responseDto = new ResponseDto();
+        Optional<Users> user = userRepository.findByEmail(checkUserInfoDto.getEmail());
+        if(!user.isPresent() || !user.get().getName().equals(checkUserInfoDto.getName())){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("일치하는 계정이 없습니다.");
+            return responseDto;
+        }
+        String temp_pw = UUID.randomUUID().toString().replaceAll("-", "");
+        temp_pw = temp_pw.substring(0, 10);
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+        String setFrom = "wlgns3914@naver.com";
+        String toMail = checkUserInfoDto.getEmail();
+        String title = "임시 비밀번호 발급 이메일 입니다.";
+        String content = "BUYZ를 방문해주셔서 감사합니다." +
+                "<br><br>" +
+                "임시 비밀번호는 "+ temp_pw  + "입니다." +
+                "<br>" +
+                "해당 비밀번호로 로그인해주세요.";
+        try {
+            mimeMessageHelper.setFrom(setFrom);
+            mimeMessageHelper.setTo(toMail);
+            mimeMessageHelper.setSubject(title);
+            mimeMessageHelper.setText(content, true);
+            mailSender.send(mimeMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("이메일 전송에 실패했습니다.");
+            return responseDto;
+        }
+        user.get().updatepassword(passwordEncoder.encode(temp_pw));
+        userRepository.save(user.get());
+
+//        redisUtil.setDataExpire(email, authNumber, 60 * 5L);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("임시 비밀번호 발급 완료");
+        return responseDto;
     }
 
     @Override
