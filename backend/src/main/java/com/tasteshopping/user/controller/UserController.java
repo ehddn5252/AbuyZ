@@ -62,4 +62,12 @@ public class UserController {
     public ResponseEntity<ResponseDto>sendTempPassword(@RequestBody CheckUserInfoDto checkUserInfoDto){
         return new ResponseEntity<>(userService.sendTempPassword(checkUserInfoDto),HttpStatus.OK);
     }
+    @GetMapping("/send-email/{email}")
+    public ResponseEntity<ResponseDto>sendCertificationNumber (@PathVariable String email){
+        return new ResponseEntity<>(userService.sendCertificationNumber(email),HttpStatus.OK);
+    }
+    @PostMapping("/authentication-email")
+    public ResponseEntity<ResponseDto>sendCertificationNumber (@RequestBody AuthenticationNumberDto authenticationNumberDto){
+        return new ResponseEntity<>(userService.authenticationNumber(authenticationNumberDto),HttpStatus.OK);
+    }
 }

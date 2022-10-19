@@ -18,8 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -118,14 +120,52 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ResponseDto sendEmail(String email) {
+    public ResponseDto sendCertificationNumber(String email) {
+        ResponseDto responseDto = new ResponseDto();
+        Random rand = new Random();
+        String authNumber = String.valueOf(rand.nextInt(999999));
 
-        return null;
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+        String setFrom = "wlgns3914@naver.com";
+        String toMail = email;
+        String title = "회원 가입 인증 이메일 입니다.";
+        String content = "BUYZ를 방문해주셔서 감사합니다." +
+                "<br><br>" +
+                "인증 번호는 " + authNumber + "입니다." +
+                "<br>" +
+                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+        try {
+            mimeMessageHelper.setFrom(setFrom);
+            mimeMessageHelper.setTo(toMail);
+            mimeMessageHelper.setSubject(title);
+            mimeMessageHelper.setText(content, true);
+            mailSender.send(mimeMessage);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("이메일 전송에 실패했습니다.");
+            return responseDto;
+        }
+        // 5분 동안만 인증번호 저장
+//        redisUtil.setDataExpire(email, authNumber, 60 * 5L);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("인증 번호를 전송 완료");
+        return responseDto;
     }
 
     @Override
-    public ResponseDto authenticationNumber(String authentication_number) {
-        return null;
+    public ResponseDto authenticationNumber(AuthenticationNumberDto authenticationNumberDto) {
+        ResponseDto responseDto = new ResponseDto();
+//        if (!redisUtil.getData(email).equals(authNum)) {
+//            responseDto.setData(new ResultDto(false));
+//            responseDto.setMessage("불일치");
+//        }
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("일치");
+        return responseDto;
     }
 
     @Override
@@ -168,7 +208,6 @@ public class UserServiceImpl implements UserService{
         user.get().updatepassword(passwordEncoder.encode(temp_pw));
         userRepository.save(user.get());
 
-//        redisUtil.setDataExpire(email, authNumber, 60 * 5L);
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("임시 비밀번호 발급 완료");
         return responseDto;
