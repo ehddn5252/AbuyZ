@@ -11,7 +11,7 @@ import java.util.List;
 public interface ReviewService {
     BaseRes myReviewList();
     BaseRes reviewWrite(String email, ReviewReqDto dto);
-    BaseRes reviewDelete();
+    BaseRes reviewDelete(int review_uid);
     BaseRes reviewLike();
     BaseRes reviewLikeDelete();
     BaseRes reviewReply();

@@ -5,7 +5,9 @@ import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
+import com.tasteshopping.review.entity.Likes;
 import com.tasteshopping.review.entity.Reviews;
+import com.tasteshopping.review.repository.LikeRepository;
 import com.tasteshopping.review.repository.ReviewRepository;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
@@ -30,6 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final LikeRepository likeRepository;
 
 
     @Override
@@ -39,13 +42,15 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BaseRes reviewWrite(String email, ReviewReqDto dto) {
+//        상품과 회원 완료되면 변경
 //        Optional<Users> findUser = userRepository.findByEmail(email);
 //        Products product = productRepository.find~(product_uid);
+//        Reviews review = dto.toEntity(dto, findUser.get(), product);
         Products product = new Products();
+//        임시 날짜
 //        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 //        Date date = new Date();
 //        System.out.println("reviewWrite" + dateFormat.format(date));
-//        Reviews review = dto.toEntity(dto, findUser.get(), product);
         Users user = userRepository.getReferenceById(1);
         Reviews review = dto.toEntity(dto, user, product);
         Reviews result = reviewRepository.save(review);
@@ -54,8 +59,17 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public BaseRes reviewDelete() {
-        return new BaseRes();
+    public BaseRes reviewDelete(int review_uid) {
+        Reviews target = reviewRepository.getReferenceById(review_uid);
+        // 답글 삭제
+        Reviews reply = reviewRepository.findByParent_review(target);
+        if(reply != null) reviewRepository.delete(reply);
+        // 도움이돼요 삭제
+        List<Likes> likeList = likeRepository.findAllByReview(target);
+        for (Likes like: likeList) {
+            likeRepository.delete(like);
+        }
+        return new BaseRes(200,"리뷰 삭제 성공", null);
     }
 
     @Override

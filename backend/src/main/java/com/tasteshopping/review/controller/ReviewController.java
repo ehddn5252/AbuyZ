@@ -40,8 +40,8 @@ public class ReviewController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> reviewDelete(){
-        //답글과 도움이돼요 같이 삭제
+    public ResponseEntity<BaseRes> reviewDelete(@RequestBody int review_uid){
+
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
