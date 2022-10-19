@@ -1,6 +1,7 @@
 package com.tasteshopping.review.controller;
 
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
@@ -19,61 +20,62 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/review")
+@RequestMapping("/review")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     @GetMapping()
-    public ResponseEntity<List<Products>> myReviewList(){
+    public ResponseEntity<BaseRes> myReviewList(){
         List<Products> list = new ArrayList<>(); // dto로 변경해야함
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
-    @PostMapping()
-    public ResponseEntity<Boolean> reviewWrite(@AuthenticationPrincipal String email, @RequestBody ReviewReqDto dto, @RequestBody int product_uid, @RequestParam("file") MultipartFile file){
+    @PostMapping("")
+    public ResponseEntity<BaseRes> reviewWrite(@AuthenticationPrincipal String email, @RequestBody ReviewReqDto dto){
         //파일서버에업로드후 img_url데려오기
-        return new ResponseEntity<>(reviewService.reviewWrite(email, dto, product_uid), HttpStatus.OK);
+//         @RequestParam("file") MultipartFile file
+        return new ResponseEntity<>(reviewService.reviewWrite(email, dto), HttpStatus.OK);
     }
 
     @DeleteMapping()
-    public ResponseEntity<Boolean> reviewDelete(){
+    public ResponseEntity<BaseRes> reviewDelete(){
         //답글과 도움이돼요 같이 삭제
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @PostMapping("/like")
-    public ResponseEntity<Boolean> reviewLike(){
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public ResponseEntity<BaseRes> reviewLike(){
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<Boolean> reviewLikeDelete(){
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public ResponseEntity<BaseRes> reviewLikeDelete(){
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<Boolean> reviewReply(){
+    public ResponseEntity<BaseRes> reviewReply(){
         // 관리자만
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @DeleteMapping("/reply")
-    public ResponseEntity<Boolean> reviewReplyDelete(){
+    public ResponseEntity<BaseRes> reviewReplyDelete(){
         // 관리자만
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @GetMapping("/{product_id}")
-    public ResponseEntity<List<ReviewResDto>> productReviewList(@PathVariable int product_id){
+    public ResponseEntity<BaseRes> productReviewList(@PathVariable int product_id){
         List<ReviewResDto> list = new ArrayList<>(); // dto로 변경해야함
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @GetMapping("/report/{review_id}")
-    public ResponseEntity<Boolean> reviewReport(@PathVariable int review_id){
-        return new ResponseEntity<>(true, HttpStatus.OK);
+    public ResponseEntity<BaseRes> reviewReport(@PathVariable int review_id){
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
 }

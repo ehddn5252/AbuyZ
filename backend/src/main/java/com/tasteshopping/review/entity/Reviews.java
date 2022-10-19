@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Reviews {
     @JoinColumn(name="reviews_uid")
     private Reviews parent_review;        //구매자 리뷰 유아이디
 
-    @Column(nullable = false)
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;             //작성날짜
 

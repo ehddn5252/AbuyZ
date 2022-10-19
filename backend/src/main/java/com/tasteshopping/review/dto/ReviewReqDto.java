@@ -16,26 +16,29 @@ import java.util.Date;
 public class ReviewReqDto {
     private String content;
     private float rating;
+    private int product_uid;
 
-    public static Reviews toEntity(ReviewReqDto dto, Users user, Products product, Date date){
+    public static Reviews toEntity(ReviewReqDto dto, Users user, Products product){
         return Reviews.builder()
                 .product(product)
-                .date(date)
+//                .date(date)
                 .content(dto.getContent())
                 .rating(dto.getRating())
                 .user(user)
+                .report(false)
 //                .img_url()
                 .build();
     }
 
-    public static Reviews toEntityParent(ReviewReqDto dto,Users user, Products product, Reviews parent, Date date){
+    public static Reviews toEntityParent(ReviewReqDto dto,Users user, Products product, Reviews parent){
         return Reviews.builder()
                 .product(product)
-                .date(date)
+//                .date(date)
                 .parent_review(parent)
                 .content(dto.getContent())
                 .rating(dto.getRating())
                 .user(user)
+                .report(false)
 //                .img_url()
                 .build();
     }

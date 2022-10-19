@@ -1,5 +1,6 @@
 package com.tasteshopping.review.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.review.dto.ReviewReqDto;
@@ -32,55 +33,58 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public List<Products> myReviewList() {
+    public BaseRes myReviewList() {
         return null;
     }
 
     @Override
-    public boolean reviewWrite(String email, ReviewReqDto dto, int product_uid) {
-        Optional<Users> findUser = userRepository.findByEmail(email);
+    public BaseRes reviewWrite(String email, ReviewReqDto dto) {
+//        Optional<Users> findUser = userRepository.findByEmail(email);
 //        Products product = productRepository.find~(product_uid);
         Products product = new Products();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println("reviewWrite" + dateFormat.format(date));
-        Reviews review = dto.toEntity(dto, findUser.get(), product, date);
-        reviewRepository.save(review);
-        return true;
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//        Date date = new Date();
+//        System.out.println("reviewWrite" + dateFormat.format(date));
+//        Reviews review = dto.toEntity(dto, findUser.get(), product);
+        Users user = userRepository.getReferenceById(1);
+        Reviews review = dto.toEntity(dto, user, product);
+        Reviews result = reviewRepository.save(review);
+        BaseRes res = new BaseRes(200,"리뷰 작성 성공", null);
+        return res;
     }
 
     @Override
-    public boolean reviewDelete() {
-        return false;
+    public BaseRes reviewDelete() {
+        return new BaseRes();
     }
 
     @Override
-    public boolean reviewLike() {
-        return false;
+    public BaseRes reviewLike() {
+        return new BaseRes();
     }
 
     @Override
-    public boolean reviewLikeDelete() {
-        return false;
+    public BaseRes reviewLikeDelete() {
+        return new BaseRes();
     }
 
     @Override
-    public boolean reviewReply() {
-        return false;
+    public BaseRes reviewReply() {
+        return new BaseRes();
     }
 
     @Override
-    public boolean reviewReplyDelete() {
-        return false;
+    public BaseRes reviewReplyDelete() {
+        return new BaseRes();
     }
 
     @Override
-    public List<ReviewResDto> productReviewList() {
+    public BaseRes productReviewList() {
         return null;
     }
 
     @Override
-    public boolean reviewReport() {
-        return false;
+    public BaseRes reviewReport() {
+        return new BaseRes();
     }
 }
