@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Inventories {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column

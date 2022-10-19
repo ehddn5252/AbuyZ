@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class SmallCategories {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(name="small_category_name",nullable = false, columnDefinition = "varchar(30) default 'basic'")
