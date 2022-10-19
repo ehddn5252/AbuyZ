@@ -1,4 +1,10 @@
+// React
 import React from "react";
+
+// MUI
+import Container from "@mui/material/Container";
+
+// StyledComponents
 import styled from "styled-components";
 
 export default function MypageSideNav(props) {
@@ -16,7 +22,7 @@ export default function MypageSideNav(props) {
   };
 
   return (
-    <div>
+    <Container>
       <SidebarWrapper>
         <SidebarMenu>
           <SidebarTitle>마이페이지</SidebarTitle>
@@ -56,7 +62,7 @@ export default function MypageSideNav(props) {
           </SidebarList>
         </SidebarMenu>
       </SidebarWrapper>
-    </div>
+    </Container>
   );
 }
 
@@ -83,7 +89,7 @@ const SidebarListItem = styled.li`
   padding: 1rem;
   cursor: pointer;
   display: flex;
-  alignitems: center;
-  borderradius: 10px;
-  fontsize: 2rem;
+  align-items: center;
+  border-radius: 10px;
+  font-size: 2rem;
 `;
