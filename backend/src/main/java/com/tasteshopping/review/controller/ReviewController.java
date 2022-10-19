@@ -5,6 +5,7 @@ import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
+import com.tasteshopping.review.dto.ReviewUIdDto;
 import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -40,29 +42,31 @@ public class ReviewController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> reviewDelete(@RequestBody int review_uid){
-
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
+        int review_uid = dto.getReviewUid();
+        return new ResponseEntity<>(reviewService.reviewDelete(email, review_uid), HttpStatus.OK);
     }
 
     @PostMapping("/like")
-    public ResponseEntity<BaseRes> reviewLike(){
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewLike(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
+        int review_uid = dto.getReviewUid();
+        return new ResponseEntity<>(reviewService.reviewLike(email, review_uid), HttpStatus.OK);
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<BaseRes> reviewLikeDelete(){
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email,  @RequestBody ReviewUIdDto dto){
+        int review_uid = dto.getReviewUid();
+        return new ResponseEntity<>(reviewService.reviewLikeDelete(email, review_uid), HttpStatus.OK);
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<BaseRes> reviewReply(){
+    public ResponseEntity<BaseRes> reviewReply(@AuthenticationPrincipal String email){
         // 관리자만
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 
     @DeleteMapping("/reply")
-    public ResponseEntity<BaseRes> reviewReplyDelete(){
+    public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email){
         // 관리자만
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
@@ -74,7 +78,7 @@ public class ReviewController {
     }
 
     @GetMapping("/report/{review_id}")
-    public ResponseEntity<BaseRes> reviewReport(@PathVariable int review_id){
+    public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @PathVariable int review_id){
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
     }
 

@@ -2,6 +2,7 @@ package com.tasteshopping.review.repository;
 
 import com.tasteshopping.review.entity.Likes;
 import com.tasteshopping.review.entity.Reviews;
+import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +13,5 @@ import java.util.List;
 @Transactional
 public interface LikeRepository extends JpaRepository<Likes, Integer> {
     List<Likes> findAllByReview(Reviews review);
+    Likes findByReviewAndUser(Reviews review, Users user);
 }

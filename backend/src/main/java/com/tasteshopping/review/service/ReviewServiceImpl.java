@@ -59,27 +59,43 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public BaseRes reviewDelete(int review_uid) {
+    public BaseRes reviewDelete(String email, int review_uid) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
         Reviews target = reviewRepository.getReferenceById(review_uid);
-        // 답글 삭제
-        Reviews reply = reviewRepository.findByParentReview(target);
-        if(reply != null) reviewRepository.delete(reply);
-        // 도움이돼요 삭제
-        List<Likes> likeList = likeRepository.findAllByReview(target);
-        for (Likes like: likeList) {
-            likeRepository.delete(like);
+        // 리뷰작성자와 유저가 같은지 확인
+        if(findUser.get() == target.getUser()){
+            // 답글 삭제
+            Reviews reply = reviewRepository.findByParentReview(target);
+            if(reply != null) reviewRepository.delete(reply);
+            // 도움이돼요 삭제
+            List<Likes> likeList = likeRepository.findAllByReview(target);
+            for (Likes like: likeList) {
+                likeRepository.delete(like);
+            }
+            return new BaseRes(200,"리뷰 삭제 성공", null);
         }
-        return new BaseRes(200,"리뷰 삭제 성공", null);
+        return new BaseRes(202,"리뷰 삭제 실패", null);
     }
 
     @Override
-    public BaseRes reviewLike() {
-        return new BaseRes();
+    public BaseRes reviewLike(String email, int review_uid) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        Reviews target = reviewRepository.getReferenceById(review_uid);
+        Likes like = Likes.builder()
+                .review(target)
+                .user(findUser.get())
+                .build();
+        likeRepository.save(like);
+        return new BaseRes(200,"리뷰 도움이돼요 등록 성공", null);
     }
 
     @Override
-    public BaseRes reviewLikeDelete() {
-        return new BaseRes();
+    public BaseRes reviewLikeDelete(String email, int review_uid) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        Reviews reviews = reviewRepository.getReferenceById(review_uid);
+        Likes target = likeRepository.findByReviewAndUser(reviews,findUser.get());
+        likeRepository.delete(target);
+        return new BaseRes(200,"리뷰 도움이돼요 삭제 성공", null);
     }
 
     @Override
