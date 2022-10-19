@@ -14,4 +14,5 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Reports, Integer> {
 //    List<Likes> findAllByReview(Reviews review);
 //    Likes findByReviewAndUser(Reviews review, Users user);
+    Reports findByReviewAndUser(Reviews review, Users user);
 }

@@ -18,5 +18,5 @@ public interface ReviewService {
     BaseRes reviewReply(String email, ReplyReqDto dto);
     BaseRes reviewReplyDelete(String email, int review_uid);
     BaseRes productReviewList();
-    BaseRes reviewReport();
+    BaseRes reviewReport(String email, int review_uid);
 }

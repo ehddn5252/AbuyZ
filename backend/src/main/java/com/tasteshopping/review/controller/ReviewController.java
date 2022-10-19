@@ -78,8 +78,9 @@ public class ReviewController {
     }
 
     @GetMapping("/report/{review_id}")
-    public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @PathVariable int review_id){
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto){
+        int review_uid = dto.getReviewUid();
+        return new ResponseEntity<>(reviewService.reviewReport(email, review_uid), HttpStatus.OK);
     }
 
 }

@@ -7,8 +7,10 @@ import com.tasteshopping.review.dto.ReplyReqDto;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
 import com.tasteshopping.review.entity.Likes;
+import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.review.repository.LikeRepository;
+import com.tasteshopping.review.repository.ReportRepository;
 import com.tasteshopping.review.repository.ReviewRepository;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
@@ -18,10 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final LikeRepository likeRepository;
+    private final ReportRepository reportRepository;
 
 
     @Override
@@ -83,6 +82,10 @@ public class ReviewServiceImpl implements ReviewService {
     public BaseRes reviewLike(String email, int review_uid) {
         Optional<Users> findUser = userRepository.findByEmail(email);
         Reviews target = reviewRepository.getReferenceById(review_uid);
+        // 이미 좋아요 했는지 확인
+        if(likeRepository.findByReviewAndUser(target,findUser.get()) !=null){
+            return new BaseRes(202,"리뷰 도움이돼요 등록 실패 - 이미 좋아요 누름", null);
+        }
         Likes like = Likes.builder()
                 .review(target)
                 .user(findUser.get())
@@ -132,7 +135,18 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public BaseRes reviewReport() {
-        return new BaseRes();
+    public BaseRes reviewReport(String email, int review_uid) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        Reviews target = reviewRepository.getReferenceById(review_uid);
+        //이미 신고했는지 확인
+        if(reportRepository.findByReviewAndUser(target, findUser.get()) != null){
+            return new BaseRes(202,"리뷰 신고 실패 - 이미 신고함", null);
+        }
+        Reports report = Reports.builder()
+                .review(target)
+                .user(findUser.get())
+                .build();
+        reportRepository.delete(report);
+        return new BaseRes(200,"리뷰 신고 성공", null);
     }
 }
