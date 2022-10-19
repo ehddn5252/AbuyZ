@@ -36,6 +36,10 @@ public class Products {
     @Column(name="review_rate")
     Float reviewRate;
 
+    @Column(name="delivery_fee",nullable = false)
+    @ColumnDefault("0")
+    Integer deliveryFee;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="small_categories_uid")
     SmallCategories smallCategory;
