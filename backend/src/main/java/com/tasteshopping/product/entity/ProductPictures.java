@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class ProductPictures {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(name="img_url",columnDefinition = "varchar(100)")

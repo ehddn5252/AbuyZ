@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class Products {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(nullable = false, columnDefinition = "varchar(30) default 'base_product'")

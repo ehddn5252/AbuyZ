@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 @Entity
 public class CustomerCenters {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(name = "title", columnDefinition = "varchar(50)")

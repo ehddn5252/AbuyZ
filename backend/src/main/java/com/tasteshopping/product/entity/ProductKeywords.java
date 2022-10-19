@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class ProductKeywords {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(name="name",nullable = false, columnDefinition = "varchar(40) default 'defaultName'")

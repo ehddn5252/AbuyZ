@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Carts {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @Column(nullable = false)
