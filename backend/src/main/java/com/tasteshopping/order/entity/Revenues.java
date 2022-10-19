@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Entity
 public class Revenues {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
     @CreatedDate
