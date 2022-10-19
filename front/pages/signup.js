@@ -1,3 +1,4 @@
+// React
 import React from "react";
 
 // MUI
@@ -13,28 +14,13 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Box from "@mui/material/Box";
 
+// StyledComponent
+import styled from "styled-components";
+
 export default function Signup() {
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#F5F5F5",
-          borderRadius: "1rem",
-          width: "100%",
-          padding: 4,
-          paddingTop: 0,
-        }}
-      >
+    <SignupContainer component="main">
+      <SignupBox>
         <Typography component="h1" variant="h3" sx={{ color: "#EF2A23" }}>
           회원가입
         </Typography>
@@ -160,7 +146,6 @@ export default function Signup() {
           autoComplete="detailAddress"
           sx={{ backgroundColor: "white" }}
         />
-        {/* 주소 */}
         <Button
           fullWidth
           href="/login"
@@ -170,7 +155,21 @@ export default function Signup() {
         >
           회원가입
         </Button>
-      </Box>
-    </Container>
+      </SignupBox>
+    </SignupContainer>
   );
 }
+
+const SignupContainer = styled(Container)`
+  display: flex;
+  align-items: center;
+  width: 40rem;
+  height: 100vh;
+`;
+
+const SignupBox = styled(Box)`
+  background-color: #f5f5f5;
+  border-radius: 1rem;
+  width: 100%;
+  padding: 3rem;
+`;

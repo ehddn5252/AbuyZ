@@ -1,3 +1,4 @@
+// React
 import React, { useState } from "react";
 
 // MUI
@@ -12,6 +13,9 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 
+// StyledComponents
+import styled from "styled-components";
+
 export default function AdminSideNav() {
   const [productExpand, setProductExpand] = useState(false);
   const [userExpand, setUserExpand] = useState(false);
@@ -19,58 +23,21 @@ export default function AdminSideNav() {
   const [evnetExpand, setEventExpand] = useState(false);
 
   return (
-    <Container
-      sx={{
-        display: "flex",
-        position: "fixed",
-        flexDirection: "column",
-        justifyContent: "center",
-        top: "15%",
-        left: "3%",
-        borderRadius: "1rem",
-        width: "20rem",
-      }}
-    >
-      <Card
-        sx={{
-          display: "flex",
-          width: "11rem",
-          height: "3rem",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          padding: "1rem",
-        }}
-      >
-        <Typography sx={{ fontSize: "1.5rem", fontWeight: "border" }}>
-          <Link
-            href="/admin/dashboard"
-            sx={{ textDecoration: "none", color: "#8E8E8E" }}
-          >
-            대시보드
-          </Link>
-        </Typography>
-      </Card>
-      <Card sx={{ width: "12rem", padding: "0.5rem" }}>
+    <SideNavContainer>
+      <SoloCard>
+        <HighTag>
+          <TagLink href="/admin/dashboard">대시보드</TagLink>
+        </HighTag>
+      </SoloCard>
+      <CoupleCard>
         <CardActions
           onClick={() => setProductExpand(!productExpand)}
           sx={{ cursor: "pointer" }}
         >
           <Grid container justify="center">
-            <Grid
-              item
-              xs={9}
-              sx={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "1.5rem",
-                  color: "#8E8E8E",
-                  fontWeight: "border",
-                }}
-              >
-                상품관리
-              </Typography>
-            </Grid>
+            <TitleGrid item xs={9}>
+              <TitleTag>상품관리</TitleTag>
+            </TitleGrid>
             <Grid item xs={3}>
               <IconButton sx={{ padding: 0 }}>
                 {productExpand ? (
@@ -83,45 +50,23 @@ export default function AdminSideNav() {
           </Grid>
         </CardActions>
         <Collapse in={productExpand} sx={{ backgroundColor: "#EAEAEA" }}>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/product"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              상품조회
-            </Link>
-          </Typography>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/product"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              상품등록
-            </Link>
-          </Typography>
+          <LowerTag>
+            <TagLink href="/admin/product">상품조회</TagLink>
+          </LowerTag>
+          <LowerTag>
+            <TagLink href="/admin/product">상품등록</TagLink>
+          </LowerTag>
         </Collapse>
-      </Card>
-      <Card sx={{ width: "12rem", padding: "0.5rem" }}>
+      </CoupleCard>
+      <CoupleCard>
         <CardActions
           onClick={() => setUserExpand(!userExpand)}
           sx={{ cursor: "pointer" }}
         >
           <Grid container justify="center">
-            <Grid
-              item
-              xs={9}
-              sx={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "1.5rem",
-                  color: "#8E8E8E",
-                  fontWeight: "border",
-                }}
-              >
-                고객관리
-              </Typography>
-            </Grid>
+            <TitleGrid item xs={9}>
+              <TitleTag>고객관리</TitleTag>
+            </TitleGrid>
             <Grid item xs={3}>
               <IconButton sx={{ padding: 0 }}>
                 {userExpand ? (
@@ -134,50 +79,23 @@ export default function AdminSideNav() {
           </Grid>
         </CardActions>
         <Collapse in={userExpand} sx={{ backgroundColor: "#EAEAEA" }}>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/user"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              문의관리
-            </Link>
-          </Typography>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/user"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              신고관리
-            </Link>
-          </Typography>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/user"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              리뷰관리
-            </Link>
-          </Typography>
+          <LowerTag>
+            <TagLink href="/admin/user">문의관리</TagLink>
+          </LowerTag>
+          <LowerTag>
+            <TagLink href="/admin/user">신고관리</TagLink>
+          </LowerTag>
+          <LowerTag>
+            <TagLink href="/admin/user">리뷰관리</TagLink>
+          </LowerTag>
         </Collapse>
-      </Card>
-      <Card sx={{ width: "12rem", padding: "0.5rem" }}>
+      </CoupleCard>
+      <CoupleCard>
         <CardActions onClick={() => setCouponExpand(!couponExpand)}>
           <Grid container justify="center">
-            <Grid
-              item
-              xs={9}
-              sx={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "1.5rem",
-                  color: "#8E8E8E",
-                  fontWeight: "border",
-                }}
-              >
-                쿠폰관리
-              </Typography>
-            </Grid>
+            <TitleGrid item xs={9}>
+              <TitleTag>쿠폰관리</TitleTag>
+            </TitleGrid>
             <Grid item xs={3}>
               <IconButton sx={{ padding: 0 }}>
                 {couponExpand ? (
@@ -190,42 +108,20 @@ export default function AdminSideNav() {
           </Grid>
         </CardActions>
         <Collapse in={couponExpand} sx={{ backgroundColor: "#EAEAEA" }}>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/coupon"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              쿠폰조회
-            </Link>
-          </Typography>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/coupon"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              쿠폰등록
-            </Link>
-          </Typography>
+          <LowerTag>
+            <TagLink href="/admin/coupon">쿠폰조회</TagLink>
+          </LowerTag>
+          <LowerTag>
+            <TagLink href="/admin/coupon">쿠폰등록</TagLink>
+          </LowerTag>
         </Collapse>
-      </Card>
-      <Card sx={{ width: "12rem", padding: "0.5rem" }}>
+      </CoupleCard>
+      <CoupleCard>
         <CardActions onClick={() => setEventExpand(!evnetExpand)}>
           <Grid container justify="center">
-            <Grid
-              item
-              xs={9}
-              sx={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <Typography
-                sx={{
-                  fontSize: "1.5rem",
-                  color: "#8E8E8E",
-                  fontWeight: "border",
-                }}
-              >
-                이벤트관리
-              </Typography>
-            </Grid>
+            <TitleGrid item xs={9}>
+              <TitleTag>이벤트관리</TitleTag>
+            </TitleGrid>
             <Grid item xs={3}>
               <IconButton sx={{ padding: 0 }}>
                 {evnetExpand ? (
@@ -238,48 +134,68 @@ export default function AdminSideNav() {
           </Grid>
         </CardActions>
         <Collapse in={evnetExpand} sx={{ backgroundColor: "#EAEAEA" }}>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/event"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              이벤트조회
-            </Link>
-          </Typography>
-          <Typography sx={{ padding: "0.5rem" }}>
-            <Link
-              href="/admin/event"
-              sx={{ textDecoration: "none", color: "black" }}
-            >
-              이벤트등록
-            </Link>
-          </Typography>
+          <LowerTag>
+            <TagLink href="/admin/event">이벤트조회</TagLink>
+          </LowerTag>
+          <LowerTag>
+            <TagLink href="/admin/event">이벤트등록</TagLink>
+          </LowerTag>
         </Collapse>
-      </Card>
-      <Card
-        sx={{
-          display: "flex",
-          width: "11rem",
-          height: "3rem",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          padding: "1rem",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: "1.5rem",
-            fontWeight: "border",
-          }}
-        >
-          <Link
-            href="/admin/chart"
-            sx={{ textDecoration: "none", color: "#8E8E8E" }}
-          >
-            통계
-          </Link>
-        </Typography>
-      </Card>
-    </Container>
+      </CoupleCard>
+      <SoloCard>
+        <HighTag>
+          <TagLink href="/admin/chart">통계</TagLink>
+        </HighTag>
+      </SoloCard>
+    </SideNavContainer>
   );
 }
+
+const SideNavContainer = styled(Container)`
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  top: 20%;
+  left: 3%;
+  border-radius: 1rem;
+  width: 20rem;
+`;
+
+const SoloCard = styled(Card)`
+  display: flex;
+  width: 11rem;
+  height: 3rem;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+`;
+
+const CoupleCard = styled(Card)`
+  width: 12rem;
+  padding: 0.5rem;
+`;
+
+const TitleGrid = styled(Grid)`
+  display: flex;
+  justify-content: flex-start;
+`;
+const TitleTag = styled(Typography)`
+  font-size: 1.5rem;
+  color: #8e8e8e;
+  font-weight: border;
+`;
+
+const TagLink = styled(Link)`
+  text-decoration: none;
+  color: #8e8e8e;
+`;
+
+const HighTag = styled(Typography)`
+  font-size: 1.5rem;
+  font-weight: border;
+`;
+
+const LowerTag = styled(Typography)`
+  padding: 0.5rem;
+`;

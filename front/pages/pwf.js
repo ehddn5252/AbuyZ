@@ -1,3 +1,4 @@
+// React
 import React from "react";
 
 // MUI
@@ -7,27 +8,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
+// StyledComponents
+import styled from "styled-components";
+
 export default function PasswordFind() {
   return (
-    <Container
-      component="main"
-      maxWidth="xs"
-      sx={{
-        display: "flex",
-        height: "100vh",
-        alignItems: "center",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#F5F5F5",
-          borderRadius: "1rem",
-          padding: 4,
-          paddingTop: 0,
-        }}
-      >
+    <PwfContainer component="main">
+      <PwfBox>
         <Typography component="h1" variant="h3" sx={{ color: "red" }}>
           비밀번호 찾기
         </Typography>
@@ -70,7 +57,22 @@ export default function PasswordFind() {
             비밀번호 변경
           </Button>
         </Box>
-      </Box>
-    </Container>
+      </PwfBox>
+    </PwfContainer>
   );
 }
+
+const PwfContainer = styled(Container)`
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PwfBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  border-radius: 1rem;
+  padding: 3rem;
+`;

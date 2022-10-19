@@ -1,11 +1,16 @@
+// React
 import React, { useState } from "react";
+
+// StyledComponents
+import styled from "styled-components";
+
+// 하위컴포넌트
 import MypageSideNav from "../components/nav/MypageSideNav";
 import MyInfo from "../components/mypage/MyInfo";
 import MyInfoChange from "../components/mypage/MyInfoChange";
 import MyComplainList from "../components/mypage/MyComplainList";
 import MyCouponList from "../components/mypage/MyCouponList";
 import MyOrderList from "../components/mypage/MyOrderList";
-import styled from "styled-components";
 
 export default function Mypage() {
   const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars

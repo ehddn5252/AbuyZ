@@ -1,5 +1,7 @@
+// React
 import React from "react";
 
+// MUI
 import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
 import Menu from "@mui/material/Menu";
@@ -23,17 +25,7 @@ export default function Nav() {
       </UserBox>
       <SearchBox>
         <LogoLink href="/">ITDA</LogoLink>
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: 600,
-            height: 50,
-            margin: "0.5rem",
-          }}
-        >
+        <SearchPaper component="form">
           <InputBase
             sx={{ ml: 1, flex: 1 }}
             placeholder="찾으시는 상품을 검색해주세요"
@@ -47,7 +39,7 @@ export default function Nav() {
           >
             <SearchIcon />
           </IconButton>
-        </Paper>
+        </SearchPaper>
         <IconBox>
           <Link href="/event">
             <EventIcon fontSize="large" sx={{ color: "black" }} />
@@ -242,6 +234,16 @@ const SearchBox = styled.div`
   border-style: solid;
   border-color: #eaeaea;
 `;
+
+const SearchPaper = styled(Paper)`
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  width: 600px;
+  height: 50px;
+  margin: 0.5rem;
+`;
+
 const LogoLink = styled(Link)`
   text-decoration: none;
   font-size: 2rem;
