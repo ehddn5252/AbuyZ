@@ -17,18 +17,23 @@ export default function Mypage() {
   return (
     <MypageContainer>
       <MypageSideNav setTap={setTap} />
-      <MyInfo />
-      {tap === 0 ? <MyOrderList /> : null}
-      {tap === 1 ? <MyComplainList /> : null}
-      {tap === 2 ? <MyCouponList /> : null}
-      {tap === 3 ? <MyInfoChange /> : null}
+      <MyDiv>
+        <MyInfo />
+        {tap === 0 ? <MyOrderList /> : null}
+        {tap === 1 ? <MyComplainList /> : null}
+        {tap === 2 ? <MyCouponList /> : null}
+        {tap === 3 ? <MyInfoChange /> : null}
+      </MyDiv>
     </MypageContainer>
   );
 }
 
 const MypageContainer = styled.div`
   display: flex;
-  padding: 5rem;
-  padding-right: 10rem;
-  padding-left: 10rem;
+  padding: 1rem;
+`;
+
+const MyDiv = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

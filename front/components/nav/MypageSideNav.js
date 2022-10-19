@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Container from "@mui/material/Container";
@@ -7,67 +7,99 @@ import Container from "@mui/material/Container";
 // StyledComponents
 import styled from "styled-components";
 
-export default function MypageSideNav(props) {
+export default function MypageSideNav(setTap) {
+  const [activeTap, SetActiveTap] = useState(0);
+
   const tap0Change = () => {
-    props.setTap(0);
+    setTap.setTap(0);
+    SetActiveTap(0);
   };
   const tap1Change = () => {
-    props.setTap(1);
+    setTap.setTap(1);
+    SetActiveTap(1);
   };
   const tap2Change = () => {
-    props.setTap(2);
+    setTap.setTap(2);
+    SetActiveTap(2);
   };
   const tap3Change = () => {
-    props.setTap(3);
+    setTap.setTap(3);
+    SetActiveTap(3);
   };
-
   return (
-    <Container>
+    <NavContainer>
       <SidebarWrapper>
         <SidebarMenu>
-          <SidebarTitle>마이페이지</SidebarTitle>
+          <SidebarTitle>내 정보 관리</SidebarTitle>
           <SidebarList>
             <SidebarListItem>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
+              <TagButton
                 onClick={tap0Change}
+                style={
+                  activeTap === 0
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
               >
                 주문/리뷰 내역
-              </button>
+              </TagButton>
             </SidebarListItem>
             <SidebarListItem>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
+              <TagButton
                 onClick={tap1Change}
+                style={
+                  activeTap === 1
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
               >
                 문의 내역
-              </button>
+              </TagButton>
             </SidebarListItem>
             <SidebarListItem>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
+              <TagButton
                 onClick={tap2Change}
+                style={
+                  activeTap === 2
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
               >
                 쿠폰함
-              </button>
+              </TagButton>
             </SidebarListItem>
             <SidebarListItem>
-              <button
-                style={{ border: "none", backgroundColor: "white" }}
+              <TagButton
                 onClick={tap3Change}
+                style={
+                  activeTap === 3
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
               >
-                회원정보관리문의 내역
-              </button>
+                회원정보관리
+              </TagButton>
             </SidebarListItem>
           </SidebarList>
         </SidebarMenu>
       </SidebarWrapper>
-    </Container>
+    </NavContainer>
   );
 }
 
+const NavContainer = styled(Container)`
+  margin: 0;
+  margin-top: 3rem;
+  margin-right: 10rem;
+  margin-left: 3rem;
+  padding: 0;
+  width: 20rem;
+`;
+
 const SidebarWrapper = styled.div`
-  padding: 20px;
+  padding: 2rem;
+  border: 0.2rem solid black;
+  border-radius: 1rem;
   color: black;
 `;
 
@@ -76,8 +108,8 @@ const SidebarMenu = styled.div`
 `;
 
 const SidebarTitle = styled.h3`
-  font-size: 3rem;
-  color: rgb(197, 197, 197);
+  font-size: 2.5rem;
+  margin-left: 1.5rem;
 `;
 
 const SidebarList = styled.ul`
@@ -87,9 +119,15 @@ const SidebarList = styled.ul`
 
 const SidebarListItem = styled.li`
   padding: 1rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  font-size: 2rem;
+`;
+
+const TagButton = styled.button`
+  border: none;
+  background-color: white;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  cursor: pointer;
 `;
