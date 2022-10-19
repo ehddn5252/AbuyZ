@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductReqDto {
+public class ProductDto {
 
     private String name;
     private String price;
