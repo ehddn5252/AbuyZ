@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/globals.css";
 import "../styles/base.css";
 import Nav from "../components/nav/Nav.js";
 import AdminNav from "../components/nav/AdminNav.js";

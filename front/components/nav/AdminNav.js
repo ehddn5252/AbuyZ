@@ -35,11 +35,9 @@ export default function AdminNav() {
         <Grid item xs={2}></Grid>
         <Grid item xs={3}>
           <UserDiv onClick={handleClick}>
-            <PersonIcon sx={{ fontSize: "3.5rem", color: "white" }} />
+            <PersonIcon sx={{ fontSize: "2rem", color: "white" }} />
             <UserName>권도건님</UserName>
-            <KeyboardArrowDownIcon
-              sx={{ fontSize: "3.5rem", color: "white" }}
-            />
+            <KeyboardArrowDownIcon sx={{ fontSize: "2rem", color: "white" }} />
           </UserDiv>
           <Menu
             anchorEl={anchorEl}
@@ -50,15 +48,15 @@ export default function AdminNav() {
             transformOrigin={{ horizontal: "center", vertical: "top" }}
             anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
           >
-            <MenuItem sx={{ fontSize: "1.5rem" }}>
+            <MenuItem>
               <ListItemIcon sx={{ marginRight: "1rem" }}>
-                <Settings fontSize="large" />
+                <Settings />
               </ListItemIcon>
               마이페이지
             </MenuItem>
-            <MenuItem sx={{ fontSize: "1.5rem" }}>
+            <MenuItem>
               <ListItemIcon sx={{ marginRight: "1rem" }}>
-                <Logout fontSize="large" />
+                <Logout />
               </ListItemIcon>
               로그아웃
             </MenuItem>
@@ -73,12 +71,12 @@ export default function AdminNav() {
 const AdminNavContainer = styled.div`
   display: flex;
   background-color: #375176;
-  padding: 3rem;
+  padding: 1rem;
 `;
 
 const LogoLink = styled(Link)`
   font-weight: bold;
-  font-size: 3rem;
+  font-size: 2rem;
   color: #e60012;
   text-decoration: none;
 `;
@@ -94,6 +92,6 @@ const UserName = styled.p`
   margin: 0;
   padding: 0;
   margin: 0.3rem;
-  font-size: 2rem;
+  font-size: 1rem;
   color: white;
 `;
