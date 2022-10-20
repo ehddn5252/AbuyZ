@@ -43,10 +43,10 @@ const MainContainer = styled.div`
   align-items: center;
   margin: 0;
   padding: 0;
+  bottom: 0;
   background-color: #28323c;
-  height: 20vh;
+  height: 25vh;
   position: relative;
-  transform: translateY(100%);
 `;
 
 const FooterContent = styled(Grid)`
