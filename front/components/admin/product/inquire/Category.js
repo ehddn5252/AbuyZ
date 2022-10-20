@@ -112,7 +112,7 @@ const CategoryBox = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 1000;
   margin-right: 1rem;
 `;
