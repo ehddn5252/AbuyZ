@@ -7,6 +7,7 @@ import com.tasteshopping.user.dto.ResultDto;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.wish.dto.WishListDto;
+import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.entity.WishLists;
 import com.tasteshopping.wish.repository.WishRepository;
 import lombok.AllArgsConstructor;
@@ -72,8 +73,19 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
-    public ResponseDto cancel(String email, Integer wish_id) {
-
-        return null;
+    @Transactional
+    public ResponseDto cancel(String email, WishUidDto wishUidDto) {
+        ResponseDto responseDto = new ResponseDto();
+        Users user = userRepository.findByEmail(email).get();
+        Optional<WishLists> wishLists = wishRepository.findByUserAndUid(user,wishUidDto.getWish_uid());
+        if(!wishLists.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("잘못된 접근");
+            return responseDto;
+        }
+        wishRepository.delete(wishLists.get());
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("삭제 성공");
+        return responseDto;
     }
 }

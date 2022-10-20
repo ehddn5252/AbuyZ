@@ -2,16 +2,14 @@ package com.tasteshopping.wish.controller;
 
 import com.sun.org.apache.regexp.internal.RE;
 import com.tasteshopping.user.dto.ResponseDto;
+import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.service.WishServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -27,6 +25,11 @@ public class WishController {
     public ResponseEntity<ResponseDto> add(@AuthenticationPrincipal String email,
                                            @PathVariable String product_uid){
         return new ResponseEntity<>(wishService.wish(email,product_uid),HttpStatus.OK);
+    }
+    @DeleteMapping
+    public ResponseEntity<ResponseDto>cancel(@AuthenticationPrincipal String email,
+                                             @RequestBody WishUidDto wishUidDto){
+        return new ResponseEntity<>(wishService.cancel(email,wishUidDto),HttpStatus.OK);
     }
 
 }
