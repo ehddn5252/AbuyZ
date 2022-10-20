@@ -107,12 +107,13 @@ export default function MyinfoChange() {
 }
 
 const InfoContainer = styled.div`
-  margin-top: 10rem;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
   width: 100%;
 `;
 
 const MajorTitle = styled.h1`
-  font-size: 3rem;
+  font-size: 2rem;
 `;
 
 const ContentDiv = styled.div`
@@ -127,7 +128,7 @@ const ContentDiv = styled.div`
 const SubTitle = styled.p`
   padding: 0.5rem;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   width: 20rem;
 `;
 
