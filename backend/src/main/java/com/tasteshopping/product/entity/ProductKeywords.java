@@ -18,7 +18,7 @@ public class ProductKeywords {
     @Column(name="name",nullable = false, columnDefinition = "varchar(40) default 'defaultName'")
     String name;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="products_uid")
     Products product;
 }

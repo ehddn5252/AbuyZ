@@ -24,7 +24,7 @@ public class ProductOptionLists {
     @Column(name="option_price")
     Integer optionPrice;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="product_options_uid")
     ProductOptions productOptions;
 }
