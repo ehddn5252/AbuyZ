@@ -1,13 +1,11 @@
 package com.tasteshopping.coupon.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.product.entity.BigCategories;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
-import java.time.YearMonth;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Getter
 @Setter
@@ -17,16 +15,23 @@ import java.time.YearMonth;
 public class CouponDto {
     private String name;
     private int discount_price;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-DD", timezone = "Asia/Seoul")
-    private LocalDateTime start_date;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-DD", timezone = "Asia/Seoul")
-    private LocalDateTime end_date;
+    private String start_date;
+    private String end_date;
+    private int big_categories_uid;
 
-    public Coupons toEntity(){
-        return Coupons.builder()
-
-                .build();
+    public Coupons toEntity(BigCategories bigCategories){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return Coupons.builder()
+                    .startDate(formatter.parse(this.start_date))
+                    .endDate(formatter.parse(this.end_date))
+                    .name(this.name)
+                    .bigCategories(bigCategories)
+                    .discountPrice(this.discount_price)
+                    .build();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

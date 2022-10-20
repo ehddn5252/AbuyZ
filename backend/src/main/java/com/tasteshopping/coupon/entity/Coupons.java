@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.Date;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -25,6 +27,14 @@ public class Coupons {
 
     @Column(nullable = false)
     private int discountPrice;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endDate;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bigCategoriesUid")
