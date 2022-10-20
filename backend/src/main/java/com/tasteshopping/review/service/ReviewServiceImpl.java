@@ -42,17 +42,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public BaseRes reviewWrite(String email, ReviewReqDto dto) {
+    public BaseRes reviewWrite(String email, ReviewReqDto dto, String imagePath) {
 //        상품과 회원 완료되면 변경
         Optional<Users> findUser = userRepository.findByEmail(email);
         Optional<Products> product = productRepository.findById(dto.getProduct_uid());
-//        Reviews review = dto.toEntity(dto, findUser.get(), product);
-//        임시 날짜
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-//        Date date = new Date();
-//        System.out.println("reviewWrite" + dateFormat.format(date));
-//        Users user = userRepository.getReferenceById(1);
-        Reviews review = dto.toEntity(dto, findUser.get(), product.get());
+        // 이미 작성된 리뷰가 있는지 확인
+
+
+        Reviews review = dto.toEntity(dto, findUser.get(), product.get(), imagePath);
         reviewRepository.save(review);
         return new BaseRes(200,"리뷰 작성 성공", null);
     }
@@ -104,9 +101,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BaseRes reviewReply(String email, ReplyReqDto dto) {
-        // 관리자인지 확인
+
         //        상품과 회원 완료되면 변경
         Optional<Users> findUser = userRepository.findByEmail(email);
+        Role role = findUser.get().getUserRoles();
+        // 관리자인지 확인
+        if(role != Role.ADMIN){
+            return new BaseRes(202,"리뷰 답글 작성 실패 - 관리자가 아님", null);
+        }
         Products product = new Products();
 //        Products product = productRepository.find~(product_uid);
         Reviews parent = reviewRepository.getReferenceById(dto.getReview_uid());

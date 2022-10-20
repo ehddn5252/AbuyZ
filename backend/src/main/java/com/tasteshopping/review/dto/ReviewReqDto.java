@@ -18,14 +18,13 @@ public class ReviewReqDto {
     private float rating;
     private int product_uid;
 
-    public static Reviews toEntity(ReviewReqDto dto, Users user, Products product){
+    public static Reviews toEntity(ReviewReqDto dto, Users user, Products product, String imagePath){
         return Reviews.builder()
                 .product(product)
-//                .date(date)
                 .content(dto.getContent())
                 .rating(dto.getRating())
                 .user(user)
-//                .img_url()
+                .imgUrl(imagePath)
                 .build();
     }
 }
