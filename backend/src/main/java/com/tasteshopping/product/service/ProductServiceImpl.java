@@ -1,6 +1,7 @@
 package com.tasteshopping.product.service;
 
 import com.tasteshopping.product.dto.ProductCreateDto;
+import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.entity.Brands;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.entity.SmallCategories;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -90,6 +88,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteProduct(Integer uid) {
+        productRepository.delete(productRepository.findById(uid).get());
+    }
+
+    @Override
     public void registerProduct(ProductCreateDto productCreateDto) {
         String brandName = productCreateDto.getBrandName();
         Optional<Brands> brandsOptional = brandRepository.findByName(brandName);
@@ -118,9 +121,18 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Products> getAllProduct() {
+    public List<ProductDto> getAllProduct() {
         List<Products> l = productRepository.findAll();
-        return l;
+        System.out.println("===================================");
+        System.out.println(l);
+        System.out.println("===================================");
+
+        List<ProductDto> new_l = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            new_l.add(l.get(i).toDto());
+        }
+
+        return new_l;
     }
 
     @Override

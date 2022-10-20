@@ -30,14 +30,14 @@ public class Products {
     @Column(name = "description_img", columnDefinition = "varchar(500)")
     private String descriptionImg;
 
-    @Column(columnDefinition = "varchar(200)")
-    private String origin;
-
+//    @Column(columnDefinition = "varchar(200)")
+//    private String origin;
+//
     @Column(columnDefinition = "varchar(40)")
     private String status;
-
-    @Column(columnDefinition = "varchar(200)")
-    private String producer;
+//
+//    @Column(columnDefinition = "varchar(200)")
+//    private String producer;
 
     @Column(name = "discount_rate", nullable = false)
     @ColumnDefault("0")
@@ -50,11 +50,11 @@ public class Products {
     @ColumnDefault("0")
     private Integer deliveryFee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "small_categories_uid")
     private SmallCategories smallCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "brands_uid")
     private Brands brand;
 

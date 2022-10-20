@@ -23,15 +23,15 @@ public class ProductDto {
     private Integer price;
     private Integer discountRate;
     private String descriptionImg;
-    private String producer;
+//    private String producer;
     private Float reviewRate;
 
     //
     private Integer uid;
 
-    private String origin;
+//    private String origin;
 
-    private String status;
+//    private String status;
 
     private Integer deliveryFee;
 

@@ -4,7 +4,7 @@ import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductCreateReqDto;
 import com.tasteshopping.product.dto.ProductDto;
-import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.dto.ProductUidReqDto;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,13 +40,9 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {
-        List<Products> l = productService.getAllProduct();
         System.out.println("in getAllProduct");
-        List<ProductDto> new_l = new ArrayList<>();
-        for (int i = 0; i < l.size(); ++i) {
-            new_l.add(l.get(i).toDto());
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", new_l));
+        List<ProductDto> productDtoList =productService.getAllProduct();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
 
     @PostMapping("/register")
@@ -56,6 +52,15 @@ public class ProductController {
         productService.createProductRelated(productCreateDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
     }
+
+    @DeleteMapping()
+    public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
+        Integer uid = productUidReqDto.getUid();
+        productService.deleteProduct(uid);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
+
+    }
+
 
     @GetMapping("/big-category-list")
     public ResponseEntity<BaseRes> getBigCategoryList() {
