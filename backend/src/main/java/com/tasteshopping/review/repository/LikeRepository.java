@@ -14,4 +14,10 @@ import java.util.List;
 public interface LikeRepository extends JpaRepository<Likes, Integer> {
     List<Likes> findAllByReview(Reviews review);
     Likes findByReviewAndUser(Reviews review, Users user);
+    boolean existsByReviewAndUser(Reviews review, Users user);
+
+    //해당리뷰좋아요개수 count
+    int countByReview(Reviews review);
+
+
 }

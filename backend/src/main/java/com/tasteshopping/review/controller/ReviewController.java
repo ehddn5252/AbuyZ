@@ -96,10 +96,9 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.reviewReplyDelete(email, review_uid), HttpStatus.OK);
     }
 
-    @GetMapping("/{product_id}")
-    public ResponseEntity<BaseRes> productReviewList(@PathVariable int product_id) {
-        List<ReviewResDto> list = new ArrayList<>(); // dto로 변경해야함
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+    @GetMapping("/{product_id}/{page}")
+    public ResponseEntity<BaseRes> productReviewList(@AuthenticationPrincipal String email, @PathVariable int product_id, @PathVariable int page) {
+        return new ResponseEntity<>(reviewService.productReviewList(email, product_id, page-1), HttpStatus.OK);
     }
 
     @PostMapping("/report")
