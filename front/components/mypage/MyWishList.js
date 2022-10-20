@@ -71,7 +71,8 @@ export default function MyWishList() {
 }
 
 const MyOrderContainer = styled.div`
-  margin-top: 10rem;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
   width: 100%;
 `;
 

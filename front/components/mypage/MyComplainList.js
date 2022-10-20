@@ -65,7 +65,8 @@ export default function MyComplainList() {
 }
 
 const MyComplainContainer = styled.div`
-  margin-top: 10rem;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
   width: 100%;
 `;
 
