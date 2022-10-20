@@ -23,9 +23,6 @@ public class WishLists {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer uid;
 
-    @Column
-    private Integer type;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "uid")
     private Users user;
