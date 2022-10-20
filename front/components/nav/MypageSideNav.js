@@ -109,11 +109,11 @@ const NavContainer = styled(Container)`
   margin-right: 6rem;
   margin-left: 3rem;
   padding: 0;
-  width: 20%;
+  width: 15%;
 `;
 
 const SidebarWrapper = styled.div`
-  padding: 2rem;
+  padding: 1rem;
   border: 0.2rem solid black;
   border-radius: 1rem;
   color: black;
@@ -124,7 +124,8 @@ const SidebarMenu = styled.div`
 `;
 
 const SidebarTitle = styled.h3`
-  font-size: 2.5rem;
+  font-size: 2rem;
+  font-weight: 1000;
   margin-left: 1.5rem;
 `;
 
@@ -143,7 +144,7 @@ const SidebarListItem = styled.li`
 const TagButton = styled.button`
   border: none;
   background-color: white;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
   cursor: pointer;
 `;

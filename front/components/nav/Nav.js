@@ -44,7 +44,7 @@ export default function Nav() {
           <Link href="/event">
             <EventIcon fontSize="large" sx={{ color: "black" }} />
           </Link>
-          <Link href="/event">
+          <Link href="/event" sx={{ textDecoration: "none" }}>
             <IconTitle>이벤트</IconTitle>
           </Link>
         </IconBox>
@@ -52,7 +52,7 @@ export default function Nav() {
           <Link href="/mypage">
             <PersonIcon fontSize="large" sx={{ color: "black" }} />
           </Link>
-          <Link href="/mypage">
+          <Link href="/mypage" sx={{ textDecoration: "none" }}>
             <IconTitle>마이페이지</IconTitle>
           </Link>
         </IconBox>
@@ -60,7 +60,7 @@ export default function Nav() {
           <Link href="/basket">
             <ShoppingBasketIcon fontSize="large" sx={{ color: "black" }} />
           </Link>
-          <Link href="/basket">
+          <Link href="/basket" sx={{ textDecoration: "none" }}>
             <IconTitle>장바구니</IconTitle>
           </Link>
         </IconBox>
@@ -71,7 +71,7 @@ export default function Nav() {
             <React.Fragment>
               <CategoryTagBox {...bindTrigger(popupState)}>
                 <CategoryTitle>식품</CategoryTitle>
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon />
               </CategoryTagBox>
               <Menu {...bindMenu(popupState)}>
                 <CategoryMenuItem onClick={popupState.close}>
@@ -98,7 +98,7 @@ export default function Nav() {
             <React.Fragment>
               <CategoryTagBox {...bindTrigger(popupState)}>
                 <CategoryTitle>생활건강</CategoryTitle>
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon />
               </CategoryTagBox>
               <Menu {...bindMenu(popupState)}>
                 <CategoryMenuItem onClick={popupState.close}>
@@ -125,7 +125,7 @@ export default function Nav() {
             <React.Fragment>
               <CategoryTagBox {...bindTrigger(popupState)}>
                 <CategoryTitle>가구/인테리어</CategoryTitle>
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon />
               </CategoryTagBox>
               <Menu {...bindMenu(popupState)}>
                 <CategoryMenuItem onClick={popupState.close}>
@@ -152,7 +152,7 @@ export default function Nav() {
             <React.Fragment>
               <CategoryTagBox {...bindTrigger(popupState)}>
                 <CategoryTitle>반려/도서/취미</CategoryTitle>
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon />
               </CategoryTagBox>
               <Menu {...bindMenu(popupState)}>
                 <CategoryMenuItem onClick={popupState.close}>
@@ -179,7 +179,7 @@ export default function Nav() {
             <React.Fragment>
               <CategoryTagBox {...bindTrigger(popupState)}>
                 <CategoryTitle>뷰티</CategoryTitle>
-                <ExpandMoreIcon fontSize="large" />
+                <ExpandMoreIcon />
               </CategoryTagBox>
               <Menu {...bindMenu(popupState)}>
                 <CategoryMenuItem onClick={popupState.close}>
@@ -219,7 +219,8 @@ const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  padding-right: 4rem;
 `;
 
 const UserLink = styled(Link)`
@@ -281,14 +282,17 @@ const CategoryBox = styled.div`
 const CategoryTagBox = styled.div`
   display: flex;
   font-size: 2rem;
-  margin-left: 2rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  cursor: pointer;
 `;
 const CategoryTitle = styled.p`
   padding: 0;
   margin: 0;
+  font-size: 1.3rem;
 `;
 
 const CategoryMenuItem = styled(MenuItem)`
   width: 15rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
 `;

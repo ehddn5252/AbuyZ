@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import PersonIcon from "@mui/icons-material/Person";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import Grid from "@mui/material/Grid";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Menu from "@mui/material/Menu";
@@ -26,52 +25,46 @@ export default function AdminNav() {
   };
   return (
     <AdminNavContainer>
-      <Grid container>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}>
-          <LogoLink href="/admin/dashboard">ITDA</LogoLink>
-        </Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={2}></Grid>
-        <Grid item xs={3}>
-          <UserDiv onClick={handleClick}>
-            <PersonIcon sx={{ fontSize: "2rem", color: "white" }} />
-            <UserName>권도건님</UserName>
-            <KeyboardArrowDownIcon sx={{ fontSize: "2rem", color: "white" }} />
-          </UserDiv>
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: "center", vertical: "top" }}
-            anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-          >
-            <MenuItem>
-              <ListItemIcon sx={{ marginRight: "1rem" }}>
-                <Settings />
-              </ListItemIcon>
-              마이페이지
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon sx={{ marginRight: "1rem" }}>
-                <Logout />
-              </ListItemIcon>
-              로그아웃
-            </MenuItem>
-          </Menu>
-        </Grid>
-        <Grid item xs={1}></Grid>
-      </Grid>
+      <LogoLink href="/admin/dashboard">ITDA</LogoLink>
+      <UserDiv onClick={handleClick}>
+        <PersonIcon sx={{ fontSize: "2rem", color: "white" }} />
+        <UserName>권도건님</UserName>
+        <KeyboardArrowDownIcon sx={{ fontSize: "2rem", color: "white" }} />
+      </UserDiv>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        transformOrigin={{ horizontal: "center", vertical: "top" }}
+        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+      >
+        <MenuItem>
+          <ListItemIcon sx={{ marginRight: "1rem" }}>
+            <Settings />
+          </ListItemIcon>
+          마이페이지
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon sx={{ marginRight: "1rem" }}>
+            <Logout />
+          </ListItemIcon>
+          로그아웃
+        </MenuItem>
+      </Menu>
     </AdminNavContainer>
   );
 }
 
 const AdminNavContainer = styled.div`
   display: flex;
+  position: fixed;
+  justify-content: space-between;
+  width: 100%;
   background-color: #375176;
   padding: 1rem;
+  z-index: 1000;
 `;
 
 const LogoLink = styled(Link)`
@@ -79,6 +72,7 @@ const LogoLink = styled(Link)`
   font-size: 2rem;
   color: #e60012;
   text-decoration: none;
+  margin-left: 12rem;
 `;
 
 const UserDiv = styled.div`
