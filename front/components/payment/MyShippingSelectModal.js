@@ -28,60 +28,65 @@ export default function MyShippingSelectModal({ setModalOpen }) {
     };
   });
   return (
-    <Container ref={modalRef}>
-      <div>
-        <h1 style={{ marginLeft: "3rem" }}>내 쿠폰 선택</h1>
-        <Close onClick={closeModal}>X</Close>
-      </div>
-      <hr></hr>
-      <Caution>사용가능한 쿠폰을 선택해주세요.</Caution>
-      <br></br>
-      {/* for문으로 돌리기 */}
-      <Card>
-        <div
-          style={{ ...cardStyle, ...(selected === 0 && cardSelect) }}
-          onClick={() => setSelected(0)}
-        >
-          <Title>
-            <span>11월 빼빼로 데이 행사 쿠폰</span>
-          </Title>
-          <Text>
-            <ul>
-              <li>중복 불가</li>
-              <li>300원 할인</li>
-            </ul>
-          </Text>
+    <div style={{ position: "relative" }}>
+      <Container ref={modalRef}>
+        <div>
+          <h1 style={{ marginLeft: "3rem" }}>내 쿠폰 선택</h1>
+          <Close onClick={closeModal}>X</Close>
         </div>
-      </Card>
+        <hr></hr>
+        <Caution>사용가능한 쿠폰을 선택해주세요.</Caution>
+        <br></br>
+        {/* for문으로 돌리기 */}
+        <Card>
+          <div
+            style={{ ...cardStyle, ...(selected === 0 && cardSelect) }}
+            onClick={() => setSelected(0)}
+          >
+            <Title>
+              <span>11월 빼빼로 데이 행사 쿠폰</span>
+            </Title>
+            <Text>
+              <ul>
+                <li>중복 불가</li>
+                <li>300원 할인</li>
+              </ul>
+            </Text>
+          </div>
+        </Card>
 
-      <Card>
-        <div
-          style={{ ...cardStyle, ...(selected === 1 && cardSelect) }}
-          onClick={() => setSelected(1)}
-        >
-          <Title>
-            <span>10월 할로윈 데이 행사 쿠폰</span>
-          </Title>
-          <Text>
-            <ul>
-              <li>중복 불가</li>
-              <li>1030원 할인</li>
-            </ul>
-          </Text>
-        </div>
-      </Card>
+        <Card>
+          <div
+            style={{ ...cardStyle, ...(selected === 1 && cardSelect) }}
+            onClick={() => setSelected(1)}
+          >
+            <Title>
+              <span>10월 할로윈 데이 행사 쿠폰</span>
+            </Title>
+            <Text>
+              <ul>
+                <li>중복 불가</li>
+                <li>1030원 할인</li>
+              </ul>
+            </Text>
+          </div>
+        </Card>
 
-      <ButtonDiv>
-        <Button onClick={closeModal}>선택완료</Button>
-      </ButtonDiv>
-    </Container>
+        <ButtonDiv>
+          <Button onClick={closeModal}>선택완료</Button>
+        </ButtonDiv>
+      </Container>
+    </div>
   );
 }
 
 const Container = styled.div`
   width: 50%;
   z-index: 999;
-  transform: translate(50%, -50%);
+  position: absolute;
+  bottom: -100%;
+  left: 50%;
+  transform: translate(-50%, 50%);
   background-color: white;
   border: 1px solid #ff9494;
   border-radius: 8px;
