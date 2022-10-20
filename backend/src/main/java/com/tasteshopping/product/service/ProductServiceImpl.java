@@ -4,10 +4,10 @@ import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.entity.Brands;
 import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.product.entity.SmallCategories;
+import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.repository.BrandRepository;
 import com.tasteshopping.product.repository.ProductRepository;
-import com.tasteshopping.product.repository.SmallCategoryRepository;
+import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

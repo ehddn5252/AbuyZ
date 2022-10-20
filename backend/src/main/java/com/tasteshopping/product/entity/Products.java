@@ -1,9 +1,9 @@
 package com.tasteshopping.product.entity;
 
+import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import com.tasteshopping.product.entity.Inventories;
 
 import javax.persistence.*;
 import java.util.List;

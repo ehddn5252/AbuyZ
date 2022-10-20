@@ -2,7 +2,7 @@ package com.tasteshopping.product.dto;
 
 import com.tasteshopping.product.entity.Brands;
 import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.product.entity.SmallCategories;
+import com.tasteshopping.categories.entity.SmallCategories;
 import lombok.*;
 
 import java.util.LinkedHashMap;

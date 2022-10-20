@@ -1,6 +1,6 @@
-package com.tasteshopping.product.repository;
+package com.tasteshopping.categories.repository;
 
-import com.tasteshopping.product.entity.SmallCategories;
+import com.tasteshopping.categories.entity.SmallCategories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
