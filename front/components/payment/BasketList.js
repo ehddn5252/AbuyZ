@@ -49,8 +49,9 @@ const BasketBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 3rem;
+  margin-left: 3rem;
   width: 90%;
-  padding: 3rem;
 `;
 
 const BlankBox = styled.div`

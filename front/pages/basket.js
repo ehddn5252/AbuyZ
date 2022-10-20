@@ -16,13 +16,12 @@ export default function Basket() {
     <Container>
       <BasketBox>
         <AddressBox>
-          <HomeOutlinedIcon sx={{ fontSize: "4rem", color: "#4185ED" }} />
+          <HomeOutlinedIcon sx={{ fontSize: "2rem", color: "#4185ED" }} />
           <p style={{ color: "#4185ED", paddingRight: "1.2rem" }}>배송지</p>
           <p>부산 남구 우암로 196, 삼성 청년 SW 아카데미 202호</p>
         </AddressBox>
         <BasketList />
       </BasketBox>
-
       <PaymentBox>
         <BasketPayment />
       </PaymentBox>
@@ -44,13 +43,11 @@ const AddressBox = styled.div`
   align-items: center;
   border: 2px solid #aaaaaa;
   border-radius: 1rem;
-  padding: 0.5rem;
-
   margin-top: 3rem;
-  margin-left: 3rem;
   margin-left: 6.5rem;
-  width: 80%;
-  font-size: 1.8rem;
+  padding: 0.5rem;
+  width: 81%;
+  font-size: 1.2rem;
   font-weight: bolder;
 `;
 

@@ -17,16 +17,16 @@ export default function BasketItem({ basket }) {
         <CheckBox defaultChecked color="error" size="large" />
         <ProductImg src="/images/carrot.png" />
         <IntroBox>
-          <h2 style={{ margin: 0, width: "20rem" }}>{basket.name}</h2>
-          <h2>옵션 : {basket.option}</h2>
+          <h3 style={{ margin: 0, width: "20rem" }}>{basket.name}</h3>
+          <h3>옵션 : {basket.option}</h3>
         </IntroBox>
         <CountBox>
           <CountTitle>수량</CountTitle>
-          <MinusIcon fontSize="large"></MinusIcon>
+          <MinusIcon></MinusIcon>
           <CountDiv>
             <p style={{ margin: 0 }}>{basket.count}</p>
           </CountDiv>
-          <PlusIcon fontSize="large"></PlusIcon>
+          <PlusIcon></PlusIcon>
         </CountBox>
         <PriceBox>
           <IconBox>
@@ -52,34 +52,34 @@ const Container = styled.div`
   border: 1px solid #aaaaaa;
   margin-bottom: 6rem;
   width: 90%;
-  height: 24rem;
+  height: 20rem;
 `;
 
 const TopBox = styled.div`
   display: flex;
   align-items: flex-start;
   padding: 2rem;
-  height: 80%;
+  height: 7 0%;
 `;
 
 const ProductImg = styled.img`
-  width: 16rem;
-  height: 15rem;
+  width: 13rem;
+  height: 12rem;
   border-radius: 1rem;
   object-fit: cover;
 `;
 const IntroBox = styled.div`
-  width: 20%;
-  padding: 2rem;
+  width: 22%;
+  padding: 1rem;
 `;
 const CountBox = styled.div`
   display: flex;
   align-items: center;
-  width: 20%;
-  padding: 2rem;
-  margin-left: 2rem;
+  width: 22%;
+  padding: 1rem;
   font-size: 1rem;
   font-weight: bolder;
+  margin-right: 4rem;
 `;
 
 const CountTitle = styled.p`
@@ -99,7 +99,7 @@ const CountDiv = styled.div`
   justify-content: center;
   align-items: center;
   width: 5rem;
-  height: 2.2rem;
+  height: 1.5rem;
   border: 1px solid #aaaaaa;
 `;
 
@@ -109,12 +109,14 @@ const PlusIcon = styled(AddOutlinedIcon)`
 `;
 
 const PriceBox = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 20%;
 `;
 
 const PriceContent = styled.h1`
   margin: 0;
-  margin-top: 3rem;
+  margin-top: 1.5rem;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
   text-decoration: line-through;
@@ -131,7 +133,7 @@ const BottomBox = styled.div`
   align-items: center;
   padding: 2rem;
   background-color: #fef5fa;
-  height: 15%;
+  height: 20%;
   border-radius: 0 0 2rem 2rem;
   border: 1px solid #aaaaaa;
 `;
@@ -139,7 +141,7 @@ const BottomBox = styled.div`
 const ProductPrice = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
 `;
 
@@ -147,7 +149,7 @@ const SaleProductPrice = styled.p`
   padding: 0;
   margin: 0;
   color: #cf0a0a;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
   margin-left: 1rem;
   margin-right: 1rem;
