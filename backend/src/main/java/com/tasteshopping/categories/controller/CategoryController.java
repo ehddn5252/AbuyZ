@@ -32,22 +32,32 @@ public class CategoryController {
     @Autowired
     BigCategoryService bigCategoryService;
 
-    @GetMapping()
+    @GetMapping("/big-category")
     public ResponseEntity<BaseRes> getAllBigCategories() {
         List<BigCategoryDto> l= bigCategoryService.getAllBigCategories();
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.",l));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 대분류 가져오기 성공.",l));
     }
 
-
-    @GetMapping("/big-category-list/{categoryUid}")
+    @GetMapping("/small-category")
+    public ResponseEntity<BaseRes> getAllSmallCategories() {
+        List<SmallCategoryDto> l= smallCategoryService.getAllSmallCategories();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 small category 가져오기 성공.",l));
+    }
+    @GetMapping("/big-category/{categoryUid}")
     public ResponseEntity<BaseRes> getBigCategories(@PathVariable int categoryUid) {
         BigCategoryDto bigCategoryDto= bigCategoryService.getOneBigCategories(categoryUid);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "특정 카테고리 가져오기 성공.",bigCategoryDto));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "특정 대분류 가져오기 성공.",bigCategoryDto));
     }
 
-    @GetMapping("/small-category-list/{categoryUid}")
+    @GetMapping("/small-category/{categoryUid}")
     public ResponseEntity<BaseRes> getSmallCategories(@PathVariable int categoryUid) {
         SmallCategoryDto smallCategoryDto = smallCategoryService.getOneSmallCategories(categoryUid);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.",smallCategoryDto));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "특정 소분류 가져오기 성공.",smallCategoryDto));
+    }
+
+    @GetMapping("/big-category/{categoryUid}/small-category")
+    public ResponseEntity<BaseRes> getSmallCategoryList(@PathVariable int categoryUid) {
+        List<SmallCategoryDto> smallCategoryList = smallCategoryService.getSmallCategoryList(categoryUid);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "특정 소분류 가져오기 성공.",smallCategoryList));
     }
 }

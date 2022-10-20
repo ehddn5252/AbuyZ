@@ -8,6 +8,8 @@ import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 @Service
 public class SmallCategoryServiceImpl implements SmallCategoryService {
@@ -21,6 +23,15 @@ public class SmallCategoryServiceImpl implements SmallCategoryService {
     }
 
     @Override
+    public List<SmallCategoryDto> getAllSmallCategories() {
+        List<SmallCategories> l = smallCategoryRepository.findAll();
+        List<SmallCategoryDto> dto_l = new ArrayList<>();
+        for(int i=0;i<l.size();++i)
+            dto_l.add(SmallCategories.toDto(l.get(i)));
+        return dto_l;
+    }
+
+    @Override
     public SmallCategoryDto getOneSmallCategories(Integer categoryUid) {
 
         Optional<SmallCategories> b = smallCategoryRepository.findByUid(categoryUid);
@@ -31,5 +42,15 @@ public class SmallCategoryServiceImpl implements SmallCategoryService {
             //not found exception 처리
         }
         return null;
+    }
+
+    @Override
+    public List<SmallCategoryDto> getSmallCategoryList(Integer categoryUid) {
+        List<Optional<SmallCategories>> l = smallCategoryRepository.findByBigCategoryUid(categoryUid);
+        List<SmallCategoryDto> dto_l = new ArrayList<>();
+        for(int i=0;i<l.size();++i)
+            dto_l.add(SmallCategories.toDto(l.get(i).get()));
+        smallCategoryRepository.findByBigCategoryUid(categoryUid);
+        return dto_l;
     }
 }
