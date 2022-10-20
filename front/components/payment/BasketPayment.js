@@ -9,7 +9,7 @@ import styled from "styled-components";
 export default function BasketPayment() {
   return (
     <Container>
-      <h1>결제예정금액</h1>
+      <h3>결제예정금액</h3>
       <PriceBox>
         <PriceDiv>
           <p style={{ color: "#aaaaaa" }}>상품금액</p>
@@ -47,26 +47,25 @@ const PriceBox = styled.div``;
 const PriceDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bolder;
 `;
 const SaleDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bolder;
 `;
 
 const TotalPriceBox = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bolder;
 `;
 
 const OrderButton = styled(Button)`
-  height: 5rem;
-  font-size: 2rem;
+  height: 2rem;
   font-weight: bolder;
   margin-top: 3rem;
 `;
