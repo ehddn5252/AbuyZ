@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class WishListDto {
     private List<WishProductDto> products;
-    private int products_count;
+    private int count;
     public void upProductCount(){
-        this.products_count++;
+        this.count++;
     }
 }

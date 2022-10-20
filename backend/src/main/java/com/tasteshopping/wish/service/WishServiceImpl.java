@@ -41,8 +41,8 @@ public class WishServiceImpl implements WishService {
             listDto.upProductCount();
         }
 
-        if(listDto.getProducts_count()==0){
-            responseDto.setMessage("찜 한 것이 없음");
+        if(listDto.getCount()==0){
+            responseDto.setMessage("찜한 것이 없음");
         }else{
             responseDto.setData(listDto);
         }

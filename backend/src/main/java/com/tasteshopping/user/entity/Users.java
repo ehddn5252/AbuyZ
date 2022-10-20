@@ -65,7 +65,7 @@ public class Users {
     @Column(nullable = false)
     private Role userRoles;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<WishLists> wishLists = new ArrayList<>();
 
     public void updateStatus(){

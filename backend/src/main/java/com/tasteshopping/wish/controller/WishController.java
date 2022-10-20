@@ -1,6 +1,5 @@
 package com.tasteshopping.wish.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.service.WishServiceImpl;
@@ -31,5 +30,4 @@ public class WishController {
                                              @RequestBody WishUidDto wishUidDto){
         return new ResponseEntity<>(wishService.cancel(email,wishUidDto),HttpStatus.OK);
     }
-
 }

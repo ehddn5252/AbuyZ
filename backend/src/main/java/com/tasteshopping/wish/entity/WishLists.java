@@ -21,19 +21,20 @@ public class WishLists {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer uid;
+    private int uid;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "usersUid")
     private Users user;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "uid")
+    @JoinColumn(name = "productsUid")
     private Products products;
 
     public WishProductDto toWishProductDto(){
         int price = (int)(this.products.getPrice()*((100-this.products.getDiscountRate())/100f));
         return WishProductDto.builder()
+                .wish_uid(this.uid)
                 .product_name(this.products.getName())
                 .product_uid(this.products.getUid())
                 .img_url(this.products.getRepImg())
