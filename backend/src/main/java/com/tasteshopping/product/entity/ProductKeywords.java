@@ -1,8 +1,15 @@
 package com.tasteshopping.product.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductKeywords {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,7 +18,7 @@ public class ProductKeywords {
     @Column(name="name",nullable = false, columnDefinition = "varchar(40) default 'defaultName'")
     String name;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name="products_uid")
     Products product;
 }

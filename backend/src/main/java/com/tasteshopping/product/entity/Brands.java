@@ -1,8 +1,15 @@
 package com.tasteshopping.product.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Brands {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

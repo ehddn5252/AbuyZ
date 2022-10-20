@@ -1,53 +1,98 @@
 package com.tasteshopping.product.entity;
 
+import com.tasteshopping.product.dto.ProductDto;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity
+@Getter
+@Builder
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer uid;
+    private Integer uid;
 
     @Column(nullable = false, columnDefinition = "varchar(150) default 'base_product'")
-    String name;
+    private String name;
 
     @Column(nullable = false)
     @ColumnDefault("0")
-    Integer price;
+    private Integer price;
 
-    @Column(name="description_img", columnDefinition = "varchar(500)")
-    String descriptionImg;
+    @Column(name = "description_img", columnDefinition = "varchar(500)")
+    private String descriptionImg;
 
-    @Column(columnDefinition = "varchar(200)")
-    String origin;
+//    @Column(columnDefinition = "varchar(200)")
+//    private String origin;
+//
+    @Column(name = "rep_img", columnDefinition = "varchar(3000)")
+    private String repImg;
 
     @Column(columnDefinition = "varchar(40)")
-    String status;
+    private String status;
+//
+//    @Column(columnDefinition = "varchar(200)")
+//    private String producer;
 
-    @Column(columnDefinition = "varchar(200)")
-    String producer;
-
-    @Column(name="discount_rate",nullable = false)
+    @Column(name = "discount_rate", nullable = false)
     @ColumnDefault("0")
-    Float discountRate;
+    private Integer discountRate;
 
-    @Column(name="review_rate")
-    Float reviewRate;
+    @Column(name = "review_rate")
+    private Float reviewRate;
 
-    @Column(name="delivery_fee",nullable = false)
+    @Column(name = "delivery_fee", nullable = false)
     @ColumnDefault("0")
-    Integer deliveryFee;
+    private Integer deliveryFee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="small_categories_uid")
-    SmallCategories smallCategory;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "small_categories_uid")
+    private SmallCategories smallCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="brands_uid")
-    Brands brand;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "brands_uid")
+    private Brands brand;
+
+    public ProductDto toDto() {
+
+        return ProductDto.builder()
+                .name(name)
+                .discountRate(discountRate)
+                .deliveryFee(deliveryFee)
+                .descriptionImg(descriptionImg)
+                .smallCategoryName(smallCategory.getSmallCategoryName())
+                .brandName(brand.getName())
+                .build();
+    }
+//    static public ProductDto toDto(Products p) {
+//
+//        return ProductDto.builder()
+//                .name(p.getName())
+//                .brandName(p.getBrand().getName())
+//                .discountRate(p.getDiscountRate())
+//                .deliveryFee(p.getDeliveryFee())
+//                .descriptionImg(p.getDescriptionImg())
+//                .smallCategoriesName(p.getSmallCategory().getSmallCategoryName())
+//                .build();
+//    }
 
 
-
+//    static public ProductDto toDto2(Products p) {
+//        ProductDto pDto = new ProductDto();
+//        pDto.setName(p.getName());
+//        pDto.setBrandName(p.getBrand().getName());
+//        pDto.setDiscountRate(p.getDiscountRate());
+//        pDto.setDeliveryFee(p.getDeliveryFee());
+//        pDto.setDescriptionImg(p.getDescriptionImg());
+//        pDto.setSmallCategoriesName(p.getSmallCategory().getSmallCategoryName());
+//        return pDto;
+//    }
 }
