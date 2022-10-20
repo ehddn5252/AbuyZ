@@ -22,6 +22,7 @@ public class ProductDto {
     private String name;
     private Integer price;
     private Integer discountRate;
+    private String repImg;
     private String descriptionImg;
 //    private String producer;
     private Float reviewRate;

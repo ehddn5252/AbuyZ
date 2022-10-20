@@ -29,14 +29,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!", productService.getMaxUid()));
     }
 
-    @PostMapping("/register-test")
-    public ResponseEntity<BaseRes> registerTest(@RequestBody ProductCreateReqDto productCreateReqDto) {
-        System.out.println(productCreateReqDto.toString());
-        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-        productService.createProductRelated(productCreateDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, " 성공!"));
-    }
 
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {

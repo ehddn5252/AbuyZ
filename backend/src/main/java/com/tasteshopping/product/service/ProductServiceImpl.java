@@ -49,17 +49,25 @@ public class ProductServiceImpl implements ProductService {
             4. product_options에 맞는 product_option_lists를 생성한다.
             5. product_uid 에 맞는 product_keywords 를 생성한다.
          */
-        //save product
+
         registerProduct(productCreateDto);
         int products_uid = 1;
         Optional<Integer> maxUidOptional = getMaxUid();
         if (maxUidOptional.isPresent()) {
             products_uid = maxUidOptional.get();
         }
+        Products pp =productRepository.findById(products_uid).get();
 
         // save imgs
         LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
+        int count=0;
         for (String key : imgs.keySet()) {
+            if (count==0){
+                //save product
+                count+=1;
+                pp.setRepImg(imgs.get(key));
+                productRepository.save(pp);
+            }
             productPictureService.createProductPicture(products_uid, imgs.get(key));
         }
 
@@ -106,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
         if (smallCategoriesOptional.isPresent()) {
             smallCategories = smallCategoriesOptional.get();
         }
-
+        // Builder 로 변경
         Products product = new Products();
         product.setName((String) productCreateDto.getName());
         product.setDescriptionImg(productCreateDto.getDecsriptionImg());

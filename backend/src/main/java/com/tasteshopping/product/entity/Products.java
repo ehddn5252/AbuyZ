@@ -33,6 +33,9 @@ public class Products {
 //    @Column(columnDefinition = "varchar(200)")
 //    private String origin;
 //
+    @Column(name = "rep_img", columnDefinition = "varchar(3000)")
+    private String repImg;
+
     @Column(columnDefinition = "varchar(40)")
     private String status;
 //
