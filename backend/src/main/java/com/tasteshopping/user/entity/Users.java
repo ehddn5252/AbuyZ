@@ -4,12 +4,15 @@ import com.tasteshopping.user.dto.LoginType;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.dto.UserDto;
 import com.tasteshopping.user.dto.UserModificationDto;
+import com.tasteshopping.wish.entity.WishLists;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -61,6 +64,9 @@ public class Users {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role userRoles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<WishLists> wishLists = new ArrayList<>();
 
     public void updateStatus(){
         this.status = 1;
