@@ -3,6 +3,7 @@ package com.tasteshopping.product.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,5 +21,9 @@ public class SmallCategories {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="big_categories_uid")
     private BigCategories bigCategory;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name="products_uid")
+    private List<Products> products;
 
 }

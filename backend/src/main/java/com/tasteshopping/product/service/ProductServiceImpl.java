@@ -97,7 +97,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Integer uid) {
-        productRepository.delete(productRepository.findById(uid).get());
+
+        Products product = productRepository.findById(uid).get();
+        System.out.println(product.toString());
+        System.out.println("=============================");
+
+        productRepository.delete(product);
     }
 
     @Override
@@ -115,16 +120,9 @@ public class ProductServiceImpl implements ProductService {
             smallCategories = smallCategoriesOptional.get();
         }
         // Builder 로 변경
-        Products product = new Products();
-        product.setName((String) productCreateDto.getName());
-        product.setDescriptionImg(productCreateDto.getDecsriptionImg());
-        product.setReviewRate((float) 0);
-        product.setDeliveryFee(productCreateDto.getDeliveryFee());
-        product.setPrice(productCreateDto.getPrice());
-        product.setDiscountRate(productCreateDto.getDiscountRate());
-        product.setSmallCategory(smallCategories);
-        product.setBrand(brands);
-        productRepository.save(product);
+
+        Products product1 =  ProductCreateDto.toEntity(productCreateDto,brands,smallCategories);
+        productRepository.save(product1);
     }
 
 

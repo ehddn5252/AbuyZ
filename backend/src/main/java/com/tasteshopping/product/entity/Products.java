@@ -3,10 +3,10 @@ package com.tasteshopping.product.entity;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.security.core.parameters.P;
+import com.tasteshopping.product.entity.Inventories;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +30,7 @@ public class Products {
     @Column(name = "description_img", columnDefinition = "varchar(500)")
     private String descriptionImg;
 
-//    @Column(columnDefinition = "varchar(200)")
+    //    @Column(columnDefinition = "varchar(200)")
 //    private String origin;
 //
     @Column(name = "rep_img", columnDefinition = "varchar(3000)")
@@ -53,13 +53,27 @@ public class Products {
     @ColumnDefault("0")
     private Integer deliveryFee;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "small_categories_uid")
     private SmallCategories smallCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brands_uid")
     private Brands brand;
+
+    // 양방향 설정
+    @OneToMany(mappedBy ="product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Inventories> inventories;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductKeywords> productKeywords;
+
+    @OneToMany(mappedBy ="product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductPictures> productPictures;
+
+    @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductOptions> productOptions;
+
 
     public ProductDto toDto() {
 
@@ -70,29 +84,10 @@ public class Products {
                 .descriptionImg(descriptionImg)
                 .smallCategoryName(smallCategory.getSmallCategoryName())
                 .brandName(brand.getName())
+                .repImg(repImg)
+                .price(price)
+                .reviewRate(reviewRate)
+                .uid(uid)
                 .build();
     }
-//    static public ProductDto toDto(Products p) {
-//
-//        return ProductDto.builder()
-//                .name(p.getName())
-//                .brandName(p.getBrand().getName())
-//                .discountRate(p.getDiscountRate())
-//                .deliveryFee(p.getDeliveryFee())
-//                .descriptionImg(p.getDescriptionImg())
-//                .smallCategoriesName(p.getSmallCategory().getSmallCategoryName())
-//                .build();
-//    }
-
-
-//    static public ProductDto toDto2(Products p) {
-//        ProductDto pDto = new ProductDto();
-//        pDto.setName(p.getName());
-//        pDto.setBrandName(p.getBrand().getName());
-//        pDto.setDiscountRate(p.getDiscountRate());
-//        pDto.setDeliveryFee(p.getDeliveryFee());
-//        pDto.setDescriptionImg(p.getDescriptionImg());
-//        pDto.setSmallCategoriesName(p.getSmallCategory().getSmallCategoryName());
-//        return pDto;
-//    }
 }
