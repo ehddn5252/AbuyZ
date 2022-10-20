@@ -47,14 +47,14 @@ export default function Myinfo() {
 }
 
 const InfoContainer = styled.div`
-  width: 110rem;
+  width: 100%;
   height: 16rem;
   margin-top: 3rem;
 `;
 
 const MainBox = styled.div`
   display: flex;
-  background-color: #f8f8f8;
+  background-color: #f5efe6;
   align-items: center;
   height: 10rem;
   padding: 3rem;
@@ -63,7 +63,7 @@ const MainBox = styled.div`
 `;
 
 const SupportBox = styled.div`
-  background-color: #ec6c62;
+  background-color: #aebdca;
   height: 6rem;
   border-bottom-left-radius: 2rem;
   border-bottom-right-radius: 2rem;
@@ -72,10 +72,12 @@ const SupportBox = styled.div`
 const MyImgDiv = styled.div``;
 
 const MyName = styled.div`
-  font-size: 3.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
   font-weight: bolder;
-  margin-left: 5rem;
-  margin-right: 15rem;
+  padding-left: 3rem;
+  padding-right: 9rem;
 `;
 
 const HistoryDiv = styled.div`
@@ -83,11 +85,13 @@ const HistoryDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 5rem;
+  margin: 2.5rem;
 `;
 
 const HistoryTitle = styled.div`
-  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
   font-weight: bolder;
   padding-bottom: 1rem;
 `;

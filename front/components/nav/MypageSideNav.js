@@ -106,10 +106,10 @@ export default function MypageSideNav(setTap) {
 const NavContainer = styled(Container)`
   margin: 0;
   margin-top: 3rem;
-  margin-right: 10rem;
+  margin-right: 6rem;
   margin-left: 3rem;
   padding: 0;
-  width: 20rem;
+  width: 20%;
 `;
 
 const SidebarWrapper = styled.div`

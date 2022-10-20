@@ -7,7 +7,7 @@ import styled from "styled-components";
 export default function MyComplainItem({ complain }) {
   return (
     <Container>
-      <h1>Q. {complain.title}</h1>
+      <h3>Q. {complain.title}</h3>
       {complain.state ? (
         <CompleteDiv>
           <p>답변 완료</p>
@@ -32,7 +32,7 @@ const CompleteDiv = styled.div`
   align-items: center;
   background-color: #ff9494;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1rem;
   width: 8rem;
   height: 3rem;
   border-radius: 1rem;
@@ -44,7 +44,7 @@ const InCompleteDiv = styled.div`
   align-items: center;
   background-color: #fff5e4;
   color: #ff9494;
-  font-size: 1.5rem;
+  font-size: 1rem;
   width: 8rem;
   height: 3rem;
   border-radius: 1rem;

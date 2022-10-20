@@ -39,13 +39,13 @@ const CouponLeftBox = styled.div`
   width: 70%;
   height: 100%;
   border-radius: 1rem;
-  border: 2px solid red;
+  border: 2px solid #7895b2;
 `;
 
 const CouponTitle = styled.p`
   padding: 2rem;
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: bolder;
 `;
 
@@ -53,7 +53,7 @@ const CouponContent = styled.p`
   padding: 0rem;
   margin: 0;
   padding-left: 2rem;
-  font-size: 3rem;
+  font-size: 2rem;
 
   font-weight: bolder;
 `;
@@ -70,34 +70,34 @@ const CouponRightBox = styled.div`
   width: 20%;
   height: 100%;
   border-radius: 1rem;
-  border: 2px solid red;
+  border: 2px solid #7895b2;
 `;
 
 const CircleOne = styled.div`
   position: relative;
   top: -47%;
-  left: -21%;
+  left: -22%;
   background-color: white;
   width: 32px;
   height: 16px;
   border-radius: 0 0 16px 16px;
-  border: 2px solid red;
+  border: 2px solid #7895b2;
 `;
 const CircleTwo = styled.div`
   position: relative;
   top: 47%;
-  left: -26%;
+  left: -29%;
   background-color: white;
   width: 32px;
   height: 16px;
   border-radius: 16px 16px 0 0;
-  border: 2px solid red;
+  border: 2px solid #7895b2;
 `;
 
 const RectangleOne = styled.div`
   position: relative;
   top: -53.5%;
-  left: -31.5%;
+  left: -35.6%;
   background-color: white;
   width: 33px;
   height: 16px;
@@ -105,7 +105,7 @@ const RectangleOne = styled.div`
 const RectangleTwo = styled.div`
   position: relative;
   top: 53%;
-  left: -36%;
+  left: -42%;
   background-color: white;
   width: 33px;
   height: 16px;
