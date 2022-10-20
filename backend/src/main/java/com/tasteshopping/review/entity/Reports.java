@@ -1,16 +1,19 @@
 package com.tasteshopping.review.entity;
 
 import com.tasteshopping.user.entity.Users;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import lombok.*;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Likes {
+public class Reports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
