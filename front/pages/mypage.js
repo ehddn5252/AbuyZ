@@ -32,10 +32,11 @@ export default function Mypage() {
 
 const MypageContainer = styled.div`
   display: flex;
-  padding: 1rem;
+  width: 100%;
 `;
 
 const MyDiv = styled.div`
   display: flex;
   flex-direction: column;
+  width: 65%;
 `;

@@ -207,8 +207,10 @@ export default function Nav() {
 }
 
 const NavContainer = styled.div`
+  background-color: white;
   display: flex;
   flex-direction: column;
+  width: 100%;
   margin: 0;
   padding: 0;
 `;
@@ -216,7 +218,7 @@ const NavContainer = styled.div`
 const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 120rem;
+  width: 100%;
   margin-top: 0.5rem;
 `;
 
@@ -229,7 +231,9 @@ const SearchBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  width: 100%;
   border-width: 0 0 0.1rem 0;
   border-style: solid;
   border-color: #eaeaea;
@@ -271,7 +275,7 @@ const CategoryBox = styled.div`
   justify-content: center;
   border-width: 0 0 0.5rem 0;
   border-style: solid;
-  border-color: #ff0000;
+  border-color: #7895b2;
 `;
 
 const CategoryTagBox = styled.div`

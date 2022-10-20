@@ -33,7 +33,7 @@ export default function BasketItem({ basket }) {
             <CloseOutlinedIcon sx={{ fontSize: "3rem", cursor: "pointer" }} />
           </IconBox>
           <PriceContent>{basket.price} 원</PriceContent>
-          <h1 style={{ margin: 0 }}>{basket.price - basket.salePrice} 원</h1>
+          <h2 style={{ margin: 0 }}>{basket.price - basket.salePrice} 원</h2>
         </PriceBox>
       </TopBox>
       <BottomBox>
@@ -115,7 +115,8 @@ const PriceBox = styled.div`
 const PriceContent = styled.h1`
   margin: 0;
   margin-top: 3rem;
-  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
   text-decoration: line-through;
   color: #aaaaaa;
 `;
@@ -138,7 +139,7 @@ const BottomBox = styled.div`
 const ProductPrice = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bolder;
 `;
 
@@ -146,7 +147,7 @@ const SaleProductPrice = styled.p`
   padding: 0;
   margin: 0;
   color: #cf0a0a;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bolder;
   margin-left: 1rem;
   margin-right: 1rem;

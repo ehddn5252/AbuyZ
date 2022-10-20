@@ -31,7 +31,13 @@ export default function MyCouponList() {
   return (
     <MyComplainContainer>
       <MajorTitle>쿠폰함</MajorTitle>
-      <hr style={{ height: "0.5rem", background: "#000" }} />
+      <hr
+        style={{
+          height: "0.5rem",
+          background: "#7895B2",
+          borderRadius: "1rem",
+        }}
+      />
       {couponList.length ? (
         <CouponListBox>
           <MyCouponItem coupon={couponList[0]} />
@@ -54,7 +60,7 @@ const MyComplainContainer = styled.div`
 `;
 
 const MajorTitle = styled.h1`
-  font-size: 3rem;
+  font-size: 2rem;
 `;
 
 const CouponListBox = styled.div`
@@ -68,6 +74,7 @@ const BlankBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
   height: 30rem;
   font-size: 3rem;
   font-weight: bolder;
