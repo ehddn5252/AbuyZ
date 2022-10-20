@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,16 +39,35 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public BaseRes myReviewList() {
-        return null;
+    public BaseRes myReviewList(String email, int page) {
+        // 찜한상품목록완료되면 그거대로~
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        Page<Reviews> reviewPage = reviewRepository.findByUser(findUser.get(),PageRequest.of(page, 5));
+        long totalCount = reviewPage.getTotalElements();
+        long pageCount = reviewPage.getTotalPages();
+        List<Reviews> reviewList = reviewPage.getContent();
+
+
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalCnt",totalCount);
+        map.put("pageCnt",pageCount);
+//        map.put("sum",sum);
+//        map.put("avg",sum/totalCount);
+//        map.put("dto",dtoList);
+        return new BaseRes(200, "내 리뷰 내역 조회 성공!이라고 할뻔~", map);
     }
 
     @Override
     public BaseRes reviewWrite(String email, ReviewReqDto dto, String imagePath) {
-//        상품과 회원 완료되면 변경
+        // 상품과 회원 완료되면 변경
         Optional<Users> findUser = userRepository.findByEmail(email);
         Optional<Products> product = productRepository.findById(dto.getProduct_uid());
-        // 이미 작성된 리뷰가 있는지 확인 & 구매이력이 있는지 확인
+        // 이미 작성된 리뷰가 있는지 확인
+        if(reviewRepository.existsByProductAndUser(product.get(),findUser.get())){
+            return new BaseRes(204, "리뷰 작성 실패 - 이미 작성된 리뷰가 있음", null);
+        }
+        // 구매이력이 있는지 확인 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
         Reviews review = dto.toEntity(dto, findUser.get(), product.get(), imagePath);
@@ -72,7 +92,7 @@ public class ReviewServiceImpl implements ReviewService {
             reviewRepository.delete(target);
             return new BaseRes(200, "리뷰 삭제 성공", null);
         }
-        return new BaseRes(202, "리뷰 삭제 실패", null);
+        return new BaseRes(204, "리뷰 삭제 실패", null);
     }
 
     @Override
@@ -80,8 +100,8 @@ public class ReviewServiceImpl implements ReviewService {
         Optional<Users> findUser = userRepository.findByEmail(email);
         Reviews target = reviewRepository.getReferenceById(review_uid);
         // 이미 좋아요 했는지 확인
-        if (likeRepository.findByReviewAndUser(target, findUser.get()) != null) {
-            return new BaseRes(202, "리뷰 도움이돼요 등록 실패 - 이미 좋아요 누름", null);
+        if (likeRepository.existsByReviewAndUser(target, findUser.get())) {
+            return new BaseRes(204, "리뷰 도움이돼요 등록 실패 - 이미 좋아요 누름", null);
         }
         Likes like = Likes.builder()
                 .review(target)
@@ -102,16 +122,20 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BaseRes reviewReply(String email, ReplyReqDto dto) {
-        //        상품과 회원 완료되면 변경
+        // 상품과 회원 완료되면 변경
         Optional<Users> findUser = userRepository.findByEmail(email);
         Role role = findUser.get().getUserRoles();
         // 관리자인지 확인
         if (role != Role.ADMIN) {
-            return new BaseRes(202, "리뷰 답글 작성 실패 - 관리자가 아님", null);
+            return new BaseRes(204, "리뷰 답글 작성 실패 - 관리자가 아님", null);
+        }
+        // 이미 작성했는지 확인
+        Reviews parent = reviewRepository.getReferenceById(dto.getReview_uid());
+        if (reviewRepository.existsByParentReview(parent)){
+            return new BaseRes(204, "리뷰 답글 작성 실패 - 이미 답글 작성함", null);
         }
         Products product = new Products();
-//        Products product = productRepository.find~(product_uid);
-        Reviews parent = reviewRepository.getReferenceById(dto.getReview_uid());
+//        Products product = productRepository.find~(product_uid); 수정@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Reviews review = dto.toEntity(dto, findUser.get(), product, parent);
         reviewRepository.save(review);
         return new BaseRes(200, "리뷰 답글 작성 성공", null);
@@ -123,7 +147,7 @@ public class ReviewServiceImpl implements ReviewService {
         Role role = findUser.get().getUserRoles();
         // 관리자인지 확인
         if (role != Role.ADMIN) {
-            return new BaseRes(202, "리뷰 답글 삭제 실패 - 관리자가 아님", null);
+            return new BaseRes(204, "리뷰 답글 삭제 실패 - 관리자가 아님", null);
         }
         Reviews target = reviewRepository.getReferenceById(review_uid);
         reviewRepository.delete(target);
@@ -180,8 +204,8 @@ public class ReviewServiceImpl implements ReviewService {
         Optional<Users> findUser = userRepository.findByEmail(email);
         Reviews target = reviewRepository.getReferenceById(review_uid);
         //이미 신고했는지 확인
-        if (reportRepository.findByReviewAndUser(target, findUser.get()) != null) {
-            return new BaseRes(202, "리뷰 신고 실패 - 이미 신고함", null);
+        if (reportRepository.existsByReviewAndUser(target, findUser.get())) {
+            return new BaseRes(204, "리뷰 신고 실패 - 이미 신고함", null);
         }
         Reports report = Reports.builder()
                 .review(target)

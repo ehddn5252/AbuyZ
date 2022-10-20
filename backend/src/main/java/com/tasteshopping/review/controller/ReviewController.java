@@ -37,10 +37,10 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final AwsS3Service awsS3Service;
 
-    @GetMapping()
-    public ResponseEntity<BaseRes> myReviewList() {
+    @GetMapping("/{page}")
+    public ResponseEntity<BaseRes> myReviewList(@AuthenticationPrincipal String email, @PathVariable int page) {
         List<Products> list = new ArrayList<>(); // dto로 변경해야함
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "test 성공!"));
+        return new ResponseEntity<>(reviewService.myReviewList(email, page-1), HttpStatus.OK);
     }
 
 //    @ExceptionHandler({MaxUploadSizeExceededException.class, SizeLimitExceededException.class})

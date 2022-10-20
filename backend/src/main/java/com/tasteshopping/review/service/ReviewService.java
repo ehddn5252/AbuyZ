@@ -10,7 +10,7 @@ import com.tasteshopping.review.entity.Reviews;
 import java.util.List;
 
 public interface ReviewService {
-    BaseRes myReviewList();
+    BaseRes myReviewList(String email, int page);
     BaseRes reviewWrite(String email, ReviewReqDto dto, String imagePath);
     BaseRes reviewDelete(String email, int review_uid);
     BaseRes reviewLike(String email, int review_uid);
