@@ -41,7 +41,7 @@ export default function PaymentProcess() {
 }
 
 const cardStyle = {
-  width: "10%",
+  width: "15%",
   height: "8rem",
   background: "white",
   margin: "1rem",
