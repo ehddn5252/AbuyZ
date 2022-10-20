@@ -59,7 +59,8 @@ export default function AdminNav() {
 
 const AdminNavContainer = styled.div`
   display: flex;
-  position: fixed;
+  position: sticky;
+  top: 0;
   justify-content: space-between;
   width: 100%;
   background-color: #375176;
