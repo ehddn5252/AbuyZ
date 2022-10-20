@@ -19,11 +19,11 @@ export default function SaleProductSearch() {
   ];
 
   return (
-    <Container>
-      <Title>상품 조회</Title>
+    <Container maxWidth="xxl">
       <ContainerBox>
         {/* 현재 상태 */}
         <StatusContainer>
+          <Title>상품 조회</Title>
           <StatusBox>
             <WidgetsOutlinedIcon
               sx={{
@@ -104,7 +104,8 @@ const Title = styled.p`
   font-size: xxx-large;
   font-weight: 1000;
   padding-bottom: 3rem;
-  margin: 0;
+  margin: 3rem;
+  margin-bottom: 0;
 `;
 
 const StatusContainer = styled.div`

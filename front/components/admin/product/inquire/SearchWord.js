@@ -76,8 +76,6 @@ export default function SearchWord() {
             onFocus={brandFocus}
             onBlur={brandBlur}
           />
-        </SearchBox>
-        <SearchBox>
           <HeaderBox>
             <Header>키워드</Header>
           </HeaderBox>
@@ -115,10 +113,10 @@ const HeaderBox = styled.div`
 `;
 
 const Header = styled.div`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  width: 8rem;
-  padding-left: 3rem;
+  width: 11rem;
+  padding-left: 5rem;
 `;
 
 const Input = styled.input`

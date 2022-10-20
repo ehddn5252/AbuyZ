@@ -14,7 +14,8 @@ export default function Product() {
 
 const ProductPage = styled.div`
   background: #edf0f5;
-  padding: 2rem;
+  padding: 3rem;
+  padding-left: 15rem;
   /* width: 100vw;
   height: 100vh; */
 `;

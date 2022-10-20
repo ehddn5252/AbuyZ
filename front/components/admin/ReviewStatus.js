@@ -12,7 +12,7 @@ export default function ReviewStatus() {
   ];
 
   return (
-    <Container style={{ paddingBottom: "2rem" }}>
+    <Container maxWidth="xxl" style={{ paddingBottom: "2rem" }}>
       <DataStatusBox>
         <h1 style={{ marginLeft: "1.5rem" }}>리뷰 현황</h1>
         <hr style={{ width: "95%" }} />
