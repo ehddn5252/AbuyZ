@@ -19,4 +19,6 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     boolean existsByParentReview(Reviews parentReview);
     boolean existsByProductAndUser(Products product, Users user);
     Page<Reviews> findByUser(Users user, Pageable pageable);
+    List<Reviews> findByProductAndImgUrlIsNotNullOrderByUidDesc(Products product);
+
 }

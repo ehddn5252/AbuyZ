@@ -216,4 +216,19 @@ public class ReviewServiceImpl implements ReviewService {
         reportRepository.delete(report);
         return new BaseRes(200, "리뷰 신고 성공", null);
     }
+
+    @Override
+    public BaseRes productPhotoReview(int product_uid) {
+        return null;
+    }
+
+    @Override
+    public BaseRes productPhotosReview(int product_uid) {
+        return null;
+    }
+
+    @Override
+    public BaseRes productReviewDetail(String email, int review_uid) {
+        return null;
+    }
 }
