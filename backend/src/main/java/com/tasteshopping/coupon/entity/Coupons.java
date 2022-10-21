@@ -1,6 +1,6 @@
 package com.tasteshopping.coupon.entity;
 
-import com.tasteshopping.product.entity.BigCategories;
+import com.tasteshopping.categories.entity.BigCategories;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
