@@ -15,10 +15,11 @@ import java.util.List;
 @Transactional
 public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     Reviews findByParentReview(Reviews parentReview);
-    Page<Reviews>findByProductAndParentReviewIsNull(Products product, Pageable pageable);
+    Page<Reviews> findByProductAndParentReviewIsNull(Products product, Pageable pageable);
     boolean existsByParentReview(Reviews parentReview);
     boolean existsByProductAndUser(Products product, Users user);
     Page<Reviews> findByUser(Users user, Pageable pageable);
-    List<Reviews> findByProductAndImgUrlIsNotNullOrderByUidDesc(Products product);
+    Page<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product, Pageable pageable);
+    List<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product);
 
 }

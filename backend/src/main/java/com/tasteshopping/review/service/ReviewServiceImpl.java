@@ -3,6 +3,7 @@ package com.tasteshopping.review.service;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductRepository;
+import com.tasteshopping.review.dto.PhotoResDto;
 import com.tasteshopping.review.dto.ReplyReqDto;
 import com.tasteshopping.review.dto.ReviewReqDto;
 import com.tasteshopping.review.dto.ReviewResDto;
@@ -164,7 +165,7 @@ public class ReviewServiceImpl implements ReviewService {
         List<ReviewResDto> dtoList = new LinkedList<>();
         Optional<Users> findUser = userRepository.findByEmail(email); // 만약 로그인한사람이 존재하지 않는다면 좋아요 여부를 전부 false로
         boolean like = false;
-        boolean reply = false;
+        boolean reply;
         int likeCount = 0;
 //        float sum = 0.0f;
         if(findUser.isPresent()){
@@ -219,16 +220,60 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public BaseRes productPhotoReview(int product_uid) {
-        return null;
+        Products products = productRepository.getReferenceById(product_uid);
+        Page<Reviews> reviewPage = reviewRepository.findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(products, PageRequest.of(0, 4));
+        long totalCount = reviewPage.getTotalElements();
+        List<Reviews> reviewList = reviewPage.getContent();
+        List<PhotoResDto> dtoList = new LinkedList<>();
+        for (Reviews review: reviewList) {
+            dtoList.add(PhotoResDto.from(review));
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalCnt",totalCount);
+        map.put("dto",dtoList);
+        return new BaseRes(200, "상품 포토리뷰 조회(일부) 성공", map);
     }
 
     @Override
     public BaseRes productPhotosReview(int product_uid) {
-        return null;
+        Products products = productRepository.getReferenceById(product_uid);
+        List<Reviews> reviewList = reviewRepository.findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(products);
+        List<PhotoResDto> dto = new LinkedList<>();
+        for (Reviews review: reviewList) {
+            dto.add(PhotoResDto.from(review));
+        }
+        return new BaseRes(200, "상품 포토리뷰 조회(전체) 성공", dto);
     }
 
     @Override
     public BaseRes productReviewDetail(String email, int review_uid) {
-        return null;
+        Optional<Users> findUser = userRepository.findByEmail(email); // 만약 로그인한사람이 존재하지 않는다면 좋아요 여부를 전부 false로
+        Reviews review = reviewRepository.getReferenceById(review_uid);
+        boolean like = false;
+        boolean reply;
+        int likeCount = 0;
+        ReviewResDto dto;
+        if(findUser.isPresent()){
+            // 로그인 O
+                reply = false;
+                // 좋아요 여부, 좋아요 개수
+                if(likeRepository.existsByReviewAndUser(review, findUser.get())) like = true;
+                likeCount = likeRepository.countByReview(review);
+                // 답글 존재여부, 답글 내용, 답글시간
+                Reviews replyReview = reviewRepository.findByParentReview(review);
+                if(replyReview != null) reply = true;
+                dto = ReviewResDto.from(review, like, likeCount, reply, replyReview);
+
+        }else{
+            // 로그인 X
+                reply = false;
+                // 좋아요 여부-> false, 좋아요 개수
+                likeCount = likeRepository.countByReview(review);
+                // 답글 존재여부, 답글 내용, 답글시간
+                Reviews replyReview = reviewRepository.findByParentReview(review);
+                if(replyReview != null) reply = true;
+                dto = ReviewResDto.from(review, like, likeCount, reply, replyReview);
+        }
+        return new BaseRes(200, "상품 포토리뷰 조회(전체) 성공", dto);
     }
 }
