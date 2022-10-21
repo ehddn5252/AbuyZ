@@ -31,8 +31,6 @@ public class BigCategoryServiceImpl implements BigCategoryService {
     public BigCategoryDto getOneBigCategories(Integer categoryUid) {
 
         Optional<BigCategories> b = bigCategoryRepository.findByUid(categoryUid);
-        System.out.println("================================");
-        System.out.println(b);
         if (b.isPresent()){
             return BigCategories.toDto(b.get());
         }

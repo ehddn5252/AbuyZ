@@ -2,6 +2,9 @@ package com.tasteshopping.product.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Setter
 @Builder
@@ -31,6 +34,6 @@ public class ProductDto {
 
     private String brandName;
 
-
+    private LocalDateTime date;
 
 }

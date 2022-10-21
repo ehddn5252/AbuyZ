@@ -24,6 +24,7 @@ public class ProductCreateReqDto {
     LinkedHashMap<String,String> options;
     String keywords;
     String meta_tag;
+    Integer products_uid;
 
     public static ProductCreateDto reqToDto(ProductCreateReqDto p){
         return ProductCreateDto
@@ -41,7 +42,9 @@ public class ProductCreateReqDto {
                 .options(p.options)
                 .keywords(p.keywords)
                 .metaTag(p.meta_tag)
+                .productsUid(p.products_uid)
                 .build();
+
     }
 
 }

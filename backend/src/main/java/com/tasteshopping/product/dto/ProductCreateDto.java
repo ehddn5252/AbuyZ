@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 @NoArgsConstructor
 public class ProductCreateDto {
     String userId;
+    Integer productsUid;
     Integer smallCategoriesUid;
     String name;
     Integer discountRate;
@@ -45,6 +46,7 @@ public class ProductCreateDto {
                  .options(p.options)
                  .keywords(p.keywords)
                  .metaTag(p.meta_tag)
+                 .productsUid(p.products_uid)
                  .build();
      }
 
