@@ -19,7 +19,7 @@ export default function DataStatus() {
   const today = 200000;
 
   return (
-    <Container maxWidth="xxl" sx={{ paddingTop: "1rem" }}>
+    <Container maxWidth="xxl">
       <DataStatusBox>
         <h1 style={{ marginLeft: "1.5rem" }}>진행 현황</h1>
         <hr style={{ width: "95%" }} />
@@ -65,20 +65,9 @@ export default function DataStatus() {
   );
 }
 
-const AContainer = styled(Container)`
-  /* display: inline;
-  width: 80%;
-  height: 65%;
-  margin-bottom: 3rem;
-  margin-left: 15rem; */
-  max-width: 1500px;
-`;
-
 const DataStatusBox = styled.div`
   border: 0.1rem solid #000;
-  margin-top: 2rem;
   margin-bottom: 2rem;
-  /* width: 80rem; */
 `;
 
 const BoxContainer = styled.div`
