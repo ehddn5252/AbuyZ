@@ -6,10 +6,7 @@ import com.tasteshopping.product.entity.Brands;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.categories.entity.SmallCategories;
-import com.tasteshopping.product.repository.BrandRepository;
-import com.tasteshopping.product.repository.ProductOptionRepository;
-import com.tasteshopping.product.repository.ProductPictureRepository;
-import com.tasteshopping.product.repository.ProductRepository;
+import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +44,11 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductOptionRepository productOptionRepository;
 
+    @Autowired
+    ProductOptionListRepository productOptionListRepository;
+
+    @Autowired
+    ProductKeywordRepository productKeywordRepository;
 
     @Override
     public void modifyProductOption(ProductCreateDto productCreateDto){
@@ -56,13 +58,23 @@ public class ProductServiceImpl implements ProductService {
         3. 상품 옵션 리스트를 비우고 다시 생성한다.
          */
         Integer productsUid = productCreateDto.getProductsUid();
-//        List<Optional<ProductOptions>> optionsUid = productOptionRepository.findByProductsUid(productsUid);
-        System.out.println("===============");
-        System.out.println("===============");
-        System.out.println("===============");
-        System.out.println("===============");
-        System.out.println("===============");
-        System.out.println("===============");
+        Optional<ProductOptions> option = productOptionRepository.findByProductsUid(productsUid);
+        int optionUid = 1;
+        // 해당 옵션의 옵션 리스트 제거
+        if(option.isPresent()){
+            optionUid= option.get().getUid();
+            productOptionListRepository.deleteByProductOptionsUid(optionUid);
+        }
+        
+        // 옵션 리스트 추가
+        LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
+
+        for (String key : options.keySet()) {
+            String[] sList = options.get(key).split(",");
+            for (int i = 0; i < sList.length; ++i) {
+                productOptionListService.createProductOptionList(key, sList[i].trim(), optionUid);
+            }
+        }
     }
 
     @Override
@@ -98,12 +110,12 @@ public class ProductServiceImpl implements ProductService {
          */
 
         registerProduct(productCreateDto);
-        int products_uid = 1;
+        int productsUid = 1;
         Optional<Integer> maxUidOptional = getMaxUid();
         if (maxUidOptional.isPresent()) {
-            products_uid = maxUidOptional.get();
+            productsUid = maxUidOptional.get();
         }
-        Products pp =productRepository.findById(products_uid).get();
+        Products pp =productRepository.findById(productsUid).get();
 
         // save imgs
         LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
@@ -115,30 +127,30 @@ public class ProductServiceImpl implements ProductService {
                 pp.setRepImg(imgs.get(key));
                 productRepository.save(pp);
             }
-            productPictureService.createProductPicture(products_uid, imgs.get(key));
+            productPictureService.createProductPicture(productsUid, imgs.get(key));
         }
 
         //save product_options
         LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
 
-        productOptionService.createProductOption(products_uid);
+        productOptionService.createProductOption(productsUid);
 
-        int options_uid = 1;
+        int optionsUid = 1;
         Optional<Integer> maxOptionUidOptional = productOptionService.getMaxUid();
         if (maxOptionUidOptional.isPresent()) {
-            options_uid = maxOptionUidOptional.get();
+            optionsUid = maxOptionUidOptional.get();
         }
         // save product_option_lists
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
             for (int i = 0; i < sList.length; ++i) {
-                productOptionListService.createProductOptionList(key, sList[i].trim(), options_uid);
+                productOptionListService.createProductOptionList(key, sList[i].trim(), optionsUid);
             }
         }
         // save keyword lists
         String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
         for (int i = 0; i < keywordList.length; ++i) {
-            productKeywordService.createProductKeyword(keywordList[i].trim(), products_uid);
+            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
         }
     }
 
@@ -146,8 +158,6 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Integer uid) {
 
         Products product = productRepository.findById(uid).get();
-        System.out.println(product.toString());
-        System.out.println("=============================");
 
         productRepository.delete(product);
     }
@@ -161,8 +171,24 @@ public class ProductServiceImpl implements ProductService {
         // 상품 이미지 변경 (삭제 후 생성)
         modifyProductPicture(productCreateDto);
 
-        // product_options 변경
+        // product_options 변경 (삭제 후 생성)
         modifyProductOption(productCreateDto);
+
+        // product_uid 에 맞는 product_keywords 변경 (삭제 후 생성)
+        modifyProductKeywords(productCreateDto);
+
+    }
+
+    private void modifyProductKeywords(ProductCreateDto productCreateDto) {
+
+        Integer productsUid = productCreateDto.getProductsUid();
+        // 삭제
+        productKeywordRepository.deleteByProductsUid(productsUid);
+        // 생성
+        String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
+        for (int i = 0; i < keywordList.length; ++i) {
+            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
+        }
     }
 
     @Override

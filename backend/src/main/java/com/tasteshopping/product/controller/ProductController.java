@@ -42,7 +42,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
     }
 
-
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {
         System.out.println("in getAllProduct");
@@ -67,18 +66,17 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
     }
 
-    @PutMapping()
+    @PutMapping("/modify")
     public ResponseEntity<BaseRes> modify(@RequestBody ProductCreateReqDto productCreateReqDto) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-        Integer uid = productCreateDto.getProductsUid();
         productService.modifyProductRelated(productCreateDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
 
     }
 
 
-    @GetMapping("/big-category-list")
-    public ResponseEntity<BaseRes> getBigCategoryList() {
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product 등록 성공."));
-    }
+//    @GetMapping("/big-category-list")
+//    public ResponseEntity<BaseRes> getBigCategoryList() {
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product 등록 성공."));
+//    }
 }
