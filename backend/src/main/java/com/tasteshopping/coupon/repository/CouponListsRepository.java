@@ -10,6 +10,17 @@ import java.util.List;
 
 @Repository
 public interface CouponListsRepository extends JpaRepository<CouponLists,Integer> {
-    @Query("select cl from CouponLists cl join fetch cl.coupons c join fetch c.bigCategories bc where cl.user.email = :#{#email}")
+    @Query("select cl from CouponLists cl " +
+            "join fetch cl.coupons c " +
+            "join fetch c.bigCategories bc " +
+            "where cl.user.email = :#{#email}")
     List<CouponLists> findCouponListsByUserEmail(@Param("email")String email);
+
+    @Query("select cl from CouponLists cl " +
+            "join fetch cl.coupons c " +
+            "join fetch c.bigCategories bc " +
+            "where cl.user.email = :#{#email} " +
+            "and bc.uid = :#{#category} " +
+            "and cl.status=0")
+    List<CouponLists> findCouponListsByUserEmailAndCategory(@Param("email")String email,@Param("category")int category);
 }

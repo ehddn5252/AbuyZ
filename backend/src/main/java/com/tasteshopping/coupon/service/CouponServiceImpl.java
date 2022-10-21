@@ -81,12 +81,31 @@ public class CouponServiceImpl implements CouponService {
         responseDto.setData(new ResultDto(true));
         return responseDto;
     }
+    @Override
+    public ResponseDto getMyCoupons(String email) {
+        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmail(email);
+        return toDto(search_result);
+    }
 
     @Override
-    @Transactional
-    public ResponseDto getMyCoupons(String email) {
+    public ResponseDto getAvailableCoupons(String email, int big_category_id) {
+        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmailAndCategory(email,big_category_id);
+        return toDto(search_result);
+    }
+
+    private ResponseDto check(String email){
         ResponseDto responseDto = new ResponseDto();
-        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmail(email);
+        Users users = userRepository.findByEmail(email).get();
+        if(users.getUserRoles()!= Role.ADMIN){
+            responseDto.setMessage("추가 실패 : 궏한없음");
+            responseDto.setData(new ResultDto(false));
+            return responseDto;
+        }
+        return null;
+    }
+    @Transactional
+    public ResponseDto toDto(List<CouponLists> search_result){
+        ResponseDto responseDto = new ResponseDto();
         CouponResListDto couponResListDto = new CouponResListDto();
         Date now_date;
         try {
@@ -101,30 +120,13 @@ public class CouponServiceImpl implements CouponService {
             return responseDto;
         }
         for(CouponLists couponLists:search_result){
-             if(couponLists.getStatus()==0&&couponLists.getCoupons().getEndDate().after(now_date)){
-                 couponLists.updateStatus(2);
-                 couponListsRepository.save(couponLists);
-             }
-             couponResListDto.getResult().add(couponLists.toCouponsResDto());
+            if(couponLists.getStatus()==0&&couponLists.getCoupons().getEndDate().after(now_date)){
+                couponLists.updateStatus(2);
+                couponListsRepository.save(couponLists);
+            }
+            couponResListDto.getResult().add(couponLists.toCouponsResDto());
         }
         responseDto.setData(couponResListDto);
         return responseDto;
-    }
-
-    @Override
-    public ResponseDto getAvailableCoupons(String email, int big_category_id) {
-
-        return null;
-    }
-
-    private ResponseDto check(String email){
-        ResponseDto responseDto = new ResponseDto();
-        Users users = userRepository.findByEmail(email).get();
-        if(users.getUserRoles()!= Role.ADMIN){
-            responseDto.setMessage("추가 실패 : 궏한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
-        return null;
     }
 }
