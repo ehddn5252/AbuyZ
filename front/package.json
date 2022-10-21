@@ -27,6 +27,7 @@
     "dayjs": "^1.11.5",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "jquery": "^3.6.1",
     "luxon": "^3.0.4",
     "material-ui-popup-state": "^4.1.0",
     "moment": "^2.29.4",
