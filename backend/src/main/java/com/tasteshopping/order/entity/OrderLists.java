@@ -1,6 +1,7 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.product.entity.Products;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
+@Getter
 public class OrderLists {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

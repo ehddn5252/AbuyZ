@@ -25,4 +25,9 @@ public class StatisticsController {
     public ResponseEntity<ResponseDto>getCart(@AuthenticationPrincipal String email){
         return new ResponseEntity<>(statisticsService.getCart(email), HttpStatus.OK);
     }
+    @PostMapping("/daily")
+    public ResponseEntity<ResponseDto>getDaily(@AuthenticationPrincipal String email,
+                                               @RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getDaily(email,dateDto), HttpStatus.OK);
+    }
 }

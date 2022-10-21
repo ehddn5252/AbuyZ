@@ -2,7 +2,9 @@ package com.tasteshopping.statistics.service;
 
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
+import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Revenues;
+import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.RevenueRepository;
 import com.tasteshopping.statistics.dto.*;
 import com.tasteshopping.user.dto.ResponseDto;
@@ -25,32 +27,33 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final UserRepository userRepository;
     private final RevenueRepository revenueRepository;
     private final CartRepository cartRepository;
+    private final OrderListRepository orderListRepository;
     @Override
     public ResponseDto getSales(String email, DateDto dateDto) {
-        return check(email,dateDto,0);
+        return getStatistics(email,dateDto,0);
     }
 
     @Override
     public ResponseDto getCart(String email) {
-        return check(email,null,1);
+        return getStatistics(email,null,1);
     }
 
     @Override
     public ResponseDto getProduct(String email, DateDto dateDto) {
-        return null;
+        return getStatistics(email,dateDto,2);
     }
 
     @Override
     public ResponseDto getCategory(String email, DateDto dateDto) {
-        return null;
+        return getStatistics(email,dateDto,3);
     }
 
     @Override
     public ResponseDto getDaily(String email, DateDto dateDto) {
-        return null;
+        return getStatistics(email,dateDto,4);
     }
 
-    public ResponseDto check(String email, DateDto dateDto, int menu){
+    public ResponseDto getStatistics(String email, DateDto dateDto, int menu){
         Optional<Users> users = userRepository.findByEmail(email);
         ResponseDto responseDto = new ResponseDto();
         if(!(users.isPresent() && users.get().getUserRoles() == Role.ADMIN)){
@@ -61,7 +64,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         int total=0;
         Date start_date=null;
         Date end_date=null;
-        if(menu == 0){
+        if(menu != 1){
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 start_date = formatter.parse(dateDto.getStart_date());
@@ -113,8 +116,17 @@ public class StatisticsServiceImpl implements StatisticsService {
             case 2:
 
                 break;
+            case 3:
+                break;
             default:
-
+                Map<String,Integer>dayStatistics = new HashMap<>();
+                List<OrderLists> orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);
+                for(OrderLists orderList:orderLists){
+                    dayStatistics.put(orderList.getDay(), dayStatistics.getOrDefault(orderList.getDay(), 0) + orderList.getTotalPrice());
+                }
+                responseDto.setData(dayStatistics);
+                responseDto.setMessage("조회 성공");
+                break;
         }
 
         return responseDto;
