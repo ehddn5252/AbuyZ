@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React from "react";
 import DataStatus from "../../components/admin/DataStatus";
 import ReviewStatus from "../../components/admin/ReviewStatus";
+import { Container } from "@mui/material";
 
 export default function Dashboard() {
   return (
@@ -14,7 +15,6 @@ export default function Dashboard() {
 
 const DashboardPage = styled.div`
   background: #edf0f5;
-  /* width: 100vw;
-  height: 100vh; */
-  padding-left: 12rem;
+  padding: 3rem;
+  padding-left: 15rem;
 `;
