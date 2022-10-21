@@ -9,7 +9,7 @@ export default function Coupon() {
     <CouponPage>
       <Container maxWidth="xxl" sx={{ paddingTop: "1rem" }}>
         <CouponList />
-        <AddCoupon />
+        {/* <AddCoupon /> */}
       </Container>
     </CouponPage>
   );
