@@ -30,7 +30,7 @@ public class Reviews {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;             //작성날짜
 
-    @Column(columnDefinition = "varchar(500)")
+    @Column(columnDefinition = "varchar(500)",nullable = false)
     private String content;             //작성내용
 
     @Column(nullable = false)

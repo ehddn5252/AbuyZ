@@ -157,7 +157,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public BaseRes productReviewList(String email, int product_uid, int page) {
         Products products = productRepository.getReferenceById(product_uid);
-        Page<Reviews> reviewPage = reviewRepository.findByProduct(products, PageRequest.of(page, 5));
+        Page<Reviews> reviewPage = reviewRepository.findByProductAndParentReviewIsNull(products, PageRequest.of(page, 5));
         long totalCount = reviewPage.getTotalElements();
         long pageCount = reviewPage.getTotalPages();
         List<Reviews> reviewList = reviewPage.getContent();
@@ -170,6 +170,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(findUser.isPresent()){
             // 로그인 O
             for (Reviews reviews : reviewList){
+                reply = false;
                 // 좋아요 여부, 좋아요 개수
                 if(likeRepository.existsByReviewAndUser(reviews, findUser.get())) like = true;
                 likeCount = likeRepository.countByReview(reviews);
@@ -181,6 +182,7 @@ public class ReviewServiceImpl implements ReviewService {
         }else{
             // 로그인 X
             for (Reviews reviews : reviewList){
+                reply = false;
                 // 좋아요 여부-> false, 좋아요 개수
                 likeCount = likeRepository.countByReview(reviews);
                 // 답글 존재여부, 답글 내용, 답글시간
