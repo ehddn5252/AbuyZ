@@ -66,20 +66,27 @@ export default function Chart() {
           {chartType === 4 ? <MajorTitle>장바구니 상품비율</MajorTitle> : null}
           <LargeChartPage>
             {/* 차트 */}
-            <LargeOnlyChart>
-              {chartType === 0 ? <LineChart /> : null}
-              {chartType === 1 ? <BarChart /> : null}
-              {chartType === 2 ? <DoughnutChart /> : null}
-              {chartType === 3 ? <DataChart /> : null}
-              {chartType === 4 ? <StackChart /> : null}
-            </LargeOnlyChart>
-            <LargeChartExplantion>
-              {chartType === 0 ? <LineData /> : null}
-              {chartType === 1 ? <BarData /> : null}
-              {chartType === 2 ? <DoughnutData /> : null}
-              {chartType === 3 ? <DataChart /> : null}
-              {chartType === 4 ? <StackData /> : null}
-            </LargeChartExplantion>
+            {chartType === 3 ? (
+              <DataList>
+                <DataChart />
+              </DataList>
+            ) : null}
+            {chartType === 3 ? null : (
+              <LargeOnlyChart>
+                {chartType === 0 ? <LineChart /> : null}
+                {chartType === 1 ? <BarChart /> : null}
+                {chartType === 2 ? <DoughnutChart /> : null}
+                {chartType === 4 ? <StackChart /> : null}
+              </LargeOnlyChart>
+            )}
+            {chartType === 3 ? null : (
+              <LargeChartExplantion>
+                {chartType === 0 ? <LineData /> : null}
+                {chartType === 1 ? <BarData /> : null}
+                {chartType === 2 ? <DoughnutData /> : null}
+                {chartType === 4 ? <StackData /> : null}
+              </LargeChartExplantion>
+            )}
           </LargeChartPage>
         </LargeChart>
         <SmallCategoryBox>
@@ -89,7 +96,7 @@ export default function Chart() {
             style={{ marginBottom: "1rem" }}
           >
             <ChartTitle>상품별 결제금액</ChartTitle>
-            <DataChart />
+            {/* <DataChart /> */}
           </SmallChart2>
           <SmallChart2
             className="ChartTag"
@@ -157,6 +164,13 @@ const LargeChartExplantion = styled.div`
   height: 100%;
 `;
 
+const DataList = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+`;
 const SmallChart = styled.div`
   width: 25%;
   height: 100%;

@@ -4,20 +4,20 @@ import React from "react";
 // StyledComponent
 import styled from "styled-components";
 
-export default function BarChart() {
+export default function DoughnutData() {
   return (
     <Container>
       <TotalDiv style={{ backgroundColor: "#fff5d6" }}>
-        <TitleText>총 매출액(원)</TitleText>
-        <ResultText style={{ color: "#fda700" }}>1,300K</ResultText>
+        <TitleText>제일 인기있는 카테고리(대)</TitleText>
+        <ResultText style={{ color: "#fda700" }}>식품</ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#ffe27f" }}>
-        <TitleText>총 판매수량(개)</TitleText>
-        <ResultText style={{ color: "#fda700" }}>102</ResultText>
+        <TitleText>제일 인기있는 카테고리(소)</TitleText>
+        <ResultText style={{ color: "#fda700" }}>디저트</ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
-        <TitleText>총 기간(일)</TitleText>
-        <ResultText style={{ color: "#2daf43" }}>70</ResultText>
+        <TitleText>인기 카테고리 매출액</TitleText>
+        <ResultText style={{ color: "#2daf43" }}>9,300K</ResultText>
       </TotalDiv>
     </Container>
   );

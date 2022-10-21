@@ -1,12 +1,10 @@
 // React
-import React, { useEffect } from "react";
+import React from "react";
 
 // StyledComponent
 import styled from "styled-components";
 
-export default function BarChart() {
-  useEffect(() => {});
-
+export default function LineData() {
   return (
     <Container>
       <TotalDiv style={{ backgroundColor: "#fff5d6" }}>
