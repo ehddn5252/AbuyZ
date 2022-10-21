@@ -29,4 +29,14 @@ public class CouponController {
                                              @RequestBody CouponUidDto couponUidDto){
         return new ResponseEntity<>(couponService.delete(email, couponUidDto), HttpStatus.OK);
     }
+    @GetMapping
+    public ResponseEntity<ResponseDto>getMyCoupons(@AuthenticationPrincipal String email){
+        return new ResponseEntity<>(couponService.getMyCoupons(email),HttpStatus.OK);
+    }
+    @GetMapping("/available-coupons/{big_categories_uid}")
+    public ResponseEntity<ResponseDto>getAvailableCoupons(@AuthenticationPrincipal String email,
+                                                          @PathVariable int big_categories_uid){
+        return new ResponseEntity<>(couponService.getAvailableCoupons(email,big_categories_uid),HttpStatus.OK);
+    }
+
 }

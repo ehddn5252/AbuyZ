@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -39,4 +41,7 @@ public class Coupons {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "bigCategoriesUid")
     private BigCategories bigCategories;
+
+    @OneToMany(mappedBy = "coupons", cascade = CascadeType.ALL)
+    private List<CouponLists> couponLists = new ArrayList<>();
 }

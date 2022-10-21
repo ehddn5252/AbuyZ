@@ -1,8 +1,11 @@
 package com.tasteshopping.coupon.service;
 
 import com.tasteshopping.coupon.dto.CouponDto;
+import com.tasteshopping.coupon.dto.CouponResListDto;
 import com.tasteshopping.coupon.dto.CouponUidDto;
+import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.coupon.repository.CouponListsRepository;
 import com.tasteshopping.coupon.repository.CouponRepository;
 import com.tasteshopping.product.entity.BigCategories;
 import com.tasteshopping.product.repository.BigCategoryRepository;
@@ -16,6 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +35,7 @@ public class CouponServiceImpl implements CouponService {
     private final BigCategoryRepository bigCategoryRepository;
     private final CouponRepository couponRepository;
     private final UserRepository userRepository;
+    private final CouponListsRepository couponListsRepository;
     @Override
     @Transactional
     public ResponseDto create(String email,CouponDto couponDto) {
@@ -72,6 +81,42 @@ public class CouponServiceImpl implements CouponService {
         responseDto.setData(new ResultDto(true));
         return responseDto;
     }
+
+    @Override
+    @Transactional
+    public ResponseDto getMyCoupons(String email) {
+        ResponseDto responseDto = new ResponseDto();
+        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmail(email);
+        CouponResListDto couponResListDto = new CouponResListDto();
+        Date now_date;
+        try {
+            String now = LocalDateTime.now().toString();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            now_date = format.parse(now);
+        }
+        catch (ParseException e){
+            e.printStackTrace();
+            responseDto.setData(null);
+            responseDto.setMessage("Parsing Error");
+            return responseDto;
+        }
+        for(CouponLists couponLists:search_result){
+             if(couponLists.getStatus()==0&&couponLists.getCoupons().getEndDate().after(now_date)){
+                 couponLists.updateStatus(2);
+                 couponListsRepository.save(couponLists);
+             }
+             couponResListDto.getResult().add(couponLists.toCouponsResDto());
+        }
+        responseDto.setData(couponResListDto);
+        return responseDto;
+    }
+
+    @Override
+    public ResponseDto getAvailableCoupons(String email, int big_category_id) {
+
+        return null;
+    }
+
     private ResponseDto check(String email){
         ResponseDto responseDto = new ResponseDto();
         Users users = userRepository.findByEmail(email).get();
