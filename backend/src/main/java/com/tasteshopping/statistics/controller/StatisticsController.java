@@ -30,4 +30,14 @@ public class StatisticsController {
                                                @RequestBody DateDto dateDto){
         return new ResponseEntity<>(statisticsService.getDaily(email,dateDto), HttpStatus.OK);
     }
+    @PostMapping("/category-percentage")
+    public ResponseEntity<ResponseDto>getPercentage(@AuthenticationPrincipal String email,
+                                                    @RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getPercentage(email,dateDto), HttpStatus.OK);
+    }
+    @PostMapping("/product")
+    public ResponseEntity<ResponseDto>getProduct(@AuthenticationPrincipal String email,
+                                                    @RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getProduct(email,dateDto), HttpStatus.OK);
+    }
 }

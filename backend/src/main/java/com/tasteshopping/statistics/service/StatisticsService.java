@@ -7,6 +7,6 @@ public interface StatisticsService {
     ResponseDto getSales(String email, DateDto dateDto);
     ResponseDto getCart(String email);
     ResponseDto getProduct(String email, DateDto dateDto);
-    ResponseDto getCategory(String email, DateDto dateDto);
+    ResponseDto getPercentage(String email, DateDto dateDto);
     ResponseDto getDaily(String email, DateDto dateDto);
 }

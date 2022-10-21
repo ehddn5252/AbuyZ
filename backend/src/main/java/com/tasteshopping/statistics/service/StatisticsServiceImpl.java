@@ -3,8 +3,10 @@ package com.tasteshopping.statistics.service;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.order.entity.OrderLists;
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.entity.Revenues;
 import com.tasteshopping.order.repository.OrderListRepository;
+import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.order.repository.RevenueRepository;
 import com.tasteshopping.statistics.dto.*;
 import com.tasteshopping.user.dto.ResponseDto;
@@ -28,6 +30,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final RevenueRepository revenueRepository;
     private final CartRepository cartRepository;
     private final OrderListRepository orderListRepository;
+    private final OrderRepository orderRepository;
     @Override
     public ResponseDto getSales(String email, DateDto dateDto) {
         return getStatistics(email,dateDto,0);
@@ -44,7 +47,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public ResponseDto getCategory(String email, DateDto dateDto) {
+    public ResponseDto getPercentage(String email, DateDto dateDto) {
         return getStatistics(email,dateDto,3);
     }
 
@@ -114,7 +117,19 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 2:
+                HashMap<String,ProductStatisticsDto>productStatistics=new HashMap<>();
+                List<Orders>orders = orderRepository.findAllByDateBetween(start_date,end_date);
+                for(Orders order:orders){
+                    ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getProduct().getName(),
+                            new ProductStatisticsDto(order.getProduct().getSmallCategory().getBigCategory().getCategoryName(),
+                                    order.getProduct().getSmallCategory().getSmallCategoryName()));
 
+                    productStatisticsDto.updateCount(order.getCount());
+                    productStatisticsDto.updateSalesAmount(order.getPrice());
+                }
+
+                responseDto.setData(productStatistics);
+                responseDto.setMessage("조회 성공");
                 break;
             case 3:
                 break;
