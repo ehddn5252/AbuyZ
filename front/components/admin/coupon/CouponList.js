@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CouponItem from "./CouponItem";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-const snack = [
+const coupon = [
   {
     title: "빼빼로 데이 1000원 쿠폰",
     startDate: "2022.10.18 16:00",
@@ -21,9 +21,9 @@ export default function CouponList() {
         <AddCouponButton>쿠폰 등록</AddCouponButton>
       </CouponHeaderBox>
       <Grid2 container spacing={3}>
-        {snack.map((data, idx) => (
+        {coupon.map((data, idx) => (
           <Grid2 xs={4} md={4} key={idx}>
-            <CouponItem snack={data} />
+            <CouponItem coupon={data} />
           </Grid2>
         ))}
       </Grid2>
@@ -56,4 +56,7 @@ const AddCouponButton = styled.button`
   width: 8rem;
   font-size: 1.3rem;
   font-weight: 800;
+  &:hover {
+    cursor: pointer;
+  }
 `;

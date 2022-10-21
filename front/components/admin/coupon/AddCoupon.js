@@ -58,7 +58,7 @@ export default function AddCoupon() {
       <h1 style={{ paddingLeft: "2rem" }}>쿠폰 등록</h1>
       <hr style={{ background: "#ff9494", width: "95%" }}></hr>
       <ContentBox>
-        <ContentTitle>쿠폰 이름 </ContentTitle>
+        <ContentTitle>쿠폰 이름</ContentTitle>
         <Input
           placeholder={namePlaceholder}
           onChange={nameChange}
@@ -67,7 +67,7 @@ export default function AddCoupon() {
         />
       </ContentBox>
       <ContentBox>
-        <ContentTitle>쿠폰 시작 일자 </ContentTitle>
+        <ContentTitle>쿠폰 시작 일자</ContentTitle>
         <MyDatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
@@ -78,7 +78,7 @@ export default function AddCoupon() {
         />
       </ContentBox>
       <ContentBox>
-        <ContentTitle>쿠폰 마감 일자 </ContentTitle>
+        <ContentTitle>쿠폰 마감 일자</ContentTitle>
         <MyDatePicker
           selected={endDate}
           onChange={(date) => setEndDate(date)}
@@ -91,7 +91,7 @@ export default function AddCoupon() {
         />
       </ContentBox>
       <ContentBox>
-        <ContentTitle>쿠폰 대상 카테고리 </ContentTitle>
+        <ContentTitle>쿠폰 대상 카테고리</ContentTitle>
         <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
           <InputLabel id="demo-simple-select-autowidth-label">
             대분류
@@ -114,7 +114,7 @@ export default function AddCoupon() {
         </FormControl>
       </ContentBox>
       <ContentBox>
-        <ContentTitle>쿠폰 할인금액 </ContentTitle>
+        <ContentTitle>쿠폰 할인금액</ContentTitle>
         <Input
           placeholder={salePlaceholder}
           onChange={saleChange}
@@ -177,6 +177,9 @@ const DeleteButton = styled.button`
   height: 2rem;
   width: 3rem;
   font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const EditButton = styled.button`
@@ -188,4 +191,7 @@ const EditButton = styled.button`
   height: 2rem;
   width: 5rem;
   font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
