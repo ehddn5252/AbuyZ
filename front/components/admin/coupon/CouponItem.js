@@ -4,11 +4,11 @@ import styled from "styled-components";
 export default function CouponItem(props) {
   return (
     <CouponBox>
-      <Title>{props.snack.title}</Title>
-      <Content>쿠폰 시작 일시 : {props.snack.startDate}</Content>
-      <Content>쿠폰 끝 일시 : {props.snack.endDate}</Content>
-      <Content>사용 카테고리 : {props.snack.category}</Content>
-      <Content>쿠폰 할인 금액 : {props.snack.discount}원</Content>
+      <Title>{props.coupon.title}</Title>
+      <Content>쿠폰 시작 일시 : {props.coupon.startDate}</Content>
+      <Content>쿠폰 끝 일시 : {props.coupon.endDate}</Content>
+      <Content>사용 카테고리 : {props.coupon.category}</Content>
+      <Content>쿠폰 할인 금액 : {props.coupon.discount}원</Content>
       <ButtonBox>
         <DeleteButton>삭제</DeleteButton>
         <EditButton>수정</EditButton>
@@ -53,6 +53,9 @@ const DeleteButton = styled.button`
   height: 2rem;
   width: 3rem;
   font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const EditButton = styled.button`
@@ -64,4 +67,7 @@ const EditButton = styled.button`
   height: 2rem;
   width: 5rem;
   font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
