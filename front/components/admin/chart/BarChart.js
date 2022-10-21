@@ -6,22 +6,17 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
-
-// StyledComponent
-import styled from "styled-components";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -36,28 +31,39 @@ export const options = {
     },
     title: {
       display: false,
+      text: "Chart.js Bar Chart",
     },
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const labels = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export const data = {
   labels,
   datasets: [
     {
-      label: "Dataset 1",
-      data: [30, 10, 11, 40, 60, 12, 22],
-      borderColor: "rgb(255, 99, 132)",
+      label: "매출액",
+      data: [10, 30, 40, 30, 10, 60, 70],
       backgroundColor: "rgba(255, 99, 132, 0.5)",
     },
   ],
 };
 
-export default function LineChart() {
+// StyledComponent
+import styled from "styled-components";
+
+export default function BarChart() {
   return (
     <Container>
-      <Line options={options} data={data} />
+      <Bar options={options} data={data} />
     </Container>
   );
 }
@@ -65,7 +71,8 @@ export default function LineChart() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+
   width: 100%;
   height: 80%;
-  padding: 1rem;
+  padding: 0.5rem;
 `;
