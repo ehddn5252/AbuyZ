@@ -1,12 +1,18 @@
 package com.tasteshopping.product.entity;
 
+import com.tasteshopping.categories.entity.SmallCategories;
+import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import com.tasteshopping.product.entity.Inventories;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+
 
 @Entity
 @Getter
@@ -74,6 +80,10 @@ public class Products {
     @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
 
+    @CreatedDate
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdDate;
+
 
     public ProductDto toDto() {
 
@@ -89,5 +99,17 @@ public class Products {
                 .reviewRate(reviewRate)
                 .uid(uid)
                 .build();
+    }
+
+    public void modifyEntity(ProductCreateDto p, SmallCategories smallCategory, Brands brand) {
+        this.name= p.getName();
+        this.discountRate = p.getDiscountRate();
+        this.deliveryFee = p.getDeliveryFee();
+        this.descriptionImg = p.getDescriptionImg();
+        this.smallCategory = smallCategory;
+        this.brand = brand;
+        this.repImg = p.getRepImg();
+        this.price = p.getPrice();
+        this.reviewRate = p.getReviewRate();
     }
 }
