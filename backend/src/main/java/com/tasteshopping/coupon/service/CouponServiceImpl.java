@@ -1,5 +1,7 @@
 package com.tasteshopping.coupon.service;
 
+import com.tasteshopping.categories.entity.BigCategories;
+import com.tasteshopping.categories.repository.BigCategoryRepository;
 import com.tasteshopping.coupon.dto.CouponDto;
 import com.tasteshopping.coupon.dto.CouponResListDto;
 import com.tasteshopping.coupon.dto.CouponUidDto;
@@ -7,8 +9,6 @@ import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.coupon.repository.CouponListsRepository;
 import com.tasteshopping.coupon.repository.CouponRepository;
-import com.tasteshopping.categories.entity.BigCategories;
-import com.tasteshopping.categories.repository.BigCategoryRepository;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.user.dto.ResultDto;
 import com.tasteshopping.user.dto.Role;

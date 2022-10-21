@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -24,5 +21,8 @@ public class StatisticsController {
                                                @RequestBody DateDto dateDto){
         return new ResponseEntity<>(statisticsService.getSales(email,dateDto), HttpStatus.OK);
     }
-
+    @GetMapping("/cart")
+    public ResponseEntity<ResponseDto>getCart(@AuthenticationPrincipal String email){
+        return new ResponseEntity<>(statisticsService.getCart(email), HttpStatus.OK);
+    }
 }

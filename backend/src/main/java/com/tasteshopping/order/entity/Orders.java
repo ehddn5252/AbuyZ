@@ -3,11 +3,13 @@ package com.tasteshopping.order.entity;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.coupon.entity.Coupons;
+import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

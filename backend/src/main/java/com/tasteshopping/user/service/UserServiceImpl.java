@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService{
             responseDto = new ResponseDto(new ResultDto(false),"기존 비밀번호가 틀림");
         }else{
             Optional<Users> findUser = userRepository.findByEmail(email);
-            findUser.get().updatepassword(passwordEncoder.encode(passwordChangeDto.getNew_password()));
+            findUser.get().updatePassword(passwordEncoder.encode(passwordChangeDto.getNew_password()));
             userRepository.save(findUser.get());
             responseDto = new ResponseDto(new ResultDto(true),"비밀 번호 변경 완료");
         }
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService{
             responseDto.setMessage("이메일 전송에 실패했습니다.");
             return responseDto;
         }
-        user.get().updatepassword(passwordEncoder.encode(temp_pw));
+        user.get().updatePassword(passwordEncoder.encode(temp_pw));
         userRepository.save(user.get());
 
         responseDto.setData(new ResultDto(true));

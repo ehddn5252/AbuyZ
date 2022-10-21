@@ -1,5 +1,6 @@
 package com.tasteshopping.user.entity;
 
+import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.user.dto.LoginType;
 import com.tasteshopping.user.dto.Role;
@@ -72,12 +73,17 @@ public class Users {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CouponLists> couponLists = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Carts> carts = new ArrayList<>();
+
     public void updateStatus(){
         this.status = 1;
     }
-    public void updatepassword(String password){
+
+    public void updatePassword(String password){
         this.password = password;
     }
+
     public void modifyInfo(UserModificationDto userModificationDto){
         this.address = userModificationDto.getAddress();
         this.detailAddress = userModificationDto.getDetailAddress();
