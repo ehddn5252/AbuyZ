@@ -17,7 +17,9 @@ export default function Period() {
     setStandard(e.target.value);
   };
 
+  // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
+  // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
   return (
@@ -104,7 +106,7 @@ const Button = styled.button`
   /* border: 1rem; */
 `;
 
-const MyDatePicker = styled(DatePicker)`
+export const MyDatePicker = styled(DatePicker)`
   /* width: 15rem; */
   /* background-color: transparent; */
   height: 3rem;
