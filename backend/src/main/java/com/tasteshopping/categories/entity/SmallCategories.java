@@ -1,5 +1,9 @@
-package com.tasteshopping.product.entity;
+package com.tasteshopping.categories.entity;
 
+import com.tasteshopping.categories.dto.BigCategoryDto;
+import com.tasteshopping.categories.dto.SmallCategoryDto;
+import com.tasteshopping.categories.entity.BigCategories;
+import com.tasteshopping.product.entity.Products;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,4 +30,7 @@ public class SmallCategories {
     @JoinColumn(name="products_uid")
     private List<Products> products;
 
+    static public SmallCategoryDto toDto(SmallCategories b){
+        return SmallCategoryDto.builder().categoryName(b.getSmallCategoryName()).uid(b.getUid()).build();
+    }
 }

@@ -3,11 +3,14 @@ package com.tasteshopping.product.service;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.entity.Brands;
+import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.product.entity.SmallCategories;
+import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.repository.BrandRepository;
+import com.tasteshopping.product.repository.ProductOptionRepository;
+import com.tasteshopping.product.repository.ProductPictureRepository;
 import com.tasteshopping.product.repository.ProductRepository;
-import com.tasteshopping.product.repository.SmallCategoryRepository;
+import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +19,6 @@ import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
-    @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    BrandRepository brandRepository;
-
-    @Autowired
-    SmallCategoryRepository smallCategoryRepository;
 
     @Autowired
     ProductPictureService productPictureService;
@@ -37,6 +31,59 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductKeywordService productKeywordService;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    BrandRepository brandRepository;
+
+    @Autowired
+    SmallCategoryRepository smallCategoryRepository;
+
+    @Autowired
+    ProductPictureRepository productPictureRepository;
+
+    @Autowired
+    ProductOptionRepository productOptionRepository;
+
+
+    @Override
+    public void modifyProductOption(ProductCreateDto productCreateDto){
+        /*
+        1. 상품에 맞는 상품 옵션 유아이디를 가져온다. findByProductsUid()
+        2. 상품 옵션 유아이디에 맞는 상품 옵션 리스트를 가져온다.
+        3. 상품 옵션 리스트를 비우고 다시 생성한다.
+         */
+        Integer productsUid = productCreateDto.getProductsUid();
+//        List<Optional<ProductOptions>> optionsUid = productOptionRepository.findByProductsUid(productsUid);
+        System.out.println("===============");
+        System.out.println("===============");
+        System.out.println("===============");
+        System.out.println("===============");
+        System.out.println("===============");
+        System.out.println("===============");
+    }
+
+    @Override
+    public void modifyProductPicture(ProductCreateDto productCreateDto) {
+        // product 변경
+        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
+
+        // save imgs
+        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
+        int count=0;
+        Products pp =productRepository.findById(productCreateDto.getProductsUid()).get();
+        for (String key : imgs.keySet()){
+            if (count==0){
+                //save product
+                count+=1;
+                pp.setRepImg(imgs.get(key));
+                productRepository.save(pp);
+            }
+            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
+        }
+    }
 
     @Override
     @Transactional
@@ -103,6 +150,45 @@ public class ProductServiceImpl implements ProductService {
         System.out.println("=============================");
 
         productRepository.delete(product);
+    }
+
+    @Override
+    @Transactional
+    public void modifyProductRelated(ProductCreateDto productCreateDto){
+        // 상품 변경
+        modifyProduct(productCreateDto);
+        
+        // 상품 이미지 변경 (삭제 후 생성)
+        modifyProductPicture(productCreateDto);
+
+        // product_options 변경
+        modifyProductOption(productCreateDto);
+    }
+
+    @Override
+    public void modifyProduct(ProductCreateDto productCreateDto) {
+        // product 변경
+        Products product = productRepository.findById(productCreateDto.getProductsUid()).get();
+
+        // brand 설정
+        String brandName = productCreateDto.getBrandName();
+        Optional<Brands> brandsOptional = brandRepository.findByName(brandName);
+        Brands brand = null;
+        if (brandsOptional.isPresent()) {
+            brand = brandsOptional.get();
+        }
+
+        // small category 설정
+        Integer smallCategoryUid = productCreateDto.getSmallCategoriesUid();//int)param.get("small_categories_uid");
+        Optional<SmallCategories> smallCategoriesOptional = smallCategoryRepository.findById(smallCategoryUid);
+        SmallCategories smallCategory = null;
+        if (smallCategoriesOptional.isPresent()) {
+            smallCategory = smallCategoriesOptional.get();
+        }
+
+        product.modifyEntity(productCreateDto,smallCategory,brand);
+        productRepository.save(product);
+
     }
 
     @Override
