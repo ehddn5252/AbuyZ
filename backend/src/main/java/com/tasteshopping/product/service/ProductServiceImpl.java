@@ -1,5 +1,7 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.product.dto.DeliveryFee;
+import com.tasteshopping.product.dto.Price;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.entity.Brands;
@@ -51,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
     ProductKeywordRepository productKeywordRepository;
 
     @Override
-    public void modifyProductOption(ProductCreateDto productCreateDto){
+    public void modifyProductOption(ProductCreateDto productCreateDto) {
         /*
         1. 상품에 맞는 상품 옵션 유아이디를 가져온다. findByProductsUid()
         2. 상품 옵션 유아이디에 맞는 상품 옵션 리스트를 가져온다.
@@ -61,11 +63,11 @@ public class ProductServiceImpl implements ProductService {
         Optional<ProductOptions> option = productOptionRepository.findByProductsUid(productsUid);
         int optionUid = 1;
         // 해당 옵션의 옵션 리스트 제거
-        if(option.isPresent()){
-            optionUid= option.get().getUid();
+        if (option.isPresent()) {
+            optionUid = option.get().getUid();
             productOptionListRepository.deleteByProductOptionsUid(optionUid);
         }
-        
+
         // 옵션 리스트 추가
         LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
 
@@ -84,12 +86,12 @@ public class ProductServiceImpl implements ProductService {
 
         // save imgs
         LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
-        int count=0;
-        Products pp =productRepository.findById(productCreateDto.getProductsUid()).get();
-        for (String key : imgs.keySet()){
-            if (count==0){
+        int count = 0;
+        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
+        for (String key : imgs.keySet()) {
+            if (count == 0) {
                 //save product
-                count+=1;
+                count += 1;
                 pp.setRepImg(imgs.get(key));
                 productRepository.save(pp);
             }
@@ -115,15 +117,15 @@ public class ProductServiceImpl implements ProductService {
         if (maxUidOptional.isPresent()) {
             productsUid = maxUidOptional.get();
         }
-        Products pp =productRepository.findById(productsUid).get();
+        Products pp = productRepository.findById(productsUid).get();
 
         // save imgs
         LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
-        int count=0;
+        int count = 0;
         for (String key : imgs.keySet()) {
-            if (count==0){
+            if (count == 0) {
                 //save product
-                count+=1;
+                count += 1;
                 pp.setRepImg(imgs.get(key));
                 productRepository.save(pp);
             }
@@ -164,10 +166,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void modifyProductRelated(ProductCreateDto productCreateDto){
+    public void modifyProductRelated(ProductCreateDto productCreateDto) {
         // 상품 변경
         modifyProduct(productCreateDto);
-        
+
         // 상품 이미지 변경 (삭제 후 생성)
         modifyProductPicture(productCreateDto);
 
@@ -180,24 +182,130 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Optional<Products>> findByKeyword(String keyword) {
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("11111111111111111111111");
-        List<Optional<Products>> l= productRepository.findByNameContains(keyword);
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println("========================");
-        System.out.println(l);
-        System.out.println("22222222222222222222222");
-        return productRepository.findByNameContains(keyword);
+    public List<ProductDto> findByKeyword(String keyword) {
+
+        List<Optional<Products>> l = productRepository.findByNameContains(keyword);
+        List<ProductDto> newL = new ArrayList<>();
+        // 여기에 옵션 리스트, 사진, 키워드,
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
     }
+
+    @Override
+    public List<ProductDto> getProductBySmallCategory(int smallCategoriesUid) {
+        List<Optional<Products>> l = productRepository.findBySmallCategory(smallCategoriesUid);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
+    public List<ProductDto> getProductByBigCategory(Integer bigCategoriesUid) {
+        List<Optional<Products>> l = productRepository.findByBigCategory(bigCategoriesUid);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
+    public List<ProductDto> getProductByDeliveryFee(Integer deliveryFeeUid) {
+        int start = 0;
+        int end = 0;
+        if (deliveryFeeUid == DeliveryFee.UNDER_3000.ordinal()) {
+            start = 1;
+            end = 3000;
+        } else if (deliveryFeeUid == DeliveryFee.OVER_3000.ordinal()) {
+            start = 3001;
+            end = Integer.MAX_VALUE;
+        }
+        List<Optional<Products>> l = productRepository.findByDeliveryFeeBetween(start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
+    public List<ProductDto> getProductByPrice(Integer priceUid) {
+
+        int start = 0;
+        int end = 50000;
+
+        if(priceUid == Price.UNDER_100000.ordinal()){
+            start=50001;
+            end=100000;
+        }
+        else if (priceUid == Price.UNDER_300000.ordinal()){
+            start=100001;
+            end=300000;
+        }
+        else if (priceUid== Price.OVER_300000.ordinal()){
+            start = 300001;
+            end = Integer.MAX_VALUE;
+        }
+
+        List<Optional<Products>> l = productRepository.findByPriceBetween(start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
+    public List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid, Integer deliveryFeeUid) {
+
+        int start = 0;
+        int end = 0;
+        if (deliveryFeeUid == DeliveryFee.UNDER_3000.ordinal()) {
+            start = 1;
+            end = 3000;
+        } else if (deliveryFeeUid == DeliveryFee.OVER_3000.ordinal()) {
+            start = 3001;
+            end = Integer.MAX_VALUE;
+        }
+
+        List<Optional<Products>> l = productRepository.findByDeliveryFeeBetweenAndSmallCategory(smallCategoriesUid,start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
+    public List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid) {
+
+        int start = 0;
+        int end = 50000;
+
+        if(priceUid == Price.UNDER_100000.ordinal()){
+            start=50001;
+            end=100000;
+        }
+        else if (priceUid == Price.UNDER_300000.ordinal()){
+            start=100001;
+            end=300000;
+        }
+        else if (priceUid== Price.OVER_300000.ordinal()){
+            start = 300001;
+            end = Integer.MAX_VALUE;
+        }
+        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid,start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
 
     private void modifyProductKeywords(ProductCreateDto productCreateDto) {
 
@@ -232,7 +340,7 @@ public class ProductServiceImpl implements ProductService {
             smallCategory = smallCategoriesOptional.get();
         }
 
-        product.modifyEntity(productCreateDto,smallCategory,brand);
+        product.modifyEntity(productCreateDto, smallCategory, brand);
         productRepository.save(product);
 
     }
@@ -253,7 +361,7 @@ public class ProductServiceImpl implements ProductService {
         }
         // Builder 로 변경
 
-        Products product1 =  ProductCreateDto.toEntity(productCreateDto,brands,smallCategories);
+        Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
         productRepository.save(product1);
     }
 
