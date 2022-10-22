@@ -39,7 +39,6 @@ public class ReviewController {
 
     @GetMapping("/{page}")
     public ResponseEntity<BaseRes> myReviewList(@AuthenticationPrincipal String email, @PathVariable int page) {
-        List<Products> list = new ArrayList<>(); // dto로 변경해야함
         return new ResponseEntity<>(reviewService.myReviewList(email, page-1), HttpStatus.OK);
     }
 
@@ -107,4 +106,18 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.reviewReport(email, review_uid), HttpStatus.OK);
     }
 
+    @GetMapping("/photo/{product_id}")
+    public ResponseEntity<BaseRes> productPhotoReview(@PathVariable int product_id) {
+        return new ResponseEntity<>(reviewService.productPhotoReview(product_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/photos/{product_id}")
+    public ResponseEntity<BaseRes> productPhotosReview(@PathVariable int product_id) {
+        return new ResponseEntity<>(reviewService.productPhotosReview(product_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/detail/{review_id}")
+    public ResponseEntity<BaseRes> productReviewDetail(@AuthenticationPrincipal String email, @PathVariable int review_id) {
+        return new ResponseEntity<>(reviewService.productReviewDetail(email, review_id), HttpStatus.OK);
+    }
 }

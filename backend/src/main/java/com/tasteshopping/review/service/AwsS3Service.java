@@ -25,7 +25,7 @@ public class AwsS3Service {
     public String uploadImgFile(MultipartFile multipartFile) throws IOException {
         // 이미지파일인지 확인은 프론트에서? 백에서? 얘기해볼것
         System.out.println("----------------3-----------------");
-        String imagePath = "";
+        String imagePath = null;
         if(multipartFile != null) {
             long size = multipartFile.getSize(); // 파일 크기 20MB제한
 
