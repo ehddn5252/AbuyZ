@@ -1,5 +1,6 @@
 package com.tasteshopping.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
@@ -26,6 +27,7 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
 
+    @JsonIgnore
     @Column(nullable = false, columnDefinition = "varchar(150) default 'base_product'")
     private String name;
 

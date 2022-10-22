@@ -5,6 +5,7 @@ import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductCreateReqDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.dto.ProductUidReqDto;
+import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductPictureRepository;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @RestController
@@ -36,6 +36,18 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 test 성공!"));
     }
 
+    @GetMapping("/fo-search/basic/{keyword}")
+    public ResponseEntity<BaseRes> foSearch(@PathVariable String keyword) {
+        List<Optional<Products>> l = productService.findByKeyword(keyword);
+        List<ProductDto> newL = new ArrayList<>();
+        for(int i=0;i<l.size();++i){
+            System.out.println(l.get(i).get());
+            newL.add(l.get(i).get().toDto());
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
+    }
 
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch() {

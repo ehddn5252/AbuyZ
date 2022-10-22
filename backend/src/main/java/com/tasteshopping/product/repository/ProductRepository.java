@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Products,Integer> {
     @Query(value="select max(uid) from Products")
     public Optional<Integer> getMaxUid();
+
+    public List<Optional<Products>> findByNameContains(String keyword);
 }

@@ -26,4 +26,6 @@ public interface ProductService {
 
     public void modifyProduct(ProductCreateDto productCreateDto);
     public void modifyProductRelated(ProductCreateDto productCreateDto);
+
+    List<Optional<Products>> findByKeyword(String keyword);
 }

@@ -179,6 +179,26 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public List<Optional<Products>> findByKeyword(String keyword) {
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("11111111111111111111111");
+        List<Optional<Products>> l= productRepository.findByNameContains(keyword);
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println("========================");
+        System.out.println(l);
+        System.out.println("22222222222222222222222");
+        return productRepository.findByNameContains(keyword);
+    }
+
     private void modifyProductKeywords(ProductCreateDto productCreateDto) {
 
         Integer productsUid = productCreateDto.getProductsUid();
