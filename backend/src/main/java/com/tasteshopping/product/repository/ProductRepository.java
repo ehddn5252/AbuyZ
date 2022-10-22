@@ -1,5 +1,6 @@
 package com.tasteshopping.product.repository;
 
+import com.tasteshopping.product.dto.ProductDetailDto;
 import com.tasteshopping.product.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,13 @@ public interface ProductRepository extends JpaRepository<Products,Integer> {
 
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
     List<Optional<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
+
+//    @Query(value = "select p,pp from Products p left join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
+//    List<Optional<Products>> findProductDetailByProductsUid(int productsUid);
+
+//    @Query(value = "select p,pp from Products p left join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
+//    Object findProductDetailByProductsUid(int productsUid);
+
+    @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
+    Optional<Products> findProductDetailByProductsUid(int productsUid);
 }

@@ -1,6 +1,7 @@
 package com.tasteshopping.product.service;
 
 import com.tasteshopping.product.dto.ProductCreateDto;
+import com.tasteshopping.product.dto.ProductDetailDto;
 import com.tasteshopping.product.dto.ProductDto;
 
 import java.util.List;
@@ -37,4 +38,8 @@ public interface ProductService {
     List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid, Integer deliveryFeeUid);
 
     List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid);
+
+    public ProductDto getOneProduct(Integer productsUid);
+
+    ProductDetailDto getDetailProduct(int productsUid);
 }

@@ -1,8 +1,11 @@
 package com.tasteshopping.product.dto;
 
+import com.tasteshopping.product.entity.ProductOptionLists;
+import com.tasteshopping.product.entity.ProductPictures;
+import com.tasteshopping.product.entity.Products;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,27 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ProductDetailDto {
 
-    private String name;
-    private Integer price;
-    private Integer discountRate;
-    private String repImg;
-    private String descriptionImg;
-//    private String producer;
-    private Float reviewRate;
+    ProductDto products;
+    List<ProductPictureDto> productPictureDto;
+    List<ProductOptionListDto> productOptionListDtoList;
 
-    //
-    private Integer uid;
-
-//    private String origin;
-
-//    private String status;
-
-    private Integer deliveryFee;
-
-    private String smallCategoryName;
-
-    private String brandName;
-
-    private LocalDateTime date;
 
 }

@@ -23,10 +23,15 @@ public class ProductController {
     ProductService productService;
 
     @Autowired
+    ProductPictureService productPictureService;
+    @Autowired
     ProductKeywordService productKeywordService;
     // for test
     @Autowired
     ProductPictureRepository productPictureRepository;
+
+    @Autowired
+    ProductOptionListService productOptionListService;
 
     @PostMapping("/test")
     public ResponseEntity<BaseRes> test(@RequestBody ProductCreateReqDto productCreateReqDto) {
@@ -42,8 +47,6 @@ public class ProductController {
 
         // price 로 찾기
         if (searchDto.getPriceUid() != null) {
-            System.out.println("===========================");
-            System.out.println("price로 찾기");
 //            l = productService.getProductByPrice(searchDto.getPriceUid());
             l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(),searchDto.getPriceUid());
         }
@@ -52,8 +55,6 @@ public class ProductController {
         else if (searchDto.getDeliveryFeeUid() != null) {
             // l = productService.getProductByDeliveryFee(searchDto.getDeliveryFeeUid());
             l = productService.getProductBySmallCategoryAndDeliveryFee(searchDto.getSmallCategoriesUid(), searchDto.getDeliveryFeeUid());
-            System.out.println("===========================");
-            System.out.println("deliveryFee로 찾기");
         }
 
         // small category 로 찾기
@@ -81,12 +82,32 @@ public class ProductController {
         if (newL.size() == 0) {
             newL = productKeywordService.findByParamInKeyword(keyword);
         }
-        // 여기에 옵션 리스트, 사진, 키워드, 추가해야함
-
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
 
+//    @PostMapping("/detail")
+//    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
+//        /*
+//        상품 detail 에서는 상품, 사진, 옵션 dto 를 가져와야함 SQL에서 처리 안하는 따로버전
+//         */
+//        ProductUidDto productUidDto = productUidReqDto.toDto();
+//        // 상품 가져옴
+//        ProductDto p = productService.getOneProduct(productUidDto.getProductsUid());
+//
+//        // 상품 사진 가져옴
+//        List<ProductPictureDto> productPictureDto = productPictureService.getProductPictureByPicturesUid(productUidDto.getProductsUid());
+//        // 상품 옵션 가져옴
+////        List<ProductOptionListDto> productOptionListDtos = productOptionListService.getOptionListByUid(productUidDto.getProductsUid());
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!"));
+//    }
 
+    @PostMapping("/detail")
+    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
+        ProductUidDto productUidDto = productUidReqDto.toDto();
+        ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!",l));
+    }
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch() {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
@@ -109,7 +130,7 @@ public class ProductController {
 
     @DeleteMapping()
     public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
-        Integer uid = productUidReqDto.getUid();
+        Integer uid = productUidReqDto.getProducts_uid();
         productService.deleteProduct(uid);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
     }
@@ -119,12 +140,5 @@ public class ProductController {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
-
     }
-
-
-//    @GetMapping("/big-category-list")
-//    public ResponseEntity<BaseRes> getBigCategoryList() {
-//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product 등록 성공."));
-//    }
 }

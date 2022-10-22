@@ -1,12 +1,7 @@
 package com.tasteshopping.product.service;
 
-import com.tasteshopping.product.dto.DeliveryFee;
-import com.tasteshopping.product.dto.Price;
-import com.tasteshopping.product.dto.ProductCreateDto;
-import com.tasteshopping.product.dto.ProductDto;
-import com.tasteshopping.product.entity.Brands;
-import com.tasteshopping.product.entity.ProductOptions;
-import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.dto.*;
+import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
@@ -238,15 +233,13 @@ public class ProductServiceImpl implements ProductService {
         int start = 0;
         int end = 50000;
 
-        if(priceUid == Price.UNDER_100000.ordinal()){
-            start=50001;
-            end=100000;
-        }
-        else if (priceUid == Price.UNDER_300000.ordinal()){
-            start=100001;
-            end=300000;
-        }
-        else if (priceUid== Price.OVER_300000.ordinal()){
+        if (priceUid == Price.UNDER_100000.ordinal()) {
+            start = 50001;
+            end = 100000;
+        } else if (priceUid == Price.UNDER_300000.ordinal()) {
+            start = 100001;
+            end = 300000;
+        } else if (priceUid == Price.OVER_300000.ordinal()) {
             start = 300001;
             end = Integer.MAX_VALUE;
         }
@@ -272,7 +265,7 @@ public class ProductServiceImpl implements ProductService {
             end = Integer.MAX_VALUE;
         }
 
-        List<Optional<Products>> l = productRepository.findByDeliveryFeeBetweenAndSmallCategory(smallCategoriesUid,start, end);
+        List<Optional<Products>> l = productRepository.findByDeliveryFeeBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             newL.add(l.get(i).get().toDto());
@@ -286,24 +279,61 @@ public class ProductServiceImpl implements ProductService {
         int start = 0;
         int end = 50000;
 
-        if(priceUid == Price.UNDER_100000.ordinal()){
-            start=50001;
-            end=100000;
-        }
-        else if (priceUid == Price.UNDER_300000.ordinal()){
-            start=100001;
-            end=300000;
-        }
-        else if (priceUid== Price.OVER_300000.ordinal()){
+        if (priceUid == Price.UNDER_100000.ordinal()) {
+            start = 50001;
+            end = 100000;
+        } else if (priceUid == Price.UNDER_300000.ordinal()) {
+            start = 100001;
+            end = 300000;
+        } else if (priceUid == Price.OVER_300000.ordinal()) {
             start = 300001;
             end = Integer.MAX_VALUE;
         }
-        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid,start, end);
+        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             newL.add(l.get(i).get().toDto());
         }
         return newL;
+    }
+
+    @Override
+    public ProductDto getOneProduct(Integer productsUid) {
+        Optional<Products> p = productRepository.findById(productsUid);
+        ProductDto productDto = null;
+        if(p.isPresent()){
+            productDto = p.get().toDto();
+        }
+        return productDto;
+    }
+
+    @Override
+    public ProductDetailDto getDetailProduct(int productsUid) {
+
+        Optional<Products> l = productRepository.findProductDetailByProductsUid(productsUid);
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        if(l.isPresent()){
+            Products p = l.get();
+            productDetailDto.setProducts(p.toDto());
+            List<ProductPictures> productPicturesList = p.getProductPictures();
+            List<ProductOptions> productOptionsList= p.getProductOptions();
+            List<ProductOptionLists> productOptionLists = new ArrayList<>();
+            if(productOptionsList.size()!=0){
+                productOptionLists = productOptionsList.get(0).getProductOptionLists();
+            }
+            List<ProductOptionListDto> productOptionListDtoList = new ArrayList<>();
+
+            for(int i=0;i<productOptionLists.size();++i){
+                productOptionListDtoList.add(productOptionLists.get(i).toDto());
+            }
+            List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
+            for(int i=0;i<productPicturesList.size();++i){
+                productPictureDtoList.add(productPicturesList.get(i).toDto());
+            }
+            productDetailDto.setProductOptionListDtoList(productOptionListDtoList);
+            productDetailDto.setProductPictureDto(productPictureDtoList);
+        }
+        return productDetailDto;
     }
 
 
