@@ -218,7 +218,7 @@ const NavContainer = styled.div`
 const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 100%;
+  width: 84.5%;
   margin-top: 1rem;
   padding-right: 4rem;
 `;
@@ -244,9 +244,11 @@ const SearchPaper = styled(Paper)`
   padding: 2px 4px;
   display: flex;
   align-items: center;
-  width: 600px;
+  width: 800px;
   height: 50;
-  margin: 0.5rem;
+  margin: 1.3rem;
+  border: 1px solid;
+  box-shadow: none;
 `;
 
 const LogoLink = styled(Link)`
@@ -261,7 +263,7 @@ const IconBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 1rem;
+  margin: 1.3rem;
 `;
 
 const IconTitle = styled.p`
@@ -282,8 +284,8 @@ const CategoryBox = styled.div`
 const CategoryTagBox = styled.div`
   display: flex;
   font-size: 2rem;
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
   cursor: pointer;
 `;
 const CategoryTitle = styled.p`
