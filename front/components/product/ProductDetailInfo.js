@@ -1,9 +1,18 @@
+// React
 import React from "react";
+
+// styledComponent
+import styled from "styled-components";
 
 export default function ProductDetailInfo() {
   return (
-    <div>
-      <h1> 상품 디테일 설명</h1>
-    </div>
+    <Container>
+      <img src="/images/detail1.png" />
+    </Container>
   );
 }
+
+const Container = styled.div`
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+`;
