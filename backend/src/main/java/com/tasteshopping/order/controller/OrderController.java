@@ -2,7 +2,10 @@ package com.tasteshopping.order.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.order.dto.OrderDto;
+import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.order.dto.OrderReqDto;
+import com.tasteshopping.order.entity.OrderLists;
+import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -24,19 +29,24 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    OrderListService orderListService;
+
+
     @PostMapping("/register")
     public ResponseEntity<BaseRes> test() {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!"));
     }
 
-    @PostMapping("/cart/test")
-    public ResponseEntity<BaseRes> cartPayTest(@RequestBody OrderReqDto orderReqDto){
-        System.out.println("==================");
-        System.out.println("in cartPay");
-        System.out.println(orderReqDto);
-        OrderDto orderDto = orderReqDto.toCartResDto();
-        System.out.println("==================");
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+    @GetMapping("")
+    public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
+        List<OrderLists> orderLists = orderListService.getOrderLists(email);
+        List<OrderListDto> l = new ArrayList<>();
+        for(int i=0;i< orderLists.size();++i){
+            OrderListDto orderListDto = orderLists.get(i).toDto();
+            l.add(orderListDto);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",l));
     }
 
     @PostMapping("/cart")

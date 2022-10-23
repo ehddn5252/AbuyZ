@@ -1,5 +1,6 @@
 package com.tasteshopping.order.entity;
 
+import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
@@ -40,5 +41,16 @@ public class OrderLists {
     Users user;
 
     String Status;
+
+    public OrderListDto toDto(){
+        OrderListDto orderListDto = new OrderListDto();
+        orderListDto.setStatus(Status);
+        orderListDto.setCreatedDate(createdDate);
+        orderListDto.setUserEmail(user.getEmail());
+        orderListDto.setTotalPrice(totalPrice);
+        orderListDto.setDay(day);
+        orderListDto.setUid(uid);
+        return orderListDto;
+    }
 
 }

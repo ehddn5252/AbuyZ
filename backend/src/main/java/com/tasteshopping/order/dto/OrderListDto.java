@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -17,8 +18,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class OrderListDto {
     Integer uid;
-    Date date;
     Integer totalPrice;
+    LocalDateTime createdDate;
+    String userEmail;
+    String Status;
     String day;
-    ProductDto productDto;
+
+
 }
