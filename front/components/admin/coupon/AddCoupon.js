@@ -29,6 +29,7 @@ export default function AddCoupon() {
   // 상품명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
+    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -40,6 +41,7 @@ export default function AddCoupon() {
   // 브랜드 입력하면
   const saleChange = (event) => {
     setSale(event.target.value);
+    console.log(sale);
   };
   const saleFocus = () => {
     setSalePlaceholder("");
