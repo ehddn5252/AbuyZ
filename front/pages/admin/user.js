@@ -19,7 +19,6 @@ import ReportList from "../../components/admin/user/ReportList";
 // 임시 탭 기능
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <Box
       role="tabpanel"
@@ -41,7 +40,9 @@ function a11yProps(index) {
 
 export default function User() {
   const [value, setValue] = useState(0);
-
+  // 유무확인
+  const [search, setSearch] = useState(false);
+  const [reviewSearch, setReviewSearch] = useState(false);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -50,6 +51,7 @@ export default function User() {
     <Container>
       <h1> 유저관리 페이지</h1>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        {/* 탭 상단 탭 */}
         <Tabs
           value={value}
           onChange={handleChange}
@@ -72,8 +74,8 @@ export default function User() {
       <Box>
         <TabPanel value={value} index={0}>
           <Box>
-            <ServiceCategory />
-            <ServiceList />
+            <ServiceCategory setSearch={setSearch} />
+            {search ? <ServiceList /> : null}
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
@@ -83,8 +85,8 @@ export default function User() {
         </TabPanel>
         <TabPanel value={value} index={2}>
           <Box>
-            <ReviewCategory />
-            <ReviewList />
+            <ReviewCategory setReviewSearch={setReviewSearch} />
+            {reviewSearch ? <ReviewList /> : null}
           </Box>
         </TabPanel>
       </Box>

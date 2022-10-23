@@ -39,6 +39,7 @@ export default function AddEvent() {
   // 이벤트명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
+    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
