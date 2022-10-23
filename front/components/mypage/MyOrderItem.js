@@ -1,24 +1,38 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
-
+import Modal from "@mui/material/Modal";
 // StyledComponents
 import styled from "styled-components";
 
-export default function MyOrderItem(product) {
+// 하위 컴포넌트
+import ReviewAddModel from "./ReviewAddModel";
+
+export default function MyOrderItem({ product }) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <ItemContainer>
       <ProductImg src="/images/carrot.png" />
 
       <DateDiv>
-        <p>{product.product.dateOfPurchase}</p>
+        <p>{product.dateOfPurchase}</p>
       </DateDiv>
 
-      <ProductIntro>{product.product.productName}</ProductIntro>
-      <ProductIntro>{product.product.price}</ProductIntro>
-      <WriteIcon />
+      <ProductIntro>{product.productName}</ProductIntro>
+      <ProductIntro>{product.price}</ProductIntro>
+      <WriteIcon onClick={handleOpen} />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <ReviewAddModel row={product} />
+      </Modal>
     </ItemContainer>
   );
 }

@@ -2,7 +2,6 @@
 import React from "react";
 
 // MUI
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 // StyledComponent
@@ -15,29 +14,17 @@ export default function Myinfo() {
         <MyImgDiv>
           <AccountBoxIcon sx={{ fontSize: "10rem" }} />
         </MyImgDiv>
-        <MyName>
-          권도건님
-          <ArrowForwardIosIcon sx={{ fontSize: "2.5rem" }} />
-        </MyName>
+        <MyName>권도건님</MyName>
         <HistoryDiv>
-          <HistoryTitle>
-            주문 내역
-            <ArrowForwardIosIcon sx={{ fontSize: "1.5rem" }} />
-          </HistoryTitle>
+          <HistoryTitle>주문 내역</HistoryTitle>
           <HistoryCount>4건</HistoryCount>
         </HistoryDiv>
         <HistoryDiv>
-          <HistoryTitle>
-            문의 내역
-            <ArrowForwardIosIcon sx={{ fontSize: "1.5rem" }} />
-          </HistoryTitle>
+          <HistoryTitle>문의 내역</HistoryTitle>
           <HistoryCount>1건</HistoryCount>
         </HistoryDiv>
         <HistoryDiv>
-          <HistoryTitle>
-            나의 쿠폰
-            <ArrowForwardIosIcon sx={{ fontSize: "1.5rem" }} />
-          </HistoryTitle>
+          <HistoryTitle>나의 쿠폰</HistoryTitle>
           <HistoryCount>1개</HistoryCount>
         </HistoryDiv>
       </MainBox>

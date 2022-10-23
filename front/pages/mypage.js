@@ -14,7 +14,7 @@ import MyOrderList from "../components/mypage/MyOrderList";
 import MyWishList from "../components/mypage/MyWishList";
 
 export default function Mypage() {
-  const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
+  const [tap, setTap] = useState(4); // eslint-disable-line no-unused-vars
   return (
     <MypageContainer>
       <MypageSideNav setTap={setTap} />

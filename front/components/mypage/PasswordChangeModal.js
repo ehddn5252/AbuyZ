@@ -65,19 +65,15 @@ export default function PasswordChangeModal({ setModalOpen }) {
 const PasswordChangeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 4rem;
-  width: 20%;
-  height: 30%;
-  z-index: 999;
   position: absolute;
-  top: 70%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #ff9494;
-  border-radius: 8px;
+  transform: translate(-50%, -20%);
+  width: 40%;
+  border: 2px solid #000;
+  background-color: #fff;
+  box-shadow: 24;
+  padding: 2rem;
 `;
 
 const IconDiv = styled.div`
