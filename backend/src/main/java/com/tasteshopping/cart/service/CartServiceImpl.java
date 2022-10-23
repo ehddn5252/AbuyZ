@@ -76,12 +76,19 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void deleteCart(int cartsUid) {
+    public void deleteCart(String email, int cartsUid) {
         Optional<Carts> cartsOptional = cartRepository.findById(cartsUid);
         Carts carts = null;
         if (cartsOptional.isPresent()) {
             carts = cartsOptional.get();
-            cartRepository.delete(carts);
+            if (carts.getUser().getEmail().equals(email)){
+                cartRepository.delete(carts);
+                System.out.println("삭제 성공");
+
+            }
+            else{
+                System.out.println("적잘하지 않은 접근");
+            }
         } else {
             System.out.println("not found cartsUid");
         }

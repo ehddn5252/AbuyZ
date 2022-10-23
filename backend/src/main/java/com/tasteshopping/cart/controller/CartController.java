@@ -37,12 +37,12 @@ public class CartController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> deleteCart(@RequestBody CartUidReqDto cartUidReqDto) {
+    public ResponseEntity<BaseRes> deleteCart(@AuthenticationPrincipal String email, @RequestBody CartUidReqDto cartUidReqDto) {
+
         int cartsUid = cartUidReqDto.getCarts_uid();
-        cartService.deleteCart(cartsUid);
+        cartService.deleteCart(email,cartsUid);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 삭제 성공!"));
     }
-
 
     @GetMapping()
     public ResponseEntity<BaseRes> getCart(@AuthenticationPrincipal String email) {

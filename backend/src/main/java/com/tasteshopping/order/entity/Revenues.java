@@ -1,6 +1,10 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.user.entity.Users;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -9,6 +13,10 @@ import java.util.Date;
 import java.sql.Timestamp;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Revenues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,13 +1,22 @@
 package com.tasteshopping.order.entity;
 
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.coupon.entity.Coupons;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,5 +47,8 @@ public class Orders {
     Coupons coupon;
 
 
+    public OrderDto toDto(){
+        return null;
+    }
 
 }

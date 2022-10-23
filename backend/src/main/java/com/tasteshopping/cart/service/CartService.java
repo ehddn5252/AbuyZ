@@ -8,7 +8,7 @@ import java.util.List;
 public interface CartService {
     void putCart(String email, CartDto cartsDto);
 
-    void deleteCart(int cartsUid);
+    void deleteCart(String email, int cartsUid);
 
     List<CartResDto> getCart(String email);
 }
