@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Table from "@mui/material/Table";
@@ -9,7 +9,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+
+import ServiceItemModal from "./ServiceItemModal";
+
 export default function ServiceList() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const rows = [
     {
       id: 0,
@@ -28,6 +36,7 @@ export default function ServiceList() {
       solved: "미해결",
     },
   ];
+
   return (
     <TableContainer component={Paper} sx={{ margin: "2rem" }}>
       <Table sx={{ minWidth: 100 }} aria-label="simple table">
@@ -54,15 +63,31 @@ export default function ServiceList() {
               <TableCell align="center">{row.cause}</TableCell>
               <TableCell align="center">
                 {row.solved === "해결" ? (
-                  <Button variant="contained" color="success">
+                  <Button
+                    onClick={handleOpen}
+                    variant="contained"
+                    color="success"
+                  >
                     {row.solved}
                   </Button>
                 ) : (
-                  <Button variant="contained" color="error">
+                  <Button
+                    onClick={handleOpen}
+                    variant="contained"
+                    color="error"
+                  >
                     {row.solved}
                   </Button>
                 )}
               </TableCell>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <ServiceItemModal row={row} />
+              </Modal>
             </TableRow>
           ))}
         </TableBody>
