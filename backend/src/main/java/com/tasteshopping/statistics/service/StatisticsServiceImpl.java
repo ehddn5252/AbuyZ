@@ -116,22 +116,58 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setData(cartStatisticsListDto);
                 responseDto.setMessage("조회 성공");
                 break;
-            case 2:
+            case 2:case 3:
+
                 HashMap<String,ProductStatisticsDto>productStatistics=new HashMap<>();
                 List<Orders>orders = orderRepository.findAllByDateBetween(start_date,end_date);
-                for(Orders order:orders){
-                    ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getProduct().getName(),
-                            new ProductStatisticsDto(order.getProduct().getSmallCategory().getBigCategory().getCategoryName(),
-                                    order.getProduct().getSmallCategory().getSmallCategoryName()));
+                if(menu==2){
+                    for(Orders order:orders){
+                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getProduct().getName(),
+                                new ProductStatisticsDto(order.getProduct().getSmallCategory().getBigCategory().getCategoryName(),
+                                        order.getProduct().getSmallCategory().getSmallCategoryName()));
 
-                    productStatisticsDto.updateCount(order.getCount());
-                    productStatisticsDto.updateSalesAmount(order.getPrice());
+                        productStatisticsDto.updateCount(order.getCount());
+                        productStatisticsDto.updateSalesAmount(order.getPrice());
+                    }
+                    responseDto.setData(productStatistics);
                 }
+                else{
+                    PercentStatisticsListDto percentStatistics = new PercentStatisticsListDto(new HashMap<>(),0);
+                    for(Orders order:orders){
+                        percentStatistics.updateTotalSales(order.getCount()*order.getPrice());
 
-                responseDto.setData(productStatistics);
+                        String big_category_name = order.getProduct().
+                                getSmallCategory().getBigCategory()
+                                .getCategoryName();
+
+                        String small_category_name = order.getProduct().
+                                getSmallCategory().getSmallCategoryName();
+
+                        BigCategoryPercentDto bigCategoryPercentDto = percentStatistics.getBig_category()
+                                .getOrDefault(big_category_name,new BigCategoryPercentDto(new HashMap<>(),0,0));
+                        bigCategoryPercentDto.updateTotalSales(order.getCount()*order.getPrice());
+
+                        SmallCategoryPercentDto smallCategoryPercentDto = bigCategoryPercentDto.getSmall_category()
+                                .getOrDefault(small_category_name,new SmallCategoryPercentDto(0,0));
+                        smallCategoryPercentDto.updateTotalSales(order.getCount()*order.getPrice());
+                    }
+                    for(String big_category_name :percentStatistics.getBig_category().keySet()){
+                        BigCategoryPercentDto bigCategoryPercentDto = percentStatistics.getBig_category().get(big_category_name);
+                        double percent = (double) bigCategoryPercentDto.getTotal_sales()
+                                        / (double) percentStatistics.getTotal_sales()
+                                        * 100;
+                        bigCategoryPercentDto.setPercent(Math.round(percent*10)/10.0);
+                        for(String small_category_name:bigCategoryPercentDto.getSmall_category().keySet()){
+                            SmallCategoryPercentDto smallCategoryPercentDto = bigCategoryPercentDto.getSmall_category().get(small_category_name);
+                            percent = (double) smallCategoryPercentDto.getTotal_sales()
+                                    / (double) bigCategoryPercentDto.getTotal_sales()
+                                    * 100;
+                            smallCategoryPercentDto.setPercent(Math.round(percent*10)/10.0);
+                        }
+                    }
+                    responseDto.setData(percentStatistics);
+                }
                 responseDto.setMessage("조회 성공");
-                break;
-            case 3:
                 break;
             default:
                 Map<String,Integer>dayStatistics = new HashMap<>();
