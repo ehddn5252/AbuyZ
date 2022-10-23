@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
         //save product_options
         LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
 
-        productOptionService.createProductOption(productsUid);
+        productOptionService.createProductOption(productsUid,true);
 
         int optionsUid = 1;
         Optional<Integer> maxOptionUidOptional = productOptionService.getMaxUid();

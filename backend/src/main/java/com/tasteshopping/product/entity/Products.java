@@ -21,7 +21,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

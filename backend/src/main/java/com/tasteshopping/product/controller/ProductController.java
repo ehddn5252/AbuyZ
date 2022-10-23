@@ -27,16 +27,21 @@ public class ProductController {
     @Autowired
     ProductKeywordService productKeywordService;
     // for test
-    @Autowired
-    ProductPictureRepository productPictureRepository;
+
 
     @Autowired
     ProductOptionListService productOptionListService;
 
     @PostMapping("/test")
     public ResponseEntity<BaseRes> test(@RequestBody ProductCreateReqDto productCreateReqDto) {
-        productPictureRepository.deleteByProductsUid(productCreateReqDto.getProducts_uid());
+
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 test 성공!"));
+    }
+
+    @PostMapping("/bo-search")
+    public ResponseEntity<BaseRes> boSearch(@RequestBody BoSearchReqDto boSearchReqDto) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
     }
 
     @PostMapping("/fo-search/detail")
@@ -108,10 +113,7 @@ public class ProductController {
         ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!",l));
     }
-    @PostMapping("/bo-search")
-    public ResponseEntity<BaseRes> boSearch() {
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
-    }
+
 
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {

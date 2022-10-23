@@ -26,4 +26,7 @@ public class ProductOptions {
 
     @OneToMany(mappedBy = "productOptions",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptionLists> productOptionLists;
+
+    @Column(columnDefinition = "tinyint(1) default 1")
+    Boolean isDefaultOption;
 }
