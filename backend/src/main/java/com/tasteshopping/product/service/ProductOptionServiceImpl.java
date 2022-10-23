@@ -34,6 +34,9 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         if (!isDefaultOption){
             productOptions.setIsDefaultOption(false);
         }
+        else{
+            productOptions.setIsDefaultOption(true);
+        }
         productOptionRepository.save(productOptions);
     }
 

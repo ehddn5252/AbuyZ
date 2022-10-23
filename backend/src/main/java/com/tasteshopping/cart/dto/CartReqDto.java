@@ -22,7 +22,6 @@ public class CartReqDto {
         cartsDto.setProductsUid(products_uid);
         cartsDto.setProductCount(product_count);
         cartsDto.setOptionValues(option_values);
-        cartsDto.setUsersUid(users_uid);
         return cartsDto;
     }
 }

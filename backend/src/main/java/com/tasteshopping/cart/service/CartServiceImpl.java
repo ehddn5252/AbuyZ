@@ -45,7 +45,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void putCart(CartDto cartsDto) {
+    public void putCart(String email, CartDto cartsDto) {
         int productsUid = cartsDto.getProductsUid();
         HashMap<String, String> optionValues = cartsDto.getOptionValues();
 
@@ -65,7 +65,7 @@ public class CartServiceImpl implements CartService {
 
         // 장바구니에 저장할 것들 가져옴
         Optional<Products> products = productRepository.findById(productsUid);
-        Optional<Users> user = userRepository.findById(cartsDto.getUsersUid());
+        Optional<Users> user = userRepository.findByEmail(email);
         Optional<ProductOptions> productOptions = productOptionRepository.findById(optionsUid);
 
         Carts carts = new Carts();
@@ -88,8 +88,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartResDto> getCart(Integer usersUid) {
-        List<Carts> cartsList = cartRepository.findByUsersUid(usersUid);
+    public List<CartResDto> getCart(String email) {
+        Users user = userRepository.findByEmail(email).get();
+        List<Carts> cartsList = cartRepository.findByUsersUid(user.getUid());
         List<CartResDto> cartResDtoList = new ArrayList<>();
         for (int i = 0; i < cartsList.size(); ++i) {
             CartResDto cartResDto = new CartResDto();
