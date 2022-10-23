@@ -3,7 +3,6 @@ package com.tasteshopping.order.dto;
 import com.tasteshopping.cart.dto.CartResDto;
 import com.tasteshopping.product.dto.ProductOptionListDto;
 import lombok.*;
-import org.hibernate.mapping.Array;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,7 +14,7 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderReqDtoTest {
+public class OrderReqDtotmp {
 
     private Integer uid;
     private LinkedHashMap<String,String> productDto;

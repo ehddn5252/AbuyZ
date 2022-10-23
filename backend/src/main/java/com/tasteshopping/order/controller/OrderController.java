@@ -1,19 +1,19 @@
 package com.tasteshopping.order.controller;
 
-import com.tasteshopping.cart.dto.CartResDto;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderReqDto;
-import com.tasteshopping.order.dto.OrderReqDtoTest;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @Slf4j
@@ -30,29 +30,24 @@ public class OrderController {
     }
 
     @PostMapping("/cart/test")
-    public ResponseEntity<BaseRes> cartPayTest(@RequestBody OrderReqDtoTest orderReqDtoTests){
-        System.out.println("==================");
+    public ResponseEntity<BaseRes> cartPayTest(@RequestBody OrderReqDto orderReqDto){
         System.out.println("==================");
         System.out.println("in cartPay");
-        System.out.println(orderReqDtoTests);
+        System.out.println(orderReqDto);
+        OrderDto orderDto = orderReqDto.toCartResDto();
         System.out.println("==================");
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
-
     @PostMapping("/cart")
-    public ResponseEntity<BaseRes> cartPay(@RequestBody List<OrderReqDto> orderReqDtos){
-        System.out.println("==================");
-        System.out.println("==================");
-        System.out.println("in cartPay");
-        System.out.println(orderReqDtos);
-        System.out.println("==================");
+    public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
+        orderService.cartPay(email);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+    }
 
-        List<CartResDto> cartResDtoList = new ArrayList<>();
-        for(int i = 0; i< orderReqDtos.size(); ++i){
-            cartResDtoList.add(orderReqDtos.get(i).toCartResDto());
-        }
-        orderService.cartPay(cartResDtoList);
+    @GetMapping("/cart")
+    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
+        orderService.cartPay(email);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
