@@ -14,7 +14,9 @@ export default function Search() {
       <Center>
         <ProductCategory />
       </Center>
-      <ProductLIst />
+      <Center>
+        <ProductLIst />
+      </Center>
     </div>
   );
 }

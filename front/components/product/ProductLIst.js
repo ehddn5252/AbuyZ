@@ -24,15 +24,18 @@ export default function ProductLIst() {
         </SelectBox>
       </Right>
       <Center>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
+        <Grid container>
+          <Grid item xs={4} marginBottom={3}>
             <ProductItem />
           </Grid>
-          <Grid item xs={4}>
-            <ProductItem />
+          <Grid item xs={4} marginBottom={3}>
+            {/* <ProductItem /> */}
           </Grid>
-          <Grid item xs={4}>
-            <ProductItem />
+          <Grid item xs={4} marginBottom={3}>
+            {/* <ProductItem /> */}
+          </Grid>
+          <Grid item xs={4} marginBottom={3}>
+            {/* <ProductItem /> */}
           </Grid>
         </Grid>
       </Center>
@@ -43,14 +46,16 @@ export default function ProductLIst() {
 const Right = styled.div`
   display: flex;
   justify-content: end;
-  margin-right: 15rem;
   margin-top: 3rem;
+  margin-right: 2rem;
 `;
 
 const Center = styled.div`
   margin-top: 5rem;
   display: flex;
   justify-content: center;
+  width: 100%;
+  margin-left: 2.5rem;
 `;
 const SelectBox = styled.div`
   position: relative;
