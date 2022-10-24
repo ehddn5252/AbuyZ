@@ -1,5 +1,6 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.product.dto.ProductPictureDto;
 import com.tasteshopping.product.entity.ProductPictures;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductPictureRepository;
@@ -7,6 +8,8 @@ import com.tasteshopping.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +33,17 @@ public class ProductPictureServiceImpl implements ProductPictureService {
         }
         productPictures.setImgUrl(imgUrl);
         productPictureRepository.save(productPictures);
+    }
+
+    @Override
+    public List<ProductPictureDto> getProductPictureByPicturesUid(int productsUid) {
+
+        List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
+        List<Optional<ProductPictures>> productPictures = productPictureRepository.findByProductUid(productsUid);
+
+        for(int i=0;i<productPictures.size();++i) {
+            productPictureDtoList.add(productPictures.get(i).get().toDto());
+        }
+        return productPictureDtoList;
     }
 }

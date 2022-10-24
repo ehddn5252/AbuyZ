@@ -3,13 +3,11 @@ package com.tasteshopping.cart.entity;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
-import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
 public class Carts {
 
     @Id
@@ -28,9 +26,16 @@ public class Carts {
     @JoinColumn(name="products_uid")
     Products product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="product_options_uid")
     ProductOptions productOption;
 
+
+    public void modifyInfo(int productCount, Users user, Products product, ProductOptions productOptions){
+        this.productCount = productCount;
+        this.user = user;
+        this.product = product;
+        this.productOption = productOptions;
+    }
 
 }

@@ -22,7 +22,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
 
     @Override
-    public void createProductOption(int productsUid) {
+    public void createProductOption(int productsUid, Boolean isDefaultOption) {
         ProductOptions productOptions = new ProductOptions();
         Optional<Products> productsOptional = productRepository.findById(productsUid);
         if (productsOptional.isPresent()){
@@ -30,6 +30,12 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         }
         else{
             productOptions.setProduct(null);
+        }
+        if (!isDefaultOption){
+            productOptions.setIsDefaultOption(false);
+        }
+        else{
+            productOptions.setIsDefaultOption(true);
         }
         productOptionRepository.save(productOptions);
     }

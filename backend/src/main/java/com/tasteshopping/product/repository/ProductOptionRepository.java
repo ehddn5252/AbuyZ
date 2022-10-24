@@ -13,5 +13,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptions,In
     @Query(value="select max(uid) from ProductOptions")
     public Optional<Integer> getMaxUid();
 
-//    public List<Optional<ProductOptions>> findByProductsUid(Integer productsUid);
+    @Query(value="select * from product_options where products_uid=:productsUid",nativeQuery = true)
+    public Optional<ProductOptions> findByProductsUid(Integer productsUid);
 }

@@ -1,11 +1,9 @@
 package com.tasteshopping.product.service;
 
 import com.tasteshopping.product.dto.ProductCreateDto;
+import com.tasteshopping.product.dto.ProductDetailDto;
 import com.tasteshopping.product.dto.ProductDto;
-import com.tasteshopping.product.dto.ProductUidReqDto;
-import com.tasteshopping.product.entity.Products;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +24,22 @@ public interface ProductService {
 
     public void modifyProduct(ProductCreateDto productCreateDto);
     public void modifyProductRelated(ProductCreateDto productCreateDto);
+
+    List<ProductDto> findByKeyword(String keyword);
+
+    List<ProductDto> getProductBySmallCategory(int smallCategoriesUid);
+
+    List<ProductDto> getProductByBigCategory(Integer bigCategoriesUid);
+
+    List<ProductDto> getProductByDeliveryFee(Integer deliveryFeeUid);
+
+    List<ProductDto> getProductByPrice(Integer priceUid);
+
+    List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid, Integer deliveryFeeUid);
+
+    List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid);
+
+    public ProductDto getOneProduct(Integer productsUid);
+
+    ProductDetailDto getDetailProduct(int productsUid);
 }

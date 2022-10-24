@@ -8,5 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductUidReqDto {
-    private int uid;
+    private int products_uid;
+
+    public ProductUidDto toDto(){
+        ProductUidDto p = new ProductUidDto();
+        p.setProductsUid(products_uid);
+        return p;
+    }
 }

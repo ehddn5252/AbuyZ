@@ -21,12 +21,12 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
 
+    @JsonIgnore
     @Column(nullable = false, columnDefinition = "varchar(150) default 'base_product'")
     private String name;
 
