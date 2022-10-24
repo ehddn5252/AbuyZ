@@ -5,30 +5,30 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
-  <button
-    {...props}
-    className={
-      "slick-prev slick-arrow" + (currentSlide === 0 ? " slick-disabled" : "")
-    }
-    aria-hidden="true"
-    aria-disabled={currentSlide === 0 ? true : false}
-    type="button"
-  />
-);
+// const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
+//   <button
+//     {...props}
+//     className={
+//       "slick-prev slick-arrow" + (currentSlide === 0 ? " slick-disabled" : "")
+//     }
+//     aria-hidden="true"
+//     aria-disabled={currentSlide === 0 ? true : false}
+//     type="button"
+//   />
+// );
 
-const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-  <button
-    {...props}
-    className={
-      "slick-next slick-arrow" +
-      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
-    }
-    aria-hidden="true"
-    aria-disabled={currentSlide === slideCount - 1 ? true : false}
-    type="button"
-  />
-);
+// const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+//   <button
+//     {...props}
+//     className={
+//       "slick-next slick-arrow" +
+//       (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+//     }
+//     aria-hidden="true"
+//     aria-disabled={currentSlide === slideCount - 1 ? true : false}
+//     type="button"
+//   />
+// );
 
 export default function EventCarousel() {
   // 나중에 array 지우면 될 듯
@@ -37,26 +37,24 @@ export default function EventCarousel() {
   const settings = {
     centerPadding: "0px", // 0px 하면 슬라이드 끝쪽 이미지가 안잘림
     centerMode: true, // 1번이 가운데서 시작 하게 함
-    dots: true, // 슬라이드 밑에 점 보이게
+    // dots: true, // 슬라이드 밑에 점 보이게
     infinite: true, // 무한으로 반복
-    speed: 500, // 넘어가는 속도
-    slidesToShow: 3, // n장씩 보이게
+    speed: 400, // 넘어가는 속도
+    slidesToShow: 1, // n장씩 보이게
     slidesToScroll: 1, // 1장씩 뒤로 넘어가게
-    prevArrow: <SlickArrowLeft />,
-    nextArrow: <SlickArrowRight />,
+    // prevArrow: <SlickArrowLeft />,
+    prevArrow: <img src="/images/left-arrow.png" width="10rem" />,
+    // nextArrow: <SlickArrowRight />,
+    nextArrow: <img src="/images/right-arrow.png" width="10rem" />,
   };
 
   return (
-    <Container sx={{ mb: 10 }}>
-      <TitleBox>
-        <Title>진행중인</Title>
-        <Title2>이벤트!</Title2>
-      </TitleBox>
+    <Container maxWidth="xl">
       <StyledSlider {...settings}>
         {array.map((e, idx) => (
           <CardBox key={idx}>
             <CardImg alt="인기 서비스" src="/images/event.png" />
-            <CardText>{e}</CardText>
+            {/* <CardText>{e}</CardText> */}
           </CardBox>
         ))}
       </StyledSlider>
@@ -64,31 +62,12 @@ export default function EventCarousel() {
   );
 }
 
-const TitleBox = styled.div`
-  display: flex;
-`;
-
-const Title = styled.p`
-  font-size: 2rem;
-  font-weight: bolder;
-  margin-right: 1rem;
-`;
-
-const Title2 = styled.p`
-  font-size: 2rem;
-  font-weight: bolder;
-  margin-right: 1rem;
-  color: red;
-`;
-
 const StyledSlider = styled(Slider)`
   .slick-list {
     //슬라이드 스크린
-    /* width: 100%;
+    width: 100%;
     height: 100%;
-    margin: 0 auto;
-    background: blue; */
-    margin-left: 1rem;
+    margin-left: 0.5rem;
   }
 
   .slick-slide div {
@@ -137,14 +116,16 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 90%;
-  height: 90%;
   margin: 0 auto;
+  height: 40rem;
+  width: 95%;
+  object-fit: cover;
+  border-radius: 15px;
 `;
 
-const CardText = styled.p`
-  /* padding: 1rem; */
-  font-size: 1rem;
-  font-weight: bolder;
-  text-align: center;
-`;
+// const CardText = styled.p`
+//   /* padding: 1rem; */
+//   font-size: 1rem;
+//   font-weight: bolder;
+//   text-align: center;
+// `;

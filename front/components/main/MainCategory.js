@@ -18,10 +18,10 @@ export default function MainCategory() {
       grade: 3.7,
       reviews: 32,
     },
+    { img: "potato", name: "데님 바지" },
   ];
   return (
-    <Container sx={{ my: 10 }}>
-      <Title>자주찾는 카테고리</Title>
+    <Container maxWidth="xl" sx={{ my: 10 }}>
       <CardContainer>
         {array.map((data, idx) => {
           const imgURL = "/images/" + data.img + ".png";
@@ -37,14 +37,10 @@ export default function MainCategory() {
   );
 }
 
-const Title = styled.p`
-  font-size: 2rem;
-  font-weight: bolder;
-  margin-right: 1rem;
-`;
-
 const CardContainer = styled.div`
   display: flex;
+  padding-left: 10rem;
+  padding-right: 10rem;
 `;
 
 const CardBox = styled.div`
@@ -52,9 +48,9 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 90%;
-  height: 90%;
-  margin: 0 auto;
+  width: 9rem;
+  height: 10rem;
+  padding: 2rem;
 `;
 
 const CardText = styled.p`
