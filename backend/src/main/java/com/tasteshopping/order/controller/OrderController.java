@@ -40,13 +40,8 @@ public class OrderController {
 
     @GetMapping("")
     public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
-        List<OrderLists> orderLists = orderListService.getOrderLists(email);
-        List<OrderListDto> l = new ArrayList<>();
-        for(int i=0;i< orderLists.size();++i){
-            OrderListDto orderListDto = orderLists.get(i).toDto();
-            l.add(orderListDto);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",l));
+        List<OrderListDto> orderListDtos = orderListService.getOrderLists(email);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",orderListDtos));
     }
 
     @PostMapping("/cart")
