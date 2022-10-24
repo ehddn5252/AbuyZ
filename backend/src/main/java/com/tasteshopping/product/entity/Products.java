@@ -1,5 +1,6 @@
 package com.tasteshopping.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductCreateDto;

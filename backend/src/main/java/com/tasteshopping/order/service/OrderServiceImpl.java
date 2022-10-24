@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService{
         String caseStartDate = dateFormat.format(LocalDateTime.now());
 
         LocalDateTime localdatetime = LocalDateTime.parse(caseStartDate, dateFormat);
-        orderLists.setCreatedDate(localdatetime);
+        orderLists.setDate(null);
         orderListRepository.save(orderLists);
 
         // 이 과정을 줄일 수 있나?

@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 @Entity
+@Getter
 @Setter
 @Builder
 @AllArgsConstructor
