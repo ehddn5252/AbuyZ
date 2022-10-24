@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return (
     <MainContainer>
-      {isNav && adminCheck === false ? <Nav /> : null}
+      {adminCheck === false ? <Nav /> : null}
       {adminCheck ? <AdminNav /> : null}
       {adminCheck ? <AdminSideNav /> : null}
       <Component {...pageProps} />
