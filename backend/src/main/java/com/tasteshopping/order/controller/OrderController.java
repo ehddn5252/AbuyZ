@@ -50,11 +50,18 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
-    @GetMapping("/cart")
-    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
-        orderService.cartPay(email);
+    @PostMapping("")
+    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,OrderReqDto orderReqDto){
+
+        orderService.basicPay(email,orderReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
+
+//    @GetMapping("/cart")
+//    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
+//        orderService.cartPay(email);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+//    }
 
     @GetMapping("/success")
     public ResponseEntity<BaseRes> kakaoSuccess( @RequestParam String pg_token) {

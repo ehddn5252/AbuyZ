@@ -2,6 +2,7 @@ package com.tasteshopping.order.service;
 
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
+import com.tasteshopping.order.dto.OrderReqDto;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
@@ -89,5 +90,13 @@ public class OrderServiceImpl implements OrderService{
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);
         orderListRepository.save(orderLists);
+    }
+
+    @Override
+    public void basicPay(String email, OrderReqDto orderReqDto) {
+        /*
+        1. 일반 결제하기
+         */
+        
     }
 }
