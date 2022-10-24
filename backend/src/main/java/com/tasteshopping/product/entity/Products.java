@@ -1,6 +1,7 @@
 package com.tasteshopping.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
@@ -80,6 +81,9 @@ public class Products {
 
     @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
+
+    @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Carts> carts;
 
     @CreatedDate
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

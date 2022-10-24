@@ -1,7 +1,7 @@
 package com.tasteshopping.coupon.dto;
 
-import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.categories.entity.BigCategories;
+import com.tasteshopping.coupon.entity.Coupons;
 import lombok.*;
 
 import java.text.ParseException;

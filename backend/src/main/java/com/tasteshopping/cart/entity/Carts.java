@@ -7,7 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-
 @Entity
 @Getter
 @Setter
@@ -24,7 +23,7 @@ public class Carts {
     @ColumnDefault("0")
     Integer productCount;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_uid")
     Users user;
 

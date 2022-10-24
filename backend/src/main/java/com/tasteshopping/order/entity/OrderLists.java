@@ -1,14 +1,12 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.order.dto.OrderListDto;
-import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,12 +20,12 @@ public class OrderLists {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-//    @CreatedDate
-//    @Temporal(TemporalType.TIMESTAMP)
-//    Date date;
-
     @CreatedDate
-    private LocalDateTime createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    Date date;
+
+//    @CreatedDate
+//    private LocalDateTime createdDate;
 
     @Column(nullable = false)
     Integer totalPrice;
@@ -45,7 +43,7 @@ public class OrderLists {
     public OrderListDto toDto(){
         OrderListDto orderListDto = new OrderListDto();
         orderListDto.setStatus(Status);
-        orderListDto.setCreatedDate(createdDate);
+        orderListDto.setDate(date);
         orderListDto.setUserEmail(user.getEmail());
         orderListDto.setTotalPrice(totalPrice);
         orderListDto.setDay(day);
