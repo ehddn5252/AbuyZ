@@ -113,10 +113,9 @@ export default function Chart() {
 }
 
 const Container = styled.div`
-  width: 85vw;
-  height: 93vh;
-  margin-left: 14.5rem;
-  background-color: #fafafa;
+  background: #edf0f5;
+  height: 88vh;
+  padding-left: 15rem;
 `;
 
 const CategoryBox = styled.div`
