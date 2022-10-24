@@ -1,7 +1,13 @@
 package com.tasteshopping.event.service;
 
 import com.tasteshopping.common.service.ImageUploadService;
+import com.tasteshopping.coupon.entity.CouponLists;
+import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.coupon.repository.CouponRepository;
 import com.tasteshopping.event.dto.EventDto;
+import com.tasteshopping.event.entity.EventCouponLists;
+import com.tasteshopping.event.entity.Events;
+import com.tasteshopping.event.repository.EventCouponListRepository;
 import com.tasteshopping.event.repository.EventRepository;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.user.dto.ResultDto;
@@ -17,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +35,8 @@ public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final ImageUploadService imageUploadService;
+    private final CouponRepository couponRepository;
+    private final EventCouponListRepository eventCouponListRepository;
     @Override
     @Transactional
     public ResponseDto create(String email, MultipartFile thumbnail,
@@ -47,11 +56,13 @@ public class EventServiceImpl implements EventService{
                 String content_img_url = imageUploadService.uploadImg(content_img);
                 eventDto.setContentImg(content_img_url);
             }
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date start_date = formatter.parse(eventDto.getStart_date());
             Date end_date = formatter.parse(eventDto.getEnd_date());
             String now = LocalDateTime.now().toString();
             Date now_date = formatter.parse(now);
+
             if(start_date.after(now_date)){
                 eventDto.setStatus(0);
             }
@@ -61,11 +72,19 @@ public class EventServiceImpl implements EventService{
             else {
                 eventDto.setStatus(2);
             }
-            eventRepository.save(eventDto.toEntity());
+            Events events = eventRepository.save(eventDto.toEntity());
+            List<Coupons> coupons = couponRepository.findByUidIn(eventDto.getCoupon_lists());
+            for(Coupons coupon: coupons){
+                EventCouponLists eventCouponLists = EventCouponLists.builder()
+                                        .coupons(coupon)
+                                        .events(events)
+                                        .build();
+                eventCouponListRepository.save(eventCouponLists);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
-            responseDto.setMessage("이미지 업로드 실패");
+            responseDto.setMessage("추가 실패");
             responseDto.setData(new ResultDto(false));
             return responseDto;
         }
@@ -73,9 +92,16 @@ public class EventServiceImpl implements EventService{
         responseDto.setData(new ResultDto(true));
         return responseDto;
     }
-
     @Override
-    public ResponseDto getEventList(String email) {
+    public ResponseDto getEventList(String email, Integer event_uid) {
+        ResponseDto responseDto = new ResponseDto();
+        if(!check(email)){
+            responseDto.setMessage("추가 실패 : 궏한없음");
+            responseDto.setData(new ResultDto(false));
+            return responseDto;
+        }
+
+
 
         return null;
     }

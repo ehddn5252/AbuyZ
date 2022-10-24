@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -39,6 +42,11 @@ public class Events {
     @Column
     private int status;
 
+    @Column(nullable = false)
+    private String content;
+
+    @OneToMany(mappedBy = "events", cascade = CascadeType.ALL)
+    private List<EventCouponLists> eventCouponLists = new ArrayList<>();
     public EventDto toDto(){
         return null;
     }

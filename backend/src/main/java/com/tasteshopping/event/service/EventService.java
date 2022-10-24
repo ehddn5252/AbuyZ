@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface EventService {
     ResponseDto create(String email, MultipartFile thumbnail,
                        MultipartFile content_img,EventDto eventDto);
-    ResponseDto getEventList(String email);
+    ResponseDto getEventList(String email, Integer event_uid);
     ResponseDto deleteEvent(String email);
 }

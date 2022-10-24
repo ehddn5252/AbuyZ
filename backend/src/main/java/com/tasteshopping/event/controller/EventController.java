@@ -25,5 +25,9 @@ public class EventController {
                                                    @RequestPart(value = "eventDto") EventDto eventDto){
         return new ResponseEntity<>(eventService.create(email, thumbnail,content_img,eventDto), HttpStatus.OK);
     }
-
+    @GetMapping("/{event_uid}")
+    public ResponseEntity<ResponseDto>getEventList(@AuthenticationPrincipal String email,
+                                                   @PathVariable Integer event_uid){
+        return new ResponseEntity<>(eventService.getEventList(email,event_uid),HttpStatus.OK);
+    }
 }

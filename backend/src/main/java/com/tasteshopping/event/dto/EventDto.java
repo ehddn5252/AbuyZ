@@ -1,17 +1,13 @@
 package com.tasteshopping.event.dto;
 
+import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.event.entity.Events;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +19,8 @@ public class EventDto {
     private String thumbnail;
     private String contentImg;
     private int status;
+    private String content;
+    private List<Integer> coupon_lists;
     public Events toEntity(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -33,6 +31,7 @@ public class EventDto {
                     .thumbnail(this.thumbnail)
                     .contentImgUrl(this.contentImg)
                     .status(this.status)
+                    .content(this.content)
                     .build();
         }
         catch (ParseException e) {
