@@ -7,7 +7,7 @@ import { Container } from "@mui/system";
 
 export default function Main() {
   return (
-    <Container maxWidth="false" sx={{ my: 10 }}>
+    <Container maxWidth="false" sx={{ m: 0 }}>
       <EventCarousel />
       <MainCategory />
       <ProductCarousel />

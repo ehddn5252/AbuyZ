@@ -11,9 +11,9 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import EventIcon from "@mui/icons-material/Event";
-import PersonIcon from "@mui/icons-material/Person";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 
 export default function Nav() {
   return (
@@ -27,7 +27,7 @@ export default function Nav() {
         </UserBox>
         <SearchBox>
           <Link href="/">
-            <img src="/images/ABUYZ_LOGO.png" style={{ width: "14rem" }}></img>
+            <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
           </Link>
           <SearchPaper component="form">
             <InputBase
@@ -38,7 +38,7 @@ export default function Nav() {
             <IconButton
               href="/search"
               type="button"
-              sx={{ color: "#2623A5" }}
+              sx={{ color: "#56a9f1" }}
               aria-label="search"
             >
               <SearchIcon sx={{ fontSize: "1.8rem" }} />
@@ -47,26 +47,35 @@ export default function Nav() {
           <div style={{ display: "flex" }}>
             <IconBox>
               <Link href="/event">
-                <EventIcon fontSize="large" sx={{ color: "black" }} />
+                <EventAvailableOutlinedIcon
+                  fontSize="large"
+                  sx={{ color: "black" }}
+                />
               </Link>
               <Link href="/event" sx={{ textDecoration: "none" }}>
-                <IconTitle>이벤트</IconTitle>
+                {/* <IconTitle>이벤트</IconTitle> */}
               </Link>
             </IconBox>
             <IconBox>
               <Link href="/mypage">
-                <PersonIcon fontSize="large" sx={{ color: "black" }} />
+                <PersonOutlineOutlinedIcon
+                  fontSize="large"
+                  sx={{ color: "black" }}
+                />
               </Link>
               <Link href="/mypage" sx={{ textDecoration: "none" }}>
-                <IconTitle>마이페이지</IconTitle>
+                {/* <IconTitle>마이페이지</IconTitle> */}
               </Link>
             </IconBox>
             <IconBox>
               <Link href="/basket">
-                <ShoppingBasketIcon fontSize="large" sx={{ color: "black" }} />
+                <ShoppingBasketOutlinedIcon
+                  fontSize="large"
+                  sx={{ color: "black" }}
+                />
               </Link>
               <Link href="/basket" sx={{ textDecoration: "none" }}>
-                <IconTitle>장바구니</IconTitle>
+                {/* <IconTitle>장바구니</IconTitle> */}
               </Link>
             </IconBox>
           </div>
@@ -216,8 +225,8 @@ const NavContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 70%;
-  margin: 0 15%;
+  width: 55%;
+  margin: 0 22%;
   padding: 0;
 `;
 
@@ -239,21 +248,21 @@ const SearchBox = styled.div`
   padding-top: 2rem;
   padding-bottom: 1rem;
   width: 100%;
-  border-width: 0 0 0.1rem 0;
+  /* border-width: 0 0 0.1rem 0;
   border-style: solid;
-  border-color: #eaeaea;
+  border-color: #eaeaea; */
 `;
 
 const SearchPaper = styled(Paper)`
   display: flex;
   align-items: center;
-  width: 40rem;
+  width: 35rem;
   height: 55;
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
   padding: 0.5rem;
   border: 1px solid;
   box-shadow: none;
-  border-color: #2623a5;
+  border-color: #56a9f1;
 `;
 
 const IconBox = styled.div`
@@ -273,9 +282,9 @@ const CategoryBox = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 4.5rem;
+  height: 3rem;
   justify-content: center;
-  background-color: #56a9f1;
+  /* background-color: #56a9f1; */
 `;
 
 const CategoryContainer = styled.div`
@@ -283,7 +292,7 @@ const CategoryContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
 
-  width: 70%;
+  width: 50%;
   margin: 0 15%;
   padding: 0;
 `;
@@ -296,8 +305,9 @@ const CategoryTagBox = styled.div`
 const CategoryTitle = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 1.3rem;
-  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
 `;
 
 const CategoryMenuItem = styled(MenuItem)`

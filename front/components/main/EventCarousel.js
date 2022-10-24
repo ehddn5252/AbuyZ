@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Container } from "@mui/system";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -49,7 +48,7 @@ export default function EventCarousel() {
   };
 
   return (
-    <Container maxWidth="xl">
+    <div>
       <StyledSlider {...settings}>
         {array.map((e, idx) => (
           <CardBox key={idx}>
@@ -58,7 +57,7 @@ export default function EventCarousel() {
           </CardBox>
         ))}
       </StyledSlider>
-    </Container>
+    </div>
   );
 }
 
@@ -117,10 +116,9 @@ const CardBox = styled.div`
 
 const CardImg = styled.img`
   margin: 0 auto;
-  height: 40rem;
-  width: 95%;
+  height: 25rem;
+  width: 100%;
   object-fit: cover;
-  border-radius: 15px;
 `;
 
 // const CardText = styled.p`
