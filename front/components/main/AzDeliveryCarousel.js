@@ -5,14 +5,14 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function ProductCarousel() {
+export default function AzDeliveryCarousel() {
   // 나중에 array 지우면 될 듯
 
   const [array, setArray] = useState([]);
 
   useEffect(() => {
     setArray([
-      { name: "당근", price: 3000, grade: 4.0, reviews: 100, discount: 20 },
+      { name: "당근", price: 690, grade: 4.0, reviews: 100, discount: 20 },
       { name: "우유", price: 3500, grade: 4.4, reviews: 30 },
       { name: "감자", price: 3900, grade: 3.5, reviews: 6 },
       { name: "계란", price: 6990, grade: 5.0, reviews: 200 },
@@ -25,9 +25,6 @@ export default function ProductCarousel() {
     ]);
   }, []);
 
-  // user정보 받아와서 username에 넣기
-  const username = "권도건";
-
   return (
     <Container
       maxWidth="xl"
@@ -35,19 +32,26 @@ export default function ProductCarousel() {
         background: "#ffffff",
         paddingRight: "7rem",
         paddingLeft: "7rem",
-        marginBottom: "5rem",
       }}
     >
       <Title>
-        <span style={{ fontWeight: "bold", fontSize: "2rem" }}>{username}</span>
+        <span
+          style={{ fontWeight: "bold", fontSize: "2rem", color: "#56a9f1" }}
+        >
+          AZ 배송
+        </span>
         <span style={{ fontWeight: "lighter", fontSize: "1.3rem" }}>
-          님을 위한
+          주문 시,
         </span>
         <span
           style={{ fontWeight: "bold", fontSize: "1.6rem", color: "#56a9f1" }}
         >
           {" "}
-          추천상품
+          내일 11:00 ~ 13:00
+        </span>
+        <span style={{ fontWeight: "lighter", fontSize: "1.3rem" }}>
+          {" "}
+          도착 예정
         </span>
       </Title>
       <StyledSlider {...settings}>
@@ -221,10 +225,6 @@ const CardPPrice = styled.p`
   margin-right: 1.5rem;
   margin-top: 0;
   margin-bottom: 0;
-`;
-const Won = styled.p`
-  margin: 0;
-  font-size: 0.9rem;
 `;
 
 const Star = styled.img`
