@@ -1,8 +1,15 @@
 package com.tasteshopping.order.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentMethods {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

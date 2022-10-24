@@ -5,6 +5,7 @@ import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductCreateReqDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.dto.ProductUidReqDto;
+import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductPictureRepository;
 import com.tasteshopping.product.service.ProductService;
@@ -15,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -40,10 +43,9 @@ public class TestProductController {
 
     @PostMapping("/option")
     public ResponseEntity<BaseRes> optionTest(@RequestBody ProductCreateReqDto productCreateReqDto) {
-//        System.out.println(productOptionRepository.findByProductsUid(productCreateReqDto.getProducts_uid()));
-
+        Optional<ProductOptions> l = productOptionRepository.findByProductsUid(productCreateReqDto.getProducts_uid());
+        List<ProductOptions> s = new ArrayList<>();
+            System.out.println(l.get().getUid());
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 test 성공!"));
     }
-
-
 }

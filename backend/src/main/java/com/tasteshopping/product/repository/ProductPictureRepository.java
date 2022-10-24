@@ -19,4 +19,6 @@ public interface ProductPictureRepository extends JpaRepository<ProductPictures,
     @Modifying
     @Query(value=" delete from product_pictures where products_uid=:productsUid",nativeQuery = true)
     void deleteByProductsUid(int productsUid);
+
+    List<Optional<ProductPictures>> findByProductUid(int productsUid);
 }

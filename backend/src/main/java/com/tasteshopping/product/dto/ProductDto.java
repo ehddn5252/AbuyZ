@@ -18,15 +18,9 @@ public class ProductDto {
     private Integer discountRate;
     private String repImg;
     private String descriptionImg;
-//    private String producer;
     private Float reviewRate;
 
-    //
     private Integer uid;
-
-//    private String origin;
-
-//    private String status;
 
     private Integer deliveryFee;
 
@@ -36,4 +30,5 @@ public class ProductDto {
 
     private LocalDateTime date;
 
+    private Integer reviewNum;
 }
