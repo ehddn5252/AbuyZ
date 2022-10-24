@@ -40,7 +40,7 @@ public class UserDto {
                 .mileage(this.mileage)
                 .status(this.status)
                 .loginType(loginType)
-                .userRoles(Role.ADMIN)
+                .userRoles(Role.USER)
                 .build();
 
     }
