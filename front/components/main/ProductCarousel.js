@@ -30,7 +30,7 @@ export default function ProductCarousel() {
 
   return (
     <Container
-      maxWidth="xl"
+      maxWidth="lg"
       style={{
         background: "#ffffff",
         paddingRight: "7rem",
@@ -55,19 +55,18 @@ export default function ProductCarousel() {
           <CardContainer key={idx}>
             <CardImg
               alt="추천상품"
-              src="/images/carrot.png"
+              src="/images/sandwich.png"
               style={{
                 width: "14rem",
-                height: "15rem",
+                height: "16rem",
                 objectFit: "cover",
-                borderRadius: "15px",
               }}
             />
-            <CardTextBox>
+            {/* <CardTextBox>
               <Star alt="별점" src="/images/star.png" />
               <CardGrade>{e.grade.toFixed(1)}</CardGrade>
               <CardReviews>({e.reviews})</CardReviews>
-            </CardTextBox>
+            </CardTextBox> */}
             <CardTextBox>
               <CardName>{e.name}</CardName>
             </CardTextBox>
@@ -118,7 +117,7 @@ const settings = {
   // dots: true, // 슬라이드 밑에 점 보이게
   infinite: true, // 무한으로 반복
   speed: 500, // 넘어가는 속도
-  slidesToShow: 5, // n장씩 보이게
+  slidesToShow: 4, // n장씩 보이게
   slidesToScroll: 1, // 1장씩 뒤로 넘어가게
   nextArrow: <img src="/images/right-arrow.png" width="10rem" />,
   prevArrow: <img src="/images/left-arrow.png" width="10rem" />,

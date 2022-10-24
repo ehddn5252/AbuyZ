@@ -13,18 +13,22 @@ import styled from "styled-components";
 
 export default function PasswordFind() {
   return (
-    <PwfContainer component="main">
-      <PwfBox>
-        <Typography component="h1" variant="h3" sx={{ color: "red" }}>
-          비밀번호 찾기
-        </Typography>
-        <Box
-          component="form"
-          noValidate
-          sx={{
-            mt: 1,
+    <div>
+      <AllContainer>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
           }}
         >
+          <Typography component="h1" variant="h3" sx={{ fontWeight: "bold" }}>
+            비밀번호 찾기
+          </Typography>
+        </div>
+      </AllContainer>
+      <PwfContainer component="main">
+        <PwfBox>
+          <span>아이디</span>
           <TextField
             margin="normal"
             required
@@ -35,6 +39,7 @@ export default function PasswordFind() {
             autoComplete="email"
             sx={{ backgroundColor: "white" }}
           />
+          <span>이메일</span>
           <TextField
             margin="normal"
             required
@@ -46,33 +51,44 @@ export default function PasswordFind() {
             sx={{ backgroundColor: "white" }}
           />
 
-          <Button
+          <ChangeButton
             fullWidth
             type="submit"
             href="/login"
             variant="contained"
-            color="error"
             sx={{ mt: 1, mb: 3 }}
           >
             비밀번호 변경
-          </Button>
-        </Box>
-      </PwfBox>
-    </PwfContainer>
+          </ChangeButton>
+        </PwfBox>
+      </PwfContainer>
+    </div>
   );
 }
-
+const AllContainer = styled(Container)`
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+  width: 55%;
+`;
 const PwfContainer = styled(Container)`
   display: flex;
-  height: 100vh;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  width: 40rem;
+  height: 50vh;
 `;
 
 const PwfBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
-  border-radius: 1rem;
   padding: 3rem;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+`;
+
+const ChangeButton = styled(Button)`
+  margin-top: 2rem;
+  background-color: #56a9f1;
 `;

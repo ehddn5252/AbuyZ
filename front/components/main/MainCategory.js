@@ -5,20 +5,16 @@ import { Container } from "@mui/system";
 export default function MainCategory() {
   // 나중에 array 지우면 될 듯
   const array = [
-    { img: "carrot", name: "당근" },
-    { img: "milk", name: "우유" },
-    { img: "potato", name: "감자" },
-    { img: "carrot", name: "계란" },
-    { img: "milk", name: "새우" },
-    { img: "potato", name: "데님 바지" },
+    { img: "fruit", name: "과일" },
+    { img: "meat", name: "고기" },
+    { img: "water", name: "생수" },
+    { img: "hair", name: "헤어" },
+    { img: "sofa", name: "가구" },
+    { img: "shoes", name: "신발" },
     {
-      img: "carrot",
-      name: "피지오겔 로션",
-      price: 1090,
-      grade: 3.7,
-      reviews: 32,
+      img: "base",
+      name: "기초",
     },
-    { img: "potato", name: "데님 바지" },
   ];
   return (
     <Container maxWidth="xl" sx={{ my: 10 }}>
@@ -39,7 +35,7 @@ export default function MainCategory() {
 
 const CardContainer = styled.div`
   display: flex;
-  padding-left: 10rem;
+  padding-left: 22rem;
   padding-right: 10rem;
 `;
 
@@ -48,9 +44,10 @@ const CardBox = styled.div`
 `;
 
 const CardImg = styled.img`
-  width: 9rem;
-  height: 10rem;
-  padding: 2rem;
+  width: 7rem;
+  height: 6.5rem;
+  padding: 0.5rem;
+  border-radius: 15px;
 `;
 
 const CardText = styled.p`

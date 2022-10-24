@@ -62,7 +62,7 @@ export default function Signup() {
         </div>
       </AllContainer>
       <div
-        style={{ display: "flex", justifyContent: "end", marginRight: "22rem" }}
+        style={{ display: "flex", justifyContent: "end", marginRight: "27rem" }}
       >
         <span>*은 필수 입력사항입니다.</span>
       </div>
@@ -332,14 +332,13 @@ export default function Signup() {
 }
 
 const AllContainer = styled(Container)`
-  margin-top: 2rem;
+  margin-top: 5rem;
   display: flex;
   justify-content: center;
-  width: 150rem;
-  border-bottom: 1px black solid;
+  width: 55%;
 `;
 const SignupContainer = styled(Container)`
-  width: 74rem;
+  width: 56rem;
   height: 100vh;
 `;
 
