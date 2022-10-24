@@ -3,11 +3,15 @@ package com.tasteshopping.cart.entity;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-
 @Entity
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Carts {
 
     @Id
