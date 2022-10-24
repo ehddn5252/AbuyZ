@@ -1,58 +1,40 @@
 // React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import Link from "@mui/material/Link";
-import PersonIcon from "@mui/icons-material/Person";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 // StyledComponents
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 export default function AdminNav() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const [location, setLocation] = useState("");
+
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    if (pathname === "/admin/account") setLocation("정보수정");
+    else if (pathname === "/admin/chart") setLocation("통계");
+    else if (pathname === "/admin/coupon") setLocation("전시관리 - 쿠폰");
+    else if (pathname === "/admin/dashboard") setLocation("대시보드");
+    else if (pathname === "/admin/event") setLocation("전시관리 - 이벤트");
+    else if (pathname === "/admin/product") setLocation("상품관리");
+    else setLocation("고객관리");
+  }, [window.location.pathname]);
+  const logout = () => {
+    console.log("로그아웃");
   };
   return (
     <AdminNavContainer>
-      <LogoLink href="/admin/dashboard">ITDA</LogoLink>
-      <UserDiv onClick={handleClick}>
-        <PersonIcon sx={{ fontSize: "2rem", color: "white" }} />
-        <UserName>권도건님</UserName>
-        <KeyboardArrowDownIcon sx={{ fontSize: "2rem", color: "white" }} />
-      </UserDiv>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        transformOrigin={{ horizontal: "center", vertical: "top" }}
-        anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
-      >
-        <MenuItem>
-          <ListItemIcon sx={{ marginRight: "1rem" }}>
-            <Settings />
-          </ListItemIcon>
-          마이페이지
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon sx={{ marginRight: "1rem" }}>
-            <Logout />
-          </ListItemIcon>
+      <Location>{location}</Location>
+      <UserDiv>
+        <AccountCircleIcon fontSize="large" />
+        <NavLink>권도건님</NavLink>
+        <NavLink href="/admin/account">정보수정</NavLink>
+        <NavLink onClick={logout} sx={{ cursor: "pointer" }}>
           로그아웃
-        </MenuItem>
-      </Menu>
+        </NavLink>
+        <ButtonBox href="/">사이트 바로가기</ButtonBox>
+      </UserDiv>
     </AdminNavContainer>
   );
 }
@@ -63,30 +45,43 @@ const AdminNavContainer = styled.div`
   top: 0;
   justify-content: space-between;
   width: 100%;
-  background-color: #375176;
+  background-color: #fff;
   padding: 1rem;
-  z-index: 1000;
 `;
 
-const LogoLink = styled(Link)`
+const Location = styled.h1`
   font-weight: bold;
   font-size: 2rem;
-  color: #e60012;
+  color: #000;
   text-decoration: none;
-  margin-left: 12rem;
+  margin-left: 15rem;
 `;
 
 const UserDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  font-size: 1.3rem;
 `;
 
-const UserName = styled.p`
-  margin: 0;
-  padding: 0;
-  margin: 0.3rem;
-  font-size: 1rem;
+const NavLink = styled(Link)`
+  text-decoration: none;
+  margin-left: 1rem;
+  color: #000;
+  font-weight: bold;
+`;
+
+const ButtonBox = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  background-color: #acb8ca;
+  width: 15rem;
+  height: 4rem;
+  margin-left: 2rem;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: bold;
   color: white;
 `;

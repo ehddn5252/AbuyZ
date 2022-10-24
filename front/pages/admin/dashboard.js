@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import React from "react";
-import DataStatus from "../../components/admin/DataStatus";
-import ReviewStatus from "../../components/admin/ReviewStatus";
-import { Container } from "@mui/material";
+import DataStatus from "../../components/admin/dashboard/DataStatus";
+import ReviewStatus from "../../components/admin/dashboard/ReviewStatus";
 
 export default function Dashboard() {
   return (
@@ -14,7 +13,11 @@ export default function Dashboard() {
 }
 
 const DashboardPage = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 88vh;
   background: #edf0f5;
-  padding: 3rem;
-  padding-left: 15rem;
+  padding: 2rem;
+  padding-left: 14rem;
 `;

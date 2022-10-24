@@ -6,6 +6,11 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
+import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
+import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
+import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 
 // StyledComponents
 import styled from "styled-components";
@@ -13,10 +18,18 @@ import styled from "styled-components";
 export default function AdminSideNav() {
   return (
     <SideNavContainer>
+      <LogoDiv>
+        <img src="/images/ABUYZ_LOGO.png" style={{ width: "6rem" }} />
+        <p>셀리오피스</p>
+      </LogoDiv>
+
+      <hr style={{ width: "100%" }} />
       <HighTag>
+        <GridViewOutlinedIcon />
         <TagLink href="/admin/dashboard">대시보드</TagLink>
       </HighTag>
       <TitleGrid>
+        <CardGiftcardOutlinedIcon />
         <TitleTag>상품관리</TitleTag>
       </TitleGrid>
 
@@ -29,6 +42,7 @@ export default function AdminSideNav() {
         </LowerTag>
       </div>
       <TitleGrid>
+        <SupportAgentOutlinedIcon />
         <TitleTag>고객관리</TitleTag>
       </TitleGrid>
       <div style={{ backgroundColor: "#EAEAEA" }}>
@@ -43,30 +57,21 @@ export default function AdminSideNav() {
         </LowerTag>
       </div>
       <TitleGrid>
-        <TitleTag>쿠폰관리</TitleTag>
+        <LocalActivityOutlinedIcon />
+        <TitleTag>전시관리</TitleTag>
       </TitleGrid>
 
       <div style={{ backgroundColor: "#EAEAEA" }}>
         <LowerTag>
-          <TagLink href="/admin/coupon">- 쿠폰조회</TagLink>
-        </LowerTag>
-        <LowerTag>
-          <TagLink href="/admin/coupon">- 쿠폰등록</TagLink>
-        </LowerTag>
-      </div>
-      <TitleGrid>
-        <TitleTag>이벤트관리</TitleTag>
-      </TitleGrid>
-
-      <div style={{ backgroundColor: "#EAEAEA" }}>
-        <LowerTag>
-          <TagLink href="/admin/event">- 이벤트조회</TagLink>
+          <TagLink href="/admin/coupon">- 쿠폰</TagLink>
         </LowerTag>
         <LowerTag>
           <TagLink href="/admin/event">- 이벤트등록</TagLink>
         </LowerTag>
       </div>
+
       <HighTag>
+        <ShowChartOutlinedIcon />
         <TagLink href="/admin/chart">통계</TagLink>
       </HighTag>
     </SideNavContainer>
@@ -79,16 +84,26 @@ const SideNavContainer = styled(Container)`
   padding: 0;
   margin: 0;
   flex-direction: column;
-  padding-top: 5rem;
+  padding-top: 2rem;
   width: 12rem;
   height: 100%;
-  background-color: white;
+  background-color: #000000;
+  color: #eeeeee;
   z-index: 999;
+`;
+
+const LogoDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
 `;
 
 const TitleGrid = styled(Grid)`
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  margin-left: 0.5rem;
 `;
 const TitleTag = styled(Typography)`
   font-size: 1.2rem;
@@ -100,9 +115,12 @@ const TitleTag = styled(Typography)`
 const TagLink = styled(Link)`
   text-decoration: none;
   color: #8e8e8e;
+  margin-left: 0.5rem;
 `;
 
 const HighTag = styled(Typography)`
+  display: flex;
+  align-items: center;
   font-size: 1.2rem;
   font-weight: 1000;
   padding: 0.5rem;

@@ -26,7 +26,9 @@ export default function Nav() {
           </UserLink>
         </UserBox>
         <SearchBox>
-          <img src="/images/ABUYZ_LOGO.png" style={{ width: "14rem" }}></img>
+          <Link href="/">
+            <img src="/images/ABUYZ_LOGO.png" style={{ width: "14rem" }}></img>
+          </Link>
           <SearchPaper component="form">
             <InputBase
               sx={{ ml: 1, flex: 1 }}
