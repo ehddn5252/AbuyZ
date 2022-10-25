@@ -2,8 +2,8 @@
 import React from "react";
 
 // MUI
+import styled from "styled-components";
 import Link from "@mui/material/Link";
-import styled from "@emotion/styled";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -12,72 +12,9 @@ import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlin
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 
-export default function Nav() {
+export default function ScrollNav() {
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <NavContainer>
-        <UserBox>
-          <UserLink href="/login">로그인</UserLink>
-          <UserLink href="/service" sx={{ marginLeft: "1rem" }}>
-            고객센터
-          </UserLink>
-        </UserBox>
-        <SearchBox>
-          <Link href="/">
-            <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
-          </Link>
-          <SearchPaper component="form">
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="찾으시는 상품을 검색해주세요"
-              inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
-            />
-            <IconButton
-              href="/search"
-              type="button"
-              sx={{ color: "#56a9f1" }}
-              aria-label="search"
-            >
-              <SearchIcon sx={{ fontSize: "1.8rem" }} />
-            </IconButton>
-          </SearchPaper>
-          <div style={{ display: "flex" }}>
-            <IconBox>
-              <Link href="/event">
-                <EventAvailableOutlinedIcon
-                  fontSize="large"
-                  sx={{ color: "black" }}
-                />
-              </Link>
-              <Link href="/event" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>이벤트</IconTitle> */}
-              </Link>
-            </IconBox>
-            <IconBox>
-              <Link href="/mypage">
-                <PersonOutlineOutlinedIcon
-                  fontSize="large"
-                  sx={{ color: "black" }}
-                />
-              </Link>
-              <Link href="/mypage" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>마이페이지</IconTitle> */}
-              </Link>
-            </IconBox>
-            <IconBox>
-              <Link href="/basket">
-                <ShoppingBasketOutlinedIcon
-                  fontSize="large"
-                  sx={{ color: "black" }}
-                />
-              </Link>
-              <Link href="/basket" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>장바구니</IconTitle> */}
-              </Link>
-            </IconBox>
-          </div>
-        </SearchBox>
-      </NavContainer>
+    <div>
       <CategoryBox>
         <CategoryContainer>
           <CategoryTagBox>
@@ -135,51 +72,75 @@ export default function Nav() {
             </Menu>
           </CategoryTagBox>
         </CategoryContainer>
+        <SearchPaper component="form">
+          <InputBase
+            sx={{ ml: 1, flex: 1, fontSize: "0.8rem" }}
+            placeholder="찾으시는 상품을 검색해주세요"
+            inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
+          />
+          <IconButton
+            href="/search"
+            type="button"
+            sx={{ color: "#56a9f1" }}
+            aria-label="search"
+          >
+            <SearchIcon sx={{ fontSize: "1rem" }} />
+          </IconButton>
+        </SearchPaper>
+        <div style={{ display: "flex" }}>
+          <IconBox>
+            <Link href="/event">
+              <EventAvailableOutlinedIcon
+                fontSize="large"
+                sx={{ color: "black" }}
+              />
+            </Link>
+            <Link href="/event" sx={{ textDecoration: "none" }}></Link>
+          </IconBox>
+          <IconBox>
+            <Link href="/mypage">
+              <PersonOutlineOutlinedIcon
+                fontSize="large"
+                sx={{ color: "black" }}
+              />
+            </Link>
+            <Link href="/mypage" sx={{ textDecoration: "none" }}></Link>
+          </IconBox>
+          <IconBox>
+            <Link href="/basket">
+              <ShoppingBasketOutlinedIcon
+                fontSize="large"
+                sx={{ color: "black" }}
+              />
+            </Link>
+            <Link href="/basket" sx={{ textDecoration: "none" }}></Link>
+          </IconBox>
+        </div>
       </CategoryBox>
     </div>
   );
 }
 
-const NavContainer = styled.div`
-  background-color: white;
+const CategoryBox = styled.div`
   display: flex;
-  flex-direction: column;
+  position: fixed;
+  top: 0;
+  align-items: center;
+  width: 100%;
+  padding: 0 22%;
+  height: 4rem;
   justify-content: center;
-  align-items: center;
-  width: 55%;
-  margin: 0 22%;
-  padding: 0;
-`;
-
-const UserBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  margin-top: 1rem;
-`;
-
-const UserLink = styled(Link)`
-  text-decoration: none;
-  color: #aaaaaa;
-`;
-const SearchBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
-  width: 100%;
-  /* border-width: 0 0 0.1rem 0;
-  border-style: solid;
-  border-color: #eaeaea; */
+  background-color: #fff;
+  z-index: 1011;
 `;
 
 const SearchPaper = styled(Paper)`
   display: flex;
   align-items: center;
-  width: 35rem;
-  height: 55;
+  width: 17rem;
+  height: 2rem;
   border-radius: 0.5rem;
+  margin-left: 2rem;
   padding: 0.5rem;
   border: 1px solid;
   box-shadow: none;
@@ -194,22 +155,11 @@ const IconBox = styled.div`
   margin-left: 2rem;
 `;
 
-const CategoryBox = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 3rem;
-  justify-content: center;
-  /* background-color: #56a9f1; */
-`;
-
 const CategoryContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-
   width: 50%;
-  margin: 0 15%;
   padding: 0;
 `;
 const CategoryTagBox = styled.li`
@@ -218,7 +168,7 @@ const CategoryTagBox = styled.li`
   cursor: pointer;
   &:hover #menu {
     opacity: 1;
-    /* visibility: visible; */
+    visibility: visible;
   }
 `;
 const CategoryTitle = styled.p`
@@ -235,16 +185,13 @@ const Menu = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 3.1rem;
   padding: 0;
   position: absolute;
-  z-index: 1001;
+  margin-top: 2.5rem;
   list-style: none;
   background: #fff;
   opacity: 0;
-  /* visibility: hidden; */
-  /* opacity: 1; */
-  /* visibility: visible; */
+  visibility: hidden;
   transition: all 0.15s ease-in;
 `;
 
