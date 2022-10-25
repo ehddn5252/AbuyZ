@@ -1,6 +1,7 @@
 package com.tasteshopping.event.entity;
 
 import com.tasteshopping.coupon.dto.CouponResDto;
+import com.tasteshopping.event.dto.EventReqDto;
 import com.tasteshopping.event.dto.EventResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,11 +45,27 @@ public class Events {
     @Column
     private int status;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
     @OneToMany(mappedBy = "events", cascade = CascadeType.ALL)
     private List<EventCouponLists> eventCouponLists = new ArrayList<>();
+
+    public void update(EventReqDto eventDto){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.thumbnail = eventDto.getThumbnail();
+            this.contentImgUrl = eventDto.getContentImg();
+            this.content = eventDto.getContent();
+            this.endDate = formatter.parse(eventDto.getEnd_date());
+            this.startDate = formatter.parse(eventDto.getStart_date());
+            this.status = eventDto.getStatus();
+            this.name = eventDto.getName();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public EventResDto toDto(){
         List<CouponResDto> coupon_lists = new ArrayList<>();
         for(EventCouponLists eventCoupon: this.getEventCouponLists()){

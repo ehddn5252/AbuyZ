@@ -1,5 +1,6 @@
 package com.tasteshopping.event.controller;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.tasteshopping.event.dto.EventReqDto;
 import com.tasteshopping.event.service.EventService;
 import com.tasteshopping.user.dto.ResponseDto;
@@ -33,5 +34,13 @@ public class EventController {
     public ResponseEntity<ResponseDto>deleteEvent(@AuthenticationPrincipal String email,
                                                   @PathVariable int event_uid){
         return new ResponseEntity<>(eventService.deleteEvent(email, event_uid),HttpStatus.OK);
+    }
+    @PutMapping("/{event_uid}")
+    public ResponseEntity<ResponseDto>modifyEvent(@AuthenticationPrincipal String email,
+                                                  @PathVariable int event_uid,
+                                                  @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+                                                  @RequestPart(value = "content_img", required = false) MultipartFile content_img,
+                                                  @RequestPart(value = "eventDto") EventReqDto eventDto){
+        return new ResponseEntity<>(eventService.modifyEvent(email,event_uid,thumbnail,content_img,eventDto),HttpStatus.OK);
     }
 }

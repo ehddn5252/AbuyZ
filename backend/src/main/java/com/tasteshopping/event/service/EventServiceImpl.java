@@ -43,52 +43,24 @@ public class EventServiceImpl implements EventService{
     public ResponseDto create(String email, MultipartFile thumbnail,
                               MultipartFile content_img, EventReqDto eventDto) {
         ResponseDto responseDto = new ResponseDto();
-        if(!check(email)){
-            responseDto.setMessage("추가 실패 : 궏한없음");
+        if(check(email)){
+            responseDto.setMessage("추가 실패 : 권한없음");
             responseDto.setData(new ResultDto(false));
             return responseDto;
         }
-        try {
-            if(thumbnail!=null){
-                String thumbnail_url = imageUploadService.uploadImg(thumbnail);
-                eventDto.setThumbnail(thumbnail_url);
-            }
-            if(content_img!=null){
-                String content_img_url = imageUploadService.uploadImg(content_img);
-                eventDto.setContentImg(content_img_url);
-            }
+        updateEventDto(thumbnail,content_img,eventDto,responseDto);
+        if(responseDto.getMessage()!=null) return responseDto;
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date start_date = formatter.parse(eventDto.getStart_date());
-            Date end_date = formatter.parse(eventDto.getEnd_date());
-            String now = LocalDateTime.now().toString();
-            Date now_date = formatter.parse(now);
+        Events events = eventRepository.save(eventDto.toEntity());
+        List<Coupons> coupons = couponRepository.findByUidIn(eventDto.getCoupon_lists());
+        for(Coupons coupon: coupons){
+            EventCouponLists eventCouponLists = EventCouponLists.builder()
+                    .coupons(coupon)
+                    .events(events)
+                    .build();
+            eventCouponListRepository.save(eventCouponLists);
+        }
 
-            if(start_date.after(now_date)){
-                eventDto.setStatus(0);
-            }
-            else if(now_date.after(start_date) && now_date.before(end_date)){
-                eventDto.setStatus(1);
-            }
-            else {
-                eventDto.setStatus(2);
-            }
-            Events events = eventRepository.save(eventDto.toEntity());
-            List<Coupons> coupons = couponRepository.findByUidIn(eventDto.getCoupon_lists());
-            for(Coupons coupon: coupons){
-                EventCouponLists eventCouponLists = EventCouponLists.builder()
-                                        .coupons(coupon)
-                                        .events(events)
-                                        .build();
-                eventCouponListRepository.save(eventCouponLists);
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            responseDto.setMessage("추가 실패");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
         responseDto.setMessage("추가 성공");
         responseDto.setData(new ResultDto(true));
         return responseDto;
@@ -113,8 +85,8 @@ public class EventServiceImpl implements EventService{
     public ResponseDto deleteEvent(String email,int event_uid) {
         ResponseDto responseDto = new ResponseDto();
 
-        if(!check(email)){
-            responseDto.setMessage("삭제 실패 : 궏한없음");
+        if(check(email)){
+            responseDto.setMessage("삭제 실패 : 권한없음");
             responseDto.setData(new ResultDto(false));
             return responseDto;
         }
@@ -128,11 +100,89 @@ public class EventServiceImpl implements EventService{
         return responseDto;
     }
 
+    @Override
+    @Transactional
+    public ResponseDto modifyEvent(String email,int event_uid,MultipartFile thumbnail,
+                                   MultipartFile content_img, EventReqDto eventDto) {
+        ResponseDto responseDto = new ResponseDto();
+
+        if(check(email)){
+            responseDto.setMessage("수정 실패 : 권한없음");
+            responseDto.setData(new ResultDto(false));
+            return responseDto;
+        }
+        Optional<Events> events = eventRepository.findById(event_uid);
+
+        if(!events.isPresent()){
+            responseDto.setMessage("수정 실패 : 잘못된 접근");
+            responseDto.setData(new ResultDto(false));
+            return responseDto;
+        }
+
+        Events event = events.get();
+        if(event.getContentImgUrl()!=null)imageUploadService.delete(event.getContentImgUrl());
+        if(event.getThumbnail()!=null)imageUploadService.delete(event.getThumbnail());
+
+        updateEventDto(thumbnail,content_img,eventDto,responseDto);
+        event.update(eventDto);
+
+        List<Integer> ids = new ArrayList<>();
+        for(EventCouponLists eventCoupon:event.getEventCouponLists()){
+            ids.add(eventCoupon.getUid());
+        }
+        eventCouponListRepository.deleteByUidIn(ids);
+
+        List<Coupons> coupons = couponRepository.findByUidIn(eventDto.getCoupon_lists());
+
+        List<EventCouponLists> eventCouponList = new ArrayList<>();
+        for(Coupons coupon: coupons){
+            EventCouponLists eventCouponLists = EventCouponLists.builder()
+                    .coupons(coupon)
+                    .events(event)
+                    .build();
+            eventCouponList.add(eventCouponLists);
+        }
+        eventCouponListRepository.saveAll(eventCouponList);
+        eventRepository.save(event);
+
+        responseDto.setMessage("수정 완료");
+        responseDto.setData(new ResultDto(true));
+        return responseDto;
+    }
+    public void updateEventDto(MultipartFile thumbnail,
+                               MultipartFile content_img, EventReqDto eventDto,ResponseDto responseDto){
+        try {
+            if (thumbnail != null) {
+                String thumbnail_url = imageUploadService.uploadImg(thumbnail);
+                eventDto.setThumbnail(thumbnail_url);
+            }
+            if (content_img != null) {
+                String content_img_url = imageUploadService.uploadImg(content_img);
+                eventDto.setContentImg(content_img_url);
+            }
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date start_date = formatter.parse(eventDto.getStart_date());
+            Date end_date = formatter.parse(eventDto.getEnd_date());
+            String now = LocalDateTime.now().toString();
+            Date now_date = formatter.parse(now);
+
+            if (start_date.after(now_date)) {
+                eventDto.setStatus(0);
+            } else if (now_date.after(start_date) && now_date.before(end_date)) {
+                eventDto.setStatus(1);
+            } else {
+                eventDto.setStatus(2);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            responseDto.setMessage("추가 실패");
+            responseDto.setData(new ResultDto(false));
+        }
+    }
     public boolean check(String email){
         Optional<Users> users = userRepository.findByEmail(email);
-        if(!(users.isPresent() && users.get().getUserRoles() == Role.ADMIN)){
-            return false;
-        }
-        return true;
+        return !users.isPresent() || users.get().getUserRoles() != Role.ADMIN;
     }
 }

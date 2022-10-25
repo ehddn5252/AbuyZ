@@ -9,4 +9,6 @@ public interface EventService {
                        MultipartFile content_img, EventReqDto eventDto);
     ResponseDto getEventList(String email);
     ResponseDto deleteEvent(String email,int event_uid);
+    ResponseDto modifyEvent(String email,int event_uid,MultipartFile thumbnail,
+                            MultipartFile content_img, EventReqDto eventDto);
 }
