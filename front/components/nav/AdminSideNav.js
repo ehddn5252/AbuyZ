@@ -256,5 +256,5 @@ const LowerTag = styled(Typography)`
 const LowLink = styled(Link)`
   text-decoration: none;
   color: #8e8e8e;
-  margin-left: 0.5rem;
+  margin-left: 2rem;
 `;
