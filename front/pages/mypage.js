@@ -13,52 +13,48 @@ import MyCouponList from "../components/mypage/MyCouponList";
 import MyOrderList from "../components/mypage/MyOrderList";
 import MyWishList from "../components/mypage/MyWishList";
 import DeliveryList from "../components/mypage/DeliveryList";
+import CanReview from "../components/mypage/CanReview";
 
 export default function Mypage() {
   const [tap, setTap] = useState(1); // eslint-disable-line no-unused-vars
   return (
-    <Container
-      maxWidth="lg"
-      style={{
-        background: "#ffffff",
-        paddingRight: "5rem",
-        paddingLeft: "5rem",
-        marginBottom: "5rem",
-      }}
-    >
-      <AllContainer>
+    <div>
+      <div style={{ margin: "0" }}>
         <MyInfo />
-      </AllContainer>
-
-      <div
+      </div>
+      <Container
+        maxWidth="lg"
         style={{
-          display: "flex",
-          flexDirection: "row",
+          background: "#ffffff",
+          paddingRight: "7rem",
+          paddingLeft: "3rem",
+          marginBottom: "5rem",
         }}
       >
-        <div style={{ flex: 1 }}>
-          <MypageSideNav setTap={setTap} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <MypageSideNav setTap={setTap} />
+          </div>
+          <div style={{ flex: 4 }}>
+            {tap === 0 ? <MyOrderList /> : null}
+            {tap === 1 ? (
+              <div>
+                <MyWishList />
+                <CanReview />
+              </div>
+            ) : null}
+            {tap === 2 ? <MyComplainList /> : null}
+            {tap === 3 ? <MyCouponList /> : null}
+            {tap === 4 ? <MyInfoChange /> : null}
+            {tap === 5 ? <DeliveryList /> : null}
+          </div>
         </div>
-        <div style={{ flex: 5 }}>
-          {tap === 0 ? <MyOrderList /> : null}
-          {tap === 1 ? <MyWishList /> : null}
-          {tap === 2 ? <MyComplainList /> : null}
-          {tap === 3 ? <MyCouponList /> : null}
-          {tap === 4 ? <MyInfoChange /> : null}
-          {tap === 5 ? <DeliveryList /> : null}
-        </div>
-      </div>
-    </Container>
+      </Container>
+    </div>
   );
 }
-const AllContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const MyDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-`;

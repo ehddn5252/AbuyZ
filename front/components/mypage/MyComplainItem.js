@@ -17,16 +17,28 @@ export default function MyComplainItem({ complain }) {
 
   return (
     <Container>
-      <h3>Q. {complain.title}</h3>
-      {complain.state ? (
-        <CompleteDiv onClick={handleOpen}>
-          <p>답변 완료</p>
-        </CompleteDiv>
-      ) : (
-        <InCompleteDiv onClick={handleOpen}>
-          <p>처리중</p>
-        </InCompleteDiv>
-      )}
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: "10" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span>
+              [{complain.category}] {complain.title}
+            </span>
+            <span style={{ color: "#aaaaaa" }}>{complain.date}</span>
+          </div>
+        </div>
+        <div style={{ flex: "2" }}>
+          {complain.state ? (
+            <CompleteDiv onClick={handleOpen}>
+              <p>답변 완료</p>
+            </CompleteDiv>
+          ) : (
+            <InCompleteDiv onClick={handleOpen}>
+              <p>처리중</p>
+            </InCompleteDiv>
+          )}
+        </div>
+      </div>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -40,15 +52,16 @@ export default function MyComplainItem({ complain }) {
 }
 
 const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
+  border-bottom: 1px solid black;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 `;
 
 const CompleteDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ff9494;
+  background-color: #56a9f1;
   color: white;
   font-size: 1rem;
   width: 8rem;
@@ -60,8 +73,8 @@ const InCompleteDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff5e4;
-  color: #ff9494;
+  background-color: rgba(182, 193, 232, 0.55);
+  color: #56a9f1;
   font-size: 1rem;
   width: 8rem;
   height: 3rem;

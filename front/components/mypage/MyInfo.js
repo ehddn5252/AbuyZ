@@ -1,9 +1,6 @@
 // React
 import React from "react";
 
-// MUI
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-
 // StyledComponent
 import styled from "styled-components";
 
@@ -41,15 +38,14 @@ export default function Myinfo() {
 
 const InfoContainer = styled.div`
   width: 100%;
-  height: 16rem;
-  margin-top: 3rem;
+  height: 100%;
 `;
 
 const MainBox = styled.div`
   display: flex;
   background-color: #f4f4f4;
   align-items: center;
-  height: 10rem;
+  height: 8rem;
   padding: 3rem;
   border-radius: 10px;
 `;
@@ -61,6 +57,7 @@ const MyName = styled.div`
   font-weight: bolder;
   padding-left: 3rem;
   padding-right: 9rem;
+  margin-left: 30rem;
 `;
 
 const HistoryDiv = styled.div`
