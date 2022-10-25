@@ -1,8 +1,15 @@
 package com.tasteshopping.inquiry.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerCenterCategories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
