@@ -31,15 +31,6 @@ public class OrderController {
     @Autowired
     OrderListService orderListService;
 
-    @PostMapping("/register")
-    public ResponseEntity<BaseRes> test() {
-
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        System.out.println(formatter.format(date));
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!"));
-    }
-
     @GetMapping("")
     public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
         List<OrderListDto> orderListDtos = orderListService.getOrderLists(email);

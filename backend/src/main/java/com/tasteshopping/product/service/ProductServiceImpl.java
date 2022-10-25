@@ -234,7 +234,7 @@ public class ProductServiceImpl implements ProductService {
         int end = 50000;
 
         if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 50001;
+            start = 30001;
             end = 100000;
         } else if (priceUid == Price.UNDER_300000.ordinal()) {
             start = 100001;
@@ -277,10 +277,10 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid) {
 
         int start = 0;
-        int end = 50000;
+        int end = 30000;
 
         if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 50001;
+            start = 30001;
             end = 100000;
         } else if (priceUid == Price.UNDER_300000.ordinal()) {
             start = 100001;
@@ -336,6 +336,101 @@ public class ProductServiceImpl implements ProductService {
         return productDetailDto;
     }
 
+    @Override
+    public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice) {
+        int start = startPrice;
+        int end = endPrice;
+        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto) {
+
+        // 반환할 리스트
+        List<ProductDto> l= new ArrayList<>();
+
+        Integer startPrice = searchDto.getStartPrice();
+        Integer endPrice = searchDto.getEndPrice();
+        Integer priceId = searchDto.getPriceUid();
+        Integer deliveryFeeId = searchDto.getDeliveryFeeUid();
+        Integer bigCategoriesUid = searchDto.getBigCategoriesUid();
+        l.addAll(newL);
+        if(bigCategoriesUid!=null){
+            l.clear();
+            for(int i=0;i<newL.size();++i){
+                int bigCategoryUid = newL.get(i).getBigCategoryUid();
+                if(bigCategoryUid==bigCategoriesUid){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+
+        if(priceId !=null && (startPrice==null || endPrice==null)){
+            l.clear();
+            int start = 0;
+            int end = 30000;
+
+            if (priceId == Price.UNDER_100000.ordinal()) {
+                start = 30001;
+                end = 100000;
+            } else if (priceId == Price.UNDER_300000.ordinal()) {
+                start = 100001;
+                end = 300000;
+            } else if (priceId == Price.OVER_300000.ordinal()) {
+                start = 300001;
+                end = Integer.MAX_VALUE;
+            }
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=start && price<=end){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+        if(deliveryFeeId!=null){
+            l.clear();
+            int startDeliveryFee = 0;
+            int endDeliveryFee = 0;
+            if (deliveryFeeId == DeliveryFee.UNDER_3000.ordinal()) {
+                startDeliveryFee = 1;
+                endDeliveryFee = 3000;
+            } else if (deliveryFeeId == DeliveryFee.OVER_3000.ordinal()) {
+                startDeliveryFee = 3001;
+                endDeliveryFee = Integer.MAX_VALUE;
+            }
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=startDeliveryFee && price<=endDeliveryFee){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+        System.out.println(newL.size());
+        // 시작 가격과 끝 가격이 있다면 체크
+        if(startPrice!=null && endPrice!=null){
+            l.clear();
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=startPrice && price<=endPrice){
+                    l.add(newL.get(i));
+                }
+            }
+        }
+        return l;
+    }
+
 
     private void modifyProductKeywords(ProductCreateDto productCreateDto) {
 
@@ -389,8 +484,6 @@ public class ProductServiceImpl implements ProductService {
         if (smallCategoriesOptional.isPresent()) {
             smallCategories = smallCategoriesOptional.get();
         }
-        // Builder 로 변경
-
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
         productRepository.save(product1);
     }
@@ -399,10 +492,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProduct() {
         List<Products> l = productRepository.findAll();
-        System.out.println("===================================");
-        System.out.println(l);
-        System.out.println("===================================");
-
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());

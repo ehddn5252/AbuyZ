@@ -1,8 +1,6 @@
 package com.tasteshopping.product.service;
 
-import com.tasteshopping.product.dto.ProductCreateDto;
-import com.tasteshopping.product.dto.ProductDetailDto;
-import com.tasteshopping.product.dto.ProductDto;
+import com.tasteshopping.product.dto.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,4 +40,8 @@ public interface ProductService {
     public ProductDto getOneProduct(Integer productsUid);
 
     ProductDetailDto getDetailProduct(int productsUid);
+
+    List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice);
+
+    List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
 }

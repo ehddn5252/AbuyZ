@@ -103,6 +103,8 @@ public class Products {
                 .price(price)
                 .reviewRate(reviewRate)
                 .uid(uid)
+                .bigCategoryUid(smallCategory.getBigCategory().getUid())
+                .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
                 .build();
     }
 

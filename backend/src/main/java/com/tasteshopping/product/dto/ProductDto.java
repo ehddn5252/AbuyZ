@@ -25,6 +25,8 @@ public class ProductDto {
     private Integer deliveryFee;
 
     private String smallCategoryName;
+    private String bigCategoryName;
+    private Integer bigCategoryUid;
 
     private String brandName;
 

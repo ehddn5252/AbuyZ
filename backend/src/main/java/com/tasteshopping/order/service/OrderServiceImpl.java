@@ -71,7 +71,6 @@ public class OrderServiceImpl implements OrderService{
         }
 
         orderLists.setDate(date);
-
         orderListRepository.save(orderLists);
 
         // 이 과정을 줄일 수 있나?
