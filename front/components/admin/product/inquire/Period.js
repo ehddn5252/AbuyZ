@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SearchContainer } from "./SearchWord";
 import { SearchTitle } from "./InquireProduct";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+// mui
+import Grid2 from "@mui/material/Unstable_Grid2";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 export default function Period() {
   // 기준기간
@@ -23,65 +26,88 @@ export default function Period() {
   const [endDate, setEndDate] = useState(new Date());
 
   return (
-    <SearchContainer style={{ marginBottom: "2rem" }}>
-      <SearchTitle
-        style={{
-          paddingLeft: "4rem",
-          marginTop: "1rem",
-          // marginRight: "15rem",
-          width: "30rem",
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
         }}
       >
         기간
-      </SearchTitle>
-      <FormControl
+      </Grid2>
+      <Grid2
+        xs={10}
         sx={{
-          marginTop: "2rem",
-          marginLeft: "5rem",
-          minWidth: 100,
-          width: 150,
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          alignContent: "center",
         }}
       >
-        <InputLabel id="demo-simple-select-autowidth-label">
-          기준기간
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
-          value={standard}
-          onChange={standardChange}
-          autoWidth
-          label="기준"
+        <FormControl
+          sx={{
+            marginLeft: "5rem",
+            minWidth: 200,
+            width: 300,
+          }}
         >
-          <MenuItem value={"상품등록일"}>상품등록일</MenuItem>
-          <MenuItem value={"상품판매일"}>상품판매일</MenuItem>
-        </Select>
-      </FormControl>
-      <ButtonGroup>
-        <Button>하루</Button>
-        <Button>1주일</Button>
-        <Button>1개월</Button>
-        <Button>1년</Button>
-      </ButtonGroup>
-      <MyDatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        selectsStart
-        startDate={startDate}
-        // endDate={endDate}
-        dateFormat="yyyy/MM/dd"
-      />
-      <MyDatePicker
-        selected={endDate}
-        onChange={(date) => setEndDate(date)}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        style={{ width: "40%" }}
-        dateFormat="yyyy/MM/dd"
-      />
-    </SearchContainer>
+          <InputLabel id="demo-simple-select-autowidth-label">
+            기준기간
+          </InputLabel>
+          <Select
+            value={standard}
+            onChange={standardChange}
+            label="기준"
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              getContentAnchorEl: null,
+            }}
+            sx={{ border: 1, height: 50 }}
+          >
+            <MenuItem value={"상품등록일"}>상품등록일</MenuItem>
+            <MenuItem value={"상품판매일"}>상품판매일</MenuItem>
+          </Select>
+        </FormControl>
+        <ButtonGroup>
+          <Button>하루</Button>
+          <Button>1주일</Button>
+          <Button>1개월</Button>
+          <Button>1년</Button>
+        </ButtonGroup>
+        <MyDatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          // endDate={endDate}
+          dateFormat="yyyy/MM/dd"
+        />
+        <MyDatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          style={{ width: "40%" }}
+          dateFormat="yyyy/MM/dd"
+        />
+      </Grid2>
+    </Grid2>
   );
 }
 
@@ -90,18 +116,16 @@ const ButtonGroup = styled.div`
   margin-left: 1rem;
   height: fit-content;
   align-items: flex-end;
-  margin-top: 2rem;
   box-shadow: 0;
 `;
 
 const Button = styled.button`
-  background: #ff9494;
-  font-size: 2rem;
-  padding: 0.3rem;
+  background: #3b7cbe;
+  font-size: 1.2rem;
+  padding: 0.5rem;
   color: white;
-  border-color: #ff9494;
-  border-radius: 10%;
-  margin-left: 0.3rem;
+  border-color: #3b7cbe;
+  /* margin-left: 0.3rem; */
   width: 7rem;
   /* border: 1rem; */
 `;
@@ -116,7 +140,6 @@ export const MyDatePicker = styled(DatePicker)`
   border: 1px solid;
   width: 50%;
   margin-left: 1rem;
-  margin-top: 2rem;
   padding-left: 1rem;
 
   .custom-react-datepicker__wrapper {
