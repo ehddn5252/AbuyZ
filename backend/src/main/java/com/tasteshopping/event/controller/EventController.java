@@ -29,4 +29,9 @@ public class EventController {
     public ResponseEntity<ResponseDto>getEventList(@AuthenticationPrincipal String email){
         return new ResponseEntity<>(eventService.getEventList(email),HttpStatus.OK);
     }
+    @DeleteMapping("/{event_uid}")
+    public ResponseEntity<ResponseDto>deleteEvent(@AuthenticationPrincipal String email,
+                                                  @PathVariable int event_uid){
+        return new ResponseEntity<>(eventService.deleteEvent(email, event_uid),HttpStatus.OK);
+    }
 }

@@ -8,5 +8,5 @@ public interface EventService {
     ResponseDto create(String email, MultipartFile thumbnail,
                        MultipartFile content_img, EventReqDto eventDto);
     ResponseDto getEventList(String email);
-    ResponseDto deleteEvent(String email);
+    ResponseDto deleteEvent(String email,int event_uid);
 }

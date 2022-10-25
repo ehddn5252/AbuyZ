@@ -110,9 +110,22 @@ public class EventServiceImpl implements EventService{
 
     @Override
     @Transactional
-    public ResponseDto deleteEvent(String email) {
+    public ResponseDto deleteEvent(String email,int event_uid) {
+        ResponseDto responseDto = new ResponseDto();
 
-        return null;
+        if(!check(email)){
+            responseDto.setMessage("삭제 실패 : 궏한없음");
+            responseDto.setData(new ResultDto(false));
+            return responseDto;
+        }
+
+        Events event = eventRepository.findById(event_uid).get();
+        eventRepository.delete(event);
+
+        responseDto.setMessage("삭제 성공");
+        responseDto.setData(new ResultDto(true));
+
+        return responseDto;
     }
 
     public boolean check(String email){
