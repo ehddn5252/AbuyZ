@@ -17,7 +17,7 @@ export const PageContainer = styled.div`
   justify-content: space-evenly;
   width: 100%;
   height: auto;
-  background: #edf0f5;
+  background: #eeeeee;
   padding: 2.8rem;
   padding-left: 14rem;
 `;
