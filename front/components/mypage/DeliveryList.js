@@ -32,14 +32,8 @@ export default function DeliveryList() {
   }, []);
   return (
     <MyOrderContainer>
-      <MajorTitle>주문/리뷰 내역</MajorTitle>
-      <hr
-        style={{
-          height: "0.5rem",
-          background: "#7895B2",
-          borderRadius: "1rem",
-        }}
-      />
+      <MajorTitle>주문/리뷰</MajorTitle>
+      <Hr />
       {productList.length === 0 ? (
         <BlankBox>
           <ShoppingCartOutlinedIcon sx={{ fontSize: "6rem" }} />
@@ -78,7 +72,11 @@ const MyOrderContainer = styled.div`
 const MajorTitle = styled.h1`
   font-size: 2rem;
 `;
-
+const Hr = styled.hr`
+  height: 0.3rem;
+  background: #7895b2;
+  border-radius: 1rem;
+`;
 const BlankBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -93,8 +91,7 @@ const BlankBox = styled.div`
 
 const ProductListBox = styled.div`
   display: flex;
-  justify-content: space-evenly;
-  margin-top: 3rem;
+  margin-top: 1rem;
 `;
 
 const ButtonDiv = styled.div`

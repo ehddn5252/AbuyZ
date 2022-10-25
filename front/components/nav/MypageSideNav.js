@@ -39,77 +39,64 @@ export default function MypageSideNav(setTap) {
       <SidebarWrapper>
         <SidebarMenu>
           <SidebarList>
-            <SidebarhomeListItem>
+            <SidebarListItem>
               <TagButton
                 onClick={tap1Change}
                 style={
                   activeTap === 1
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                MY PAGE
+                <p style={{ margin: "0", fontSize: "1rem" }}> MY PAGE</p>
               </TagButton>
-            </SidebarhomeListItem>
-            <SidebarSubTitle>
-              <span>주문 내역</span>
-            </SidebarSubTitle>
+            </SidebarListItem>
             <SidebarListItem>
               <TagButton
                 onClick={tap0Change}
                 style={
                   activeTap === 0
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                주문/리뷰 관리
+                <p style={{ margin: "0", fontSize: "1rem" }}> 주문/리뷰</p>
               </TagButton>
             </SidebarListItem>
-            <SidebarSubTitle>
-              <span>문의 내역</span>
-            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap2Change}
                 style={
                   activeTap === 2
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                문의 내역
+                <p style={{ margin: "0", fontSize: "1rem" }}> 문의 내역</p>
               </TagButton>
             </SidebarListItem>
-            <SidebarSubTitle>
-              <span>쿠폰</span>
-            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap3Change}
                 style={
                   activeTap === 3
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                쿠폰함
+                <p style={{ margin: "0", fontSize: "1rem" }}>쿠폰함</p>
               </TagButton>
             </SidebarListItem>
-
-            <SidebarSubTitle>
-              <span>개인 정보</span>
-            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap4Change}
                 style={
                   activeTap === 4
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                내 정보 관리
+                <p style={{ margin: "0", fontSize: "1rem" }}> 내 정보 관리</p>
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>
@@ -117,11 +104,11 @@ export default function MypageSideNav(setTap) {
                 onClick={tap5Change}
                 style={
                   activeTap === 5
-                    ? { color: "black" }
+                    ? { color: "#56a9f1" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                배송지 관리
+                <p style={{ margin: "0", fontSize: "1rem" }}> 배송지 관리</p>
               </TagButton>
             </SidebarListItem>
           </SidebarList>
@@ -132,14 +119,14 @@ export default function MypageSideNav(setTap) {
 }
 
 const NavContainer = styled(Container)`
-  margin: 0;
+  margin-top: 3.5rem;
   margin-right: 6rem;
   padding: 0;
   width: 100%;
 `;
 
 const SidebarWrapper = styled.div`
-  padding: 1rem;
+  padding: 0rem;
   border-radius: 1rem;
   color: black;
 `;
@@ -148,23 +135,15 @@ const SidebarMenu = styled.div`
   margin-bottom: 2rem;
 `;
 
-const SidebarSubTitle = styled.div``;
-
 const SidebarList = styled.ul`
   list-style: none;
-  padding: 0.5rem;
-`;
-
-const SidebarhomeListItem = styled.li`
-  display: flex;
-  border-color: 1px solid black;
+  padding: 0rem;
 `;
 
 const SidebarListItem = styled.li`
   padding: 1rem;
   display: flex;
   align-items: center;
-  border-radius: 10px;
 `;
 
 const TagButton = styled.button`
@@ -173,4 +152,7 @@ const TagButton = styled.button`
   font-size: 1.2rem;
   font-weight: bolder;
   cursor: pointer;
+  &:hover p {
+    color: #56a9f1;
+  }
 `;
