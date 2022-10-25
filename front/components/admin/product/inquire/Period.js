@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { SearchContainer } from "./SearchWord";
-import { SearchTitle } from "./InquireProduct";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -54,6 +52,7 @@ export default function Period() {
         <FormControl
           sx={{
             marginLeft: "5rem",
+            marginRight: "3rem",
             minWidth: 200,
             width: 300,
           }}
@@ -88,25 +87,34 @@ export default function Period() {
           <Button>1개월</Button>
           <Button>1년</Button>
         </ButtonGroup>
-        <MyDatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          // endDate={endDate}
-          dateFormat="yyyy/MM/dd"
-        />
-        <WaveTag>~</WaveTag>
-        <MyDatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          style={{ width: "40%" }}
-          dateFormat="yyyy/MM/dd"
-        />
+        <div
+          style={{
+            width: "25rem",
+            display: "flex",
+            alignItems: "center",
+            marginLeft: "3rem",
+          }}
+        >
+          <MyDatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            // endDate={endDate}
+            dateFormat="yyyy/MM/dd"
+          />
+          <WaveTag>~</WaveTag>
+          <MyDatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            style={{ width: "40%" }}
+            dateFormat="yyyy/MM/dd"
+          />
+        </div>
       </Grid2>
     </Grid2>
   );
@@ -122,13 +130,16 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  background: #ffffff;
+  background: #0b7ee9;
   font-size: 1rem;
   padding: 0.5rem;
-  color: black;
-  border-color: #ffffff;
+  color: white;
+  border-color: #0b7ee9;
   width: 4rem;
   height: 70%;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const WaveTag = styled.div`
@@ -144,7 +155,7 @@ export const MyDatePicker = styled(DatePicker)`
   font-weight: bold;
   color: black;
   border: 1px solid;
-  width: fit-content;
+  width: 10rem;
   margin-right: 0;
   margin-left: 1rem;
   padding-left: 1rem;
