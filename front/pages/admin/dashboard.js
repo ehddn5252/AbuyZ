@@ -5,19 +5,19 @@ import ReviewStatus from "../../components/admin/dashboard/ReviewStatus";
 
 export default function Dashboard() {
   return (
-    <DashboardPage>
+    <PageContainer>
       <DataStatus />
       <ReviewStatus />
-    </DashboardPage>
+    </PageContainer>
   );
 }
 
-const DashboardPage = styled.div`
+export const PageContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   width: 100%;
-  height: 88vh;
+  height: auto;
   background: #edf0f5;
-  padding: 2rem;
+  padding: 2.8rem;
   padding-left: 14rem;
 `;
