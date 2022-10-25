@@ -123,7 +123,7 @@ export default function SaleProductSearch() {
         xs={12}
         sx={{
           margin: "0",
-          marginTop: "1rem",
+          marginTop: "2rem",
           background: "white",
           padding: "0",
         }}
@@ -144,10 +144,9 @@ export default function SaleProductSearch() {
           <ResetButton>초기화</ResetButton>
           <SearchButton>검색</SearchButton>
         </ButtonBox>
-        {/* </ContainerBox> */}
       </Grid2>
       {/* 상품 목록 */}
-      {/* <InquireList /> */}
+      <InquireList />
     </Grid2>
   );
 }
@@ -209,6 +208,9 @@ const ResetButton = styled.button`
   height: 3rem;
   width: 6rem;
   font-size: 1.3rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -220,4 +222,7 @@ const SearchButton = styled.button`
   height: 3rem;
   width: 7rem;
   font-size: 1.5rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
