@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SearchContainer } from "./SearchWord";
 import { SearchTitle } from "./InquireProduct";
+
+// mui
+import Grid2 from "@mui/material/Unstable_Grid2";
 import Checkbox from "@mui/material/Checkbox";
 
 export default function SaleStatus() {
@@ -25,39 +28,58 @@ export default function SaleStatus() {
   };
 
   return (
-    <SearchContainer>
-      <SearchTitle style={{ paddingLeft: "4rem", marginTop: "1rem" }}>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
         판매상태
-      </SearchTitle>
-      <Checkbox
-        checked={total}
-        onChange={totalChange}
-        inputProps={{ "aria-label": "controlled" }}
-        style={{ marginLeft: "3rem" }}
-        sx={{ "& .MuiSvgIcon-root": { fontSize: 30 } }}
-      />
-      <Name>전체</Name>
-      <Checkbox
-        checked={sale}
-        onChange={saleChange}
-        inputProps={{ "aria-label": "controlled" }}
-        style={{ marginLeft: "3rem" }}
-        sx={{ "& .MuiSvgIcon-root": { fontSize: 30 } }}
-      />
-      <Name>판매 중</Name>
-      <Checkbox
-        checked={soldOut}
-        onChange={soldOutChange}
-        inputProps={{ "aria-label": "controlled" }}
-        style={{ marginLeft: "3rem" }}
-        sx={{ "& .MuiSvgIcon-root": { fontSize: 30 } }}
-      />
-      <Name>판매완료</Name>
-    </SearchContainer>
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{ padding: "1rem", paddingLeft: "1.5rem", display: "flex" }}
+      >
+        <Checkbox
+          checked={total}
+          onChange={totalChange}
+          inputProps={{ "aria-label": "controlled" }}
+          style={{ marginLeft: "3rem" }}
+          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        />
+        <Name>전체</Name>
+        <Checkbox
+          checked={sale}
+          onChange={saleChange}
+          inputProps={{ "aria-label": "controlled" }}
+          style={{ marginLeft: "3rem" }}
+          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        />
+        <Name>판매중</Name>
+        <Checkbox
+          checked={soldOut}
+          onChange={soldOutChange}
+          inputProps={{ "aria-label": "controlled" }}
+          style={{ marginLeft: "3rem" }}
+          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        />
+        <Name>판매완료</Name>
+      </Grid2>
+    </Grid2>
   );
 }
 
 const Name = styled.p`
-  font-size: 1.5rem;
-  font-weight: 1000;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
 `;

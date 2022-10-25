@@ -10,7 +10,7 @@ export default function Add() {
 }
 
 const ProductPage = styled.div`
-  background: #edf0f5;
+  background: #eeeeee;
   padding: 3rem;
   padding-left: 15rem;
 `;
