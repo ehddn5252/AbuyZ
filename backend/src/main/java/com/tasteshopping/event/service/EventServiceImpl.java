@@ -1,10 +1,10 @@
 package com.tasteshopping.event.service;
 
 import com.tasteshopping.common.service.ImageUploadService;
-import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.coupon.repository.CouponRepository;
-import com.tasteshopping.event.dto.EventDto;
+import com.tasteshopping.event.dto.EventReqDto;
+import com.tasteshopping.event.dto.EventResDto;
 import com.tasteshopping.event.entity.EventCouponLists;
 import com.tasteshopping.event.entity.Events;
 import com.tasteshopping.event.repository.EventCouponListRepository;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class EventServiceImpl implements EventService{
     @Override
     @Transactional
     public ResponseDto create(String email, MultipartFile thumbnail,
-                              MultipartFile content_img,EventDto eventDto) {
+                              MultipartFile content_img, EventReqDto eventDto) {
         ResponseDto responseDto = new ResponseDto();
         if(!check(email)){
             responseDto.setMessage("추가 실패 : 궏한없음");
@@ -93,17 +94,18 @@ public class EventServiceImpl implements EventService{
         return responseDto;
     }
     @Override
-    public ResponseDto getEventList(String email, Integer event_uid) {
+    public ResponseDto getEventList(String email) {
         ResponseDto responseDto = new ResponseDto();
-        if(!check(email)){
-            responseDto.setMessage("추가 실패 : 궏한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
+
+        List<Events>events = eventRepository.findAll();
+        List<EventResDto> result = new ArrayList<>();
+
+        for(Events event:events){
+            result.add(event.toDto());
         }
 
-
-
-        return null;
+        responseDto.setData(result);
+        return responseDto;
     }
 
     @Override

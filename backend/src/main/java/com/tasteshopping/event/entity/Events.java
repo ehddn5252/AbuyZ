@@ -1,6 +1,7 @@
 package com.tasteshopping.event.entity;
 
-import com.tasteshopping.event.dto.EventDto;
+import com.tasteshopping.coupon.dto.CouponResDto;
+import com.tasteshopping.event.dto.EventResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,7 +48,21 @@ public class Events {
 
     @OneToMany(mappedBy = "events", cascade = CascadeType.ALL)
     private List<EventCouponLists> eventCouponLists = new ArrayList<>();
-    public EventDto toDto(){
-        return null;
+    public EventResDto toDto(){
+        List<CouponResDto> coupon_lists = new ArrayList<>();
+        for(EventCouponLists eventCoupon: this.getEventCouponLists()){
+            coupon_lists.add(eventCoupon.getCoupons().toDto());
+        }
+
+        return EventResDto.builder()
+                .name(this.name)
+                .start_date(this.startDate.toString())
+                .end_date(this.endDate.toString())
+                .thumbnail(this.thumbnail)
+                .contentImg(this.contentImgUrl)
+                .status(this.status)
+                .content(this.content)
+                .coupon_lists(coupon_lists)
+                .build();
     }
 }

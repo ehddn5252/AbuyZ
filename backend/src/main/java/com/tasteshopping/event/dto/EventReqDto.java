@@ -1,6 +1,5 @@
 package com.tasteshopping.event.dto;
 
-import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.event.entity.Events;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class EventDto {
+public class EventReqDto {
 
     private String name;
     private String start_date;

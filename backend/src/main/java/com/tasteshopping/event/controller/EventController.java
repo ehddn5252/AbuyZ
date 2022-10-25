@@ -1,6 +1,6 @@
 package com.tasteshopping.event.controller;
 
-import com.tasteshopping.event.dto.EventDto;
+import com.tasteshopping.event.dto.EventReqDto;
 import com.tasteshopping.event.service.EventService;
 import com.tasteshopping.user.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +22,11 @@ public class EventController {
     public ResponseEntity<ResponseDto> createEvent(@AuthenticationPrincipal String email,
                                                    @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
                                                    @RequestPart(value = "content_img", required = false) MultipartFile content_img,
-                                                   @RequestPart(value = "eventDto") EventDto eventDto){
+                                                   @RequestPart(value = "eventDto") EventReqDto eventDto){
         return new ResponseEntity<>(eventService.create(email, thumbnail,content_img,eventDto), HttpStatus.OK);
     }
-    @GetMapping("/{event_uid}")
-    public ResponseEntity<ResponseDto>getEventList(@AuthenticationPrincipal String email,
-                                                   @PathVariable Integer event_uid){
-        return new ResponseEntity<>(eventService.getEventList(email,event_uid),HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<ResponseDto>getEventList(@AuthenticationPrincipal String email){
+        return new ResponseEntity<>(eventService.getEventList(email),HttpStatus.OK);
     }
 }

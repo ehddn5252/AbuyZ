@@ -43,7 +43,6 @@ public class CouponLists {
                 .discount_price(this.coupons.getDiscountPrice())
                 .start_date(this.coupons.getStartDate().toString())
                 .end_date(this.coupons.getEndDate().toString())
-                .status(this.status)
                 .available_categories_uid(this.coupons.getBigCategories().getUid())
                 .available_categories_name(this.coupons.getBigCategories().getCategoryName())
                 .build();
