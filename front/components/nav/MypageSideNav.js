@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import styled from "styled-components";
 
 export default function MypageSideNav(setTap) {
-  const [activeTap, SetActiveTap] = useState(4);
+  const [activeTap, SetActiveTap] = useState(1);
 
   const tap0Change = () => {
     setTap.setTap(0);
@@ -30,24 +30,30 @@ export default function MypageSideNav(setTap) {
     setTap.setTap(4);
     SetActiveTap(4);
   };
+  const tap5Change = () => {
+    setTap.setTap(5);
+    SetActiveTap(5);
+  };
   return (
     <NavContainer>
       <SidebarWrapper>
         <SidebarMenu>
-          <SidebarTitle>내 정보 관리</SidebarTitle>
           <SidebarList>
-            <SidebarListItem>
+            <SidebarhomeListItem>
               <TagButton
-                onClick={tap4Change}
+                onClick={tap1Change}
                 style={
-                  activeTap === 4
+                  activeTap === 1
                     ? { color: "black" }
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                회원정보관리
+                MY PAGE
               </TagButton>
-            </SidebarListItem>
+            </SidebarhomeListItem>
+            <SidebarSubTitle>
+              <span>주문 내역</span>
+            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap0Change}
@@ -57,21 +63,12 @@ export default function MypageSideNav(setTap) {
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                주문/리뷰 내역
+                주문/리뷰 관리
               </TagButton>
             </SidebarListItem>
-            <SidebarListItem>
-              <TagButton
-                onClick={tap1Change}
-                style={
-                  activeTap === 1
-                    ? { color: "black" }
-                    : { color: "rgb(197, 197, 197)" }
-                }
-              >
-                찜한 상품내역
-              </TagButton>
-            </SidebarListItem>
+            <SidebarSubTitle>
+              <span>문의 내역</span>
+            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap2Change}
@@ -84,6 +81,9 @@ export default function MypageSideNav(setTap) {
                 문의 내역
               </TagButton>
             </SidebarListItem>
+            <SidebarSubTitle>
+              <span>쿠폰</span>
+            </SidebarSubTitle>
             <SidebarListItem>
               <TagButton
                 onClick={tap3Change}
@@ -96,6 +96,34 @@ export default function MypageSideNav(setTap) {
                 쿠폰함
               </TagButton>
             </SidebarListItem>
+
+            <SidebarSubTitle>
+              <span>개인 정보</span>
+            </SidebarSubTitle>
+            <SidebarListItem>
+              <TagButton
+                onClick={tap4Change}
+                style={
+                  activeTap === 4
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
+              >
+                내 정보 관리
+              </TagButton>
+            </SidebarListItem>
+            <SidebarListItem>
+              <TagButton
+                onClick={tap5Change}
+                style={
+                  activeTap === 5
+                    ? { color: "black" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
+              >
+                배송지 관리
+              </TagButton>
+            </SidebarListItem>
           </SidebarList>
         </SidebarMenu>
       </SidebarWrapper>
@@ -105,16 +133,13 @@ export default function MypageSideNav(setTap) {
 
 const NavContainer = styled(Container)`
   margin: 0;
-  margin-top: 3rem;
   margin-right: 6rem;
-  margin-left: 3rem;
   padding: 0;
-  width: 15%;
+  width: 100%;
 `;
 
 const SidebarWrapper = styled.div`
   padding: 1rem;
-  border: 0.2rem solid black;
   border-radius: 1rem;
   color: black;
 `;
@@ -123,15 +148,16 @@ const SidebarMenu = styled.div`
   margin-bottom: 2rem;
 `;
 
-const SidebarTitle = styled.h3`
-  font-size: 2rem;
-  font-weight: 1000;
-  margin-left: 1.5rem;
-`;
+const SidebarSubTitle = styled.div``;
 
 const SidebarList = styled.ul`
   list-style: none;
   padding: 0.5rem;
+`;
+
+const SidebarhomeListItem = styled.li`
+  display: flex;
+  border-color: 1px solid black;
 `;
 
 const SidebarListItem = styled.li`
