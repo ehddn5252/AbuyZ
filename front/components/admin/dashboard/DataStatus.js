@@ -126,8 +126,8 @@ const TodayBox = styled.div`
 
 const DailyBox = styled.div`
   width: 100%;
-  height: 31rem;
-  padding: 0.5rem;
+  height: 29rem;
+  /* padding: 0.5rem; */
   background-color: white;
 `;
 
@@ -161,5 +161,5 @@ const DailyTable = styled.table`
 `;
 
 const TableRow = styled.tr`
-  height: 4.3rem;
+  height: 4rem;
 `;

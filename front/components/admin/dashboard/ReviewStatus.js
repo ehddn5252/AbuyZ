@@ -104,8 +104,8 @@ const BoxContainer = styled.div`
 
 const TodayBox = styled.div`
   width: 100%;
-  height: 23rem;
-  padding: 0.5rem;
+  height: 21rem;
+  /* padding: 0.5rem; */
   margin-bottom: 2rem;
   background-color: white;
 `;
@@ -113,6 +113,6 @@ const TodayBox = styled.div`
 const DailyBox = styled.div`
   width: 100%;
   height: 23rem;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   background-color: white;
 `;
