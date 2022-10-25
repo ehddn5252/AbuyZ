@@ -143,7 +143,6 @@ const Header = styled.div`
 
 const Input = styled.input`
   border: 0.1rem solid #000000;
-  border-radius: 0.3rem;
   width: 15rem;
   height: 3rem;
   font-size: 1.3rem;

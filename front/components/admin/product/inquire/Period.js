@@ -76,14 +76,14 @@ export default function Period() {
               },
               getContentAnchorEl: null,
             }}
-            sx={{ border: 1, height: 50 }}
+            sx={{ border: 1, height: 50, borderRadius: 0 }}
           >
             <MenuItem value={"상품등록일"}>상품등록일</MenuItem>
             <MenuItem value={"상품판매일"}>상품판매일</MenuItem>
           </Select>
         </FormControl>
         <ButtonGroup>
-          <Button>하루</Button>
+          <Button>1일</Button>
           <Button>1주일</Button>
           <Button>1개월</Button>
           <Button>1년</Button>
@@ -96,6 +96,7 @@ export default function Period() {
           // endDate={endDate}
           dateFormat="yyyy/MM/dd"
         />
+        <WaveTag>~</WaveTag>
         <MyDatePicker
           selected={endDate}
           onChange={(date) => setEndDate(date)}
@@ -114,20 +115,25 @@ export default function Period() {
 const ButtonGroup = styled.div`
   display: flex;
   margin-left: 1rem;
-  height: fit-content;
-  align-items: flex-end;
-  box-shadow: 0;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0; */
 `;
 
 const Button = styled.button`
-  background: #3b7cbe;
-  font-size: 1.2rem;
+  background: #ffffff;
+  font-size: 1rem;
   padding: 0.5rem;
-  color: white;
-  border-color: #3b7cbe;
-  /* margin-left: 0.3rem; */
-  width: 7rem;
-  /* border: 1rem; */
+  color: black;
+  border-color: #ffffff;
+  width: 4rem;
+  height: 70%;
+`;
+
+const WaveTag = styled.div`
+  font-size: 2rem;
+  /* rotate: 90deg; */
 `;
 
 export const MyDatePicker = styled(DatePicker)`
@@ -138,7 +144,8 @@ export const MyDatePicker = styled(DatePicker)`
   font-weight: bold;
   color: black;
   border: 1px solid;
-  width: 50%;
+  width: fit-content;
+  margin-right: 0;
   margin-left: 1rem;
   padding-left: 1rem;
 

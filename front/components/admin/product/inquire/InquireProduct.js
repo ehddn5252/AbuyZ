@@ -203,19 +203,19 @@ const ButtonBox = styled.div`
 
 const ResetButton = styled.button`
   background-color: #ffffff;
-  color: gray;
+  color: black;
   border: 1px solid;
-  border-radius: 0.8rem;
+  /* border-radius: 0.8rem; */
   height: 3rem;
-  width: 5rem;
+  width: 6rem;
   font-size: 1.3rem;
 `;
 
 const SearchButton = styled.button`
-  background-color: #ff7171;
+  background-color: #57a9fb;
   color: white;
   border: 1px solid;
-  border-radius: 0.8rem;
+  /* border-radius: 0.8rem; */
   margin-left: 1rem;
   height: 3rem;
   width: 7rem;
