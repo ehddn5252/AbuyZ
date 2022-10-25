@@ -1,10 +1,10 @@
 package com.tasteshopping.order.controller;
 
+import com.tasteshopping.cart.dto.CartDto;
+import com.tasteshopping.cart.dto.CartReqDto;
+import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
-import com.tasteshopping.order.dto.OrderReqDto;
-import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,9 +31,12 @@ public class OrderController {
     @Autowired
     OrderListService orderListService;
 
-
     @PostMapping("/register")
     public ResponseEntity<BaseRes> test() {
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        System.out.println(formatter.format(date));
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!"));
     }
 
@@ -50,10 +52,11 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
-    @PostMapping("")
-    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,OrderReqDto orderReqDto){
+    @PostMapping("/basic")
+    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,@RequestBody CartReqDto cartReqDto){
+        CartDto cartDto = cartReqDto.toDto();
 
-        orderService.basicPay(email,orderReqDto);
+        orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
