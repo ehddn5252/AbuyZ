@@ -100,7 +100,7 @@ export default function Category() {
                 },
                 getContentAnchorEl: null,
               }}
-              sx={{ border: 1, height: 50 }}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
               <MenuItem value="대분류">
                 <em>대분류</em>
@@ -134,7 +134,7 @@ export default function Category() {
                 },
                 getContentAnchorEl: null,
               }}
-              sx={{ border: 1, height: 50 }}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
               <MenuItem value="소분류">
                 <em>소분류</em>
