@@ -27,7 +27,7 @@ const ItemContainer = styled.div`
 `;
 
 const ProductImg = styled.img`
-  width: 18rem;
+  width: 10rem;
   height: 18rem;
   object-fit: cover;
   border-radius: 2rem;

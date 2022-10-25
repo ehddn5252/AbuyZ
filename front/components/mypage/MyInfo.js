@@ -11,24 +11,30 @@ export default function Myinfo() {
   return (
     <InfoContainer>
       <MainBox>
-        <MyImgDiv>
+        {/* <MyImgDiv>
           <AccountBoxIcon sx={{ fontSize: "10rem" }} />
-        </MyImgDiv>
+        </MyImgDiv> */}
         <MyName>권도건님</MyName>
         <HistoryDiv>
           <HistoryTitle>주문 내역</HistoryTitle>
-          <HistoryCount>4건</HistoryCount>
+          <HistoryCount>
+            <span style={{ color: "#56a9f1" }}>4</span>건
+          </HistoryCount>
         </HistoryDiv>
         <HistoryDiv>
           <HistoryTitle>문의 내역</HistoryTitle>
-          <HistoryCount>1건</HistoryCount>
+          <HistoryCount>
+            <span style={{ color: "#56a9f1" }}>1</span>건
+          </HistoryCount>
         </HistoryDiv>
-        <HistoryDiv>
+        <HhistoryDiv>
           <HistoryTitle>나의 쿠폰</HistoryTitle>
-          <HistoryCount>1개</HistoryCount>
-        </HistoryDiv>
+          <HistoryCount>
+            {" "}
+            <span style={{ color: "#56a9f1" }}>1</span>개
+          </HistoryCount>
+        </HhistoryDiv>
       </MainBox>
-      <SupportBox></SupportBox>
     </InfoContainer>
   );
 }
@@ -41,22 +47,12 @@ const InfoContainer = styled.div`
 
 const MainBox = styled.div`
   display: flex;
-  background-color: #f5efe6;
+  background-color: #f4f4f4;
   align-items: center;
   height: 10rem;
   padding: 3rem;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+  border-radius: 10px;
 `;
-
-const SupportBox = styled.div`
-  background-color: #aebdca;
-  height: 6rem;
-  border-bottom-left-radius: 2rem;
-  border-bottom-right-radius: 2rem;
-`;
-
-const MyImgDiv = styled.div``;
 
 const MyName = styled.div`
   display: flex;
@@ -72,18 +68,28 @@ const HistoryDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 2.5rem;
+  margin: 1.5rem;
+  padding-right: 3rem;
+  border-right: 1px solid black;
 `;
 
+const HhistoryDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem;
+  padding-right: 3rem;
+`;
 const HistoryTitle = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
   padding-bottom: 1rem;
 `;
 
 const HistoryCount = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
 `;
