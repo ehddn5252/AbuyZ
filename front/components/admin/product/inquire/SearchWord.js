@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { SearchTitle } from "./InquireProduct";
 
+// mui
+import Grid2 from "@mui/material/Unstable_Grid2";
+
 export default function SearchWord() {
   // 상품명
   const [name, setName] = useState("");
@@ -52,11 +55,31 @@ export default function SearchWord() {
   };
 
   return (
-    <SearchContainer>
-      <SearchTitle style={{ paddingLeft: "4rem", marginTop: "1rem" }}>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
         검색어
-      </SearchTitle>
-      <BoxContainer>
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          alignContent: "center",
+        }}
+      >
         <SearchBox>
           <HeaderBox>
             <Header>상품명</Header>
@@ -86,12 +109,13 @@ export default function SearchWord() {
             onBlur={keyWordBlur}
           />
         </SearchBox>
-      </BoxContainer>
-    </SearchContainer>
+      </Grid2>
+    </Grid2>
   );
 }
 export const SearchContainer = styled.div`
   display: flex;
+  margin: 0;
 `;
 
 const BoxContainer = styled.div`
@@ -108,20 +132,18 @@ const SearchBox = styled.div`
 const HeaderBox = styled.div`
   display: flex;
   align-items: flex-end;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
 `;
 
 const Header = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  width: 11rem;
+  margin-right: 1rem;
   padding-left: 5rem;
 `;
 
 const Input = styled.input`
-  border: 0.1rem solid #ff9494;
-  border-radius: 0.5rem;
+  border: 0.1rem solid #000000;
+  border-radius: 0.3rem;
   width: 15rem;
   height: 3rem;
   font-size: 1.3rem;

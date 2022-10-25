@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+// 컴포넌트
 import { SearchContainer } from "./SearchWord";
 import { SearchTitle } from "./InquireProduct";
+
+// mui
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function Category() {
   // 대분류
@@ -47,61 +52,103 @@ export default function Category() {
   };
 
   return (
-    <SearchContainer>
-      <SearchTitle style={{ paddingLeft: "4rem", marginTop: "1rem" }}>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
         카테고리
-      </SearchTitle>
-      <CategoryBox>
-        <Title>대분류</Title>
-        <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
-          <InputLabel id="demo-simple-select-autowidth-label">
-            대분류
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-autowidth-label"
-            id="demo-simple-select-autowidth"
-            value={bigCategory}
-            onChange={handleChange}
-            autoWidth
-            label="대분류"
-          >
-            <MenuItem value="대분류">
-              <em>대분류</em>
-            </MenuItem>
-            <MenuItem value={"식품"}>식품</MenuItem>
-            <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
-            <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
-            <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
-            <MenuItem value={"뷰티"}>뷰티</MenuItem>
-          </Select>
-        </FormControl>
-      </CategoryBox>
-      <CategoryBox>
-        <Title>소분류</Title>
-        <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
-          <InputLabel id="demo-simple-select-autowidth-label">
-            소분류
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-autowidth-label"
-            id="demo-simple-select-autowidth"
-            value={smallCategory}
-            onChange={smallHandleChange}
-            autoWidth
-            label="소분류"
-          >
-            <MenuItem value="소분류">
-              <em>소분류</em>
-            </MenuItem>
-            {smallCategoryList[bigCategory]?.map((data, idx) => (
-              <MenuItem key={idx} value={data.replace(/\//g, ", ")}>
-                {data}
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+        }}
+      >
+        <CategoryBox>
+          <Title>대분류</Title>
+          <FormControl sx={{ minWidth: 200, width: 300 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              대분류
+            </InputLabel>
+            <Select
+              value={bigCategory}
+              onChange={handleChange}
+              label="대분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+                getContentAnchorEl: null,
+              }}
+              sx={{ border: 1, height: 50 }}
+            >
+              <MenuItem value="대분류">
+                <em>대분류</em>
               </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </CategoryBox>
-    </SearchContainer>
+              <MenuItem value={"식품"}>식품</MenuItem>
+              <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
+              <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
+              <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
+              <MenuItem value={"뷰티"}>뷰티</MenuItem>
+            </Select>
+          </FormControl>
+        </CategoryBox>
+        <CategoryBox>
+          <Title>소분류</Title>
+          <FormControl sx={{ minWidth: 100, width: 300 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              소분류
+            </InputLabel>
+            <Select
+              value={smallCategory}
+              onChange={smallHandleChange}
+              label="소분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+                getContentAnchorEl: null,
+              }}
+              sx={{ border: 1, height: 50 }}
+            >
+              <MenuItem value="소분류">
+                <em>소분류</em>
+              </MenuItem>
+              {smallCategoryList[bigCategory]?.map((data, idx) => (
+                <MenuItem key={idx} value={data.replace(/\//g, ", ")}>
+                  {data}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </CategoryBox>
+      </Grid2>
+    </Grid2>
   );
 }
 
@@ -111,8 +158,18 @@ const CategoryBox = styled.div`
   margin-left: 5rem;
 `;
 
-const Title = styled.p`
-  font-size: 1.5rem;
+const CategoryTitle = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
   font-weight: 1000;
+  /* margin-left: 5rem; */
+`;
+
+const Title = styled.p`
+  font-size: 1.3rem;
+  font-weight: 1000;
+  margin-right: 1rem;
+  margin: 0;
   margin-right: 1rem;
 `;
