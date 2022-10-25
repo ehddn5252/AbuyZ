@@ -9,16 +9,16 @@ import Button from "@mui/material/Button";
 import styled from "styled-components";
 
 // 하위 Components
-import MyWishItem from "./MyWishItem";
+import MyReviewItem from "./MyReviewItem";
 
-export default function MyWishList() {
+export default function CanReview() {
   const [productList, setProductList] = useState([
     {
       productName: "제주 햇 감귤 4.5kg",
       price: 12000,
-      reviewCheck: false,
       dateOfPurchase: "2022.10.19",
       discount: 30,
+      options: "1등급 감귤 / 2kg",
     },
   ]); // eslint-disable-line no-unused-vars
   // const [productList, setProductList] = useState([]);const [productList, setProductList] = useState([]);
@@ -27,15 +27,15 @@ export default function MyWishList() {
       {
         productName: "제주 햇 감귤 4.5kg",
         price: 12000,
-        reviewCheck: false,
         dateOfPurchase: "2022.10.19",
         discount: 30,
+        options: "1등급 감귤 / 2kg",
       },
     ]);
   }, []);
   return (
     <MyOrderContainer>
-      <MajorTitle>찜한 상품</MajorTitle>
+      <MajorTitle>작성 가능한 리뷰</MajorTitle>
       <hr
         style={{
           height: "0.3rem",
@@ -45,28 +45,16 @@ export default function MyWishList() {
       />
       {productList.length ? (
         <ProductListBox>
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
+          <MyReviewItem product={productList[0]} />
+          <MyReviewItem product={productList[0]} />
+          <MyReviewItem product={productList[0]} />
+          <MyReviewItem product={productList[0]} />
         </ProductListBox>
       ) : (
         <BlankBox>
           <FavoriteBorderOutlinedIcon sx={{ fontSize: "6rem" }} />
           <p>찜한 상품이 없습니다</p>
         </BlankBox>
-      )}
-      {productList.length < 4 ? null : (
-        <ButtonDiv>
-          <Button
-            variant="contained"
-            color="error"
-            size="large"
-            sx={{ borderRadius: "3rem" }}
-          >
-            더보기
-          </Button>
-        </ButtonDiv>
       )}
     </MyOrderContainer>
   );
@@ -76,15 +64,15 @@ const MyOrderContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   width: 100%;
-  width: 56rem;
 `;
 
-const MajorTitle = styled.span`
+const MajorTitle = styled.h1`
   font-size: 2rem;
 `;
 
 const ProductListBox = styled.div`
   display: flex;
+  flex-direction: column;
   margin-top: 1rem;
 `;
 

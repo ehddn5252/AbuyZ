@@ -13,28 +13,36 @@ import MyComplainItem from "./MyComplainItem";
 export default function MyComplainList() {
   const [complainList, setComplainList] = useState([
     {
-      title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
-      content: "내용",
-      state: true,
-    },
-    {
       title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어다니깐요",
       content: "내용",
       state: false,
+      category: "환불 문의",
+      date: "2022.10.26",
+    },
+    {
+      title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
+      content: "내용",
+      state: true,
+      category: "상품 문의",
+      date: "2022.10.23",
     },
   ]); // eslint-disable-line no-unused-vars
   // const [complainList, setComplainList] = useState([]);
   useEffect(() => {
     setComplainList([
       {
-        title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
-        content: "내용",
-        state: true,
-      },
-      {
         title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어다니깐요",
         content: "내용",
         state: false,
+        category: "환불 문의",
+        date: "2022.10.26",
+      },
+      {
+        title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
+        content: "내용",
+        state: true,
+        category: "상품 문의",
+        date: "2022.10.23",
       },
     ]);
   }, []);
@@ -44,8 +52,8 @@ export default function MyComplainList() {
       <MajorTitle>문의 내역</MajorTitle>
       <hr
         style={{
-          height: "0.5rem",
-          background: "#7895B2",
+          height: "0.3rem",
+          background: "#7895b2",
           borderRadius: "1rem",
         }}
       />
@@ -68,14 +76,15 @@ const MyComplainContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
   width: 100%;
+  width: 56rem;
 `;
 
-const MajorTitle = styled.h1`
+const MajorTitle = styled.span`
   font-size: 2rem;
 `;
 
 const ComplainListBox = styled.div`
-  margin-top: 3rem;
+  margin-top: 1rem;
 `;
 
 const BlankBox = styled.div`
