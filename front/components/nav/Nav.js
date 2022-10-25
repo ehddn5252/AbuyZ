@@ -17,7 +17,7 @@ import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlin
 
 export default function Nav() {
   return (
-    <div>
+    <div style={{ marginBottom: "1rem" }}>
       <NavContainer>
         <UserBox>
           <UserLink href="/login">로그인</UserLink>
@@ -273,11 +273,6 @@ const IconBox = styled.div`
   margin-left: 2rem;
 `;
 
-const IconTitle = styled.p`
-  padding: 0;
-  margin: 0;
-  color: black;
-`;
 const CategoryBox = styled.div`
   display: flex;
   align-items: center;

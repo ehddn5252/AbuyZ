@@ -1,11 +1,5 @@
-@font-face {
-  font-family: "NEXON Lv2 Gothic";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv2 Gothic.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
+@import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css");
 
 * {
-  font-family: "NEXON Lv2 Gothic";
+  font-family: "NanumSquare";
 }
