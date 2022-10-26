@@ -1,10 +1,12 @@
 package com.tasteshopping.inquiry.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
+import com.tasteshopping.inquiry.dto.Status;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
-import com.tasteshopping.inquiry.repository.CustomerCenterCategoriesRepository;
 import com.tasteshopping.inquiry.repository.CustomerCenterRepository;
+import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    CustomerCenterCategoriesRepository customerCenterCategoriesRepository;
 
     @Autowired
     CustomerCenterRepository customerCenterRepository;
@@ -75,8 +75,8 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         if(customerCenterWriteReqDto.getStatus()!=null){
             customerCenter.setStatus(customerCenterWriteReqDto.getStatus());
         }
-        if(customerCenterWriteReqDto.getCategory_uid()!=null){
-            customerCenter.setCustomerCenterCategory(customerCenterCategoriesRepository.findById(customerCenterWriteReqDto.getCategory_uid()).get());
+        if(customerCenterWriteReqDto.getCustomer_center_category()!=null){
+            customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
         }
         customerCenterRepository.save(customerCenter);
     }
@@ -97,13 +97,57 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         }
         customerCenter.setDate(date);
         customerCenter.setContent(customerCenterWriteReqDto.getContent());
+        customerCenter.setStatus(Status.답변_미완료.toString());
         customerCenter.setTitle(customerCenterWriteReqDto.getTitle());
         customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
         customerCenter.setStatus(customerCenterWriteReqDto.getStatus());
-        customerCenter.setCustomerCenterCategory(customerCenterCategoriesRepository.findById(customerCenterWriteReqDto.getCategory_uid()).get());
+        customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
         customerCenterRepository.save(customerCenter);
     }
 
+    @Override
+    public BaseRes writeReplyCustomerCenter(String email, int parentUid, String content) {
+
+        BaseRes baseRes = new BaseRes();
+        Optional<Users> usersOptional = userRepository.findByEmail(email);
+        if(usersOptional.get().getUserRoles()== Role.ADMIN){
+            CustomerCenters childCustomerCenter = new CustomerCenters();
+
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String s = formatter.format(date).toString();
+            try{
+                date = formatter.parse(s);
+            }
+            catch(ParseException pErr){
+                System.out.println(pErr);
+            }
+            Optional<CustomerCenters> parentCustomerCentersOptional =  customerCenterRepository.findById(parentUid);
+            CustomerCenters parentCustomerCenter = null;
+            if(parentCustomerCentersOptional.isPresent()){
+                parentCustomerCenter = parentCustomerCentersOptional.get();
+                System.out.println(parentCustomerCenter.getTitle());
+            }
+            childCustomerCenter.setDate(date);
+            childCustomerCenter.setUser(usersOptional.get());
+            childCustomerCenter.setContent(content);
+            childCustomerCenter.setCustomerCenterCategory(parentCustomerCenter.getCustomerCenterCategory());
+            childCustomerCenter.setParent(parentCustomerCenter);
+            childCustomerCenter.setStatus(Status.답변_완료.toString());
+            parentCustomerCenter.setStatus(Status.답변_완료.toString());
+            parentCustomerCenter.setChildren(childCustomerCenter);
+            customerCenterRepository.save(childCustomerCenter);
+            customerCenterRepository.save(parentCustomerCenter);
+            baseRes.setMessage("문의 답변 작성 성공");
+            baseRes.setStatusCode(200);
+            return baseRes;
+        }
+        else{
+            baseRes.setStatusCode(403);
+            baseRes.setMessage("관리자가 아닙니다.");
+            return baseRes;
+        }
+    }
 
 
     @Override

@@ -82,10 +82,24 @@ public class CustomerCenterController {
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email, ReplyReqDto replyReqDto){
+    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email, @RequestBody ReplyReqDto replyReqDto){
         if (email.equals("anonymousUser")){
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 작성 성공"));
+        int parentUid = replyReqDto.getParent_uid();
+        String content = replyReqDto.getContent();
+        BaseRes baseRes = customerCenterService.writeReplyCustomerCenter(email,parentUid,content);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 답변 작성 성공"));
     }
+
+    @DeleteMapping("/reply/{uid}")
+    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid){
+        if (email.equals("anonymousUser")){
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+        }
+        customerCenterService.deleteCustomerCenterByUid(uid);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 제거 성공"));
+    }
+
 }

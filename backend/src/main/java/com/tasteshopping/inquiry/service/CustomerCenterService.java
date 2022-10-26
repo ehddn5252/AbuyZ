@@ -1,5 +1,6 @@
 package com.tasteshopping.inquiry.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 
@@ -15,4 +16,5 @@ public interface CustomerCenterService {
     public void deleteCustomerCenterByUid(Integer uid);
     public void createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
+    BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
 }

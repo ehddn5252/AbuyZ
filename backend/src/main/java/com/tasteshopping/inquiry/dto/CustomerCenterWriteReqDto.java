@@ -13,7 +13,7 @@ public class CustomerCenterWriteReqDto {
 
     String title;
     String content;
-    Integer category_uid;
+    String customer_center_category;
     String img_url;
     String status;
 

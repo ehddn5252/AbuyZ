@@ -1,12 +1,9 @@
 package com.tasteshopping.inquiry.dto;
 
-import com.tasteshopping.inquiry.entity.CustomerCenterCategories;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
@@ -24,7 +21,7 @@ public class CustomerCenterDto {
     private String status;
     private Date date;
     private String imgUrl;
-    private Integer customerCenterCategoriesUid;
+    private String customerCenterCategory;
     private Users user;
 
     // 부모 정의

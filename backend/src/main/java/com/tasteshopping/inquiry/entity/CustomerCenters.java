@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -37,9 +36,7 @@ public class CustomerCenters {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     Date date;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="customer_center_categories_uid")
-    private CustomerCenterCategories customerCenterCategory;
+    String customerCenterCategory;
 
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name="users_uid")
@@ -56,7 +53,7 @@ public class CustomerCenters {
 
     public CustomerCenterDto toDto(){
         CustomerCenterDto customerCenterDto = new CustomerCenterDto();
-        customerCenterDto.setCustomerCenterCategoriesUid(customerCenterCategory.getUid());
+        customerCenterDto.setCustomerCenterCategory(customerCenterCategory);
         customerCenterDto.setChildren(children);
         customerCenterDto.setContent(content);
         customerCenterDto.setDate(date);
