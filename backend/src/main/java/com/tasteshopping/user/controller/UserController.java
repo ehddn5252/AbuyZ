@@ -70,4 +70,24 @@ public class UserController {
     public ResponseEntity<ResponseDto>sendCertificationNumber (@RequestBody AuthenticationNumberDto authenticationNumberDto){
         return new ResponseEntity<>(userService.authenticationNumber(authenticationNumberDto),HttpStatus.OK);
     }
+    @PostMapping("/addresses")
+    public ResponseEntity<ResponseDto>addAddress(@AuthenticationPrincipal String email,
+                                                 @RequestBody UserAddressDto userAddressReqDto){
+        return new ResponseEntity<>(userService.addAddress(email,userAddressReqDto),HttpStatus.OK);
+    }
+    @GetMapping("/addresses")
+    public ResponseEntity<ResponseDto>getAddresses(@AuthenticationPrincipal String email){
+        return new ResponseEntity<>(userService.getAddresses(email),HttpStatus.OK);
+    }
+    @PutMapping("/addresses/{address_uid}")
+    public ResponseEntity<ResponseDto>modifyAddress(@AuthenticationPrincipal String email,
+                                                 @PathVariable int address_uid,
+                                                 @RequestBody UserAddressDto userAddressReqDto){
+        return new ResponseEntity<>(userService.modifyAddress(email,address_uid,userAddressReqDto),HttpStatus.OK);
+    }
+    @DeleteMapping("/addresses/{address_uid}")
+    public ResponseEntity<ResponseDto>deleteAddress(@AuthenticationPrincipal String email,
+                                                    @PathVariable int address_uid){
+        return new ResponseEntity<>(userService.deleteAddress(email,address_uid),HttpStatus.OK);
+    }
 }

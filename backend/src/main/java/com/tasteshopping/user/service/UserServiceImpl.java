@@ -1,13 +1,13 @@
 package com.tasteshopping.user.service;
 
 import com.tasteshopping.user.dto.*;
+import com.tasteshopping.user.entity.UserAddresses;
 import com.tasteshopping.user.entity.Users;
+import com.tasteshopping.user.repository.UserAddressRepository;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.user.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final JavaMailSenderImpl mailSender;
-
+    private final UserAddressRepository userAddressRepository;
     @Override
     @Transactional
     public ResponseDto signUp(UserDto userDto, LoginType loginType) {
@@ -229,5 +229,54 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공");
         return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto addAddress(String email, UserAddressDto userAddress) {
+        ResponseDto responseDto = new ResponseDto();
+
+        Optional<Users> user = userRepository.findByEmail(email);
+        if(!user.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("추가 실패");
+            return responseDto;
+        }
+
+        UserAddresses userAddresses = UserAddresses.builder()
+                .nickname(userAddress.getNickname())
+                .address(userAddress.getAddress())
+                .detailAddress(userAddress.getDetailAddress())
+                .postalCode(userAddress.getPostalCode())
+                .recipient(userAddress.getRecipient())
+                .contact1(userAddress.getContact1())
+                .contact2(userAddress.getContact2())
+                .note(userAddress.getNote())
+                .user(user.get())
+                .build();
+        userAddressRepository.save(userAddresses);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("추가 성공");
+        return responseDto;
+    }
+
+    @Override
+    public ResponseDto getAddresses(String email) {
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto deleteAddress(String email, int address_uid) {
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto modifyAddress(String email, int address_uid, UserAddressDto userAddressReqDto) {
+
+        return null;
     }
 }

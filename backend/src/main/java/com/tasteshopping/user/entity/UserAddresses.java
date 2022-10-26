@@ -20,7 +20,7 @@ public class UserAddresses {
     @JoinColumn(name="users_uid")
     Users user;
 
-    @Column(nullable = false)
+    @Column
     private String nickname;
 
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class UserAddresses {
     @Column(nullable = false)
     private String detailAddress;
 
-    @Column(nullable = false)
+    @Column
     private String postalCode;
 
     @Column(nullable = false)
