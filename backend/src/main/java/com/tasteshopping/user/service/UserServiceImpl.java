@@ -269,8 +269,23 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public ResponseDto deleteAddress(String email, int address_uid) {
+        ResponseDto responseDto = new ResponseDto();
 
-        return null;
+        Optional<Users> user = userRepository.findByEmail(email);
+        if(!user.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("삭제 실패");
+            return responseDto;
+        }
+        Integer result = userAddressRepository.deleteByUidAndUser(address_uid,user.get());
+        if(result==1){
+            responseDto.setData(new ResultDto(true));
+            responseDto.setMessage("삭제 성공");
+        }else{
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("삭제 실패");
+        }
+        return responseDto;
     }
 
     @Override
