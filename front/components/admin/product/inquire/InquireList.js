@@ -1,79 +1,140 @@
 import React from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 
 // MUI
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import CheckBox from "@mui/material/Checkbox";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  gridPageCountSelector,
+  gridPageSelector,
+  useGridApiContext,
+  useGridSelector,
+} from "@mui/x-data-grid";
+import { styled } from "@mui/material/styles";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
+import { useDemoData } from "@mui/x-data-grid-generator";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 110,
-    editable: true,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  },
-];
+function customCheckbox(theme) {
+  return {
+    "& .MuiCheckbox-root svg": {
+      width: 16,
+      height: 16,
+      backgroundColor: "transparent",
+      border: `1px solid ${
+        theme.palette.mode === "light" ? "#d9d9d9" : "rgb(67, 67, 67)"
+      }`,
+      borderRadius: 2,
+    },
+    "& .MuiCheckbox-root svg path": {
+      display: "none",
+    },
+    "& .MuiCheckbox-root.Mui-checked:not(.MuiCheckbox-indeterminate) svg": {
+      backgroundColor: "#1890ff",
+      borderColor: "#1890ff",
+    },
+    "& .MuiCheckbox-root.Mui-checked .MuiIconButton-label:after": {
+      position: "absolute",
+      display: "table",
+      border: "2px solid #fff",
+      borderTop: 0,
+      borderLeft: 0,
+      transform: "rotate(45deg) translate(-50%,-50%)",
+      opacity: 1,
+      transition: "all .2s cubic-bezier(.12,.4,.29,1.46) .1s",
+      content: '""',
+      top: "50%",
+      left: "39%",
+      width: 5.71428571,
+      height: 9.14285714,
+    },
+    "& .MuiCheckbox-root.MuiCheckbox-indeterminate .MuiIconButton-label:after":
+      {
+        width: 8,
+        height: 8,
+        backgroundColor: "#1890ff",
+        transform: "none",
+        top: "39%",
+        border: 0,
+      },
+  };
+}
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  border: 0,
+  color:
+    theme.palette.mode === "light"
+      ? "rgba(0,0,0,.85)"
+      : "rgba(255,255,255,0.85)",
+  fontFamily: [
+    "-apple-system",
+    "BlinkMacSystemFont",
+    '"Segoe UI"',
+    "Roboto",
+    '"Helvetica Neue"',
+    "Arial",
+    "sans-serif",
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(","),
+  WebkitFontSmoothing: "auto",
+  letterSpacing: "normal",
+  "& .MuiDataGrid-columnsContainer": {
+    backgroundColor: theme.palette.mode === "light" ? "#fafafa" : "#1d1d1d",
+  },
+  "& .MuiDataGrid-iconSeparator": {
+    display: "none",
+  },
+  "& .MuiDataGrid-columnHeader, .MuiDataGrid-cell": {
+    borderRight: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
+    borderBottom: `1px solid ${
+      theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
+    }`,
+  },
+  "& .MuiDataGrid-cell": {
+    color:
+      theme.palette.mode === "light"
+        ? "rgba(0,0,0,.85)"
+        : "rgba(255,255,255,0.65)",
+  },
+  "& .MuiPaginationItem-root": {
+    borderRadius: 0,
+  },
+  ...customCheckbox(theme),
+}));
+
+function CustomPagination() {
+  const apiRef = useGridApiContext();
+  const page = useGridSelector(apiRef, gridPageSelector);
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <Pagination
+      color="primary"
+      variant="outlined"
+      shape="rounded"
+      page={page + 1}
+      count={pageCount}
+      // @ts-expect-error
+      renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+      onChange={(event, value) => apiRef.current.setPage(value - 1)}
+    />
+  );
+}
 
 export default function InquireList() {
-  // const rows = [
-  //   {
-  //     id: 0,
-  //     saleState: "판매중",
-  //     bigCategory: "생활,건강",
-  //     smallCategory: "의류",
-  //     product: "나이키 청바지",
-  //     saleratio: "15%",
-  //     price: "50000",
-  //     fee: "2000",
-  //     brand: "나이키",
-  //     keyword: "가성비,청바지,바지",
-  //     metaTag: "나이키,바지",
-  //   },
-  // ];
+  const { data } = useDemoData({
+    dataSet: "Commodity",
+    rowLength: 10,
+    maxColumns: 10,
+  });
+
   return (
     <Grid2
       xs={12}
@@ -84,97 +145,68 @@ export default function InquireList() {
         padding: "0",
       }}
     >
-      <h1 style={{ paddingLeft: "2rem" }}>검색 목록</h1>
+      <h2 style={{ paddingLeft: "2rem" }}>검색 목록</h2>
       <hr style={{ background: "#ff9494", width: "95%" }} />
       <div
         style={{
           width: "100%",
+          paddingTop: "1rem",
           paddingLeft: "2.5rem",
           paddingRight: "2.5rem",
           display: "flex",
           justifyContent: "space-between",
+          marginBottom: "1rem",
         }}
       >
-        <CancelButton>선택삭제</CancelButton>
-        <SaveButton>수정저장</SaveButton>
+        {/* <CancelButton>선택삭제</CancelButton>
+        <SaveButton>수정항목 저장</SaveButton> */}
       </div>
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
+      <div style={{ height: 400, width: "100%" }}>
+        <StyledDataGrid
+          checkboxSelection
           pageSize={5}
           rowsPerPageOptions={[5]}
-          checkboxSelection
-          disableSelectionOnClick
-          experimentalFeatures={{ newEditingApi: true }}
+          components={{
+            Pagination: CustomPagination,
+          }}
+          {...data}
         />
-      </Box>
-      {/* <TableContainer component={Paper} sx={{ margin: "2rem", width: "95%" }}>
-        <Table sx={{ minWidth: 100 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <CheckBox></CheckBox>
-              </TableCell>
-              <TableCell>수정</TableCell>
-              <TableCell align="center">판매상태</TableCell>
-              <TableCell align="center">대분류</TableCell>
-              <TableCell align="center">소분류</TableCell>
-              <TableCell align="center">상품명</TableCell>
-              <TableCell align="center">할인율</TableCell>
-              <TableCell align="center">판매가</TableCell>
-              <TableCell align="center">배송비</TableCell>
-              <TableCell align="center">브랜드</TableCell>
-              <TableCell align="center">키워드</TableCell>
-              <TableCell align="center">메타태그</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell>
-                  <CheckBox></CheckBox>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  수정
-                </TableCell>
-                <TableCell align="center">{row.saleState}</TableCell>
-                <TableCell align="center">{row.bigCategory}</TableCell>
-                <TableCell align="center">{row.smallCategory}</TableCell>
-                <TableCell align="center">{row.product}</TableCell>
-                <TableCell align="center">{row.saleratio}</TableCell>
-                <TableCell align="center">{row.price}</TableCell>
-                <TableCell align="center">{row.fee}</TableCell>
-                <TableCell align="center">{row.brand}</TableCell>
-                <TableCell align="center">{row.keyword}</TableCell>
-                <TableCell align="center">{row.metaTag}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+      </div>
     </Grid2>
   );
 }
 
-const CancelButton = styled.button`
-  width: 10%;
-  height: 2.5rem;
-  background-color: #fff;
-  border-radius: 1rem;
-  font-size: 1rem;
-  border: 0;
-`;
+// export const MyBox = styled(Box)`
+//   /* width: 15rem; */
+//   /* background-color: transparent; */
+//   .MuiDataGrid-columnHeaders {
+//     width: 100%;
+//     background: #dadada;
+//   }
+//   .MuiDataGrid-columnHeaderDraggableContainer {
+//     border: 1px;
+//     border-color: #000;
+//   }
+//   .MuiDataGrid-columnHeaderTitleContainer {
+//     background: #dadada;
+//   }
+// `;
 
-const SaveButton = styled.button`
-  width: 10%;
-  height: 2.5rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  background-color: #ff9494;
-  color: #fff;
-  border: 0;
-`;
+// const CancelButton = styled.button`
+//   width: 10%;
+//   height: 2.5rem;
+//   border: 1px solid border;
+//   /* border-radius: 1rem; */
+//   font-size: 1rem;
+//   border: 0;
+// `;
+
+// const SaveButton = styled.button`
+//   width: 10%;
+//   height: 2.5rem;
+//   /* border-radius: 1rem; */
+//   font-size: 1rem;
+//   background-color: #57a9fb;
+//   color: #fff;
+//   border: 0;
+// `;
