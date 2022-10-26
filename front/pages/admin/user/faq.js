@@ -152,7 +152,7 @@ const AddButton = styled.button`
   margin-bottom: 2rem;
 `;
 
-const InquireBox = styled.table`
+const InquireBox = styled.div`
   background-color: white;
   width: 100%;
   height: 21.5rem;
