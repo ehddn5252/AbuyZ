@@ -151,6 +151,33 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
 
     @Override
+    public void deleteCustomerCenterByUidSameEmail(Integer uid, String email){
+        CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
+        Optional<Users> user = userRepository.findByEmail(email);
+        if(user.get().getUid()==customerCenter.getUser().getUid()){
+            deleteCustomerCenterByUid(uid);
+        }
+    }
+
+    @Override
+    public BaseRes deleteCustomerCenterReplyByUid(Integer uid, String email){
+        CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
+        Optional<Users> user = userRepository.findByEmail(email);
+        BaseRes baseRes = new BaseRes();
+        if(user.get().getUserRoles()==Role.ADMIN){
+            deleteCustomerCenterByUid(uid);
+            baseRes.setStatusCode(200);
+            baseRes.setMessage("문의 답글 제거 완료");
+        }
+        else{
+            baseRes.setStatusCode(204);
+            baseRes.setMessage("관리자 계정이 아닙니다.");
+        }
+        return baseRes;
+    }
+
+
+    @Override
     public void deleteCustomerCenterByUid(Integer uid){
         CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
         customerCenterRepository.delete(customerCenter);

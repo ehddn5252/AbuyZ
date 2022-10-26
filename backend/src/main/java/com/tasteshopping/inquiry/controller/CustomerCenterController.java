@@ -25,7 +25,6 @@ public class CustomerCenterController {
     @Autowired
     CustomerCenterService customerCenterService;
 
-
     @GetMapping("/my")
     public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
         System.out.println(email);
@@ -68,7 +67,7 @@ public class CustomerCenterController {
         if (email.equals("anonymousUser")){
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        customerCenterService.deleteCustomerCenterByUid(uid);
+        customerCenterService.deleteCustomerCenterByUidSameEmail(uid, email);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 삭제 성공"));
     }
 
@@ -89,17 +88,16 @@ public class CustomerCenterController {
         int parentUid = replyReqDto.getParent_uid();
         String content = replyReqDto.getContent();
         BaseRes baseRes = customerCenterService.writeReplyCustomerCenter(email,parentUid,content);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 답변 작성 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
     @DeleteMapping("/reply/{uid}")
-    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid){
+    public ResponseEntity<BaseRes> deleteReplyInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid){
         if (email.equals("anonymousUser")){
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        customerCenterService.deleteCustomerCenterByUid(uid);
-
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 제거 성공"));
+        BaseRes baseRes = customerCenterService.deleteCustomerCenterReplyByUid(uid,email);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
 }
