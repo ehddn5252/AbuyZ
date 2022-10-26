@@ -33,7 +33,7 @@ export default function MyCouponList() {
       <MajorTitle>쿠폰함</MajorTitle>
       <hr
         style={{
-          height: "0.5rem",
+          height: "0.3rem",
           background: "#7895B2",
           borderRadius: "1rem",
         }}
@@ -55,12 +55,12 @@ export default function MyCouponList() {
 }
 
 const MyComplainContainer = styled.div`
-  margin-top: 4rem;
+  margin-top: 4.5rem;
   margin-bottom: 4rem;
-  width: 100%;
+  width: 56rem;
 `;
 
-const MajorTitle = styled.h1`
+const MajorTitle = styled.span`
   font-size: 2rem;
 `;
 

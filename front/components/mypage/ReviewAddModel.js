@@ -2,10 +2,12 @@ import React from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 
 export default function ReviewAddModel({ productName, productOptions }) {
+  const [value, setValue] = React.useState(0);
   return (
     <Container>
       <span style={{ fontWeight: "bold", fontSize: "2rem" }}>리뷰 작성</span>
@@ -18,29 +20,22 @@ export default function ReviewAddModel({ productName, productOptions }) {
         {/* <p>{product.productName}</p> */}
       </Box>
       <div style={{ marginTop: "4rem" }}>
-        <span>별점등록</span>
-        <RateContainer>
-          <img
-            src={"images/star.png"}
-            style={{ width: "3rem", height: "3rem" }}
-          ></img>
-          <img
-            src={"images/star.png"}
-            style={{ width: "3rem", height: "3rem" }}
-          ></img>
-          <img
-            src={"images/star.png"}
-            style={{ width: "3rem", height: "3rem" }}
-          ></img>
-          <img
-            src={"images/star.png"}
-            style={{ width: "3rem", height: "3rem" }}
-          ></img>
-          <img
-            src={"images/star.png"}
-            style={{ width: "3rem", height: "3rem" }}
-          ></img>
-        </RateContainer>
+        <span>별점등록 [{value}/5]</span>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              "& > legend": { mt: 2 },
+            }}
+          >
+            <Rating
+              name="simple-controlled"
+              value={value}
+              onChange={(event, newValue) => {
+                setValue(newValue);
+              }}
+            />
+          </Box>
+        </div>
       </div>
       <div style={{ marginTop: "4rem" }}>
         <span>리뷰 내용</span>
