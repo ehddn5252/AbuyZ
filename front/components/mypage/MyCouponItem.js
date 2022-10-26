@@ -7,8 +7,8 @@ import styled from "styled-components";
 export default function MyCouponItem({ coupon }) {
   return (
     <CouponContainer>
-      {console.log(coupon)}
-      <CouponLeftBox>
+      <span>권도건 바보</span>
+      {/* <CouponLeftBox>
         <CouponTitle>{coupon.couponName}</CouponTitle>
         <CouponContent>{coupon.saleprice}</CouponContent>
         <CouponDate>~{coupon.expirationPeriod} 까지</CouponDate>
@@ -19,7 +19,7 @@ export default function MyCouponItem({ coupon }) {
       <CircleOne></CircleOne>
       <CircleTwo></CircleTwo>
       <RectangleOne></RectangleOne>
-      <RectangleTwo></RectangleTwo>
+      <RectangleTwo></RectangleTwo> */}
     </CouponContainer>
   );
 }

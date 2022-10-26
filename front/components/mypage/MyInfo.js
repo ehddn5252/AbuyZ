@@ -67,7 +67,8 @@ const HistoryDiv = styled.div`
   align-items: center;
   margin: 1.5rem;
   padding-right: 3rem;
-  border-right: 1px solid black;
+  border-right: 1px solid;
+  border-color: rgba(128, 128, 128, 0.23);
 `;
 
 const HhistoryDiv = styled.div`

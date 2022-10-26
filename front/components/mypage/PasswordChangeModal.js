@@ -1,5 +1,5 @@
 // React
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -8,11 +8,13 @@ import CloseIcon from "@mui/icons-material/Close";
 // StyledComponents
 import styled from "styled-components";
 
-export default function PasswordChangeModal({ setModalOpen }) {
+export default function PasswordChangeModal({ setModalOpen, Pw }) {
   const closeModal = () => {
     setModalOpen(false);
   };
+  console.log(Pw);
 
+  const [myPw, setMyPw] = useState("");
   const modalRef = useRef(null);
   return (
     <PasswordChangeContainer ref={modalRef}>
@@ -30,7 +32,13 @@ export default function PasswordChangeModal({ setModalOpen }) {
         autoComplete="password"
         autoFocus
         sx={{ marginBottom: "2rem" }}
+        onChange={(event) => {
+          setMyPw(event.currentTarget.value);
+        }}
       ></TextField>
+      {myPw === Pw ? null : (
+        <span style={{ color: "red" }}>비밀번호를 정확하게 입력해주세요.</span>
+      )}
       <TextField
         margin="normal"
         required
@@ -45,7 +53,7 @@ export default function PasswordChangeModal({ setModalOpen }) {
         required
         fullWidth
         id="newPasswordConfirm"
-        label="기존 비밀번호를 재입력해주세요."
+        label="새 비밀번호를 재입력해주세요."
         name="newPasswordConfirm"
         autoComplete="newPasswordConfirm"
         sx={{ marginBottom: "2rem" }}

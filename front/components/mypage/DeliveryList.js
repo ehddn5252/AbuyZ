@@ -32,7 +32,7 @@ export default function DeliveryList() {
   }, []);
   return (
     <MyOrderContainer>
-      <MajorTitle>주문/리뷰</MajorTitle>
+      <MajorTitle>배송지관리</MajorTitle>
       <Hr />
       {productList.length === 0 ? (
         <BlankBox>
@@ -64,12 +64,13 @@ export default function DeliveryList() {
 }
 
 const MyOrderContainer = styled.div`
-  margin-top: 4rem;
+  margin-top: 4.5rem;
   margin-bottom: 4rem;
-  width: 100%;
+  height: 50rem;
+  width: 56rem;
 `;
 
-const MajorTitle = styled.h1`
+const MajorTitle = styled.span`
   font-size: 2rem;
 `;
 const Hr = styled.hr`

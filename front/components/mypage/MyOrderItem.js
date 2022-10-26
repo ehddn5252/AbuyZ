@@ -95,6 +95,7 @@ const ReviewFinishButton = styled.button`
   width: 7rem;
   border: none;
   height: 2rem;
+  border-radius: 5px;
 `;
 
 const ReviewButton = styled.button`
@@ -103,6 +104,7 @@ const ReviewButton = styled.button`
   width: 7rem;
   border: none;
   height: 2rem;
+  border-radius: 5px;
 `;
 
 const CartButton = styled.button`
@@ -112,4 +114,5 @@ const CartButton = styled.button`
   border: 1px solid #56a9f1;
   margin-top: 1rem;
   height: 2rem;
+  border-radius: 5px;
 `;
