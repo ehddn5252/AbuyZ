@@ -75,7 +75,7 @@ export default function MyComplainList() {
 const MyComplainContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  width: 100%;
+  height: 50rem;
   width: 56rem;
 `;
 
