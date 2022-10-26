@@ -1,19 +1,12 @@
 // React
 import React, { useState } from "react";
 
-// MUI
-import Modal from "@mui/material/Modal";
-
 // StyledCopmoent
 import styled from "styled-components";
 
-// 하위 Components
-import MyComplainModal from "./MyComplainModel";
-
 export default function MyComplainItem({ complain }) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [answerOpen, setAnswerOpen] = useState(false);
+  const ansOpen = () => setAnswerOpen(!answerOpen);
 
   return (
     <Container>
@@ -28,25 +21,24 @@ export default function MyComplainItem({ complain }) {
         </div>
         <div style={{ flex: "2" }}>
           {complain.state ? (
-            <CompleteDiv onClick={handleOpen}>
+            <CompleteDiv onClick={ansOpen}>
               <p>답변 완료</p>
             </CompleteDiv>
           ) : (
-            <InCompleteDiv onClick={handleOpen}>
+            <InCompleteDiv>
               <p>처리중</p>
             </InCompleteDiv>
           )}
         </div>
       </div>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <MyComplainModal complain={complain} />
-      </Modal>
+      {answerOpen ? (
+        <ContentDiv>
+          <div style={{ padding: "2rem" }}>
+            <span>{complain.content}</span>
+          </div>
+        </ContentDiv>
+      ) : null}
     </Container>
   );
 }
@@ -58,25 +50,38 @@ const Container = styled.div`
 `;
 
 const CompleteDiv = styled.div`
+  background-color: #56a9f1;
+  color: white;
+  width: 7rem;
+  font-size: 1rem;
+  border: none;
+  height: 2rem;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #56a9f1;
-  color: white;
-  font-size: 1rem;
-  width: 8rem;
-  height: 3rem;
-  border-radius: 1rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const InCompleteDiv = styled.div`
+  background-color: rgba(182, 193, 232, 0.55);
+  color: #56a9f1;
+  width: 7rem;
+  font-size: 1rem;
+  border: none;
+  height: 2rem;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(182, 193, 232, 0.55);
-  color: #56a9f1;
-  font-size: 1rem;
-  width: 8rem;
-  height: 3rem;
-  border-radius: 1rem;
+`;
+
+const ContentDiv = styled.div`
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.17);
+  margin-top: 1rem;
+  border-radius: 5px;
 `;

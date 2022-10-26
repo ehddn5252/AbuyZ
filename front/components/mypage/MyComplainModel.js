@@ -16,10 +16,15 @@ export default function ReportItemModal({ complain }) {
       </Box>
       <hr />
       <Box sx={{ display: "flex" }}>
-        <p style={{ paddingRight: "1rem" }}>답변 내용</p>
-        <p>{complain.content}</p>
+        {complain.state ? (
+          <div>
+            <p style={{ paddingRight: "1rem" }}>답변 내용</p>
+            <p>{complain.content}</p>
+          </div>
+        ) : (
+          <span>아직 답변 안됨</span>
+        )}
       </Box>
-      <hr />
     </Container>
   );
 }
@@ -31,7 +36,8 @@ const Container = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40%;
+  width: 30%;
+  height: 50rem;
   border: 2px solid #000;
   background-color: #fff;
   box-shadow: 24;
