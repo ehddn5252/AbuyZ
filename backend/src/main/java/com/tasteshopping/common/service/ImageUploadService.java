@@ -23,7 +23,7 @@ public class ImageUploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String uploadImge(MultipartFile file){
+    public String uploadImg(MultipartFile file){
         String fileName = createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
