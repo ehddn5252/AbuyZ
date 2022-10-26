@@ -44,20 +44,16 @@ public class CustomerCenters {
 
     // 부모 정의
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_CENTERS_UID")
+    @JoinColumn(name = "customer_centers_uid")
     private CustomerCenters parent;
 
-    // 자식 정의
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "parent")
-    private CustomerCenters children;
 
     public CustomerCenterDto toDto(){
         CustomerCenterDto customerCenterDto = new CustomerCenterDto();
         customerCenterDto.setCustomerCenterCategory(customerCenterCategory);
-        customerCenterDto.setChildren(children);
         customerCenterDto.setContent(content);
         customerCenterDto.setDate(date);
-        customerCenterDto.setParent(parent);
+//        customerCenterDto.setParent(parent);
         customerCenterDto.setStatus(status);
         customerCenterDto.setTitle(title);
         customerCenterDto.setUid(uid);

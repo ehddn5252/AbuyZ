@@ -18,7 +18,7 @@ public interface CustomerCenterService {
     BaseRes deleteCustomerCenterReplyByUid(Integer uid, String email);
 
     public void deleteCustomerCenterByUid(Integer uid);
-    public void createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
+    public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
     BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
 }

@@ -72,9 +72,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         if(customerCenterWriteReqDto.getImg_url()!=null){
             customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
         }
-        if(customerCenterWriteReqDto.getStatus()!=null){
-            customerCenter.setStatus(customerCenterWriteReqDto.getStatus());
-        }
         if(customerCenterWriteReqDto.getCustomer_center_category()!=null){
             customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
         }
@@ -82,27 +79,36 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     }
 
     @Override
-    public void createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto) {
-        Optional<Users> usersOptional = userRepository.findByEmail(email);
-        CustomerCenters customerCenter = new CustomerCenters();
+    public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto) {
+        BaseRes baseRes = new BaseRes();
+        try {
+            Optional<Users> usersOptional = userRepository.findByEmail(email);
+            CustomerCenters customerCenter = new CustomerCenters();
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        String s = formatter.format(date).toString();
-        try{
-            date = formatter.parse(s);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            String s = formatter.format(date).toString();
+            try {
+                date = formatter.parse(s);
+            } catch (ParseException pErr) {
+                System.out.println(pErr);
+            }
+            customerCenter.setDate(date);
+            customerCenter.setContent(customerCenterWriteReqDto.getContent());
+            customerCenter.setStatus(Status.답변_미완료.toString());
+            customerCenter.setTitle(customerCenterWriteReqDto.getTitle());
+            customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
+            customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
+            customerCenterRepository.save(customerCenter);
+            baseRes.setStatusCode(200);
+            baseRes.setMessage("문의 작성 성공");
         }
-        catch(ParseException pErr){
-            System.out.println(pErr);
+        catch (Exception e){
+            baseRes.setMessage("문의 저장 서버 에러");
+            baseRes.setStatusCode(500);
+            return baseRes;
         }
-        customerCenter.setDate(date);
-        customerCenter.setContent(customerCenterWriteReqDto.getContent());
-        customerCenter.setStatus(Status.답변_미완료.toString());
-        customerCenter.setTitle(customerCenterWriteReqDto.getTitle());
-        customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
-        customerCenter.setStatus(customerCenterWriteReqDto.getStatus());
-        customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
-        customerCenterRepository.save(customerCenter);
+        return baseRes;
     }
 
     @Override
@@ -135,7 +141,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             childCustomerCenter.setParent(parentCustomerCenter);
             childCustomerCenter.setStatus(Status.답변_완료.toString());
             parentCustomerCenter.setStatus(Status.답변_완료.toString());
-            parentCustomerCenter.setChildren(childCustomerCenter);
             customerCenterRepository.save(childCustomerCenter);
             customerCenterRepository.save(parentCustomerCenter);
             baseRes.setMessage("문의 답변 작성 성공");

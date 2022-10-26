@@ -25,9 +25,5 @@ public class CustomerCenterDto {
     private Users user;
 
     // 부모 정의
-    private CustomerCenters parent;
-
-    // 자식 정의
-    private CustomerCenters children;
-
+    //    private CustomerCenters parent;
 }
