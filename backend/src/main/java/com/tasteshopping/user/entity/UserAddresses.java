@@ -1,5 +1,6 @@
 package com.tasteshopping.user.entity;
 
+import com.tasteshopping.user.dto.UserAddressDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,5 +45,15 @@ public class UserAddresses {
     @Column
     private String note;
 
+    public void update(UserAddressDto userAddress){
+        this.address = userAddress.getAddress();
+        this.detailAddress = userAddress.getDetailAddress();
+        this.contact1 = userAddress.getContact1();
+        this.contact2 = userAddress.getContact2();
+        this.nickname = userAddress.getNickname();
+        this.note = userAddress.getNote();
+        this.postalCode = userAddress.getPostalCode();
+        this.recipient = userAddress.getRecipient();
 
+    }
 }

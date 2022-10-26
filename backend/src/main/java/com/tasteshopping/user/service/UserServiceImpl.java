@@ -291,7 +291,20 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public ResponseDto modifyAddress(String email, int address_uid, UserAddressDto userAddressReqDto) {
+        ResponseDto responseDto = new ResponseDto();
 
-        return null;
+        Optional<UserAddresses> userAddresses = userAddressRepository.findByUidAndUser(address_uid,email);
+
+        if(!userAddresses.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("수정 실패");
+            return responseDto;
+        }
+        userAddresses.get().update(userAddressReqDto);
+        userAddressRepository.save(userAddresses.get());
+
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("수정 성공");
+        return responseDto;
     }
 }
