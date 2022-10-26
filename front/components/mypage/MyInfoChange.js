@@ -9,7 +9,6 @@ import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
 
 // StyledComponents
 import styled from "styled-components";
@@ -18,14 +17,13 @@ import styled from "styled-components";
 import PasswordChangeModal from "./PasswordChangeModal";
 
 export default function MyinfoChange() {
-  const [userInfo, setUserInfo] = useState({
-    userId: "kjmk1007",
-    userName: "권도건",
-    userEmail: "kjmk1007@naver.com",
-    userPhone: "01012345678",
-    userSex: "male",
-    userBirthDay: "1996-10-07",
-  });
+  const [userId, setUserId] = useState("kjmk1007");
+  const [userName, setUserName] = useState("권도건");
+  const [userEmail, setUserEmail] = useState("kjmk1007@naver.com");
+  const [userPhone, setUserPhone] = useState("01012345678");
+  const [userSex, setUserSex] = useState("male");
+  const [userBirthDay, setUserBirthDay] = useState("1996-10-07");
+  const [userPw, setUserPw] = useState("qwer");
   const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -35,10 +33,6 @@ export default function MyinfoChange() {
     } else {
       setCheckPhoneNumber(false);
     }
-  };
-
-  const cancelPhoneNumber = () => {
-    setCheckPhoneNumber(false);
   };
 
   const showModal = () => {
@@ -65,7 +59,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={8}>
               <TextField
-                placeholder={userInfo.userId}
+                placeholder={userId}
                 margin="normal"
                 fullWidth
                 id="id"
@@ -73,6 +67,7 @@ export default function MyinfoChange() {
                 autoComplete="id"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                disabled
               ></TextField>
             </Grid>
           </Grid>
@@ -92,7 +87,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={8}>
               <TextField
-                placeholder={userInfo.userName}
+                placeholder={userName}
                 margin="normal"
                 fullWidth
                 id="name"
@@ -100,6 +95,7 @@ export default function MyinfoChange() {
                 autoComplete="name"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onChange={(event) => setUserName(event.currentTarget.value)}
               ></TextField>
             </Grid>
           </Grid>
@@ -109,7 +105,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={8}>
               <TextField
-                placeholder={userInfo.userEmail}
+                placeholder={userEmail}
                 margin="normal"
                 fullWidth
                 id="email"
@@ -117,6 +113,7 @@ export default function MyinfoChange() {
                 autoComplete="email"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onChange={(event) => setUserEmail(event.currentTarget.value)}
               ></TextField>
             </Grid>
           </Grid>
@@ -126,11 +123,20 @@ export default function MyinfoChange() {
             </Grid>
 
             <Grid item xs={8}>
-              {checkPhoneNumber ? (
-                <TextField></TextField>
-              ) : (
+              <TextField
+                placeholder={userPhone}
+                margin="normal"
+                fullWidth
+                id="number"
+                name="number"
+                autoComplete="number"
+                autoFocus
+                sx={{ backgroundColor: "white" }}
+                onChange={(event) => setUserPhone(event.currentTarget.value)}
+              ></TextField>
+              {/* {checkPhoneNumber ? (
                 <TextField
-                  placeholder={userInfo.userPhone}
+                  placeholder="수정할 번호를 입력하세요."
                   margin="normal"
                   fullWidth
                   id="number"
@@ -139,25 +145,41 @@ export default function MyinfoChange() {
                   autoFocus
                   sx={{ backgroundColor: "white" }}
                 ></TextField>
-              )}
-            </Grid>
-            <Grid item xs={2} style={{ marginTop: "2rem" }}>
-              {checkPhoneNumber ? (
-                <button onClick={changePhoneNumber}>수정 취소</button>
               ) : (
-                <button onClick={changePhoneNumber}>번호 수정</button>
-              )}
+                <TextField
+                  placeholder={userPhone}
+                  margin="normal"
+                  fullWidth
+                  id="number"
+                  name="number"
+                  autoComplete="number"
+                  autoFocus
+                  sx={{ backgroundColor: "white" }}
+                  onChange={(event) => setUserPhone(event.currentTarget.value)}
+                ></TextField>
+              )} */}
             </Grid>
+            {/* <Grid item xs={2} style={{ marginTop: "1rem" }}>
+              {checkPhoneNumber ? (
+                <PhoneButton variant="outlined" onClick={changePhoneNumber}>
+                  수정 취소
+                </PhoneButton>
+              ) : (
+                <PhoneButton variant="outlined" onClick={changePhoneNumber}>
+                  번호 수정
+                </PhoneButton>
+              )}
+            </Grid> */}
           </Grid>
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>성별</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={8} style={{ marginTop: "1rem" }}>
               <FormControl>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue={userInfo.userSex}
+                  defaultValue={userSex}
                   name="radio-buttons-group"
                 >
                   <div style={{ display: "flex", flexDirection: "row" }}>
@@ -165,16 +187,19 @@ export default function MyinfoChange() {
                       value="female"
                       control={<Radio />}
                       label="여성"
+                      onClick={() => setUserSex("female")}
                     />
                     <FormControlLabel
                       value="male"
                       control={<Radio />}
                       label="남성"
+                      onClick={() => setUserSex("male")}
                     />
                     <FormControlLabel
                       value="other"
                       control={<Radio />}
                       label="선택안함"
+                      onClick={() => setUserSex("other")}
                     />
                   </div>
                 </RadioGroup>
@@ -182,26 +207,36 @@ export default function MyinfoChange() {
             </Grid>
           </Grid>
           <Grid container spacing={1}>
-            <Grid item xs={2} style={{ marginTop: "2rem" }}>
+            <Grid item xs={2} style={{ marginTop: "2.5rem" }}>
               <span style={{ fontWeight: "bold" }}>생년월일</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={8} style={{ marginTop: "1.5rem" }}>
               <TextField
                 id="date"
                 type="date"
-                defaultValue={userInfo.userBirthDay}
+                defaultValue={userBirthDay}
                 sx={{ width: 220 }}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                onChange={(event) => setUserBirthDay(event.currentTarget.value)}
               />
             </Grid>
           </Grid>
-          <button>탈퇴하기</button>
-          <button>수정하기</button>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              marginTop: "3rem",
+            }}
+          >
+            <QuitButton>탈퇴하기</QuitButton>
+            <ModifyButton>수정하기</ModifyButton>
+          </div>
           {modalOpen && (
             <PasswordChangeModal
               setModalOpen={setModalOpen}
+              Pw={userPw}
             ></PasswordChangeModal>
           )}
         </ContentDiv>
@@ -231,19 +266,41 @@ const InfoChangeContainer = styled.div`
   height: 100vh;
 `;
 
-const SubTitle = styled.p`
-  padding: 0.5rem;
-  margin: 0;
-  font-size: 1.2rem;
-  width: 20rem;
-`;
-
-const SubContent = styled.p`
-  padding: 0;
-  margin: 0;
-  padding-right: 1rem;
-`;
-
 const SubButton = styled(Button)`
   margin-right: 1rem;
+  margin-top: 1rem;
+  background-color: white;
+  border-color: #56a9f1;
+  height: 3.3rem;
+  width: 100%;
+  color: #56a9f1;
+`;
+
+const PhoneButton = styled.button`
+  background-color: white;
+  border: 1px solid;
+  border-color: #56a9f1;
+  height: 3.3rem;
+  width: 100%;
+  color: #56a9f1;
+  border-radius: 5px;
+`;
+
+const QuitButton = styled.button`
+  background-color: white;
+  border: 1px solid;
+  border-color: rgba(128, 128, 128, 0.5);
+  height: 3.3rem;
+  width: 8rem;
+  color: rgba(128, 128, 128, 0.5);
+  border-radius: 5px;
+`;
+
+const ModifyButton = styled.button`
+  background-color: #56a9f1;
+  border: none;
+  height: 3.3rem;
+  width: 8rem;
+  color: white;
+  border-radius: 5px;
 `;
