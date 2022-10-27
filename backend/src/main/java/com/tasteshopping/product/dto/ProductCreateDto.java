@@ -25,7 +25,6 @@ public class ProductCreateDto {
     String brandName;
     String descriptionImg;
     String repImg;
-    LinkedHashMap<String,String> imgs;
     LinkedHashMap<String,String> options;
     String keywords;
     String metaTag;
@@ -42,7 +41,6 @@ public class ProductCreateDto {
                  .brandName(p.brand_name)
                  .descriptionImg(p.description_img)
                  .repImg(p.rep_img)
-                 .imgs(p.imgs)
                  .options(p.options)
                  .keywords(p.keywords)
                  .metaTag(p.meta_tag)
