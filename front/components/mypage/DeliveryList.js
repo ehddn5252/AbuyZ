@@ -1,63 +1,100 @@
 // React
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 // MUI
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Button from "@mui/material/Button";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 // StyledComponents
 import styled from "styled-components";
-
+import { TableRow } from "@mui/material";
 // 하위 Components
-import MyOrderItem from "./MyOrderItem";
+import DeliveryAddModal from "./DeliveryAddModal";
+import DeliveryModifyModal from "./DeliveryModifyModal";
 
 export default function DeliveryList() {
-  const [productList, setProductList] = useState([
+  const [valuenumber, setValueNumber] = useState(0);
+  const [addOpen, setAddOpen] = useState(false);
+  const [modifyOpen, setModifyOpen] = useState(false);
+  const [realAddress, setRealAddress] = useState(0);
+  const datas = [
     {
-      productName: "제주 햇 감귤 4.5kg",
-      price: "12,340 원",
-      reviewCheck: false,
-      dateOfPurchase: "2022.10.19",
+      id: 0,
+      address: "수원시 권선구 금곡로 73번길 71",
+      detailaddress: "405동 1803호",
+      receiver: "수취인1",
+      number: "번호1",
     },
-  ]); // eslint-disable-line no-unused-vars
-  // const [productList, setProductList] = useState([]);
-  useEffect(() => {
-    setProductList([
-      {
-        productName: "제주 햇 감귤 4.5kg",
-        price: "12,340 원",
-        reviewCheck: false,
-        dateOfPurchase: "2022.10.19",
-      },
-    ]);
-  }, []);
+    {
+      id: 1,
+      address: "주소2",
+      detailaddress: "405동 1803호",
+      receiver: "수취인2",
+      number: "번호2",
+    },
+  ];
+  const ModifyClick = (e) => {
+    setModifyOpen(true);
+    setValueNumber(e.id);
+  };
+
+  const dataList = datas.map((e) => (
+    <TableRow key={e.id}>
+      <td style={{ textAlign: "center" }}>
+        <input
+          type="radio"
+          name="address"
+          onClick={() => setRealAddress(e.id)}
+        />
+      </td>
+      <td style={{ textAlign: "center" }}>
+        {e.address} {e.detailaddress}
+      </td>
+      <td style={{ textAlign: "center" }}>{e.receiver}</td>
+      <td style={{ textAlign: "center" }}>{e.number}</td>
+      <td style={{ textAlign: "center", color: "#56a9f1" }}>
+        <CreateOutlinedIcon onClick={() => ModifyClick(e)} />
+      </td>
+      <td style={{ textAlign: "center", color: "red" }}>
+        <DeleteOutlineOutlinedIcon></DeleteOutlineOutlinedIcon>
+      </td>
+    </TableRow>
+  ));
+  // const [address, setAddress] = useState("주소");
+  // const [receiver, setReceiver] = useState("받는 분");
+  // const [number, Setnumber] = useState("번호");
+
   return (
     <MyOrderContainer>
       <MajorTitle>배송지관리</MajorTitle>
       <Hr />
-      {productList.length === 0 ? (
-        <BlankBox>
-          <ShoppingCartOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>구매하신 상품이 없습니다</p>
-        </BlankBox>
-      ) : (
-        <ProductListBox>
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[0]} />
-        </ProductListBox>
-      )}
-      {productList.length < 4 ? null : (
-        <ButtonDiv>
-          <Button
-            variant="contained"
-            color="error"
-            size="large"
-            sx={{ borderRadius: "3rem" }}
-          >
-            더보기
-          </Button>
-        </ButtonDiv>
+      <div
+        style={{ display: "flex", justifyContent: "end", marginBottom: "2rem" }}
+      >
+        <Button onClick={() => setAddOpen(true)}>새 배송지 추가</Button>
+      </div>
+      <TableBox>
+        <Table>
+          <thead>
+            <tr>
+              <th>선택</th>
+              <th>주소</th>
+              <th>받는 분</th>
+              <th>연락처</th>
+              <th>수정</th>
+              <th>삭제</th>
+            </tr>
+          </thead>
+          <tbody>{dataList}</tbody>
+        </Table>
+      </TableBox>
+
+      {addOpen && <DeliveryAddModal setAddOpen={setAddOpen}></DeliveryAddModal>}
+      {modifyOpen && (
+        <DeliveryModifyModal
+          setModifyOpen={setModifyOpen}
+          valuenumber={valuenumber}
+          datas={datas}
+        ></DeliveryModifyModal>
       )}
     </MyOrderContainer>
   );
@@ -78,25 +115,24 @@ const Hr = styled.hr`
   background: #7895b2;
   border-radius: 1rem;
 `;
-const BlankBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+const Button = styled.button`
+  background-color: white;
+  border: 1px solid;
+  border-color: #56a9f1;
+  height: 3rem;
+  width: 8rem;
+  color: #56a9f1;
+  border-radius: 5px;
+`;
+
+const Table = styled.table`
   width: 100%;
-  height: 30rem;
-  font-size: 3rem;
-  font-weight: bolder;
-  color: #aaaaaa;
 `;
 
-const ProductListBox = styled.div`
-  display: flex;
-  margin-top: 1rem;
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+const TableBox = styled.div`
+  width: 100%;
+  height: 29rem;
+  /* padding: 0.5rem; */
+  background-color: white;
 `;
