@@ -2,7 +2,7 @@ import React from "react";
 import EventCarousel from "../components/main/EventCarousel";
 import MainCategory from "../components/main/MainCategory";
 import ProductCarousel from "../components/main/ProductCarousel";
-import AzDeliveryCarousel from "../components/main/azdeliveryCarousel";
+// import AzDeliveryCarousel from "../components/main/azdeliveryCarousel";
 import { Container } from "@mui/system";
 
 export default function Main() {
@@ -12,7 +12,7 @@ export default function Main() {
       <MainCategory />
       <ProductCarousel />
       {/* <ProductCarousel /> */}
-      <AzDeliveryCarousel />
+      {/* <AzDeliveryCarousel /> */}
     </Container>
   );
 }

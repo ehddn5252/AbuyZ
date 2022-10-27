@@ -1,5 +1,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
+RUN mkdir .next
 WORKDIR /.next
 COPY package*.json ./
 RUN yarn install
@@ -8,7 +9,7 @@ RUN /bin/sh -c CI=false yarn build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-RUN ls
+# RUN ls
 COPY --from=build-stage /.next /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
