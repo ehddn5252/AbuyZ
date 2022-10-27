@@ -70,9 +70,6 @@ public class Products {
     private Brands brand;
 
     // 양방향 설정
-    @OneToMany(mappedBy ="product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Inventories> inventories;
-
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductKeywords> productKeywords;
 

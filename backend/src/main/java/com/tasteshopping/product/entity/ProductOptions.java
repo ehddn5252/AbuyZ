@@ -22,9 +22,9 @@ public class ProductOptions {
     @JoinColumn(name="products_uid")
     Products product;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="inventories_uid")
-    Inventories inventories;
+    Integer count;
+
+    Integer price;
 
     @OneToMany(mappedBy = "productOptions",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptionLists> productOptionLists;

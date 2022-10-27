@@ -4,7 +4,6 @@ import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
-import com.tasteshopping.order.dto.OrderReqDto;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
@@ -20,10 +19,8 @@ import java.text.ParseException;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -54,7 +51,7 @@ public class OrderServiceImpl implements OrderService{
     public void cartPay(String email) {
         Users user =  userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
-        List<Carts> l = cartRepository.findByUsersUid(user.getUid());
+        List<Carts> cartList = cartRepository.findByUsersUid(user.getUid());
         OrderLists orderLists = new OrderLists();
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
@@ -78,8 +75,8 @@ public class OrderServiceImpl implements OrderService{
         orderLists = orderListRepository.findById(uid).get();
 
         int totalPrice = 0;
-        for(int i=0;i<l.size();++i){
-            Carts cart= l.get(i);
+        for(int i = 0; i< cartList.size(); ++i){
+            Carts cart= cartList.get(i);
             Orders orders = new Orders();
             orders.setOrderList(orderLists);
             orders.setCount(cart.getProductCount());
@@ -93,7 +90,7 @@ public class OrderServiceImpl implements OrderService{
             totalPrice += products.getPrice() * cart.getProductCount();
 
             orderRepository.save(orders);
-//            cartRepository.delete(cart);
+            cartRepository.delete(cart);
         }
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);
