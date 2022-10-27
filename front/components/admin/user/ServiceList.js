@@ -126,6 +126,7 @@ const SolvedButton = styled.button`
   width: 5rem;
   padding: 0.5rem;
   border-radius: 3px;
+  cursor: pointer;
 `;
 
 const NoButton = styled.button`
@@ -136,4 +137,5 @@ const NoButton = styled.button`
   padding: 0.5rem;
   border: none;
   border-radius: 3px;
+  cursor: pointer;
 `;
