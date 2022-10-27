@@ -16,7 +16,7 @@ import DeliveryList from "../components/mypage/DeliveryList";
 import CanReview from "../components/mypage/CanReview";
 
 export default function Mypage() {
-  const [tap, setTap] = useState(1); // eslint-disable-line no-unused-vars
+  const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
   return (
     <div>
       <div style={{ margin: "0" }}>

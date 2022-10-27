@@ -38,23 +38,23 @@ export default function DeliveryList() {
   };
 
   const dataList = datas.map((e) => (
-    <TableRow key={e.id}>
-      <td style={{ textAlign: "center" }}>
+    <TableRow key={e.id} style={{ padding: "1rem" }}>
+      <td style={{ textAlign: "center", padding: "1rem" }}>
         <input
           type="radio"
           name="address"
           onClick={() => setRealAddress(e.id)}
         />
       </td>
-      <td style={{ textAlign: "center" }}>
+      <td style={{ textAlign: "center", padding: "1rem" }}>
         {e.address} {e.detailaddress}
       </td>
-      <td style={{ textAlign: "center" }}>{e.receiver}</td>
-      <td style={{ textAlign: "center" }}>{e.number}</td>
-      <td style={{ textAlign: "center", color: "#56a9f1" }}>
+      <td style={{ textAlign: "center", padding: "1rem" }}>{e.receiver}</td>
+      <td style={{ textAlign: "center", padding: "1rem" }}>{e.number}</td>
+      <td style={{ textAlign: "center", color: "#56a9f1", padding: "1rem" }}>
         <CreateOutlinedIcon onClick={() => ModifyClick(e)} />
       </td>
-      <td style={{ textAlign: "center", color: "red" }}>
+      <td style={{ textAlign: "center", color: "red", padding: "1rem" }}>
         <DeleteOutlineOutlinedIcon></DeleteOutlineOutlinedIcon>
       </td>
     </TableRow>

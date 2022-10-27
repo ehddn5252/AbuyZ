@@ -1,16 +1,44 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-export default function ProductSelectModal({ setModalOpen }) {
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+export default function ProductSelectModal({
+  setModalOpen,
+  setDate,
+  setImg,
+  setName,
+  setOptions,
+  setPrice,
+  setCount,
+  setSelected,
+  selected,
+}) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  const [selected, setSelected] = useState(0);
-
   const modalRef = useRef(null);
 
+  const productList = [
+    {
+      id: 0,
+      img: "/images/carrot.png",
+      name: "Only Price 1등급 당근 (300g * 2입)",
+      count: 1,
+      options: "1등급/ 세척",
+      price: 3000,
+      date: "2022.10.27",
+    },
+    {
+      id: 1,
+      img: "/images/sandwich.png",
+      name: "Only Price 샌드위치 (300g * 2입)",
+      count: 5,
+      options: "치킨마요",
+      price: 5000,
+      date: "2022.10.27",
+    },
+  ];
   useEffect(() => {
     // 이벤트 핸들러 함수
     const handler = () => {
@@ -30,119 +58,80 @@ export default function ProductSelectModal({ setModalOpen }) {
       // document.removeEventListener('touchstart', handler); // 모바일 대응
     };
   });
+
+  const selectfunction = () => {
+    setDate(productList[selected].date);
+    setImg(productList[selected].img);
+    setName(productList[selected].name);
+    setOptions(productList[selected].options);
+    setPrice(productList[selected].price);
+    setCount(productList[selected].count);
+    setModalOpen(false);
+  };
   return (
     <Container ref={modalRef}>
+      <CloseIconDiv>
+        <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
+      </CloseIconDiv>
       <div>
-        <Close onClick={closeModal}>X</Close>
         <h1 style={{ marginLeft: "3rem" }}>주문상품 선택</h1>
         <hr></hr>
         <Caution>1주일 이내 주문 내역만 노출됩니다.</Caution>
-        <br></br>
         <Date>
           {/* 7일전 ~ 오늘 날짜 */}
           2022.10.11 - 2022.10.18
         </Date>
         {/* for문으로 돌리기 */}
-        <Card>
-          <IconDiv>
-            {selected === 0 ? (
-              <div>
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </div>
-            ) : (
-              <div>
-                <FontAwesomeIcon icon={faCircle} />
-              </div>
-            )}
-          </IconDiv>
-          <div style={{ flex: 8 }}>
-            <div
-              style={{ ...cardStyle, ...(selected === 0 && cardSelect) }}
-              onClick={() => setSelected(0)}
-            >
+        {productList.map((e) => (
+          <Card
+            key={e.id}
+            style={{
+              ...cardStyle,
+              display: "flex",
+              flexDirection: "row",
+            }}
+            onClick={() => setSelected(e.id)}
+          >
+            <div style={{ flex: 1 }}>
+              <IconDiv>
+                {selected === e.id ? (
+                  <ExpandCircleDownOutlinedIcon
+                    sx={{ color: "#56a9f1" }}
+                  ></ExpandCircleDownOutlinedIcon>
+                ) : (
+                  <div>
+                    <CircleOutlinedIcon
+                      sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                    ></CircleOutlinedIcon>
+                  </div>
+                )}
+              </IconDiv>
+            </div>
+            <div style={{ flex: 11 }}>
               <RowDiv>
-                <div style={{ flex: 1 }}>
-                  <ImageStyle src={"/images/carrot.png"}></ImageStyle>
+                <div style={{ flex: 2 }}>
+                  <ImageStyle src={e.img}></ImageStyle>
                 </div>
-                <div style={{ flex: 7 }}>
+                <div style={{ flex: 9 }}>
                   {/* 상품 이름 */}
                   <TextDiv>
-                    <span>Only Price 1등급 당근 (300g * 2입)</span>
+                    <span style={{ fontWeight: "bold" }}>{e.name}</span>
                     <br></br>
                     <br></br>
                     {/* 가격 | 수량 */}
-                    <span>3500원 | 2개</span>
+                    <span>
+                      {e.price}원 | {e.count}개
+                    </span>
                   </TextDiv>
                   <br></br>
                 </div>
               </RowDiv>
             </div>
-          </div>
-        </Card>
+          </Card>
+        ))}
 
-        <Card>
-          <IconDiv>
-            {selected === 1 ? (
-              <div>
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </div>
-            ) : (
-              <div>
-                <FontAwesomeIcon icon={faCircle} />
-              </div>
-            )}
-          </IconDiv>
-          <div style={{ flex: 8 }}>
-            <div
-              style={{ ...cardStyle, ...(selected === 1 && cardSelect) }}
-              onClick={() => setSelected(1)}
-            >
-              <RowDiv>
-                <div style={{ flex: 1 }}>
-                  <ImageStyle src={"/images/carrot.png"}></ImageStyle>
-                </div>
-                <div style={{ flex: 7 }}>
-                  {/* 상품 이름 */}
-                  <TextDiv>
-                    <span>Only Price 1등급 당근 (300g * 2입)</span>
-                    <br></br>
-                    <br></br>
-                    {/* 가격 | 수량 */}
-                    <span>3500원 | 2개</span>
-                  </TextDiv>
-                  <br></br>
-                </div>
-              </RowDiv>
-            </div>
-          </div>
-        </Card>
-
-        {/* <div
-            style={{ ...cardStyle, ...(selected === 1 && cardSelect) }}
-            onClick={() => setSelected(1)}
-          >
-            {selected === 1 && (
-              <div className="select">
-                <FontAwesomeIcon icon={faCheckCircle} />
-              </div>
-            )}
-            <span>우유</span>
-          </div> */}
-        {/* <div
-            style={{ ...cardStyle, ...(selected === 2 && cardSelect) }}
-            onClick={() => setSelected(2)}
-          >
-            {selected === 2 && (
-              <div className="select">
-                <div className="select">
-                  <FontAwesomeIcon icon={faCheckCircle} />
-                </div>
-              </div>
-            )}
-            <span>베이글</span>
-          </div> */}
         <ButtonDiv>
-          <Button>선택완료</Button>
+          <Button onClick={selectfunction}>선택완료</Button>
         </ButtonDiv>
       </div>
     </Container>
@@ -157,16 +146,10 @@ const Container = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border: 1px solid #ff9494;
+  border: 1px solid #56a9f1;
   border-radius: 8px;
+  height: 70%;
 `;
-
-const Close = styled.button`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-`;
-
 const Caution = styled.p`
   margin-left: 3rem;
   margin-top: 3rem;
@@ -174,7 +157,7 @@ const Caution = styled.p`
 
 const Date = styled.p`
   margin-left: 3rem;
-  margin-top: 1rem;
+  color: rgb(128, 128, 128, 0.8);
 `;
 
 const Card = styled.div`
@@ -185,7 +168,7 @@ const Card = styled.div`
 const IconDiv = styled.div`
   flex: 1;
   margin-top: 3rem;
-  margin-left: 3rem;
+  margin-left: 1rem;
 `;
 
 const RowDiv = styled.div`
@@ -193,14 +176,10 @@ const RowDiv = styled.div`
   flex-direction: row;
 `;
 const cardStyle = {
-  width: "80%",
+  width: "90%",
   height: "6rem",
   background: "white",
   margin: "1rem",
-};
-
-const cardSelect = {
-  boxShadow: "2px 4px 30px 0px rgba(0, 0, 0, 0.75)",
 };
 
 const ButtonDiv = styled.div`
@@ -217,13 +196,20 @@ const Button = styled.button`
 `;
 
 const ImageStyle = styled.img`
-  width: 6rem;
-  height: 5rem;
+  width: 4em;
+  height: 6rem;
   margin-top: 0.5rem;
+  object-fit: cover;
   margin-left: 0.5rem;
 `;
 
 const TextDiv = styled.div`
   margin-top: 0.8rem;
   margin-left: 0.4rem;
+`;
+
+const CloseIconDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 `;
