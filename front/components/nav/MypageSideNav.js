@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import styled from "styled-components";
 
 export default function MypageSideNav(setTap) {
-  const [activeTap, SetActiveTap] = useState(1);
+  const [activeTap, SetActiveTap] = useState(0);
 
   const tap0Change = () => {
     setTap.setTap(0);
@@ -41,18 +41,6 @@ export default function MypageSideNav(setTap) {
           <SidebarList>
             <SidebarListItem>
               <TagButton
-                onClick={tap1Change}
-                style={
-                  activeTap === 1
-                    ? { color: "#56a9f1" }
-                    : { color: "rgb(197, 197, 197)" }
-                }
-              >
-                <p style={{ margin: "0", fontSize: "1rem" }}> MY PAGE</p>
-              </TagButton>
-            </SidebarListItem>
-            <SidebarListItem>
-              <TagButton
                 onClick={tap0Change}
                 style={
                   activeTap === 0
@@ -61,6 +49,18 @@ export default function MypageSideNav(setTap) {
                 }
               >
                 <p style={{ margin: "0", fontSize: "1rem" }}> 주문/리뷰</p>
+              </TagButton>
+            </SidebarListItem>
+            <SidebarListItem>
+              <TagButton
+                onClick={tap1Change}
+                style={
+                  activeTap === 1
+                    ? { color: "#56a9f1" }
+                    : { color: "rgb(197, 197, 197)" }
+                }
+              >
+                <p style={{ margin: "0", fontSize: "1rem" }}>찜한 상품</p>
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>
