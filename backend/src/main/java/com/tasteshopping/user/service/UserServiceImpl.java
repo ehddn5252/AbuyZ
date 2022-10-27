@@ -1,5 +1,6 @@
 package com.tasteshopping.user.service;
 
+import com.tasteshopping.common.service.RedisService;
 import com.tasteshopping.user.dto.*;
 import com.tasteshopping.user.entity.UserAddresses;
 import com.tasteshopping.user.entity.Users;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService{
     private final TokenProvider tokenProvider;
     private final JavaMailSenderImpl mailSender;
     private final UserAddressRepository userAddressRepository;
+    private final RedisService redisService;
     @Override
     @Transactional
     public ResponseDto signUp(UserDto userDto, LoginType loginType) {
@@ -129,7 +131,7 @@ public class UserServiceImpl implements UserService{
         String setFrom = "wlgns3914@naver.com";
         String toMail = email;
         String title = "회원 가입 인증 이메일 입니다.";
-        String content = "BUYZ를 방문해주셔서 감사합니다." +
+        String content = "ABUYZ를 방문해주셔서 감사합니다." +
                 "<br><br>" +
                 "인증 번호는 " + authNumber + "입니다." +
                 "<br>" +
@@ -147,20 +149,21 @@ public class UserServiceImpl implements UserService{
             responseDto.setMessage("이메일 전송에 실패했습니다.");
             return responseDto;
         }
-        // 5분 동안만 인증번호 저장
-//        redisUtil.setDataExpire(email, authNumber, 60 * 5L);
+
+        redisService.setDataExpire(email, authNumber, 60 * 10L);
+
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("인증 번호를 전송 완료");
         return responseDto;
     }
 
     @Override
-    public ResponseDto authenticationNumber(AuthenticationNumberDto authenticationNumberDto) {
+    public ResponseDto authenticationNumber(AuthenticationDto authenticationDto) {
         ResponseDto responseDto = new ResponseDto();
-//        if (!redisUtil.getData(email).equals(authNum)) {
-//            responseDto.setData(new ResultDto(false));
-//            responseDto.setMessage("불일치");
-//        }
+        if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("불일치");
+        }
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("일치");
         return responseDto;
@@ -185,7 +188,7 @@ public class UserServiceImpl implements UserService{
         String setFrom = "wlgns3914@naver.com";
         String toMail = checkUserInfoDto.getEmail();
         String title = "임시 비밀번호 발급 이메일 입니다.";
-        String content = "BUYZ를 방문해주셔서 감사합니다." +
+        String content = "ABUYZ를 방문해주셔서 감사합니다." +
                 "<br><br>" +
                 "임시 비밀번호는 "+ temp_pw  + "입니다." +
                 "<br>" +

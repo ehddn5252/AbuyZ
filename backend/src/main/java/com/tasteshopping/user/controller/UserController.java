@@ -67,8 +67,8 @@ public class UserController {
         return new ResponseEntity<>(userService.sendCertificationNumber(email),HttpStatus.OK);
     }
     @PostMapping("/authentication-email")
-    public ResponseEntity<ResponseDto>sendCertificationNumber (@RequestBody AuthenticationNumberDto authenticationNumberDto){
-        return new ResponseEntity<>(userService.authenticationNumber(authenticationNumberDto),HttpStatus.OK);
+    public ResponseEntity<ResponseDto>sendCertificationNumber (@RequestBody AuthenticationDto authenticationDto){
+        return new ResponseEntity<>(userService.authenticationNumber(authenticationDto),HttpStatus.OK);
     }
     @PostMapping("/addresses")
     public ResponseEntity<ResponseDto>addAddress(@AuthenticationPrincipal String email,
