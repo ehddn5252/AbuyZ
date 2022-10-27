@@ -18,11 +18,7 @@ export default function ReportCategory({ setReportSearch }) {
     { label: "주문, 결제" },
   ];
   const dateList = () => [{ label: "전체" }, { label: "문의일시" }];
-  const solvedList = () => [
-    { label: "전체" },
-    { label: "미답변" },
-    { label: "답변완료" },
-  ];
+
   const searchButton = () => {
     setReportSearch(true);
   };

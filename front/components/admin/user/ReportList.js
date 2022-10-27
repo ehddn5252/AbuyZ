@@ -147,13 +147,5 @@ const SolvedButton = styled.button`
   width: 5rem;
   padding: 0.5rem;
   border-radius: 3px;
-`;
-
-const NoButton = styled.button`
-  color: white;
-  font-weight: bold;
-  width: 5rem;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 3px;
+  cursor: pointer;
 `;
