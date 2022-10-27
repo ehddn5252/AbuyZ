@@ -4,7 +4,6 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 // MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -27,13 +26,13 @@ export default function MyinfoChange() {
   const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const changePhoneNumber = () => {
-    if (checkPhoneNumber === false) {
-      setCheckPhoneNumber(true);
-    } else {
-      setCheckPhoneNumber(false);
-    }
-  };
+  // const changePhoneNumber = () => {
+  //   if (checkPhoneNumber === false) {
+  //     setCheckPhoneNumber(true);
+  //   } else {
+  //     setCheckPhoneNumber(false);
+  //   }
+  // };
 
   const showModal = () => {
     setModalOpen(true);
@@ -247,7 +246,6 @@ export default function MyinfoChange() {
 
 const InfoContainer = styled.div`
   margin-top: 4rem;
-  margin-bottom: 4rem;
   width: 56rem;
 `;
 
@@ -258,7 +256,7 @@ const MajorTitle = styled.span`
 const ContentDiv = styled.div`
   border-radius: 1rem;
   width: 100%;
-  padding: 3rem;
+  padding: 1rem;
 `;
 
 const InfoChangeContainer = styled.div`
@@ -274,16 +272,6 @@ const SubButton = styled(Button)`
   height: 3.3rem;
   width: 100%;
   color: #56a9f1;
-`;
-
-const PhoneButton = styled.button`
-  background-color: white;
-  border: 1px solid;
-  border-color: #56a9f1;
-  height: 3.3rem;
-  width: 100%;
-  color: #56a9f1;
-  border-radius: 5px;
 `;
 
 const QuitButton = styled.button`

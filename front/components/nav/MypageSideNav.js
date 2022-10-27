@@ -84,7 +84,7 @@ export default function MypageSideNav(setTap) {
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                <p style={{ margin: "0", fontSize: "1rem" }}>쿠폰함</p>
+                <p style={{ margin: "0", fontSize: "1rem" }}>쿠폰</p>
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>

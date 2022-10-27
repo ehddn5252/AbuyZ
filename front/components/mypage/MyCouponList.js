@@ -13,24 +13,46 @@ import MyCouponItem from "./MyCouponItem";
 export default function MyCouponList() {
   const [couponList, setCouponList] = useState([
     {
+      id: 0,
       couponName: "잇다 출시기념 감사 쿠폰",
       saleprice: "3000 원",
+      startPeriod: "2022.10.18",
       expirationPeriod: "2022.10.19",
+      used: false,
+    },
+    {
+      id: 1,
+      couponName: "잇다 출시기념 감사 쿠폰123",
+      saleprice: "3000 원",
+      startPeriod: "2022.10.18",
+      expirationPeriod: "2022.10.19",
+      used: true,
     },
   ]); // eslint-disable-line no-unused-vars
   // const [couponList, setCouponList] = useState([]);
   useEffect(() => {
     setCouponList([
       {
+        id: 0,
         couponName: "잇다 출시기념 감사 쿠폰",
         saleprice: "3000 원",
+        startPeriod: "2022.10.18",
         expirationPeriod: "2022.10.19",
+        used: false,
+      },
+      {
+        id: 1,
+        couponName: "잇다 출시기념 감사 쿠폰123",
+        saleprice: "3000 원",
+        startPeriod: "2022.10.18",
+        expirationPeriod: "2022.10.19",
+        used: true,
       },
     ]);
   }, []);
   return (
     <MyComplainContainer>
-      <MajorTitle>쿠폰함</MajorTitle>
+      <MajorTitle>쿠폰</MajorTitle>
       <hr
         style={{
           height: "0.3rem",
@@ -39,11 +61,7 @@ export default function MyCouponList() {
         }}
       />
       {couponList.length ? (
-        <CouponListBox>
-          <MyCouponItem coupon={couponList[0]} />
-          <MyCouponItem coupon={couponList[0]} />
-          <MyCouponItem coupon={couponList[0]} />
-        </CouponListBox>
+        <MyCouponItem couponList={couponList}></MyCouponItem>
       ) : (
         <BlankBox>
           <LocalOfferOutlinedIcon sx={{ fontSize: "6rem" }} />
@@ -56,7 +74,6 @@ export default function MyCouponList() {
 
 const MyComplainContainer = styled.div`
   margin-top: 4.5rem;
-  margin-bottom: 4rem;
   width: 56rem;
 `;
 
@@ -65,8 +82,6 @@ const MajorTitle = styled.span`
 `;
 
 const CouponListBox = styled.div`
-  display: flex;
-  justify-content: space-evenly;
   margin-top: 3rem;
 `;
 
@@ -80,4 +95,8 @@ const BlankBox = styled.div`
   font-size: 3rem;
   font-weight: bolder;
   color: #aaaaaa;
+`;
+
+const DailyTable = styled.table`
+  width: 100%;
 `;
