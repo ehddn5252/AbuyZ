@@ -1,9 +1,6 @@
 // React
 import React, { useState } from "react";
 
-// MUI
-import Box from "@mui/material/Box";
-
 // StyledComponents
 import styled from "styled-components";
 
@@ -11,26 +8,22 @@ import styled from "styled-components";
 import ReviewCategory from "../../../components/admin/user/ReviewCategory";
 import ReviewList from "../../../components/admin/user/ReviewList";
 
-export default function User() {
+export default function Review() {
   const [reviewSearch, setReviewSearch] = useState(false);
 
   return (
     <Container>
-      <Box>
-        <Box>
-          <ReviewCategory setReviewSearch={setReviewSearch} />
-          {reviewSearch ? <ReviewList /> : null}
-        </Box>
-      </Box>
+      <ReviewCategory setReviewSearch={setReviewSearch} />
+      {reviewSearch ? <ReviewList /> : null}
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   background: #edf0f5;
-  height: 88vh;
   padding: 3rem;
   padding-left: 15rem;
+  height: 89vh;
 `;
