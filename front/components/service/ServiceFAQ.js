@@ -77,7 +77,7 @@ export default function ServiceFAQ() {
       </RowDiv>
       {faq2 == 1 ? (
         <SpanStyle>
-          <span>비밀번호 변경은 마이페이지 > 내 정보 수정에서 가능합니다.</span>
+          <span>비밀번호 변경은 마이페이지 내 정보 수정에서 가능합니다.</span>
         </SpanStyle>
       ) : null}
 
@@ -96,8 +96,8 @@ export default function ServiceFAQ() {
       {faq3 == 1 ? (
         <SpanStyle>
           <span>
-            상품을 받으신 후에, 고객센터 > 1:1 문의하기에 교환/환불을 클릭하신
-            후 접수 가능합니다.
+            상품을 받으신 후에, 고객센터 1:1 문의하기에 교환/환불을 클릭하신 후
+            접수 가능합니다.
           </span>
           <br></br>
           <span>
@@ -122,8 +122,8 @@ export default function ServiceFAQ() {
       {faq4 == 1 ? (
         <SpanStyle>
           <span>
-            마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증
-            진행/완료 후 가능하십니다. <br></br>
+            마이롯데 회원 정보 관리 회원탈퇴 ‘탈퇴’ 버튼 클릭 인증 진행/완료 후
+            가능하십니다. <br></br>
             <br></br>답변이 충분하지 않으셨다면 1:1 문의하기 또는 고객센터
             전화상담을 이용해주시기 바랍니다. <br></br>감사합니다.
           </span>

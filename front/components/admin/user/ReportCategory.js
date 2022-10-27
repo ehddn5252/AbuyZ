@@ -2,15 +2,15 @@
 import React from "react";
 
 // MUI
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
 
 // StyledComponent
 import styled from "styled-components";
 
-export default function ServiceCategory({ setSearch }) {
+export default function ReportCategory({ setReportSearch }) {
   const inquiryList = () => [
     { label: "전체" },
     { label: "상품문의" },
@@ -24,17 +24,17 @@ export default function ServiceCategory({ setSearch }) {
     { label: "답변완료" },
   ];
   const searchButton = () => {
-    setSearch(true);
+    setReportSearch(true);
   };
   const resetButton = () => {
-    setSearch(false);
+    setReportSearch(false);
   };
   return (
     <Container>
       <SearchBox>
         <ColumnBox>
           <TitleDiv>
-            <p style={{ margin: 0 }}>문의사유</p>
+            <p style={{ margin: 0 }}>신고 사유</p>
           </TitleDiv>
           <CategoryDiv>
             <Autocomplete
@@ -48,7 +48,7 @@ export default function ServiceCategory({ setSearch }) {
         </ColumnBox>
         <ColumnBox>
           <TitleDiv>
-            <p style={{ margin: 0 }}>문의명</p>
+            <p style={{ margin: 0 }}>제품명</p>
           </TitleDiv>
           <CategoryDiv>
             <TextField sx={{ width: 400, paddingLeft: "2rem" }} />
@@ -70,7 +70,7 @@ export default function ServiceCategory({ setSearch }) {
         </ColumnBox>
         <ColumnBox>
           <TitleDiv>
-            <p style={{ margin: 0 }}>답변유무</p>
+            <p style={{ margin: 0 }}>승인 유무</p>
           </TitleDiv>
           <CategoryDiv>
             <Checkbox
@@ -80,9 +80,11 @@ export default function ServiceCategory({ setSearch }) {
             />
             <p style={{ paddingRight: "2rem" }}>전체</p>
             <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>미답변</p>
+            <p style={{ paddingRight: "2rem" }}>대기</p>
             <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>답변완료</p>
+            <p style={{ paddingRight: "2rem" }}>거절</p>
+            <Checkbox name="check" />
+            <p style={{ paddingRight: "2rem" }}>승인</p>
           </CategoryDiv>
         </ColumnBox>
         <ButtonDiv>
