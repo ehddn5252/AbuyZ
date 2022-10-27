@@ -59,12 +59,15 @@ public class CustomerCenterController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 상세 성공",customerCenterDto));
     }
 
+
+
     @PostMapping()
-    public ResponseEntity<BaseRes> writeInquiry(@AuthenticationPrincipal String email,@RequestBody CustomerCenterWriteReqDto customerCenterWriteReqDto, @RequestPart(name = "file",required = false) MultipartFile multipartFile) {
+    public ResponseEntity<BaseRes> writeInquiry(@AuthenticationPrincipal String email,
+                                                    @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
+                                                    @RequestPart(name = "file",required = false) MultipartFile multipartFile) {
         if (email.equals("anonymousUser")){
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
         try {
@@ -80,6 +83,7 @@ public class CustomerCenterController {
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
 
     @DeleteMapping("/{uid}")
     public ResponseEntity<BaseRes> deleteInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid) {

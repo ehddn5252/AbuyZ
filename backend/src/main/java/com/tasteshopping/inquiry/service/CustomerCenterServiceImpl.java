@@ -99,6 +99,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             customerCenter.setTitle(customerCenterWriteReqDto.getTitle());
             customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
             customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
+            customerCenter.setUser(usersOptional.get());
             customerCenterRepository.save(customerCenter);
             baseRes.setStatusCode(200);
             baseRes.setMessage("문의 작성 성공");
@@ -132,7 +133,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             CustomerCenters parentCustomerCenter = null;
             if(parentCustomerCentersOptional.isPresent()){
                 parentCustomerCenter = parentCustomerCentersOptional.get();
-                System.out.println(parentCustomerCenter.getTitle());
             }
             childCustomerCenter.setDate(date);
             childCustomerCenter.setUser(usersOptional.get());
