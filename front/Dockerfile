@@ -1,7 +1,5 @@
 # build stage
 FROM node:lts-alpine as build-stage
-RUN mkdir .next
-WORKDIR /.next
 COPY package*.json ./
 RUN yarn install
 COPY . .
