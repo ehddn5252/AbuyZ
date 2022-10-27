@@ -1,6 +1,8 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +18,7 @@ public interface ProductService {
 
     public Optional<Integer> getMaxUid();
 
-    public void createProductRelated(ProductCreateDto productCreateDto);
+    public BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
 
     public void deleteProduct(Integer uid);
 

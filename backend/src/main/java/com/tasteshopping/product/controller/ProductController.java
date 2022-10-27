@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -145,13 +146,23 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
 
+//    @PostMapping("/register")
+//    public ResponseEntity<BaseRes> register(@RequestBody ProductCreateReqDto productCreateReqDto) {
+//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
+//        // 상품 관련된 모든 것 생성
+//        productService.createProductRelated(productCreateDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
+//    }
+
     @PostMapping("/register")
-    public ResponseEntity<BaseRes> register(@RequestBody ProductCreateReqDto productCreateReqDto) {
+    public ResponseEntity<BaseRes> registerImgTest(@RequestPart ProductCreateReqDto productCreateReqDto,
+                                                   @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         // 상품 관련된 모든 것 생성
-        productService.createProductRelated(productCreateDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
+
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto,multipartFiles));
     }
+
 
     @DeleteMapping()
     public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
