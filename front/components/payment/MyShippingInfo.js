@@ -46,16 +46,15 @@ export default function MyShippingInfo() {
   // }, [cellphone]);
   return (
     <div>
-      <h1>배송정보</h1>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span style={{ fontWeight: "bold", fontSize: "1.5rem" }}>배송정보</span>
+        <button onClick={() => setAddress(!address)}>배송지 변경</button>
+      </div>
       <hr></hr>
 
       {address == 0 ? (
         <div>
-          <ButtonDiv>
-            <button onClick={() => setAddress(!address)}>
-              배송지 새로 입력하기
-            </button>
-          </ButtonDiv>
+          <ButtonDiv></ButtonDiv>
           <ShipDiv>
             <TwoFlexDiv>
               <span>받는 분</span>

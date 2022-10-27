@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-export default function MyShippingSelectModal({ setModalOpen }) {
+export default function MyCouponSelectModal({ setModalOpen }) {
   const closeModal = () => {
     setModalOpen(false);
   };

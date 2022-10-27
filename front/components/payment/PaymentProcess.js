@@ -5,7 +5,7 @@ export default function PaymentProcess() {
 
   return (
     <div>
-      <h1>결제수단</h1>
+      <span style={{ fontWeight: "bold", fontSize: "1.5rem" }}>결제 수단</span>
       <hr></hr>
       <AllDiv>
         <div
