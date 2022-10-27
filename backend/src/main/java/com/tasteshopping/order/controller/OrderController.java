@@ -40,7 +40,7 @@ public class OrderController {
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
         orderService.cartPay(email);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 
     @PostMapping("/basic")
@@ -48,14 +48,9 @@ public class OrderController {
         CartDto cartDto = cartReqDto.toDto();
 
         orderService.basicPay(email,cartDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 
-//    @GetMapping("/cart")
-//    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
-//        orderService.cartPay(email);
-//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
-//    }
 
     @GetMapping("/success")
     public ResponseEntity<BaseRes> kakaoSuccess( @RequestParam String pg_token) {
@@ -73,8 +68,6 @@ public class OrderController {
 
     @GetMapping("/lastOrder")
     public ResponseEntity<BaseRes> getLastOrder() {
-
-
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "kakao test 성공!"));
     }
 }
