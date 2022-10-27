@@ -93,7 +93,7 @@ public class OrderServiceImpl implements OrderService{
             totalPrice += products.getPrice() * cart.getProductCount();
 
             orderRepository.save(orders);
-            cartRepository.delete(cart);
+//            cartRepository.delete(cart);
         }
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);

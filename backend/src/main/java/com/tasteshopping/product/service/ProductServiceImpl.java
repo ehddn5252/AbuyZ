@@ -82,23 +82,59 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+//    @Override
+//    public void modifyProductPicture(ProductCreateDto productCreateDto) {
+//        // product 변경
+//        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
+//
+//        // save imgs
+//        int count = 0;
+//        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
+//        for (String key : imgs.keySet()) {
+//            if (count == 0) {
+//                //save product
+//                count += 1;
+//                pp.setRepImg(imgs.get(key));
+//                productRepository.save(pp);
+//            }
+//            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
+//        }
+//    }
+
+
     @Override
-    public void modifyProductPicture(ProductCreateDto productCreateDto) {
+    public void modifyProductPicture(ProductCreateDto productCreateDto,
+                                     MultipartFile[] multipartFiles) {
+        int productUid = productCreateDto.getProductsUid();
+
         // product 변경
-        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
+        productPictureRepository.deleteByProductsUid(productUid);
 
         // save imgs
-        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
+        Products pp = productRepository.findById(productUid).get();
+        System.out.println("=================================");
+        System.out.println(pp);
+        // save imgs
         int count = 0;
-        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
-        for (String key : imgs.keySet()) {
-            if (count == 0) {
-                //save product
-                count += 1;
-                pp.setRepImg(imgs.get(key));
-                productRepository.save(pp);
+        String imagePath = null; //파일서버에업로드후 img_url 데려오기
+        if(multipartFiles.length==0){
+            productRepository.save(pp);
+        }
+        for (int i=0;i<multipartFiles.length;++i) {
+            try {
+                imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+                if (count == 0) {
+                    //save product
+                    count += 1;
+                    pp.setRepImg(imagePath);
+                    productRepository.save(pp);
+                } else {
+                    productPictureService.createProductPicture(productUid, imagePath);
+                }
             }
-            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
+            catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -242,13 +278,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void modifyProductRelated(ProductCreateDto productCreateDto) {
+    public void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles) {
         // 상품 변경
         modifyProduct(productCreateDto);
 
         // 상품 이미지 변경 (삭제 후 생성)
-        modifyProductPicture(productCreateDto);
-
+        if(multipartFiles!=null) {
+            modifyProductPicture(productCreateDto, multipartFiles);
+        }
         // product_options 변경 (삭제 후 생성)
         modifyProductOption(productCreateDto);
 
