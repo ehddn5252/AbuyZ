@@ -8,8 +8,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
+
+import styled from "styled-components";
 
 import ReportItemModal from "./ReportItemModal";
 
@@ -21,68 +22,97 @@ export default function ReportList() {
   const rows = [
     {
       id: 0,
-      nickname: "권도건",
-      product: "제주 햇 감귤 4.5kg",
-      content: "원산지 표시가 잘못됬다 이거사지마라 이거 사기다. 이개...",
-      cause: "환불 / 교환",
-      date: "2022.10.22",
-      solved: "해결",
+      nickname: "dogeon123",
+      product: "Jeep 맨투맨",
+      content: "흰색이라고 해서 구매했는데 검은색이 왔네요.",
+      cause: "허위사실유포",
+      report_date: "2022.10.23 15:30",
+      solved_date: "-",
+      solved: "대기",
     },
     {
       id: 1,
-      nickname: "권도건",
-      product: "제주 햇 감귤 4.5kg",
-      content: "원산지 표시가 잘못됬다 이거사지마라 이거 사기다. 이개...",
-      cause: "환불 / 교환",
-      date: "2022.10.22",
-      solved: "미해결",
+      nickname: "hello321",
+      product: "아몬드 빼빼로",
+      content: "빼빼로데이 이벤트 언제부터 진행하나요?",
+      cause: "허위사실유포",
+      report_date: "2022.10.23 16:30",
+      solved_date: "2022.10.26 15:30",
+      solved: "거절",
+    },
+    {
+      id: 2,
+      nickname: "ssafy1010",
+      product: "강아지 사료",
+      content: "강아지 사료에서 머리카락이 나왔어요. 사진 첨부...",
+      cause: "허위사실유포",
+      report_date: "2022.10.23 17:30",
+      solved_date: "2022.10.25 15:30",
+      solved: "승인",
     },
   ];
   return (
-    <TableContainer component={Paper} sx={{ margin: "2rem" }}>
-      <Table sx={{ minWidth: 100 }} aria-label="simple table">
-        <TableHead>
+    <TableContainer component={Paper} sx={{ paddingTop: "2rem" }}>
+      <Table
+        sx={{
+          minWidth: 100,
+          border: "1px solid black",
+          borderCollapse: "collapse",
+        }}
+      >
+        <TableHead
+          sx={{
+            backgroundColor: "#C5E2FF",
+            border: "1px solid black",
+            borderCollapse: "collapse",
+          }}
+        >
           <TableRow>
-            <TableCell>닉네임</TableCell>
-            <TableCell align="center">제품 명</TableCell>
-            <TableCell align="center">리뷰 내용</TableCell>
-            <TableCell align="center">신고 사유</TableCell>
-            <TableCell align="center">작성 일</TableCell>
-            <TableCell align="center">해결 유무</TableCell>
+            <HeadTableCell align="center">해결 유무</HeadTableCell>
+            <HeadTableCell align="center">신고 사유</HeadTableCell>
+            <HeadTableCell align="center">상품명</HeadTableCell>
+            <HeadTableCell align="center">리뷰 내용</HeadTableCell>
+            <HeadTableCell align="center">신고 일시</HeadTableCell>
+            <HeadTableCell align="center">처리 일시</HeadTableCell>
+            <HeadTableCell align="center">작성자</HeadTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.nickname}
-              </TableCell>
-              <TableCell align="center">{row.product}</TableCell>
-              <TableCell align="center">{row.content}</TableCell>
-              <TableCell align="center">{row.cause}</TableCell>
-              <TableCell align="center">{row.date}</TableCell>
-              <TableCell align="center">
-                {row.solved === "해결" ? (
-                  <Button
+            <TableRow key={row.id}>
+              <BodyTableCell align="center" component="th" scope="row">
+                {row.solved === "대기" ? (
+                  <SolvedButton
                     onClick={handleOpen}
-                    variant="contained"
-                    color="success"
+                    style={{ backgroundColor: "#7A7A7A" }}
                   >
-                    {row.solved}
-                  </Button>
-                ) : (
-                  <Button
+                    대기
+                  </SolvedButton>
+                ) : null}
+                {row.solved === "거절" ? (
+                  <SolvedButton
                     onClick={handleOpen}
-                    variant="contained"
-                    color="error"
+                    style={{ backgroundColor: "#FB5757" }}
                   >
-                    {row.solved}
-                  </Button>
-                )}
-              </TableCell>
+                    거절
+                  </SolvedButton>
+                ) : null}
+                {row.solved === "승인" ? (
+                  <SolvedButton
+                    onClick={handleOpen}
+                    style={{ backgroundColor: "#57A9FB" }}
+                  >
+                    승인
+                  </SolvedButton>
+                ) : null}
+              </BodyTableCell>
+              <BodyTableCell align="center">{row.cause}</BodyTableCell>
+              <BodyTableCell>{row.product}</BodyTableCell>
+              <BodyTableCell>{row.content}</BodyTableCell>
+              <BodyTableCell align="center">{row.report_date}</BodyTableCell>
+              <BodyTableCell align="center">{row.solved_date}</BodyTableCell>
+              <BodyTableCell align="center">{row.nickname}</BodyTableCell>
+
               <Modal
                 open={open}
                 onClose={handleClose}
@@ -98,3 +128,32 @@ export default function ReportList() {
     </TableContainer>
   );
 }
+
+const HeadTableCell = styled(TableCell)`
+  border: 1px solid black;
+  border-collapse: collapse;
+`;
+
+const BodyTableCell = styled(TableCell)`
+  border: 1px solid black;
+  border-collapse: collapse;
+`;
+
+const SolvedButton = styled.button`
+  color: white;
+  background-color: #57a9fb;
+  font-weight: bold;
+  border: none;
+  width: 5rem;
+  padding: 0.5rem;
+  border-radius: 3px;
+`;
+
+const NoButton = styled.button`
+  color: white;
+  font-weight: bold;
+  width: 5rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 3px;
+`;
