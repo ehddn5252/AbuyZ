@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MyShippingSelectModal from "./MyShippingSelectModal";
+import MyCouponSelectModal from "./MyCouponSelectModal";
 
 export default function ProductSaleInfo() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -10,7 +10,9 @@ export default function ProductSaleInfo() {
   };
   return (
     <div>
-      <h1>할인 및 쿠폰 정보</h1>
+      <span style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+        할인 및 쿠폰 정보
+      </span>
       <hr></hr>
       <AllDiv>
         <LeftDiv>
@@ -57,9 +59,7 @@ export default function ProductSaleInfo() {
         </RightDiv>
       </AllDiv>
       {modalOpen && (
-        <MyShippingSelectModal
-          setModalOpen={setModalOpen}
-        ></MyShippingSelectModal>
+        <MyCouponSelectModal setModalOpen={setModalOpen}></MyCouponSelectModal>
       )}
     </div>
   );

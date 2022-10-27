@@ -4,19 +4,20 @@ import MyShippingInfo from "../components/payment/MyShippingInfo";
 import PaymentProcess from "../components/payment/PaymentProcess";
 import ProductSaleInfo from "../components/payment/ProductSaleInfo";
 import ProductSimpleInfo from "../components/payment/ProductSimpleInfo";
-
+import { Container } from "@mui/system";
 export default function Payment() {
   return (
-    <div>
+    <Container maxWidth="xl" sx={{ my: 10 }}>
       <Center>
         <h1> 주문 / 결제</h1>
       </Center>
       <Card>
-        <MyShippingInfo />
-      </Card>
-      <Card>
         <ProductSimpleInfo />
       </Card>
+      <Card>
+        <MyShippingInfo />
+      </Card>
+
       <Card>
         <ProductSaleInfo />
       </Card>
@@ -26,7 +27,7 @@ export default function Payment() {
       <ButtonDiv>
         <Button>결제하기</Button>
       </ButtonDiv>
-    </div>
+    </Container>
   );
 }
 
