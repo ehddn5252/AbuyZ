@@ -39,12 +39,18 @@ export default function ReportItemModal({ row }) {
           </ContentP>
         </ContentBox>
       </ContentDiv>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <RefusalButton>거절</RefusalButton>
-        <AcceptButton>승인</AcceptButton>
-      </Box>
+      {row.solved ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <RefusalButton>거절</RefusalButton>
+          <AcceptButton>승인</AcceptButton>
+        </Box>
+      ) : null}
     </Container>
   );
 }
