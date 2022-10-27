@@ -39,4 +39,5 @@ public interface ProductRepository extends JpaRepository<Products,Integer> {
 
     @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
     Optional<Products> findProductDetailByProductsUid(int productsUid);
+
 }

@@ -51,7 +51,11 @@ public class ProductController {
         List<ProductDto> l = new ArrayList<>();
 
         // price 로 찾기
-        if (searchDto.getPriceUid() != null) {
+        if(searchDto.getStartPrice() !=null && searchDto.getEndPrice() !=null){
+            l = productService.getProductBySmallCategoryAndPriceBetween(searchDto.getSmallCategoriesUid(),searchDto.getStartPrice(),searchDto.getEndPrice());
+        }
+
+        else if (searchDto.getPriceUid() != null) {
 //            l = productService.getProductByPrice(searchDto.getPriceUid());
             l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(),searchDto.getPriceUid());
         }
@@ -89,6 +93,25 @@ public class ProductController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
+
+    @PostMapping("/fo-search/keyword/detail")
+    public ResponseEntity<BaseRes> foSearchKeywordAndFilter(@RequestBody SearchReqDto searchReqDto) {
+        SearchDto searchDto = searchReqDto.toDto();
+        // 제목으로 검색한 기록
+        List<ProductDto> newL = productService.findByKeyword(searchDto.getKeyword());
+        // 키워드로 검색한 기록
+        if (newL.size() == 0) {
+            newL = productKeywordService.findByParamInKeyword(searchDto.getKeyword());
+        }
+        for(int i=0;i<newL.size();++i){
+            System.out.println(newL.get(i).getBigCategoryUid());
+
+        }
+        newL =productService.findByKeywordAndFilter(newL,searchDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
+    }
+
 
 //    @PostMapping("/detail")
 //    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {

@@ -1,10 +1,10 @@
 package com.tasteshopping.order.controller;
 
+import com.tasteshopping.cart.dto.CartDto;
+import com.tasteshopping.cart.dto.CartReqDto;
+import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
-import com.tasteshopping.order.dto.OrderReqDto;
-import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,12 +31,6 @@ public class OrderController {
     @Autowired
     OrderListService orderListService;
 
-
-    @PostMapping("/register")
-    public ResponseEntity<BaseRes> test() {
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!"));
-    }
-
     @GetMapping("")
     public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
         List<OrderListDto> orderListDtos = orderListService.getOrderLists(email);
@@ -50,11 +43,19 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
 
-    @GetMapping("/cart")
-    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
-        orderService.cartPay(email);
+    @PostMapping("/basic")
+    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,@RequestBody CartReqDto cartReqDto){
+        CartDto cartDto = cartReqDto.toDto();
+
+        orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
     }
+
+//    @GetMapping("/cart")
+//    public ResponseEntity<BaseRes> getPay(@AuthenticationPrincipal String email){
+//        orderService.cartPay(email);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결재하기 성공!"));
+//    }
 
     @GetMapping("/success")
     public ResponseEntity<BaseRes> kakaoSuccess( @RequestParam String pg_token) {
