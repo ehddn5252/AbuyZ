@@ -54,6 +54,19 @@ public class UserAddresses {
         this.note = userAddress.getNote();
         this.postalCode = userAddress.getPostalCode();
         this.recipient = userAddress.getRecipient();
+    }
+    public UserAddressDto toDto(){
 
+        return UserAddressDto.builder()
+                .uid(this.uid)
+                .address(this.address)
+                .detailAddress(this.detailAddress)
+                .contact1(this.contact1)
+                .contact2(this.contact2)
+                .note(this.note)
+                .nickname(this.nickname)
+                .postalCode(this.postalCode)
+                .recipient(this.recipient)
+                .build();
     }
 }

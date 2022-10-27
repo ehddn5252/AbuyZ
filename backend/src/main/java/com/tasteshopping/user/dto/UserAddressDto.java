@@ -7,6 +7,7 @@ import lombok.*;
 @Data
 @Builder
 public class UserAddressDto {
+    private int uid;
     private String nickname;
     private String address;
     private String detailAddress;

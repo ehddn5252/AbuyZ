@@ -20,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -262,8 +260,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseDto getAddresses(String email) {
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        List<UserAddresses>findAddresses = userAddressRepository.findByUserEmail(email);
+        List<UserAddressDto>userAddresses = new ArrayList<>();
+        for(UserAddresses userAddress:findAddresses){
+            userAddresses.add(userAddress.toDto());
+        }
+        responseDto.setData(userAddresses);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
     }
 
     @Override
