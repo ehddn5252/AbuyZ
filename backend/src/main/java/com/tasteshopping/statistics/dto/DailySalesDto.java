@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TotalSaleDto {
-    private int total_sales;
+public class DailySalesDto {
+    private Date date;
+    private int sales;
 }
