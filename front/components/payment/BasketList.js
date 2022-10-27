@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-
+import CheckBox from "@mui/material/Checkbox";
 // StyeldComponet
 import styled from "styled-components";
 
@@ -28,6 +28,10 @@ export default function BasketList() {
     <Container>
       {basketList.length ? (
         <BasketBox>
+          <CheckDiv>
+            <CheckBox defaultChecked />
+            <p style={{ fontSize: "1.4rem" }}>전체 선택 (2/2)</p>
+          </CheckDiv>
           <BasketItem basket={basketList[0]} />
           <BasketItem basket={basketList[0]} />
         </BasketBox>
@@ -42,16 +46,20 @@ export default function BasketList() {
 }
 
 const Container = styled.div`
-  width: 100%;
+  margin: 0;
+  padding: 0;
+  width: 70%;
 `;
 
 const BasketBox = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 3rem;
-  margin-left: 3rem;
-  width: 90%;
+  justify-content: center;
+  width: 100%;
+`;
+
+const CheckDiv = styled.div`
+  display: flex;
 `;
 
 const BlankBox = styled.div`
