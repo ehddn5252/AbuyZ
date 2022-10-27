@@ -77,53 +77,53 @@ export default function Nav() {
             <Menu id="menu">
               <MajorMenu>
                 <MenuTitle>식품</MenuTitle>
-                <MenuList>
+                {/* <MenuList>
                   <MenuItem>과일</MenuItem>
                   <MenuItem>채소</MenuItem>
                   <MenuItem>고기</MenuItem>
                   <MenuItem>과자/디저트/아이스크림</MenuItem>
                   <MenuItem>생수/음료/주류</MenuItem>
-                </MenuList>
+                </MenuList> */}
               </MajorMenu>
               <MajorMenu>
                 <MenuTitle>생활건강</MenuTitle>
-                <MenuList>
+                {/* <MenuList>
                   <MenuItem>의류</MenuItem>
                   <MenuItem>언더웨어</MenuItem>
                   <MenuItem>신발</MenuItem>
                   <MenuItem>가방</MenuItem>
                   <MenuItem>악세서리</MenuItem>
-                </MenuList>
+                </MenuList> */}
               </MajorMenu>
               <MajorMenu>
                 <MenuTitle>가구/인테리어</MenuTitle>
-                <MenuList>
+                {/* <MenuList>
                   <MenuItem>주방가구</MenuItem>
                   <MenuItem>거실가구</MenuItem>
                   <MenuItem>커튼/블라인드</MenuItem>
                   <MenuItem>학생/사무가구</MenuItem>
                   <MenuItem>침실가구</MenuItem>
-                </MenuList>
+                </MenuList> */}
               </MajorMenu>
               <MajorMenu>
                 <MenuTitle>반려/도서/취미</MenuTitle>
-                <MenuList>
+                {/* <MenuList>
                   <MenuItem>도서</MenuItem>
                   <MenuItem>노트/다이어리</MenuItem>
                   <MenuItem>사료</MenuItem>
                   <MenuItem>필기류</MenuItem>
                   <MenuItem>반려 동물 용품</MenuItem>
-                </MenuList>
+                </MenuList> */}
               </MajorMenu>
               <MajorMenu>
                 <MenuTitle>뷰티</MenuTitle>
-                <MenuList>
+                {/* <MenuList>
                   <MenuItem>스킨케어</MenuItem>
                   <MenuItem>향수</MenuItem>
                   <MenuItem>헤어/바디</MenuItem>
                   <MenuItem>메이크업</MenuItem>
                   <MenuItem>네일</MenuItem>
-                </MenuList>
+                </MenuList> */}
               </MajorMenu>
             </Menu>
           </CategoryTagBox>
@@ -259,7 +259,7 @@ const Menu = styled.ul`
   flex-direction: column;
   align-items: flex-start;
   padding: 0;
-  top: 20%;
+  top: 14.1%;
   position: absolute;
   margin-top: 2.5rem;
   list-style: none;
@@ -299,6 +299,6 @@ const MenuList = styled.li`
   }
 `;
 
-const MenuTitle = styled.li``;
+const MenuTitle = styled.div``;
 
 const MenuItem = styled.li``;
