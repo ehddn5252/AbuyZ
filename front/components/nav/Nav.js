@@ -8,13 +8,13 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
-
+import MenuIcon from "@mui/icons-material/Menu";
 export default function Nav() {
   return (
-    <div style={{ marginBottom: "1rem" }}>
+    <Container>
       <NavContainer>
         <UserBox>
           <UserLink href="/login">로그인</UserLink>
@@ -44,13 +44,10 @@ export default function Nav() {
           <div style={{ display: "flex" }}>
             <IconBox>
               <Link href="/event">
-                <EventAvailableOutlinedIcon
+                <FavoriteBorderOutlinedIcon
                   fontSize="large"
                   sx={{ color: "black" }}
                 />
-              </Link>
-              <Link href="/event" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>이벤트</IconTitle> */}
               </Link>
             </IconBox>
             <IconBox>
@@ -60,19 +57,13 @@ export default function Nav() {
                   sx={{ color: "black" }}
                 />
               </Link>
-              <Link href="/mypage" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>마이페이지</IconTitle> */}
-              </Link>
             </IconBox>
             <IconBox>
               <Link href="/basket">
                 <ShoppingBasketOutlinedIcon
                   fontSize="large"
-                  sx={{ color: "black" }}
+                  sx={{ color: "black", fontWeight: 100 }}
                 />
-              </Link>
-              <Link href="/basket" sx={{ textDecoration: "none" }}>
-                {/* <IconTitle>장바구니</IconTitle> */}
               </Link>
             </IconBox>
           </div>
@@ -81,64 +72,84 @@ export default function Nav() {
       <CategoryBox>
         <CategoryContainer>
           <CategoryTagBox>
-            <CategoryTitle>식품</CategoryTitle>
+            <MenuIcon sx={{ marginRight: "1rem" }} />
+            <CategoryTitle>카테고리</CategoryTitle>
             <Menu id="menu">
-              <MenuItem>과일</MenuItem>
-              <MenuItem>채소</MenuItem>
-              <MenuItem>고기</MenuItem>
-              <MenuItem>과자/디저트/아이스크림</MenuItem>
-              <MenuItem>생수/음료/주류</MenuItem>
+              <MajorMenu>
+                <MenuTitle>식품</MenuTitle>
+                {/* <MenuList>
+                  <MenuItem>과일</MenuItem>
+                  <MenuItem>채소</MenuItem>
+                  <MenuItem>고기</MenuItem>
+                  <MenuItem>과자/디저트/아이스크림</MenuItem>
+                  <MenuItem>생수/음료/주류</MenuItem>
+                </MenuList> */}
+              </MajorMenu>
+              <MajorMenu>
+                <MenuTitle>생활건강</MenuTitle>
+                {/* <MenuList>
+                  <MenuItem>의류</MenuItem>
+                  <MenuItem>언더웨어</MenuItem>
+                  <MenuItem>신발</MenuItem>
+                  <MenuItem>가방</MenuItem>
+                  <MenuItem>악세서리</MenuItem>
+                </MenuList> */}
+              </MajorMenu>
+              <MajorMenu>
+                <MenuTitle>가구/인테리어</MenuTitle>
+                {/* <MenuList>
+                  <MenuItem>주방가구</MenuItem>
+                  <MenuItem>거실가구</MenuItem>
+                  <MenuItem>커튼/블라인드</MenuItem>
+                  <MenuItem>학생/사무가구</MenuItem>
+                  <MenuItem>침실가구</MenuItem>
+                </MenuList> */}
+              </MajorMenu>
+              <MajorMenu>
+                <MenuTitle>반려/도서/취미</MenuTitle>
+                {/* <MenuList>
+                  <MenuItem>도서</MenuItem>
+                  <MenuItem>노트/다이어리</MenuItem>
+                  <MenuItem>사료</MenuItem>
+                  <MenuItem>필기류</MenuItem>
+                  <MenuItem>반려 동물 용품</MenuItem>
+                </MenuList> */}
+              </MajorMenu>
+              <MajorMenu>
+                <MenuTitle>뷰티</MenuTitle>
+                {/* <MenuList>
+                  <MenuItem>스킨케어</MenuItem>
+                  <MenuItem>향수</MenuItem>
+                  <MenuItem>헤어/바디</MenuItem>
+                  <MenuItem>메이크업</MenuItem>
+                  <MenuItem>네일</MenuItem>
+                </MenuList> */}
+              </MajorMenu>
             </Menu>
           </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>생활건강</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>의류</MenuItem>
-              <MenuItem>언더웨어</MenuItem>
-              <MenuItem>신발</MenuItem>
-              <MenuItem>가방</MenuItem>
-              <MenuItem>악세서리</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>가구/인테리어</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>주방가구</MenuItem>
-              <MenuItem>거실가구</MenuItem>
-              <MenuItem>커튼/블라인드</MenuItem>
-              <MenuItem>학생/사무가구</MenuItem>
-              <MenuItem>침실가구</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>반려/도서/취미</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>도서</MenuItem>
-              <MenuItem>노트/다이어리</MenuItem>
-              <MenuItem>사료</MenuItem>
-              <MenuItem>필기류</MenuItem>
-              <MenuItem>반려 동물 용품</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>뷰티</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>스킨케어</MenuItem>
-              <MenuItem>향수</MenuItem>
-              <MenuItem>헤어/바디</MenuItem>
-              <MenuItem>메이크업</MenuItem>
-              <MenuItem>네일</MenuItem>
-            </Menu>
-          </CategoryTagBox>
+          <TagBox>
+            <CategoryTitle href="/search">신상품</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/search">베스트</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/search">알뜰 쇼핑</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/event">특가/혜택</CategoryTitle>
+          </TagBox>
         </CategoryContainer>
       </CategoryBox>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 1000;
+`;
 
 const NavContainer = styled.div`
   background-color: white;
@@ -160,14 +171,14 @@ const UserBox = styled.div`
 
 const UserLink = styled(Link)`
   text-decoration: none;
+  font-size: 0.8rem;
   color: #aaaaaa;
 `;
 const SearchBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding-top: 1rem;
   width: 100%;
   /* border-width: 0 0 0.1rem 0;
   border-style: solid;
@@ -177,9 +188,10 @@ const SearchBox = styled.div`
 const SearchPaper = styled(Paper)`
   display: flex;
   align-items: center;
-  width: 35rem;
-  height: 55;
+  width: 25rem;
+  height: 3rem;
   border-radius: 0.5rem;
+  margin-left: 3rem;
   padding: 0.5rem;
   border: 1px solid;
   box-shadow: none;
@@ -191,7 +203,7 @@ const IconBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 2rem;
+  margin-left: 1rem;
 `;
 
 const CategoryBox = styled.div`
@@ -205,51 +217,61 @@ const CategoryBox = styled.div`
 
 const CategoryContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
-
-  width: 50%;
-  margin: 0 15%;
+  width: 55%;
+  margin: 0 22%;
   padding: 0;
 `;
 const CategoryTagBox = styled.li`
   display: flex;
-  font-size: 2rem;
+  align-items: center;
+  padding-right: 11.5rem;
   cursor: pointer;
   &:hover #menu {
     opacity: 1;
-    /* visibility: visible; */
+    visibility: visible;
   }
 `;
-const CategoryTitle = styled.p`
+
+const TagBox = styled.li`
+  display: flex;
+  align-items: center;
+  margin-right: 6.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+  &:hover CategoryTitle {
+    color: #56a9f1;
+  }
+`;
+
+const CategoryTitle = styled(Link)`
+  text-decoration: none;
   padding: 0;
   margin: 0;
-  margin-left: 2rem;
   font-size: 1rem;
   font-weight: bold;
   color: #000;
   list-style: none;
 `;
-
 const Menu = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 3.1rem;
   padding: 0;
+  top: 14.1%;
   position: absolute;
-  z-index: 1001;
+  margin-top: 2.5rem;
   list-style: none;
   background: #fff;
   opacity: 0;
-  /* visibility: hidden; */
-  /* opacity: 1; */
-  /* visibility: visible; */
+  visibility: hidden;
   transition: all 0.15s ease-in;
+  z-index: 1000;
 `;
 
-const MenuItem = styled.li`
-  font-size: 1rem;
+const MajorMenu = styled.li`
+  font-size: 0.8rem;
   list-style: none;
   width: 100%;
   margin: 0;
@@ -260,3 +282,23 @@ const MenuItem = styled.li`
     background-color: #eee;
   }
 `;
+const MenuList = styled.li`
+  font-size: 0.8rem;
+  list-style: none;
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 3rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease-in;
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const MenuTitle = styled.div``;
+
+const MenuItem = styled.li``;

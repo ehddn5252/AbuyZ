@@ -8,69 +8,31 @@ import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
-
+import MenuIcon from "@mui/icons-material/Menu";
 export default function ScrollNav() {
   return (
-    <div>
+    <Container>
       <CategoryBox>
         <CategoryContainer>
           <CategoryTagBox>
-            <CategoryTitle>식품</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>과일</MenuItem>
-              <MenuItem>채소</MenuItem>
-              <MenuItem>고기</MenuItem>
-              <MenuItem>과자/디저트/아이스크림</MenuItem>
-              <MenuItem>생수/음료/주류</MenuItem>
-            </Menu>
+            <MenuIcon sx={{ marginRight: "0.5rem" }} />
+            <CategoryTitle>카테고리</CategoryTitle>
           </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>생활건강</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>의류</MenuItem>
-              <MenuItem>언더웨어</MenuItem>
-              <MenuItem>신발</MenuItem>
-              <MenuItem>가방</MenuItem>
-              <MenuItem>악세서리</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>가구/인테리어</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>주방가구</MenuItem>
-              <MenuItem>거실가구</MenuItem>
-              <MenuItem>커튼/블라인드</MenuItem>
-              <MenuItem>학생/사무가구</MenuItem>
-              <MenuItem>침실가구</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>반려/도서/취미</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>도서</MenuItem>
-              <MenuItem>노트/다이어리</MenuItem>
-              <MenuItem>사료</MenuItem>
-              <MenuItem>필기류</MenuItem>
-              <MenuItem>반려 동물 용품</MenuItem>
-            </Menu>
-          </CategoryTagBox>
-
-          <CategoryTagBox>
-            <CategoryTitle>뷰티</CategoryTitle>
-            <Menu id="menu">
-              <MenuItem>스킨케어</MenuItem>
-              <MenuItem>향수</MenuItem>
-              <MenuItem>헤어/바디</MenuItem>
-              <MenuItem>메이크업</MenuItem>
-              <MenuItem>네일</MenuItem>
-            </Menu>
-          </CategoryTagBox>
+          <TagBox>
+            <CategoryTitle href="/search">신상품</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/search">베스트</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/search">알뜰 쇼핑</CategoryTitle>
+          </TagBox>
+          <TagBox>
+            <CategoryTitle href="/event">특가/혜택</CategoryTitle>
+          </TagBox>
         </CategoryContainer>
         <SearchPaper component="form">
           <InputBase
@@ -87,10 +49,10 @@ export default function ScrollNav() {
             <SearchIcon sx={{ fontSize: "1rem" }} />
           </IconButton>
         </SearchPaper>
-        <div style={{ display: "flex" }}>
+        <IconDiv>
           <IconBox>
             <Link href="/event">
-              <EventAvailableOutlinedIcon
+              <FavoriteBorderOutlinedIcon
                 fontSize="large"
                 sx={{ color: "black" }}
               />
@@ -115,12 +77,14 @@ export default function ScrollNav() {
             </Link>
             <Link href="/basket" sx={{ textDecoration: "none" }}></Link>
           </IconBox>
-        </div>
+        </IconDiv>
       </CategoryBox>
-    </div>
+    </Container>
   );
 }
-
+const Container = styled.div`
+  width: 100%;
+`;
 const CategoryBox = styled.div`
   display: flex;
   position: fixed;
@@ -129,19 +93,19 @@ const CategoryBox = styled.div`
   width: 100%;
   padding: 0 22%;
   height: 4rem;
-  justify-content: center;
   background-color: #fff;
   z-index: 1011;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 `;
 
 const SearchPaper = styled(Paper)`
   display: flex;
   align-items: center;
-  width: 17rem;
+  width: 15rem;
   height: 2rem;
   border-radius: 0.5rem;
-  margin-left: 2rem;
   padding: 0.5rem;
+  margin-left: 3rem;
   border: 1px solid;
   box-shadow: none;
   border-color: #56a9f1;
@@ -152,58 +116,42 @@ const IconBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 2rem;
+  margin-left: 1rem;
 `;
 
 const CategoryContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
-  width: 50%;
   padding: 0;
 `;
+
 const CategoryTagBox = styled.li`
   display: flex;
-  font-size: 2rem;
+  align-items: center;
   cursor: pointer;
-  &:hover #menu {
-    opacity: 1;
-    visibility: visible;
+`;
+
+const TagBox = styled.li`
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  margin-left: 4rem;
+  cursor: pointer;
+  &:hover CategoryTitle {
+    color: #56a9f1;
   }
 `;
 const CategoryTitle = styled.p`
   padding: 0;
   margin: 0;
-  margin-left: 2rem;
   font-size: 1rem;
   font-weight: bold;
   color: #000;
   list-style: none;
 `;
 
-const Menu = styled.ul`
+const IconDiv = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0;
-  position: absolute;
-  margin-top: 2.5rem;
-  list-style: none;
-  background: #fff;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.15s ease-in;
-`;
-
-const MenuItem = styled.li`
-  font-size: 1rem;
-  list-style: none;
-  width: 100%;
-  margin: 0;
-  padding: 0.5rem;
-  padding-left: 2rem;
-  padding-right: 3rem;
-  &:hover {
-    background-color: #eee;
-  }
+  margin-left: 3rem;
 `;

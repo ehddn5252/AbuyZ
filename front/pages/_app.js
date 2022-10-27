@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return (
     <MainContainer>
-      {adminCheck === false && scrollY > 149 ? <ScrollNav /> : null}
+      {adminCheck === false && scrollY > 125 ? <ScrollNav /> : null}
       {adminCheck === false ? <Nav /> : null}
       {adminCheck ? <AdminSideNav /> : null}
       {adminCheck ? <AdminNav /> : null}
