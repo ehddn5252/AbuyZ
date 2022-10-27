@@ -44,7 +44,8 @@ export default function MyComplainItem({ complain }) {
 }
 
 const Container = styled.div`
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
+  border-color: rgba(128, 128, 128, 0.17);
   padding-top: 1rem;
   padding-bottom: 1rem;
 `;

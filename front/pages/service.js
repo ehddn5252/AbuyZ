@@ -7,19 +7,30 @@ export default function Service() {
   const [serviceTap, setServiceTap] = useState(0);
   return (
     <div>
-      <AllDiv>
-        <div style={{ flex: 1 }}>
-          <ServiceSideNav setServiceTap={setServiceTap} />
+      <AllDiv
+        maxWidth="lg"
+        style={{
+          marginBottom: "5rem",
+          display: "flex",
+          justifyContent: "center",
+          marginRight: "23rem",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            width: "50rem",
+          }}
+        >
+          <div style={{ flex: 1 }}>
+            <ServiceSideNav setServiceTap={setServiceTap} />
+          </div>
+          <div style={{ flex: 4 }}>
+            {serviceTap === 0 ? <ServiceFAQ /> : null}
+            {serviceTap === 1 ? <ServiceConsulting /> : null}
+          </div>
         </div>
-        {serviceTap == 0 ? (
-          <div style={{ flex: 3 }}>
-            <ServiceFAQ />
-          </div>
-        ) : (
-          <div style={{ flex: 3 }}>
-            <ServiceConsulting />
-          </div>
-        )}
       </AllDiv>
     </div>
   );
@@ -27,7 +38,4 @@ export default function Service() {
 
 const AllDiv = styled.div`
   display: flex;
-  padding: 5rem;
-  padding-right: 10rem;
-  padding-left: 10rem;
 `;

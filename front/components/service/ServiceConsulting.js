@@ -1,8 +1,25 @@
 import React, { useState } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import styled from "@emotion/styled";
 import "react-dropdown/style.css";
 import ProductSelectModal from "./ProductSelectModal";
+import { TextField } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 export default function ServiceConsulting() {
+  const [selected, setSelected] = useState(0);
+  const [age, setAge] = useState("");
+  const [date, setDate] = useState("");
+  const [img, setImg] = useState("");
+  const [name, setName] = useState("");
+  const [options, setOptions] = useState("");
+  const [price, setPrice] = useState(0);
+  const [count, setCount] = useState(0);
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const [currentValue, setCurrentValue] = useState("상품");
   const [ShowOptions, setShowOptions] = useState(false);
   const [isExchange, setIsExchange] = useState(false);
@@ -14,156 +31,187 @@ export default function ServiceConsulting() {
     const { innerText } = e.target;
     setCurrentValue(innerText);
     setIsExchange(false);
+    setSelected(0);
+    setName("");
   };
   const handleOnChangeSelectValueex = (e) => {
     const { innerText } = e.target;
     setCurrentValue(innerText);
     setIsExchange(true);
+    setSelected(0);
+    setName("");
+  };
+  const deleteSelect = () => {
+    setName("");
+    setSelected(0);
   };
   return (
-    <div>
-      <h1>1 : 1 문의하기</h1>
-      <ColoredLine color="red" />
+    <Container>
+      <MajorTitle>1 : 1 문의하기</MajorTitle>
+      <hr
+        style={{
+          height: "0.3rem",
+          background: "#7895B2",
+          borderRadius: "1rem",
+        }}
+      />
       <AllDiv>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 2, marginTop: "1rem" }}>
           <span>카테고리</span>
         </div>
-        <div style={{ flex: 3 }}>
-          <SelectBox onClick={() => setShowOptions((prev) => !prev)}>
-            <Label>{currentValue}</Label>
-            <SelectOptions show={ShowOptions}>
-              <Option onClick={handleOnChangeSelectValue}>상품</Option>
-              <Option onClick={handleOnChangeSelectValueex}>교환/환불</Option>
-              <Option onClick={handleOnChangeSelectValue}>
+        <div style={{ flex: 10 }}>
+          <FormControl sx={{ width: "100%" }}>
+            <InputLabel id="demo-simple-select-standard-label">
+              문의 유형 선택
+            </InputLabel>
+            <Select value={age} onChange={handleChange} displayEmpty fullWidth>
+              <MenuItem value={1} onClick={(e) => handleOnChangeSelectValue(e)}>
+                상품
+              </MenuItem>
+
+              <MenuItem
+                value={20}
+                onClick={(e) => handleOnChangeSelectValueex(e)}
+              >
+                교환/환불
+              </MenuItem>
+              <MenuItem
+                value={10}
+                onClick={(e) => handleOnChangeSelectValue(e)}
+              >
                 이벤트 프로모션
-              </Option>
-              <Option onClick={handleOnChangeSelectValue}>사이트 개선</Option>
-              <Option onClick={handleOnChangeSelectValue}>주문/결제</Option>
-            </SelectOptions>
-          </SelectBox>
+              </MenuItem>
+              <MenuItem
+                value={30}
+                onClick={(e) => handleOnChangeSelectValue(e)}
+              >
+                사이트 개선
+              </MenuItem>
+              <MenuItem
+                value={40}
+                onClick={(e) => handleOnChangeSelectValue(e)}
+              >
+                주문 / 결제
+              </MenuItem>
+            </Select>
+          </FormControl>
         </div>
       </AllDiv>
       {isExchange == true ? (
         <AllDiv>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 2, marginTop: "0.5rem" }}>
             <span>상품 선택</span>
           </div>
-          <div style={{ flex: 3 }}>
-            <SelectButton onClick={showModal}>상품 선택</SelectButton>
-            {modalOpen && (
-              <ProductSelectModal
-                setModalOpen={setModalOpen}
-              ></ProductSelectModal>
+          <div style={{ flex: 10 }}>
+            {name.length > 0 ? (
+              <div>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div style={{ flex: "2" }}>
+                    <img
+                      src={img}
+                      style={{
+                        width: "6rem",
+                        height: "8rem",
+                        objectFit: "cover",
+                      }}
+                    ></img>{" "}
+                  </div>
+                  <div style={{ flex: "8", marginTop: "1.7rem" }}>
+                    <span style={{ fontWeight: "bold" }}>{name}</span>
+                    <br></br>
+                    <span>[{options}]</span>
+                    <br></br>
+                    <span>
+                      {price}원 | {count}개
+                    </span>
+                    <br></br>
+                    <span style={{ color: "#aaaaaa" }}>{date}</span>
+                  </div>
+                  <div style={{ flex: "2" }}>
+                    <CloseIcon onClick={deleteSelect}></CloseIcon>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <SelectButton onClick={showModal}>상품 선택</SelectButton>
+                {modalOpen && (
+                  <ProductSelectModal
+                    setModalOpen={setModalOpen}
+                    setDate={setDate}
+                    setImg={setImg}
+                    setName={setName}
+                    setOptions={setOptions}
+                    setPrice={setPrice}
+                    setCount={setCount}
+                    setSelected={setSelected}
+                    selected={selected}
+                  ></ProductSelectModal>
+                )}
+              </div>
             )}
           </div>
         </AllDiv>
       ) : null}
 
       <AllDiv>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 2, marginTop: "1rem" }}>
           <span>문의 제목</span>
         </div>
-        <div style={{ flex: 3 }}>
-          <input
+        <div style={{ flex: 10 }}>
+          <TextField
             placeholder="문의 제목을 입력해주세요."
-            style={{ width: "80%", padding: "0.7rem" }}
-          ></input>
+            fullWidth
+          ></TextField>
         </div>
       </AllDiv>
       <AllDiv>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 2, marginTop: "1rem" }}>
           <span>문의 내용</span>
         </div>
-        <div style={{ flex: 3 }}>
-          <input
+        <div style={{ flex: 10 }}>
+          <TextField
             placeholder="문의 내용을 입력해주세요."
-            style={{
-              width: "80%",
-              height: 300,
-              padding: "0.7rem",
-            }}
-          ></input>
+            fullWidth
+          ></TextField>
         </div>
       </AllDiv>
       <AllDiv>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 2, marginTop: "0.5rem" }}>
           <span>사진 첨부</span>
           <br></br>
           <span>(선택사항)</span>
         </div>
-        <div style={{ flex: 3 }}>
+        <div style={{ flex: 10 }}>
           <input type="file" multiple={true} id="fileUpload" />
         </div>
       </AllDiv>
-      <ButtonDiv>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginTop: "3rem",
+        }}
+      >
         <NoButton>취소</NoButton>
         <YesButton>등록하기</YesButton>
-      </ButtonDiv>
-    </div>
+      </div>
+    </Container>
   );
 }
 
-const ColoredLine = ({ color }) => (
-  <hr
-    style={{
-      color: color,
-      backgroundColor: color,
-      height: 5,
-    }}
-  />
-);
+const Container = styled.div`
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  width: 56rem;
+  height: 80vh;
+`;
 
 const AllDiv = styled.div`
   padding: 2rem;
   display: flex;
   flex-direction: row;
-`;
-const Label = styled.label`
-  font-size: 14px;
-  margin-left: 4px;
-  text-align: center;
-`;
-
-const Option = styled.li`
-  font-size: 14px;
-  padding: 6px 8px;
-  transition: background-color 0.2s ease-in;
-  &:hover {
-    background-color: #595959;
-  }
-`;
-
-const SelectBox = styled.div`
-  position: relative;
-  width: 200px;
-  padding: 8px;
-  border-radius: 12px;
-  background-color: #ffffff;
-  align-self: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
-  &::before {
-    content: "⌵";
-    position: absolute;
-    top: 1px;
-    right: 8px;
-    color: #49c181;
-    font-size: 20px;
-  }
-`;
-const SelectOptions = styled.ul`
-  position: absolute;
-  list-style: none;
-  top: 18px;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  height: 145px;
-  max-height: ${(props) => (props.show ? "none" : "0")};
-  padding: 0;
-  border-radius: 8px;
-  background-color: #222222;
-  color: #fefefe;
 `;
 
 const ButtonDiv = styled.div`
@@ -174,22 +222,33 @@ const ButtonDiv = styled.div`
 
 const NoButton = styled.button`
   background-color: white;
-  padding: 1rem 2rem 1rem 2rem;
-  border: 1px solid #616161;
-  border-radius: 10px;
+  border: 1px solid;
+  border-color: #56a9f1;
+  border-radius: 5px;
+  height: 3.3rem;
+  width: 8rem;
+  color: #56a9f1;
 `;
 
 const YesButton = styled.button`
-  background-color: #ff7171;
-  padding: 1rem 2rem 1rem 2rem;
+  background-color: #56a9f1;
   border: none;
-  border-radius: 10px;
-  margin-left: 3rem;
+  border-radius: 5px;
+  height: 3.3rem;
+  width: 8rem;
+  color: white;
 `;
 
 const SelectButton = styled.button`
   background-color: white;
   padding: 0.7rem 0.8rem 0.7rem 0.8rem;
-  border: 1px solid #ff7171;
-  border-radius: 10px;
+  border: 1px solid;
+  color: #56a9f1;
+  border-color: #56a9f1;
+  border-radius: 5px;
+  width: 100%;
+`;
+
+const MajorTitle = styled.span`
+  font-size: 2rem;
 `;

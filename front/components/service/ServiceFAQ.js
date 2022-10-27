@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 export default function ServiceFAQ() {
   const [faq1, setFaq1] = useState(0);
   const [faq2, setFaq2] = useState(0);
@@ -35,21 +35,22 @@ export default function ServiceFAQ() {
     setFaq4(!faq4);
   };
   return (
-    <div>
-      <div>
-        <h1>쇼핑 FAQ</h1>
-      </div>
+    <Container>
+      <MajorTitle>FAQ</MajorTitle>
 
-      <ColoredLine color="red"></ColoredLine>
+      <hr
+        style={{
+          height: "0.3rem",
+          background: "#7895B2",
+          borderRadius: "1rem",
+        }}
+      />
       <RowDiv onClick={changeFaq1}>
-        <div style={{ flex: 7 }}>
+        <div style={{ flex: 11 }}>
           <span>point를 어디서 사용할 수 있나요?</span>
         </div>
         <div style={{ flex: 1 }}>
-          <img
-            style={{ height: 20, width: 20 }}
-            src={"/images/bottom-arrow.png"}
-          ></img>
+          <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
         </div>
       </RowDiv>
       {faq1 == 1 ? (
@@ -62,17 +63,12 @@ export default function ServiceFAQ() {
           </span>
         </SpanStyle>
       ) : null}
-
-      <hr></hr>
       <RowDiv onClick={changeFaq2}>
-        <div style={{ flex: 7 }}>
+        <div style={{ flex: 11 }}>
           <span>비밀번호 변경을 어떻게 하나요?</span>
         </div>
         <div style={{ flex: 1 }}>
-          <img
-            style={{ height: 20, width: 20 }}
-            src={"/images/bottom-arrow.png"}
-          ></img>
+          <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
         </div>
       </RowDiv>
       {faq2 == 1 ? (
@@ -80,17 +76,12 @@ export default function ServiceFAQ() {
           <span>비밀번호 변경은 마이페이지 내 정보 수정에서 가능합니다.</span>
         </SpanStyle>
       ) : null}
-
-      <hr></hr>
       <RowDiv onClick={changeFaq3}>
-        <div style={{ flex: 7 }}>
+        <div style={{ flex: 11 }}>
           <span>상품을 받은 후 반품접수는 어떻게 하나요?</span>
         </div>
         <div style={{ flex: 1 }}>
-          <img
-            style={{ height: 20, width: 20 }}
-            src={"/images/bottom-arrow.png"}
-          ></img>
+          <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
         </div>
       </RowDiv>
       {faq3 == 1 ? (
@@ -106,17 +97,12 @@ export default function ServiceFAQ() {
           </span>
         </SpanStyle>
       ) : null}
-
-      <hr></hr>
       <RowDiv onClick={changeFaq4}>
-        <div style={{ flex: 7 }}>
+        <div style={{ flex: 11 }}>
           <span>회원탈퇴는 어떻게 하나요?</span>
         </div>
         <div style={{ flex: 1 }}>
-          <img
-            style={{ height: 20, width: 20 }}
-            src={"/images/bottom-arrow.png"}
-          ></img>
+          <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
         </div>
       </RowDiv>
       {faq4 == 1 ? (
@@ -129,32 +115,38 @@ export default function ServiceFAQ() {
           </span>
         </SpanStyle>
       ) : null}
-    </div>
+    </Container>
   );
 }
 
 const SpanStyle = styled.div`
-  background-color: white;
-  border: 1px #ff7171 solid;
+  margin-top: 1rem;
+  background-color: rgba(128, 128, 128, 0.17);
+  border: none;
   padding: 3rem;
+  border-radius: 5px;
 `;
-
-const ColoredLine = ({ color }) => (
-  <hr
-    style={{
-      color: color,
-      backgroundColor: color,
-      height: 5,
-    }}
-  />
-);
 
 const RowDiv = styled.div`
   display: flex;
   flex-direction: row;
   height: 3rem;
   align-items: center;
-  &:hover {
-    background-color: #e0e0e0;
+  border-bottom: 1px solid;
+  border-color: rgba(128, 128, 128, 0.17);
+  &:hover span {
+    color: #56a9f1;
+    cursor: pointer;
   }
+`;
+
+const Container = styled.div`
+  margin-top: 4.5rem;
+  margin-bottom: 4rem;
+  width: 80vh;
+  height: 40rem;
+`;
+
+const MajorTitle = styled.span`
+  font-size: 2rem;
 `;
