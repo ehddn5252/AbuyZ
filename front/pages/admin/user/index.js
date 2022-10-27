@@ -17,21 +17,17 @@ export default function User() {
 
   return (
     <Container>
-      <Box>
-        <Box>
-          <ServiceCategory setSearch={setSearch} />
-          {search ? <ServiceList /> : null}
-        </Box>
-      </Box>
+      <ServiceCategory setSearch={setSearch} />
+      {search ? <ServiceList /> : null}
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   background: #edf0f5;
-  height: 88vh;
   padding: 3rem;
   padding-left: 15rem;
+  height: 89vh;
 `;
