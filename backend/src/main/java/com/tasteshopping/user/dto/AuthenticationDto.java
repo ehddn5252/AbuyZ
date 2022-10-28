@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class AuthenticationNumberDto {
+public class AuthenticationDto {
+    private String email;
     private String certification_number;
 }
