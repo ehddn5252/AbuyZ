@@ -11,8 +11,8 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function AddCoupon() {
-  // 대분류
-  const [bigCategory, setBigCategory] = useState("");
+  // 대분류 카테고리
+  const [category, setCategory] = useState("");
 
   // 쿠폰이름
   const [name, setName] = useState("");
@@ -22,20 +22,21 @@ export default function AddCoupon() {
   // 할인금액
   const [sale, setSale] = useState("");
   const [salePlaceholder, setSalePlaceholder] =
-    useState("할인금액을 입력해주세요.");
-
-  // 대분류
-  const [category, setCategory] = useState("");
+    useState("숫자만 입력해주세요.");
 
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
-  // 상품명 입력하면
+  // 대분류 셀렉트 했을 때
+  const handleChange = (event) => {
+    setCategory(event.target.value);
+  };
+
+  // 쿠폰이름 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
-    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -44,31 +45,22 @@ export default function AddCoupon() {
     setNamePlaceholder("쿠폰 이름을 입력해주세요.");
   };
 
-  // 왼쪽 할인 금액
-  const [leftSale, setLeftSale] = useState("");
-  const [leftSalePlaceholder, setLeftSalePlaceholder] = useState("0");
-
-  // 왼쪽 할인 금액 입력하면
-  const leftSaleChange = (event) => {
-    setLeftSale(event.target.value);
+  // 할인 금액 입력하면
+  const saleChange = (event) => {
+    setSale(event.target.value);
   };
-  const leftSaleFocus = () => {
-    setLeftSalePlaceholder("");
+  const saleFocus = () => {
+    setSalePlaceholder("");
   };
-  const leftSaleBlur = () => {
-    setLeftSalePlaceholder("0");
-  };
-
-  // 대분류 셀렉트 했을 때
-  const handleChange = (event) => {
-    setCategory(event.target.value);
+  const saleBlur = () => {
+    setSalePlaceholder("숫자만 입력해주세요.");
   };
 
   return (
     <Grid2
       container
-      spacing={2}
-      sx={{ padding: "0", margin: "0", background: "white" }}
+      spacing={1}
+      sx={{ padding: "0", margin: "0", background: "#ffffff" }}
     >
       <h2
         style={{
@@ -81,7 +73,11 @@ export default function AddCoupon() {
         쿠폰 등록
       </h2>
       <hr
-        style={{ background: "#ff9494", width: "95%", marginBottom: "2rem" }}
+        style={{
+          background: "#000000",
+          width: "95%",
+          marginBottom: "2rem",
+        }}
       />
       <Grid2
         xs={12}
@@ -106,6 +102,7 @@ export default function AddCoupon() {
           alignItems: "center",
           fontSize: "1.5rem",
           fontWeight: "600",
+          height: "7rem",
         }}
       >
         카테고리
@@ -127,7 +124,7 @@ export default function AddCoupon() {
               대분류
             </InputLabel>
             <Select
-              value={bigCategory}
+              value={category}
               onChange={handleChange}
               label="대분류"
               MenuProps={{
@@ -178,6 +175,7 @@ export default function AddCoupon() {
           alignItems: "center",
           fontSize: "1.5rem",
           fontWeight: "600",
+          height: "7rem",
         }}
       >
         쿠폰명
@@ -191,6 +189,7 @@ export default function AddCoupon() {
           display: "flex",
           zIndex: "0",
           background: "white",
+          alignItems: "center",
         }}
       >
         <Input
@@ -223,6 +222,7 @@ export default function AddCoupon() {
           alignItems: "center",
           fontSize: "1.5rem",
           fontWeight: "600",
+          height: "7rem",
         }}
       >
         할인 금액
@@ -236,13 +236,14 @@ export default function AddCoupon() {
           display: "flex",
           zIndex: "0",
           background: "white",
+          alignItems: "center",
         }}
       >
         <SaleInput
-          placeholder={leftSalePlaceholder}
-          onChange={leftSaleChange}
-          onFocus={leftSaleFocus}
-          onBlur={leftSaleBlur}
+          placeholder={salePlaceholder}
+          onChange={saleChange}
+          onFocus={saleFocus}
+          onBlur={saleBlur}
         />
       </Grid2>
       <Grid2
@@ -268,6 +269,7 @@ export default function AddCoupon() {
           alignItems: "center",
           fontSize: "1.5rem",
           fontWeight: "600",
+          height: "8rem",
         }}
       >
         기간
@@ -282,6 +284,7 @@ export default function AddCoupon() {
           display: "flex",
           zIndex: "0",
           background: "white",
+          alignItems: "center",
         }}
       >
         <MyDatePicker
@@ -363,7 +366,6 @@ const SaleInput = styled.input`
   height: 3rem;
   font-size: 1.3rem;
   margin-left: 2rem;
-  text-align: end;
   padding-right: 1rem;
 
   &::placeholder {

@@ -299,6 +299,7 @@ export default function CouponInquire() {
             background: "white",
           }}
         >
+          {/* 조회한 쿠폰 리스트 */}
           <CouponList />
         </Grid2>
         <Grid2
@@ -317,6 +318,7 @@ export default function CouponInquire() {
             padding: "0",
           }}
         >
+          {/* 쿠폰 등록 */}
           <AddCoupon />
         </Grid2>
       </Grid2>
