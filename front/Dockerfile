@@ -24,8 +24,8 @@ EXPOSE 3000
 CMD [ "yarn", "start" ]
 
 # production stage
-FROM nginx:stable-alpine as production-stage
+# FROM nginx:stable-alpine as production-stage
 # COPY --from=build-stage /.next /usr/share/nginx/html
-COPY --from=build-stage /usr/src/app/.next /usr/share/nginx/html
-EXPOSE 80 443
-CMD ["nginx", "-g", "daemon off;"]
+# COPY --from=build-stage /usr/src/app/.next /usr/share/nginx/html
+# EXPOSE 80 443
+# CMD ["nginx", "-g", "daemon off;"]
