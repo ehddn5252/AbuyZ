@@ -47,9 +47,10 @@ const ButtonDiv = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #ff7171;
-  padding: 1rem 2rem 1rem 2rem;
+  background-color: #56a9f1;
+  color: white;
+  height: 3rem;
+  width: 7rem;
   border: none;
-  border-radius: 10px;
-  margin-left: 3rem;
+  border-radius: 5px;
 `;

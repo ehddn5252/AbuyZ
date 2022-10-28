@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
@@ -189,10 +189,13 @@ const ButtonDiv = styled.div`
   margin-bottom: 1rem;
 `;
 const Button = styled.button`
-  background-color: white;
-  padding: 0.7rem 0.8rem 0.7rem 0.8rem;
-  border: 1px solid #ff7171;
-  border-radius: 10px;
+  background-color: #56a9f1;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 3rem;
+  width: 7rem;
+  font-size: 1.2rem;
 `;
 
 const ImageStyle = styled.img`
