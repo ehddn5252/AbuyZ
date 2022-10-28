@@ -36,6 +36,7 @@ export default function ReportCategory({ setReportSearch }) {
             <Autocomplete
               disablePortal
               options={inquiryList()}
+              size="small"
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
               defaultValue="전체"
@@ -47,7 +48,7 @@ export default function ReportCategory({ setReportSearch }) {
             <p style={{ margin: 0 }}>제품명</p>
           </TitleDiv>
           <CategoryDiv>
-            <TextField sx={{ width: 400, paddingLeft: "2rem" }} />
+            <TextField size="small" sx={{ width: 400, paddingLeft: "2rem" }} />
           </CategoryDiv>
         </ColumnBox>
         <ColumnBox>
@@ -58,6 +59,7 @@ export default function ReportCategory({ setReportSearch }) {
             <Autocomplete
               disablePortal
               options={dateList()}
+              size="small"
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
               defaultValue="전체"
@@ -122,17 +124,18 @@ const TitleDiv = styled.div`
   justify-content: center;
   font-weight: bold;
   width: 20%;
-  height: 5.5rem;
+  height: 4.2rem;
   background-color: #dadada;
   font-size: 1.3rem;
 `;
 
 const CategoryDiv = styled.div`
   display: flex;
+  align-items: center;
   width: 80%;
   height: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   background-color: white;
 `;
 
