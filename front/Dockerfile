@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:alpine as build-stage
 
 RUN mkdir -p /usr/src/app
 ENV PORT 3000
@@ -17,5 +17,11 @@ COPY . /usr/src/app
 
 RUN yarn build
 
-EXPOSE 3000
-CMD [ "yarn", "start" ]
+# EXPOSE 3000
+# CMD [ "yarn", "start" ]
+
+# production stage
+FROM nginx:stable-alpine as production-stage
+# COPY --from=build-stage /.next /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
