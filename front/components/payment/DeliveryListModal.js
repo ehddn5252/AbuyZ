@@ -3,43 +3,55 @@ import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
-export default function MyCouponSelectModal({
-  setModalOpen,
-  setCouponDiscount,
+export default function DeliveryListModal({
+  settAddressModalOpen,
+  setPostcode,
+  setAddress,
+  setDetailAddress,
+  setName,
+  setPhone,
 }) {
   const closeModal = () => {
-    setModalOpen(false);
-    setCouponDiscount(CouponList[selected].discountprice);
+    settAddressModalOpen(false);
   };
   const [selected, setSelected] = useState(0);
 
   const modalRef = useRef(null);
 
-  const CouponList = [
+  const DeliveryList = [
     {
       id: 0,
-      couponname: "abuyz 처음 구매 고객 3000원 쿠폰",
-      discountprice: "3000",
-      category: "식품",
-      startdate: "2022.10.28",
-      finishdate: "2022.10.31",
+      name: "받는 사람 1",
+      postcode: "12345",
+      address: "주소 1",
+      detailaddress: "상세 주소 1",
+      phone: "01012345678",
     },
     {
       id: 1,
-      couponname: "abuyz 가구 첫 입점 축하 쿠폰",
-      discountprice: "5000",
-      category: "가구",
-      info: "중복 사용 불가",
-      startdate: "2022.10.28",
-      finishdate: "2022.10.31",
+      name: "받는 사람 2",
+      postcode: "67890",
+      address: "주소 2",
+      detailaddress: "상세 주소 2",
+      phone: "01098765432",
     },
   ];
+
+  const selectfunction = () => {
+    setPostcode(DeliveryList[selected].postcode);
+    setAddress(DeliveryList[selected].address);
+    setDetailAddress(DeliveryList[selected].detailaddress);
+    setName(DeliveryList[selected].name);
+    setPhone(DeliveryList[selected].phone);
+    settAddressModalOpen(false);
+  };
+
   useEffect(() => {
     // 이벤트 핸들러 함수
     const handler = () => {
       // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setModalOpen(false);
+        settAddressModalOpen(false);
       }
     };
 
@@ -54,21 +66,33 @@ export default function MyCouponSelectModal({
     };
   });
   return (
-    <Container ref={modalRef}>
+    <DeliveryListModalContainer ref={modalRef}>
       <CloseIconDiv>
         <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
       </CloseIconDiv>
-      <h1>쿠폰 선택</h1>
+      <h1>배송지 선택</h1>
       <br></br>
-      {CouponList.map((e) => (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          borderTop: "1px solid black",
+          borderBottom: "1px solid black",
+          padding: "1rem",
+        }}
+      >
+        <div style={{ flex: 2, display: "flex", justifyContent: "start" }}>
+          <span>선택</span>
+        </div>
+        <div style={{ flex: 10, display: "flex", justifyContent: "center" }}>
+          <span>배송정보</span>
+        </div>
+      </div>
+      {/* for문으로 돌리기 */}
+      {DeliveryList.map((e) => (
         <Card
           key={e.id}
-          style={{
-            ...cardStyle,
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
-          }}
+          style={{ ...cardStyle, display: "flex", flexDirection: "row" }}
           onClick={() => setSelected(e.id)}
         >
           <div style={{ flex: 2, display: "flex", justifyContent: "center" }}>
@@ -87,45 +111,43 @@ export default function MyCouponSelectModal({
             </IconDiv>
           </div>
           <div style={{ flex: 10 }}>
-            <TextDiv>
-              <div>
-                <span style={{ fontWeight: "bold" }}>{e.couponname}</span>
-              </div>
+            <div>
+              <TextDiv>
+                <span>[{e.postcode}]</span>
+                <br></br>
+                <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                  {e.address} {e.detailaddress}
+                </span>
+                <br></br>
+                <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
+                  {e.name} | {e.phone}
+                </span>
+              </TextDiv>
               <br></br>
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "1.5rem",
-                }}
-              >
-                {e.discountprice}원
-              </span>
-              <span> 할인</span>
-              <br></br>
-              <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
-                {e.category} 카테고리 구매 시 사용 가능
-              </span>
-              <br></br>
-              <span style={{ fontSize: "0.9rem", color: "pink" }}>
-                {e.startdate} ~ {e.finishdate}
-              </span>
-            </TextDiv>
-            <br></br>
+            </div>
           </div>
         </Card>
       ))}
 
       <ButtonDiv>
-        <Button onClick={closeModal}>선택완료</Button>
+        <Button onClick={selectfunction}>선택완료</Button>
       </ButtonDiv>
-    </Container>
+    </DeliveryListModalContainer>
   );
 }
 
-const Container = styled.div`
+const TextDiv = styled.div`
+  margin-top: 0.8rem;
+  margin-left: 0.4rem;
+`;
+
+const DeliveryListModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  transform: translate(30%, -60%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -20%);
   width: 30rem;
   border: 2px solid #000;
   background-color: #fff;
@@ -133,12 +155,6 @@ const Container = styled.div`
   border-radius: 5px;
   border-color: #56a9f1;
   padding: 2rem;
-`;
-
-const CloseIconDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
 `;
 
 const Card = styled.div`
@@ -169,11 +185,11 @@ const Button = styled.button`
   font-size: 1.2rem;
 `;
 
-const TextDiv = styled.div`
-  margin-top: 0.8rem;
-  margin-left: 0.4rem;
+const CloseIconDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 `;
-
 const IconDiv = styled.div`
   flex: 1;
   margin-top: 3rem;
