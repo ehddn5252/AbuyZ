@@ -1,5 +1,5 @@
 import React from "react";
-// import styled from "styled-components";
+import styled from "styled-components";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -151,6 +151,15 @@ const Th = styled.th`
   border: 1px solid black;
   text-align: center;
   background-color: #c5e2ff;
+`;
+
+const Td = styled.td`
+  margin: 0;
+  border: 1px solid black;
+  text-align: center;
+  height: fit-content;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 `;
 
 // const CancelButton = styled.button`
