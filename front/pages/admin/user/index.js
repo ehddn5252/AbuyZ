@@ -1,9 +1,6 @@
 // React
 import React, { useState } from "react";
 
-// MUI
-import Box from "@mui/material/Box";
-
 // StyledComponents
 import styled from "styled-components";
 
@@ -29,5 +26,5 @@ const Container = styled.div`
   background: #edf0f5;
   padding: 3rem;
   padding-left: 15rem;
-  height: 89vh;
+  min-height: 89vh;
 `;
