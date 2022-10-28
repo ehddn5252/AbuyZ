@@ -4,7 +4,6 @@ import React, { useState } from "react";
 // MUI
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import StarPurple500Icon from "@mui/icons-material/StarPurple500";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -43,17 +42,8 @@ export default function ProductInfo() {
       <InfoBox>
         <TitleBox>
           <TitleDiv>
-            <p
-              style={{ margin: 0, marginBottom: "0.5rem", fontSize: "1.3rem" }}
-            >
-              JEEP
-            </p>
             <p style={{ margin: 0, marginBottom: "0.5rem", fontSize: "2rem" }}>
               지프 키즈 맨투맨
-            </p>
-            <p style={{ margin: 0 }}>
-              <StarPurple500Icon color="error" />
-              3.8(105)
             </p>
           </TitleDiv>
           <IconBox onClick={changeWish}>
@@ -64,22 +54,57 @@ export default function ProductInfo() {
             )}
           </IconBox>
         </TitleBox>
-        <hr />
         <PriceBox>
           <PriceTop>
-            <p style={{ margin: 0, color: "red", marginRight: "0.5rem" }}>
+            <p
+              style={{
+                margin: 0,
+                color: "#56A9F1",
+                marginRight: "0.5rem",
+                fontSize: "1.1rem ",
+              }}
+            >
               61%
             </p>
             <p style={{ margin: 0 }}>23,010원</p>
           </PriceTop>
           <PriceBottom>
-            <p style={{ margin: 0, marginRight: "0.5rem" }}>35,400원</p>
-            <p style={{ margin: 0, textDecoration: "line-through" }}>
-              59,000원
+            <p
+              style={{
+                margin: 0,
+                marginRight: "0.5rem",
+                textDecoration: "line-through",
+              }}
+            >
+              35,400원
             </p>
           </PriceBottom>
         </PriceBox>
         <OptionBox>
+          <Option>
+            <p style={{ width: "20%" }}>사이즈</p>
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={colorList()}
+              size="small"
+              fullWidth
+              renderInput={(params) => <TextField {...params} />}
+              defaultValue="-"
+            />
+          </Option>
+          <Option>
+            <p style={{ width: "20%" }}>컬러</p>
+            <Autocomplete
+              disablePortal
+              fullWidth
+              id="combo-box-demo"
+              size="small"
+              options={sizeList()}
+              renderInput={(params) => <TextField {...params} />}
+              defaultValue="-"
+            />
+          </Option>
           <Option>
             <p style={{ width: "20%" }}>수량</p>
             <MinusIcon></MinusIcon>
@@ -89,38 +114,16 @@ export default function ProductInfo() {
             <PlusIcon></PlusIcon>
           </Option>
           <Option>
-            <p style={{ width: "20%" }}>사이즈</p>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={colorList()}
-              sx={{ width: 200 }}
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue="-"
-            />
-          </Option>
-          <Option>
-            <p style={{ width: "20%" }}>컬러</p>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={sizeList()}
-              sx={{ width: 200 }}
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue="-"
-            />
-          </Option>
-          <Option>
             <p style={{ width: "20%" }}>선택옵션</p>
             <p>XL/블랙</p>
           </Option>
-          <Option>
-            <p style={{ width: "20%" }}>배송비</p>
-            <p>3,000원</p>
-          </Option>
         </OptionBox>
+        <ResultBox>
+          <TitleTag>총 금액</TitleTag>
+          <ContentTag>23,010원</ContentTag>
+        </ResultBox>
         <ButtonBox>
-          <BuyButton>장바구니</BuyButton>
+          <BasketButton>장바구니</BasketButton>
           <BuyButton>구매하기</BuyButton>
         </ButtonBox>
       </InfoBox>
@@ -131,8 +134,8 @@ export default function ProductInfo() {
 const Container = styled.div`
   display: flex;
   width: 100%;
+  margin-top: 3rem;
   align-items: center;
-  margin: 2rem;
 `;
 // Image
 const ImgBox = styled.div`
@@ -141,41 +144,44 @@ const ImgBox = styled.div`
   width: 50%;
 `;
 
-const MajorImgBox = styled.div``;
+const MajorImgBox = styled.div`
+  width: 80%;
+`;
 
 const MajorImg = styled.img`
-  width: 24rem;
+  width: 100%;
   margin: 0.5rem;
   object-fit: cover;
 `;
 
 const SubImgBox = styled.div`
   display: flex;
+  width: 20%;
   margin: 0.5rem;
 `;
 const SubImg = styled.img`
-  width: 5rem;
+  width: 100%;
   margin-right: 1rem;
   object-fit: cover;
 `;
 
 // Info
 const InfoBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
   width: 50%;
 `;
 
 // Title
 const TitleBox = styled.div`
   display: flex;
+  justify-content: space-between;
   width: 100%;
 `;
 
-const TitleDiv = styled.div`
-  width: 80%;
-`;
-const IconBox = styled.div`
-  width: 20%;
-`;
+const TitleDiv = styled.div``;
+const IconBox = styled.div``;
 const PriceBox = styled.div`
   margin-top: 1rem;
 `;
@@ -195,7 +201,8 @@ const OptionBox = styled.div``;
 
 const Option = styled.div`
   display: flex;
-  margin-bottom: 1rem;
+  align-items: center;
+  margin-top: 0.5rem;
 `;
 
 const MinusIcon = styled(RemoveOutlinedIcon)`
@@ -220,22 +227,47 @@ const PlusIcon = styled(AddOutlinedIcon)`
   cursor: pointer;
 `;
 
+const ResultBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+const TitleTag = styled.div`
+  font-size: 1rem;
+  margin-right: 1rem;
+`;
+const ContentTag = styled.div`
+  font-size: 1.6rem;
+  font-weight: bold;
+`;
 // Button
 
 const ButtonBox = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 1rem;
+  margin-top: 3rem;
+`;
+
+const BasketButton = styled.button`
+  border: 1px solid #56a9f1;
+  border-radius: 1rem;
+  width: 40%;
+  height: 2.5rem;
+  background-color: #fff;
+  color: #56a9f1;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
 `;
 
 const BuyButton = styled.button`
-  border: 0;
-  border-radius: 0.5rem;
-  width: 20%;
-  height: 2rem;
-  background-color: #ff9494;
+  border: none;
+  border-radius: 1rem;
+  width: 40%;
+  height: 2.5rem;
+  background-color: #56a9f1;
   color: #fff;
-  font-size: 1rem;
+  font-size: 1.3rem;
   font-weight: bold;
   cursor: pointer;
 `;
