@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Rating from "@mui/material/Rating";
@@ -14,26 +14,59 @@ import styled from "styled-components";
 export default function ProductReview() {
   return (
     <Container>
+      <h1 style={{ fontSize: "3rem" }}>
+        리뷰<span style={{ fontSize: "1.5rem" }}>(105)</span>
+      </h1>
       <TotalReivew>
-        <h1>
-          리뷰<span style={{ fontSize: "1rem" }}>(105)</span>
-        </h1>
-        <Rating
-          name="text-feedback"
-          value="3.8"
-          readOnly
-          precision={0.5}
-          sx={{ fontSize: "3.5rem" }}
-          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-        />
-        <p style={{ fontSize: "1.5rem" }}>3.8/5</p>
+        <LeftBox>
+          <Rating
+            name="text-feedback"
+            value="3.8"
+            readOnly
+            precision={0.5}
+            sx={{ fontSize: "3.5rem" }}
+            emptyIcon={
+              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+            }
+          />
+          <p style={{ fontSize: "1.5rem", marginLeft: "1rem" }}>3.8/5</p>
+        </LeftBox>
+        <RightBox>
+          <ScoreBox>
+            <p style={{ margin: 0 }}>5점</p>
+            <BarDiv></BarDiv>
+            <p style={{ margin: 0 }}>2</p>
+          </ScoreBox>
+          <ScoreBox>
+            <p style={{ margin: 0 }}>4점</p>
+            <BarDiv></BarDiv>
+            <p style={{ margin: 0 }}>2</p>
+          </ScoreBox>
+          <ScoreBox>
+            <p style={{ margin: 0 }}>3점</p>
+            <BarDiv></BarDiv>
+            <p style={{ margin: 0 }}>0</p>
+          </ScoreBox>
+          <ScoreBox>
+            <p style={{ margin: 0 }}>2점</p>
+            <BarDiv></BarDiv>
+            <p style={{ margin: 0 }}>0</p>
+          </ScoreBox>
+          <ScoreBox>
+            <p style={{ margin: 0 }}>1점</p>
+            <BarDiv></BarDiv>
+            <p style={{ margin: 0 }}>0</p>
+          </ScoreBox>
+        </RightBox>
       </TotalReivew>
       <PhotoReivew>
         <TitleBox>
-          <p style={{ fontSize: "1.6rem", textAlign: "start" }}>포토리뷰(23)</p>
-          <p style={{ marginTop: "2rem", textDecoration: "underline" }}>
-            전체보기
-          </p>
+          <h1
+            style={{ fontSize: "3rem", textAlign: "start", fontWeight: "1000" }}
+          >
+            포토리뷰<span style={{ fontSize: "1.5rem" }}>(23)</span>
+          </h1>
+          <p style={{ textDecoration: "underline" }}>전체보기</p>
         </TitleBox>
 
         <PhotoList>
@@ -139,18 +172,45 @@ const Container = styled.div`
 
 const TotalReivew = styled.div`
   width: 100%;
+  height: 15rem;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  background-color: rgba(170, 170, 170, 0.13);
+  border-radius: 2rem;
+  padding: 3rem;
 `;
 
+const LeftBox = styled.div`
+  display: flex;
+  width: 50%;
+`;
+const RightBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+`;
+
+const ScoreBox = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 0.5rem;
+`;
+
+const BarDiv = styled.div`
+  height: 1rem;
+  width: 40%;
+  background-color: #56a9f1;
+`;
 const PhotoReivew = styled.div`
   width: 100%;
+  margin-top: 3rem;
 `;
 
 const TitleBox = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 const PhotoList = styled.div`
   display: flex;
