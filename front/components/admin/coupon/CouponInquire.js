@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { MyDatePicker } from "../coupon/CouponPeriod";
+import AddCoupon from "./AddCoupon";
+import CouponList from "./CouponList";
+import CouponPeriod from "./CouponPeriod";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -8,45 +10,49 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import "react-datepicker/dist/react-datepicker.css";
 
-export default function AddCoupon() {
+const coupon = [
+  {
+    title: "빼빼로 데이 1000원 쿠폰",
+    startDate: "2022.10.18 16:00",
+    endDate: "2022.11.11 12:00",
+    category: "식품",
+    discount: "1000",
+  },
+];
+
+export default function CouponInquire() {
   // 대분류
   const [bigCategory, setBigCategory] = useState("");
 
-  // 쿠폰이름
+  // 쿠폰명
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =
-    useState("쿠폰 이름을 입력해주세요.");
+    useState("쿠폰명을 입력해주세요.");
 
-  // 할인금액
-  const [sale, setSale] = useState("");
-  const [salePlaceholder, setSalePlaceholder] =
-    useState("할인금액을 입력해주세요.");
+  // 왼쪽 할인 금액
+  const [leftSale, setLeftSale] = useState("");
+  const [leftSalePlaceholder, setLeftSalePlaceholder] = useState("0");
 
-  // 대분류
-  const [category, setCategory] = useState("");
+  // 오른쪽 할인 금액
+  const [rightSale, setRightSale] = useState("");
+  const [rightSalePlaceholder, setRightSalePlaceholder] = useState("0");
 
-  // 시작 날짜
-  const [startDate, setStartDate] = useState(new Date());
-  // 마감 날짜
-  const [endDate, setEndDate] = useState(new Date());
+  // 대분류 셀렉트 했을 때
+  const handleChange = (event) => {
+    setBigCategory(event.target.value);
+  };
 
-  // 상품명 입력하면
+  // 쿠폰명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
-    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
   };
   const nameBlur = () => {
-    setNamePlaceholder("쿠폰 이름을 입력해주세요.");
+    setNamePlaceholder("쿠폰명을 입력해주세요.");
   };
-
-  // 왼쪽 할인 금액
-  const [leftSale, setLeftSale] = useState("");
-  const [leftSalePlaceholder, setLeftSalePlaceholder] = useState("0");
 
   // 왼쪽 할인 금액 입력하면
   const leftSaleChange = (event) => {
@@ -59,43 +65,22 @@ export default function AddCoupon() {
     setLeftSalePlaceholder("0");
   };
 
-  // 대분류 셀렉트 했을 때
-  const handleChange = (event) => {
-    setCategory(event.target.value);
+  // 오른쪽 할인 금액 입력하면
+  const rightSaleChange = (event) => {
+    setRightSale(event.target.value);
+  };
+  const rightSaleFocus = () => {
+    setRightSalePlaceholder("");
+  };
+  const rightSaleBlur = () => {
+    setRightSalePlaceholder("0");
   };
 
   return (
-    <Grid2
-      container
-      spacing={2}
-      sx={{ padding: "0", margin: "0", background: "white" }}
-    >
-      <h2
-        style={{
-          paddingLeft: "2rem",
-          margin: "0",
-          paddingTop: "2rem",
-          paddingBottom: "1rem",
-        }}
-      >
-        쿠폰 등록
-      </h2>
-      <hr
-        style={{ background: "#ff9494", width: "95%", marginBottom: "2rem" }}
-      />
-      <Grid2
-        xs={12}
-        sx={{
-          margin: "0",
-          padding: "0",
-          width: "100%",
-        }}
-      >
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-      </Grid2>
+    <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
       {/* 카테고리 */}
       <Grid2
-        xs={3}
+        xs={2}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -111,7 +96,7 @@ export default function AddCoupon() {
         카테고리
       </Grid2>
       <Grid2
-        xs={9}
+        xs={10}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -167,7 +152,7 @@ export default function AddCoupon() {
       </Grid2>
       {/* 쿠폰명 */}
       <Grid2
-        xs={3}
+        xs={2}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -183,7 +168,7 @@ export default function AddCoupon() {
         쿠폰명
       </Grid2>
       <Grid2
-        xs={9}
+        xs={10}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -212,7 +197,7 @@ export default function AddCoupon() {
       </Grid2>
       {/* 할인 금액 */}
       <Grid2
-        xs={3}
+        xs={2}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -228,7 +213,7 @@ export default function AddCoupon() {
         할인 금액
       </Grid2>
       <Grid2
-        xs={9}
+        xs={10}
         sx={{
           padding: "0",
           paddingTop: "1rem",
@@ -244,6 +229,14 @@ export default function AddCoupon() {
           onFocus={leftSaleFocus}
           onBlur={leftSaleBlur}
         />
+        <WaveTag>~</WaveTag>
+        <SaleInput
+          style={{ margin: "0" }}
+          placeholder={rightSalePlaceholder}
+          onChange={rightSaleChange}
+          onFocus={rightSaleFocus}
+          onBlur={rightSaleBlur}
+        />
       </Grid2>
       <Grid2
         xs={12}
@@ -257,53 +250,14 @@ export default function AddCoupon() {
       </Grid2>
       {/* 기간 */}
       <Grid2
-        xs={3}
+        xs={12}
         sx={{
+          margin: "0",
           padding: "0",
-          paddingTop: "1rem",
-          paddingBottom: "1rem",
-          background: "#DADADA",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "1.5rem",
-          fontWeight: "600",
+          width: "100%",
         }}
       >
-        기간
-      </Grid2>
-      <Grid2
-        xs={9}
-        sx={{
-          padding: "0",
-          paddingTop: "1rem",
-          paddingBottom: "1rem",
-          paddingLeft: "1rem",
-          display: "flex",
-          zIndex: "0",
-          background: "white",
-        }}
-      >
-        <MyDatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          // endDate={endDate}
-          style={{ width: "40%" }}
-          dateFormat="yyyy/MM/dd"
-        />
-        <WaveTag>~</WaveTag>
-        <MyDatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          style={{ width: "40%" }}
-          dateFormat="yyyy/MM/dd"
-        />
+        <CouponPeriod></CouponPeriod>
       </Grid2>
       <Grid2
         xs={12}
@@ -319,6 +273,7 @@ export default function AddCoupon() {
         xs={12}
         sx={{
           margin: "0",
+          marginBottom: "2rem",
           padding: "0",
           width: "100%",
           background: "white",
@@ -326,21 +281,53 @@ export default function AddCoupon() {
         }}
       >
         <ButtonBox>
-          <AddButton>등록</AddButton>
+          <ResetButton>초기화</ResetButton>
+          <SearchButton>검색</SearchButton>
         </ButtonBox>
+      </Grid2>
+      <Grid2
+        container
+        spacing={2}
+        sx={{ padding: "0", margin: "0", width: "100%" }}
+      >
+        <Grid2
+          item
+          xs={7.4}
+          sx={{
+            margin: "0",
+            padding: "0",
+            background: "white",
+          }}
+        >
+          <CouponList />
+        </Grid2>
+        <Grid2
+          item
+          xs={0.3}
+          sx={{
+            margin: "0",
+            padding: "0",
+          }}
+        />
+        <Grid2
+          item
+          xs={4.3}
+          sx={{
+            margin: "0",
+            padding: "0",
+          }}
+        >
+          <AddCoupon />
+        </Grid2>
       </Grid2>
     </Grid2>
   );
 }
 
-const WaveTag = styled.div`
-  font-size: 2rem;
-`;
-
 const CategoryBox = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 2rem;
+  margin-left: 5rem;
 `;
 
 const Input = styled.input`
@@ -348,7 +335,7 @@ const Input = styled.input`
   width: 19rem;
   height: 3rem;
   font-size: 1.3rem;
-  margin-left: 2rem;
+  margin-left: 5rem;
 
   &::placeholder {
     color: gray;
@@ -362,7 +349,7 @@ const SaleInput = styled.input`
   width: 19rem;
   height: 3rem;
   font-size: 1.3rem;
-  margin-left: 2rem;
+  margin-left: 5rem;
   text-align: end;
   padding-right: 1rem;
 
@@ -373,6 +360,14 @@ const SaleInput = styled.input`
   }
 `;
 
+const WaveTag = styled.div`
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+  margin-right: 2rem;
+`;
+
 const ButtonBox = styled.div`
   display: flex;
   justify-content: center;
@@ -381,13 +376,26 @@ const ButtonBox = styled.div`
   background-color: white;
 `;
 
-const AddButton = styled.button`
-  background-color: #1a6dff;
-  color: white;
+const ResetButton = styled.button`
+  background-color: #ffffff;
+  color: black;
   border: 1px solid;
   height: 3rem;
   width: 6rem;
   font-size: 1.3rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const SearchButton = styled.button`
+  background-color: #57a9fb;
+  color: white;
+  border: 1px solid;
+  margin-left: 1rem;
+  height: 3rem;
+  width: 7rem;
+  font-size: 1.5rem;
   &:hover {
     cursor: pointer;
   }

@@ -130,16 +130,16 @@ export default function SaleProductSearch() {
       >
         {/* 카테고리 */}
         <Category />
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }}></hr>
+        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 검색어 */}
         <SearchWord />
-        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }}></hr>
+        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         {/* 판매상태 */}
         <SaleStatus />
-        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }}></hr>
+        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         {/* 기간 */}
         <Period />
-        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }}></hr>
+        <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
           <ResetButton>초기화</ResetButton>
           <SearchButton>검색</SearchButton>
