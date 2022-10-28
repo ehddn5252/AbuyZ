@@ -1,8 +1,6 @@
-// React
 import React from "react";
 
 // MUI
-import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -18,11 +16,6 @@ export default function ServiceCategory({ setSearch }) {
     { label: "주문, 결제" },
   ];
   const dateList = () => [{ label: "전체" }, { label: "문의일시" }];
-  const solvedList = () => [
-    { label: "전체" },
-    { label: "미답변" },
-    { label: "답변완료" },
-  ];
   const searchButton = () => {
     setSearch(true);
   };
@@ -39,6 +32,7 @@ export default function ServiceCategory({ setSearch }) {
           <CategoryDiv>
             <Autocomplete
               disablePortal
+              size="small"
               options={inquiryList()}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
@@ -51,7 +45,7 @@ export default function ServiceCategory({ setSearch }) {
             <p style={{ margin: 0 }}>문의명</p>
           </TitleDiv>
           <CategoryDiv>
-            <TextField sx={{ width: 400, paddingLeft: "2rem" }} />
+            <TextField size="small" sx={{ width: 400, paddingLeft: "2rem" }} />
           </CategoryDiv>
         </ColumnBox>
         <ColumnBox>
@@ -61,6 +55,7 @@ export default function ServiceCategory({ setSearch }) {
           <CategoryDiv>
             <Autocomplete
               disablePortal
+              size="small"
               options={dateList()}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
@@ -124,17 +119,18 @@ const TitleDiv = styled.div`
   justify-content: center;
   font-weight: bold;
   width: 20%;
-  height: 5.5rem;
+  height: 4.2rem;
   background-color: #dadada;
   font-size: 1.3rem;
 `;
 
 const CategoryDiv = styled.div`
   display: flex;
+  align-items: center;
   width: 80%;
   height: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   background-color: white;
 `;
 
