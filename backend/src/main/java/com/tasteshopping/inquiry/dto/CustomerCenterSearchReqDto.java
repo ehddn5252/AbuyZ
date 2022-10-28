@@ -1,4 +1,4 @@
-package com.tasteshopping.statistics.dto;
+package com.tasteshopping.inquiry.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TotalSaleDto {
-    private int total_sales;
+public class CustomerCenterSearchReqDto {
+
+    Integer question_uid;
+    String content;
 }

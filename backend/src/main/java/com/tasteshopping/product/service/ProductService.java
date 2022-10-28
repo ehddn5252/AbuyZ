@@ -1,29 +1,31 @@
 package com.tasteshopping.product.service;
 
-import com.tasteshopping.product.dto.ProductCreateDto;
-import com.tasteshopping.product.dto.ProductDetailDto;
-import com.tasteshopping.product.dto.ProductDto;
+import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.product.dto.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
+
+    void registerProduct(ProductCreateDto productCreateDto);
+
+    List<ProductDto> getAllProduct();
+
+    Optional<Integer> getMaxUid();
+
+    BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
+
+    void deleteProduct(Integer uid);
+
+    void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
+    void modifyProduct(ProductCreateDto productCreateDto);
+
     void modifyProductOption(ProductCreateDto productCreateDto);
 
-    void modifyProductPicture(ProductCreateDto productCreateDto);
+    void modifyProductPicture(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
 
-    public void registerProduct(ProductCreateDto productCreateDto);
-
-    public List<ProductDto> getAllProduct();
-
-    public Optional<Integer> getMaxUid();
-
-    public void createProductRelated(ProductCreateDto productCreateDto);
-
-    public void deleteProduct(Integer uid);
-
-    public void modifyProduct(ProductCreateDto productCreateDto);
-    public void modifyProductRelated(ProductCreateDto productCreateDto);
 
     List<ProductDto> findByKeyword(String keyword);
 
@@ -42,4 +44,8 @@ public interface ProductService {
     public ProductDto getOneProduct(Integer productsUid);
 
     ProductDetailDto getDetailProduct(int productsUid);
+
+    List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice);
+
+    List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
 }

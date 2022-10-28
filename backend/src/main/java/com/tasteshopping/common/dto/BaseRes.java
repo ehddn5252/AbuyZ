@@ -1,15 +1,18 @@
 package com.tasteshopping.common.dto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BaseRes {
     String message=null;
     Integer statusCode = null;
     Object data = null;
 
-    public BaseRes() {}
     public BaseRes(Integer statusCode) {
         this.statusCode = statusCode;
     }
@@ -19,7 +22,6 @@ public class BaseRes {
         this.message = message;
         this.data = data;
     }
-
 
     public static BaseRes of(Integer statusCode,String message) {
         BaseRes responseBody = new BaseRes();

@@ -13,8 +13,6 @@ public class UserDto {
 
     private String email;
     private String password;
-    private String address;
-    private String detailAddress;
     private String phoneNumber;
     private String name;
     private String gender;
@@ -30,8 +28,6 @@ public class UserDto {
         return Users.builder()
                 .email(this.email)
                 .password(this.password)
-                .address(this.address)
-                .detailAddress(this.detailAddress)
                 .name(this.name)
                 .nickname(this.nickname)
                 .phoneNumber(this.phoneNumber)

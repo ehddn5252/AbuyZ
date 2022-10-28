@@ -33,12 +33,6 @@ public class Users {
     private String password;
 
     @Column
-    private String address;
-
-    @Column
-    private String detailAddress;
-
-    @Column
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -76,6 +70,9 @@ public class Users {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Carts> carts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserAddresses> userAddresses = new ArrayList<>();
+
     public void updateStatus(){
         this.status = 1;
     }
@@ -85,8 +82,6 @@ public class Users {
     }
 
     public void modifyInfo(UserModificationDto userModificationDto){
-        this.address = userModificationDto.getAddress();
-        this.detailAddress = userModificationDto.getDetailAddress();
         this.phoneNumber = userModificationDto.getPhoneNumber();
         this.name = userModificationDto.getName();
         this.gender = userModificationDto.getGender();
@@ -96,8 +91,6 @@ public class Users {
     public UserDto toDto(){
         return UserDto.builder()
                 .email(this.email)
-                .address(this.address)
-                .detailAddress(this.detailAddress)
                 .phoneNumber(this.phoneNumber)
                 .name(this.name)
                 .gender(this.gender)

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -51,7 +52,11 @@ public class ProductController {
         List<ProductDto> l = new ArrayList<>();
 
         // price 로 찾기
-        if (searchDto.getPriceUid() != null) {
+        if(searchDto.getStartPrice() !=null && searchDto.getEndPrice() !=null){
+            l = productService.getProductBySmallCategoryAndPriceBetween(searchDto.getSmallCategoriesUid(),searchDto.getStartPrice(),searchDto.getEndPrice());
+        }
+
+        else if (searchDto.getPriceUid() != null) {
 //            l = productService.getProductByPrice(searchDto.getPriceUid());
             l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(),searchDto.getPriceUid());
         }
@@ -90,6 +95,25 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
 
+    @PostMapping("/fo-search/keyword/detail")
+    public ResponseEntity<BaseRes> foSearchKeywordAndFilter(@RequestBody SearchReqDto searchReqDto) {
+        SearchDto searchDto = searchReqDto.toDto();
+        // 제목으로 검색한 기록
+        List<ProductDto> newL = productService.findByKeyword(searchDto.getKeyword());
+        // 키워드로 검색한 기록
+        if (newL.size() == 0) {
+            newL = productKeywordService.findByParamInKeyword(searchDto.getKeyword());
+        }
+        for(int i=0;i<newL.size();++i){
+            System.out.println(newL.get(i).getBigCategoryUid());
+
+        }
+        newL =productService.findByKeywordAndFilter(newL,searchDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
+    }
+
+
 //    @PostMapping("/detail")
 //    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
 //        /*
@@ -122,13 +146,23 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
 
+//    @PostMapping("/register")
+//    public ResponseEntity<BaseRes> register(@RequestBody ProductCreateReqDto productCreateReqDto) {
+//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
+//        // 상품 관련된 모든 것 생성
+//        productService.createProductRelated(productCreateDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
+//    }
+
     @PostMapping("/register")
-    public ResponseEntity<BaseRes> register(@RequestBody ProductCreateReqDto productCreateReqDto) {
+    public ResponseEntity<BaseRes> registerImgTest(@RequestPart ProductCreateReqDto productCreateReqDto,
+                                                   @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         // 상품 관련된 모든 것 생성
-        productService.createProductRelated(productCreateDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
+
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto,multipartFiles));
     }
+
 
     @DeleteMapping()
     public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
@@ -138,9 +172,10 @@ public class ProductController {
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<BaseRes> modify(@RequestBody ProductCreateReqDto productCreateReqDto) {
+    public ResponseEntity<BaseRes> modify(@RequestPart ProductCreateReqDto productCreateReqDto,
+                                          @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-        productService.modifyProductRelated(productCreateDto);
+        productService.modifyProductRelated(productCreateDto,multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
     }
 }

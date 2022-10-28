@@ -1,14 +1,19 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
+import com.tasteshopping.review.service.AwsS3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -47,6 +52,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductKeywordRepository productKeywordRepository;
 
+    @Autowired
+    AwsS3Service awsS3Service;
+
     @Override
     public void modifyProductOption(ProductCreateDto productCreateDto) {
         /*
@@ -74,29 +82,122 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+//    @Override
+//    public void modifyProductPicture(ProductCreateDto productCreateDto) {
+//        // product 변경
+//        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
+//
+//        // save imgs
+//        int count = 0;
+//        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
+//        for (String key : imgs.keySet()) {
+//            if (count == 0) {
+//                //save product
+//                count += 1;
+//                pp.setRepImg(imgs.get(key));
+//                productRepository.save(pp);
+//            }
+//            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
+//        }
+//    }
+
+
     @Override
-    public void modifyProductPicture(ProductCreateDto productCreateDto) {
+    public void modifyProductPicture(ProductCreateDto productCreateDto,
+                                     MultipartFile[] multipartFiles) {
+        int productUid = productCreateDto.getProductsUid();
+
         // product 변경
-        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
+        productPictureRepository.deleteByProductsUid(productUid);
 
         // save imgs
-        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
+        Products pp = productRepository.findById(productUid).get();
+        System.out.println("=================================");
+        System.out.println(pp);
+        // save imgs
         int count = 0;
-        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
-        for (String key : imgs.keySet()) {
-            if (count == 0) {
-                //save product
-                count += 1;
-                pp.setRepImg(imgs.get(key));
-                productRepository.save(pp);
+        String imagePath = null; //파일서버에업로드후 img_url 데려오기
+        if(multipartFiles.length==0){
+            productRepository.save(pp);
+        }
+        for (int i=0;i<multipartFiles.length;++i) {
+            try {
+                imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+                if (count == 0) {
+                    //save product
+                    count += 1;
+                    pp.setRepImg(imagePath);
+                    productRepository.save(pp);
+                } else {
+                    productPictureService.createProductPicture(productUid, imagePath);
+                }
             }
-            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
+            catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
+//    @Override
+//    @Transactional
+//    public void createProductRelated(ProductCreateDto productCreateDto) {
+//        /*
+//            param 이 넘겨오면 해야할 것
+//            1. Products product 를 생성한다. ok
+//            2. product_uid 에 맞는 product_pictures 를 생성한다. ok
+//            3. product_uid 에 맞는 product_options 를 생성한다.
+//            4. product_options에 맞는 product_option_lists를 생성한다.
+//            5. product_uid 에 맞는 product_keywords 를 생성한다.
+//         */
+//
+//        registerProduct(productCreateDto);
+//        int productsUid = 1;
+//        Optional<Integer> maxUidOptional = getMaxUid();
+//        if (maxUidOptional.isPresent()) {
+//            productsUid = maxUidOptional.get();
+//        }
+//        Products pp = productRepository.findById(productsUid).get();
+//
+//        // save imgs
+//        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
+//        int count = 0;
+//        for (String key : imgs.keySet()) {
+//            if (count == 0) {
+//                //save product
+//                count += 1;
+//                pp.setRepImg(imgs.get(key));
+//                productRepository.save(pp);
+//            }
+//            productPictureService.createProductPicture(productsUid, imgs.get(key));
+//        }
+//
+//        //save product_options
+//        LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
+//
+//        productOptionService.createProductOption(productsUid,true);
+//
+//        int optionsUid = 1;
+//        Optional<Integer> maxOptionUidOptional = productOptionService.getMaxUid();
+//        if (maxOptionUidOptional.isPresent()) {
+//            optionsUid = maxOptionUidOptional.get();
+//        }
+//        // save product_option_lists
+//        for (String key : options.keySet()) {
+//            String[] sList = options.get(key).split(",");
+//            for (int i = 0; i < sList.length; ++i) {
+//                productOptionListService.createProductOptionList(key, sList[i].trim(), optionsUid);
+//            }
+//        }
+//        // save keyword lists
+//        String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
+//        for (int i = 0; i < keywordList.length; ++i) {
+//            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
+//        }
+//    }
+
     @Override
     @Transactional
-    public void createProductRelated(ProductCreateDto productCreateDto) {
+    public BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles) {
         /*
             param 이 넘겨오면 해야할 것
             1. Products product 를 생성한다. ok
@@ -115,17 +216,31 @@ public class ProductServiceImpl implements ProductService {
         Products pp = productRepository.findById(productsUid).get();
 
         // save imgs
-        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
         int count = 0;
-        for (String key : imgs.keySet()) {
-            if (count == 0) {
-                //save product
-                count += 1;
-                pp.setRepImg(imgs.get(key));
-                productRepository.save(pp);
-            }
-            productPictureService.createProductPicture(productsUid, imgs.get(key));
+        String imagePath = null; //파일서버에업로드후 img_url 데려오기
+        BaseRes res = null;
+        if(multipartFiles.length==0){
+            productRepository.save(pp);
         }
+        for (int i=0;i<multipartFiles.length;++i) {
+            try {
+                imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+                if (count == 0) {
+                    //save product
+                    count += 1;
+                    pp.setRepImg(imagePath);
+                    productRepository.save(pp);
+                } else {
+                    productPictureService.createProductPicture(productsUid, imagePath);
+                }
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                res = new BaseRes(202,"파일 업로드 에러", null);
+                return res;
+            }
+        }
+        
 
         //save product_options
         LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
@@ -149,6 +264,8 @@ public class ProductServiceImpl implements ProductService {
         for (int i = 0; i < keywordList.length; ++i) {
             productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
         }
+
+        return new BaseRes(200,"상품 등록 완료", null);
     }
 
     @Override
@@ -161,13 +278,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void modifyProductRelated(ProductCreateDto productCreateDto) {
+    public void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles) {
         // 상품 변경
         modifyProduct(productCreateDto);
 
         // 상품 이미지 변경 (삭제 후 생성)
-        modifyProductPicture(productCreateDto);
-
+        if(multipartFiles!=null) {
+            modifyProductPicture(productCreateDto, multipartFiles);
+        }
         // product_options 변경 (삭제 후 생성)
         modifyProductOption(productCreateDto);
 
@@ -234,7 +352,7 @@ public class ProductServiceImpl implements ProductService {
         int end = 50000;
 
         if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 50001;
+            start = 30001;
             end = 100000;
         } else if (priceUid == Price.UNDER_300000.ordinal()) {
             start = 100001;
@@ -277,10 +395,10 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid) {
 
         int start = 0;
-        int end = 50000;
+        int end = 30000;
 
         if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 50001;
+            start = 30001;
             end = 100000;
         } else if (priceUid == Price.UNDER_300000.ordinal()) {
             start = 100001;
@@ -336,6 +454,101 @@ public class ProductServiceImpl implements ProductService {
         return productDetailDto;
     }
 
+    @Override
+    public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice) {
+        int start = startPrice;
+        int end = endPrice;
+        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
+        List<ProductDto> newL = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto) {
+
+        // 반환할 리스트
+        List<ProductDto> l= new ArrayList<>();
+
+        Integer startPrice = searchDto.getStartPrice();
+        Integer endPrice = searchDto.getEndPrice();
+        Integer priceId = searchDto.getPriceUid();
+        Integer deliveryFeeId = searchDto.getDeliveryFeeUid();
+        Integer bigCategoriesUid = searchDto.getBigCategoriesUid();
+        l.addAll(newL);
+        if(bigCategoriesUid!=null){
+            l.clear();
+            for(int i=0;i<newL.size();++i){
+                int bigCategoryUid = newL.get(i).getBigCategoryUid();
+                if(bigCategoryUid==bigCategoriesUid){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+
+        if(priceId !=null && (startPrice==null || endPrice==null)){
+            l.clear();
+            int start = 0;
+            int end = 30000;
+
+            if (priceId == Price.UNDER_100000.ordinal()) {
+                start = 30001;
+                end = 100000;
+            } else if (priceId == Price.UNDER_300000.ordinal()) {
+                start = 100001;
+                end = 300000;
+            } else if (priceId == Price.OVER_300000.ordinal()) {
+                start = 300001;
+                end = Integer.MAX_VALUE;
+            }
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=start && price<=end){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+        if(deliveryFeeId!=null){
+            l.clear();
+            int startDeliveryFee = 0;
+            int endDeliveryFee = 0;
+            if (deliveryFeeId == DeliveryFee.UNDER_3000.ordinal()) {
+                startDeliveryFee = 1;
+                endDeliveryFee = 3000;
+            } else if (deliveryFeeId == DeliveryFee.OVER_3000.ordinal()) {
+                startDeliveryFee = 3001;
+                endDeliveryFee = Integer.MAX_VALUE;
+            }
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=startDeliveryFee && price<=endDeliveryFee){
+                    l.add(newL.get(i));
+                }
+            }
+            newL.clear();
+            newL.addAll(l);
+        }
+        System.out.println(newL.size());
+        // 시작 가격과 끝 가격이 있다면 체크
+        if(startPrice!=null && endPrice!=null){
+            l.clear();
+            for(int i=0;i< newL.size();++i){
+                int price = newL.get(i).getPrice();
+                if(price>=startPrice && price<=endPrice){
+                    l.add(newL.get(i));
+                }
+            }
+        }
+        return l;
+    }
+
 
     private void modifyProductKeywords(ProductCreateDto productCreateDto) {
 
@@ -389,8 +602,6 @@ public class ProductServiceImpl implements ProductService {
         if (smallCategoriesOptional.isPresent()) {
             smallCategories = smallCategoriesOptional.get();
         }
-        // Builder 로 변경
-
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
         productRepository.save(product1);
     }
@@ -399,10 +610,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProduct() {
         List<Products> l = productRepository.findAll();
-        System.out.println("===================================");
-        System.out.println(l);
-        System.out.println("===================================");
-
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());

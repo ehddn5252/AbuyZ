@@ -11,8 +11,11 @@ import lombok.*;
 @NoArgsConstructor
 public class SearchDto {
 
+    String keyword;
     Integer bigCategoriesUid;
     Integer smallCategoriesUid;
     Integer deliveryFeeUid;
     Integer priceUid;
+    Integer startPrice;
+    Integer endPrice;
 }

@@ -82,11 +82,22 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         switch (menu){
             case 0:
-                List<Revenues> result = revenueRepository.findAllByDateBetween(start_date,end_date);
-                for(Revenues revenues:result){
-                    total+=revenues.getDailyRevenue();
+                int total_count=0,total_sales=0;
+                List<Revenues> revenues = revenueRepository.findAllByDateBetween(start_date,end_date);
+                List<DailySalesDto>result = new ArrayList<>();
+                for(Revenues revenue:revenues){
+                    Orders order = revenue.getOrder();
+                    total_count+=order.getCount();
+                    total_sales+=revenue.getDailyRevenue();
+                    result.add(new DailySalesDto(revenue.getDate(),revenue.getDailyRevenue()));
                 }
-                responseDto.setData(new TotalSaleDto(total));
+
+                Map<String,Object>map = new HashMap<>();
+                map.put("revenues",result);
+                map.put("total_count",total_count);
+                map.put("total_sales",total_sales);
+
+                responseDto.setData(map);
                 responseDto.setMessage("조회 성공");
                 break;
             case 1:

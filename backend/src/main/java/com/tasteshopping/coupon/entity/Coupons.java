@@ -1,6 +1,8 @@
 package com.tasteshopping.coupon.entity;
 
 import com.tasteshopping.categories.entity.BigCategories;
+import com.tasteshopping.coupon.dto.CouponResDto;
+import com.tasteshopping.event.entity.EventCouponLists;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,4 +46,18 @@ public class Coupons {
 
     @OneToMany(mappedBy = "coupons", cascade = CascadeType.ALL)
     private List<CouponLists> couponLists = new ArrayList<>();
+
+    @OneToMany(mappedBy = "coupons", cascade = CascadeType.ALL)
+    private List<EventCouponLists> eventCouponLists = new ArrayList<>();
+    public CouponResDto toDto(){
+        return CouponResDto.builder()
+                .uid(this.uid)
+                .name(this.name)
+                .discount_price(this.discountPrice)
+                .start_date(this.startDate.toString())
+                .end_date(this.endDate.toString())
+                .available_categories_name(this.getBigCategories().getCategoryName())
+                .available_categories_uid(this.getBigCategories().getUid())
+                .build();
+    }
 }

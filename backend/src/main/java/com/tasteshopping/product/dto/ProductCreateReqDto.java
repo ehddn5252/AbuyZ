@@ -38,7 +38,6 @@ public class ProductCreateReqDto {
                 .brandName(p.brand_name)
                 .descriptionImg(p.description_img)
                 .repImg(p.rep_img)
-                .imgs(p.imgs)
                 .options(p.options)
                 .keywords(p.keywords)
                 .metaTag(p.meta_tag)

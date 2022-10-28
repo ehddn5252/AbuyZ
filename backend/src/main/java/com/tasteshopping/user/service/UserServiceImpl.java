@@ -1,13 +1,14 @@
 package com.tasteshopping.user.service;
 
+import com.tasteshopping.common.service.RedisService;
 import com.tasteshopping.user.dto.*;
+import com.tasteshopping.user.entity.UserAddresses;
 import com.tasteshopping.user.entity.Users;
+import com.tasteshopping.user.repository.UserAddressRepository;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.user.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -35,7 +34,8 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
     private final JavaMailSenderImpl mailSender;
-
+    private final UserAddressRepository userAddressRepository;
+    private final RedisService redisService;
     @Override
     @Transactional
     public ResponseDto signUp(UserDto userDto, LoginType loginType) {
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService{
         String setFrom = "wlgns3914@naver.com";
         String toMail = email;
         String title = "회원 가입 인증 이메일 입니다.";
-        String content = "BUYZ를 방문해주셔서 감사합니다." +
+        String content = "ABUYZ를 방문해주셔서 감사합니다." +
                 "<br><br>" +
                 "인증 번호는 " + authNumber + "입니다." +
                 "<br>" +
@@ -149,20 +149,21 @@ public class UserServiceImpl implements UserService{
             responseDto.setMessage("이메일 전송에 실패했습니다.");
             return responseDto;
         }
-        // 5분 동안만 인증번호 저장
-//        redisUtil.setDataExpire(email, authNumber, 60 * 5L);
+
+        redisService.setDataExpire(email, authNumber, 60 * 10L);
+
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("인증 번호를 전송 완료");
         return responseDto;
     }
 
     @Override
-    public ResponseDto authenticationNumber(AuthenticationNumberDto authenticationNumberDto) {
+    public ResponseDto authenticationNumber(AuthenticationDto authenticationDto) {
         ResponseDto responseDto = new ResponseDto();
-//        if (!redisUtil.getData(email).equals(authNum)) {
-//            responseDto.setData(new ResultDto(false));
-//            responseDto.setMessage("불일치");
-//        }
+        if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("불일치");
+        }
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("일치");
         return responseDto;
@@ -187,7 +188,7 @@ public class UserServiceImpl implements UserService{
         String setFrom = "wlgns3914@naver.com";
         String toMail = checkUserInfoDto.getEmail();
         String title = "임시 비밀번호 발급 이메일 입니다.";
-        String content = "BUYZ를 방문해주셔서 감사합니다." +
+        String content = "ABUYZ를 방문해주셔서 감사합니다." +
                 "<br><br>" +
                 "임시 비밀번호는 "+ temp_pw  + "입니다." +
                 "<br>" +
@@ -228,6 +229,90 @@ public class UserServiceImpl implements UserService{
         user.modifyInfo(userModificationDto);
         userRepository.save(user);
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공");
+        return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto addAddress(String email, UserAddressDto userAddress) {
+        ResponseDto responseDto = new ResponseDto();
+
+        Optional<Users> user = userRepository.findByEmail(email);
+        if(!user.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("추가 실패");
+            return responseDto;
+        }
+
+        UserAddresses userAddresses = UserAddresses.builder()
+                .nickname(userAddress.getNickname())
+                .address(userAddress.getAddress())
+                .detailAddress(userAddress.getDetailAddress())
+                .postalCode(userAddress.getPostalCode())
+                .recipient(userAddress.getRecipient())
+                .contact1(userAddress.getContact1())
+                .contact2(userAddress.getContact2())
+                .note(userAddress.getNote())
+                .user(user.get())
+                .build();
+        userAddressRepository.save(userAddresses);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("추가 성공");
+        return responseDto;
+    }
+
+    @Override
+    public ResponseDto getAddresses(String email) {
+        ResponseDto responseDto = new ResponseDto();
+        List<UserAddresses>findAddresses = userAddressRepository.findByUserEmail(email);
+        List<UserAddressDto>userAddresses = new ArrayList<>();
+        for(UserAddresses userAddress:findAddresses){
+            userAddresses.add(userAddress.toDto());
+        }
+        responseDto.setData(userAddresses);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto deleteAddress(String email, int address_uid) {
+        ResponseDto responseDto = new ResponseDto();
+
+        Optional<Users> user = userRepository.findByEmail(email);
+        if(!user.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("삭제 실패");
+            return responseDto;
+        }
+        Integer result = userAddressRepository.deleteByUidAndUser(address_uid,user.get());
+        if(result==1){
+            responseDto.setData(new ResultDto(true));
+            responseDto.setMessage("삭제 성공");
+        }else{
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("삭제 실패");
+        }
+        return responseDto;
+    }
+
+    @Override
+    @Transactional
+    public ResponseDto modifyAddress(String email, int address_uid, UserAddressDto userAddressReqDto) {
+        ResponseDto responseDto = new ResponseDto();
+
+        Optional<UserAddresses> userAddresses = userAddressRepository.findByUidAndUser(address_uid,email);
+
+        if(!userAddresses.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("수정 실패");
+            return responseDto;
+        }
+        userAddresses.get().update(userAddressReqDto);
+        userAddressRepository.save(userAddresses.get());
+
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("수정 성공");
         return responseDto;
     }
 }
