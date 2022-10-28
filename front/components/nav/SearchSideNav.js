@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React from "react";
 
 // MUI
 import Container from "@mui/material/Container";
@@ -16,16 +16,20 @@ export default function SearchSideNav() {
   return (
     <NavContainer>
       <Title>
-        <p>필터</p>
-        <div style={{ display: "flex" }}>
+        <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
+          필터
+        </p>
+        <div style={{ display: "flex", alignItems: "flex-end" }}>
           <RestartAltIcon />
-          <p>초기화</p>
+          <p style={{ margin: 0 }}>초기화</p>
         </div>
       </Title>
 
       <hr />
       <FormControl>
-        <FormLabel id="label">배송</FormLabel>
+        <FormLabel id="label" sx={{ fontSize: "1.6rem", fontWeight: "1000" }}>
+          배송
+        </FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue="free"
@@ -44,8 +48,10 @@ export default function SearchSideNav() {
           />
         </RadioGroup>
       </FormControl>
-      <FormControl>
-        <FormLabel id="label">가격</FormLabel>
+      <FormControl sx={{ marginTop: "1rem" }}>
+        <FormLabel id="label" sx={{ fontSize: "1.6rem", fontWeight: "1000" }}>
+          가격
+        </FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue="free"
@@ -78,7 +84,6 @@ export default function SearchSideNav() {
 const NavContainer = styled(Container)`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   padding: 0;
   width: 100%;
   height: 35rem;
@@ -87,10 +92,14 @@ const NavContainer = styled(Container)`
 const Title = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid black;
+  padding-bottom: 0.5rem;
 `;
 const InputBox = styled.div`
   display: flex;
   width: 100%;
+  margin-top: 1rem;
   align-items: center;
   justify-content: space-around;
 `;
@@ -104,7 +113,9 @@ const Button = styled.button`
   width: 100%;
   height: 2rem;
   border: none;
+  margin-top: 1rem;
   border-radius: 1rem;
   color: white;
   background-color: #56a9f1;
+  cursor: pointer;
 `;
