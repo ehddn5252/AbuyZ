@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function CouponPeriod() {
+export default function EventPeriod() {
   // 기준기간
   const [standard, setStandard] = useState("");
 
