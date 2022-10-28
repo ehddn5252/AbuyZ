@@ -1,5 +1,5 @@
 import React from "react";
-// import styled from "styled-components";
+import styled from "styled-components";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -191,6 +191,15 @@ export default function InquireList() {
 //     background: #dadada;
 //   }
 // `;
+
+const Td = styled.td`
+  margin: 0;
+  border: 1px solid black;
+  text-align: center;
+  height: fit-content;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+`;
 
 // const CancelButton = styled.button`
 //   width: 10%;
