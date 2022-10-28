@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+// 달력
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -10,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function Period() {
+export default function CouponPeriod() {
   // 기준기간
   const [standard, setStandard] = useState("");
 
@@ -47,6 +49,7 @@ export default function Period() {
           paddingBottom: "1rem",
           display: "flex",
           alignContent: "center",
+          background: "white",
         }}
       >
         <FormControl
@@ -77,8 +80,8 @@ export default function Period() {
             }}
             sx={{ border: 1, height: 50, borderRadius: 0 }}
           >
-            <MenuItem value={"상품등록일"}>상품등록일</MenuItem>
-            <MenuItem value={"상품판매일"}>상품판매일</MenuItem>
+            <MenuItem value={"쿠폰사용일시"}>쿠폰사용일시</MenuItem>
+            <MenuItem value={"쿠폰마감일시"}>쿠폰마감일시</MenuItem>
           </Select>
         </FormControl>
         <ButtonGroup>
@@ -92,7 +95,7 @@ export default function Period() {
             width: "25rem",
             display: "flex",
             alignItems: "center",
-            marginLeft: "2rem",
+            marginLeft: "3rem",
           }}
         >
           <MyDatePicker
@@ -111,7 +114,6 @@ export default function Period() {
             startDate={startDate}
             endDate={endDate}
             minDate={startDate}
-            style={{ width: "40%" }}
             dateFormat="yyyy/MM/dd"
           />
         </div>
@@ -144,7 +146,6 @@ const Button = styled.button`
 
 const WaveTag = styled.div`
   font-size: 2rem;
-  /* rotate: 90deg; */
 `;
 
 export const MyDatePicker = styled(DatePicker)`
