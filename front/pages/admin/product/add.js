@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Add() {
   return (
     <ProductPage>
-      <h1>하이</h1>
+      <h1>준비중입니다.</h1>
     </ProductPage>
   );
 }

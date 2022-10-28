@@ -1,22 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { Container } from "@mui/material";
-import SaleEventList from "../../components/admin/event/SaleEventList";
-import AddEvent from "../../components/admin/event/AddEvent";
+import EventInquire from "../../components/admin/event/EventInquire";
 
 export default function Event() {
   return (
     <EventPage>
-      <Container maxWidth="xxl" sx={{ paddingTop: "1rem" }}>
-        <SaleEventList />
-        {/* <AddEvent /> */}
-      </Container>
+      <EventInquire />
     </EventPage>
   );
 }
 
 const EventPage = styled.div`
-  background: #edf0f5;
+  background: #eeeeee;
   padding: 3rem;
   padding-left: 15rem;
 `;
