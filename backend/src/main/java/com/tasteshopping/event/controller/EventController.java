@@ -1,6 +1,5 @@
 package com.tasteshopping.event.controller;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.tasteshopping.event.dto.EventReqDto;
 import com.tasteshopping.event.service.EventService;
 import com.tasteshopping.user.dto.ResponseDto;
