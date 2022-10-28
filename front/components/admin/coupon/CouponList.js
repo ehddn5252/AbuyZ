@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 // MUI
@@ -23,6 +23,7 @@ export default function CouponList() {
       discount: 3000,
       start: "2022.01.01",
       end: "2022.01.30",
+      height: "100%",
     },
   ];
 
@@ -36,10 +37,10 @@ export default function CouponList() {
         padding: "0",
       }}
     >
-      {/* <h2 style={{ paddingLeft: "2rem" }}>쿠폰 목록</h2>
+      <h2 style={{ paddingLeft: "2rem" }}>쿠폰 목록</h2>
       <hr
         style={{ background: "#ff9494", width: "95%", marginBottom: "2rem" }}
-      /> */}
+      />
       <div
         style={{
           height: 500,
