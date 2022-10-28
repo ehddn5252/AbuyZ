@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }) {
   // 마우스위치 감지
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      console.log(window.scrollY);
       setScrollY(window.scrollY);
     });
   }, []);
