@@ -48,7 +48,7 @@ const cardStyle = {
   borderRadius: "10%",
 };
 const cardSelect = {
-  boxShadow: "2px 4px 30px 0px rgba(0, 0, 0, 0.75)",
+  boxShadow: "2px 4px 30px 0px rgba(0, 0, 0, 0.2)",
 };
 
 const AllDiv = styled.div`

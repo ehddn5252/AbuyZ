@@ -223,22 +223,3 @@ const CardPPrice = styled.p`
   margin-top: 0;
   margin-bottom: 0;
 `;
-
-const Star = styled.img`
-  width: 8%;
-  height: 8%;
-  margin-left: 1rem;
-  margin-right: 0.5rem;
-`;
-
-const CardGrade = styled.p`
-  font-size: 1rem;
-  font-weight: bolder;
-  margin-right: 0.5rem;
-`;
-
-const CardReviews = styled.p`
-  font-size: 0.5rem;
-  font-weight: bolder;
-  display: flex;
-`;
