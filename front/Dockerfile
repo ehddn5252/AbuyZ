@@ -24,5 +24,5 @@ RUN npm run build
 FROM nginx:stable-alpine as production-stage
 # COPY --from=build-stage /.next /usr/share/nginx/html
 COPY --from=build-stage /usr/src/app/.next /usr/share/nginx/html
-EXPOSE 80
+EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
