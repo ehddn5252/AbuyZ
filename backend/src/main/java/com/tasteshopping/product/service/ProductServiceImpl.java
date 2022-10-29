@@ -25,9 +25,6 @@ public class ProductServiceImpl implements ProductService {
     ProductOptionService productOptionService;
 
     @Autowired
-    ProductOptionService productOptionListService;
-
-    @Autowired
     ProductKeywordService productKeywordService;
 
     @Autowired
@@ -76,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
             for (int i = 0; i < sList.length; ++i) {
-                productOptionListService.createProductOptionList(product, key, sList[i].trim());
+                productOptionService.createProductOptionList(product, key, sList[i].trim());
             }
         }
     }
@@ -182,17 +179,17 @@ public class ProductServiceImpl implements ProductService {
             String[] sList = options.get(key).split(",");
             optionKeyValueNum.add(sList.length);
             optionValueUidOuterList.add(new LinkedList<String>());
+            LinkedList<String> l = optionValueUidOuterList.get(start);
             for (int i = 0; i < sList.length; ++i) {
                 maxUid += 1; // 다음 uid 를 저장해야한다.
-                LinkedList<String> l = optionValueUidOuterList.get(start);
                 l.add(Integer.toString(maxUid));
-                optionValueUidOuterList.set(start, l);
-                productOptionListService.createProductOptionList(pp, key, sList[i].trim());
+                productOptionService.createProductOptionList(pp, key, sList[i].trim());
             }
+            optionValueUidOuterList.set(start, l);
             start+=1;
         }
 
-        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList,optionValueUidOuterList.get(0),0);
+        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList,optionValueUidOuterList.get(0),1);
 
         // 재고 생성
         int cartesianProductNum = 1;
@@ -226,12 +223,9 @@ public class ProductServiceImpl implements ProductService {
         return new BaseRes(200, "상품 등록 완료", null);
     }
 
-    public void getProductOptionList(ArrayList<LinkedList<Integer>> optionValueUidOuterList) {
-
-    }
 
     public LinkedList<String> getInventoryList(ArrayList<LinkedList<String>> ll, LinkedList<String> resultList, int current) {
-        if(ll.size()-1==current){
+        if(ll.size()==current){
             return resultList;
         }
         LinkedList<String> l2 = ll.get(current);
@@ -383,10 +377,12 @@ public class ProductServiceImpl implements ProductService {
             start = 300001;
             end = Integer.MAX_VALUE;
         }
-        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
+        Optional<List<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
-        for (int i = 0; i < l.size(); ++i) {
-            newL.add(l.get(i).get().toDto());
+        if(l.isPresent()) {
+            for (int i = 0; i < l.get().size(); ++i) {
+                newL.add(l.get().get(i).toDto());
+            }
         }
         return newL;
     }
@@ -410,15 +406,11 @@ public class ProductServiceImpl implements ProductService {
             Products p = l.get();
             productDetailDto.setProducts(p.toDto());
             List<ProductPictures> productPicturesList = p.getProductPictures();
-//            List<ProductOptions> productOptionsList= p.getProductOptions();
-            List<ProductOptions> productOptionLists = new ArrayList<>();
-//            if(productOptionsList.size()!=0){
-//                productOptionLists = productOptionsList.get(0).getProductOptionLists();
-//            }
+            List<ProductOptions> productOptionsList= p.getProductOptions();
             List<ProductOptionListDto> productOptionListDtoList = new ArrayList<>();
 
-            for (int i = 0; i < productOptionLists.size(); ++i) {
-                productOptionListDtoList.add(productOptionLists.get(i).toDto());
+            for (int i = 0; i < productOptionsList.size(); ++i) {
+                productOptionListDtoList.add(productOptionsList.get(i).toDto());
             }
             List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
             for (int i = 0; i < productPicturesList.size(); ++i) {
@@ -434,10 +426,12 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice) {
         int start = startPrice;
         int end = endPrice;
-        List<Optional<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
+        Optional<List<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
-        for (int i = 0; i < l.size(); ++i) {
-            newL.add(l.get(i).get().toDto());
+        if(l.isPresent()) {
+            for (int i = 0; i < l.get().size(); ++i) {
+                newL.add(l.get().get(i).toDto());
+            }
         }
 
         return null;

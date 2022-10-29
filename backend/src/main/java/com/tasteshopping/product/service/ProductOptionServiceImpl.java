@@ -1,19 +1,14 @@
 package com.tasteshopping.product.service;
 
 
-import com.tasteshopping.product.dto.ProductOptionListDto;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class ProductOptionListServiceImpl implements ProductOptionService {
+public class ProductOptionServiceImpl implements ProductOptionService {
     @Autowired
     ProductOptionRepository productOptionRepository;
 

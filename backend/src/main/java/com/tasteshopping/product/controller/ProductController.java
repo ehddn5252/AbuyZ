@@ -115,6 +115,9 @@ public class ProductController {
     public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
         ProductUidDto productUidDto = productUidReqDto.toDto();
         ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
+        if(l==null){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 uid의 product가 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!",l));
     }
 
@@ -138,7 +141,12 @@ public class ProductController {
     @DeleteMapping()
     public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
         Integer uid = productUidReqDto.getProducts_uid();
-        productService.deleteProduct(uid);
+        try {
+            productService.deleteProduct(uid);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 상품이 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
     }
 
