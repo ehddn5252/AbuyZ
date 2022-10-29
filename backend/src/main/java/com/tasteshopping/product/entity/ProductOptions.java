@@ -1,11 +1,9 @@
 package com.tasteshopping.product.entity;
 
-import com.tasteshopping.cart.entity.Carts;
-import com.tasteshopping.order.entity.Orders;
+import com.tasteshopping.product.dto.ProductOptionListDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -18,25 +16,23 @@ public class ProductOptions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="products_uid")
+    @Column(columnDefinition = "varchar(50)")
+    String name;
+
+    @Column(columnDefinition = "varchar(100)")
+    String value;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "products_uid")
     Products product;
 
-    Integer count;
+    // 양방향 설정
 
-    Integer price;
-
-    @OneToMany(mappedBy = "productOptions",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<ProductOptionLists> productOptionLists;
-
-
-    @OneToMany(mappedBy = "productOption",fetch= FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<Carts> cartsList;
-
-    @OneToMany(mappedBy = "productOptions",fetch = FetchType.LAZY)
-    private List<Orders> productOrderList;
-
-
-    @Column(columnDefinition = "tinyint(1) default 1")
-    Boolean isDefaultOption;
+    public ProductOptionListDto toDto(){
+        ProductOptionListDto productOptionListDto = new ProductOptionListDto();
+        productOptionListDto.setUid(uid);
+        productOptionListDto.setName(name);
+        productOptionListDto.setValue(value);
+        return productOptionListDto;
+    }
 }

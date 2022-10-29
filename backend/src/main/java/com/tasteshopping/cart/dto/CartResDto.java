@@ -2,7 +2,6 @@ package com.tasteshopping.cart.dto;
 
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.dto.ProductOptionListDto;
-import com.tasteshopping.product.entity.ProductOptionLists;
 import lombok.*;
 
 import java.util.List;

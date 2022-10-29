@@ -9,7 +9,6 @@ import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
-import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
@@ -81,12 +80,12 @@ public class OrderServiceImpl implements OrderService{
             orders.setOrderList(orderLists);
             orders.setCount(cart.getProductCount());
             orders.setStatus(Status.PROCESS.toString());
-
-            Products products = cart.getProduct();
-            orders.setPrice(products.getPrice());
-            ProductOptions productOptions = cart.getProductOption();
-            orders.setProduct(products);
-            orders.setProductOptions(productOptions);
+            Products products = null;
+//            Products products = cart.getProduct();
+//            orders.setPrice(products.getPrice());
+//            ProductOptions productOptions = cart.getProductOption();
+//            orders.setProduct(products);
+//            orders.setProductOptions(productOptions);
             totalPrice += products.getPrice() * cart.getProductCount();
 
             orderRepository.save(orders);
@@ -139,11 +138,12 @@ public class OrderServiceImpl implements OrderService{
         orders.setCount(cart.getProductCount());
         orders.setStatus(Status.PROCESS.toString());
 
-        Products products = cart.getProduct();
-        orders.setPrice(products.getPrice());
-        ProductOptions productOptions = cart.getProductOption();
-        orders.setProduct(products);
-        orders.setProductOptions(productOptions);
+        Products products = null;
+//        Products products = cart.getProduct();
+//        orders.setPrice(products.getPrice());
+//        ProductOptions productOptions = cart.getProductOption();
+//        orders.setProduct(products);
+//        orders.setProductOptions(productOptions);
         orderRepository.save(orders);
 
         totalPrice += products.getPrice() * cart.getProductCount();

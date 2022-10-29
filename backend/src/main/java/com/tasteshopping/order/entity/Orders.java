@@ -1,6 +1,6 @@
 package com.tasteshopping.order.entity;
 
-import com.tasteshopping.product.entity.ProductOptions;
+import com.tasteshopping.product.entity.Inventories;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.coupon.entity.Coupons;
 import lombok.*;
@@ -35,6 +35,11 @@ public class Orders {
     @JoinColumn(name="order_lists_uid")
     OrderLists orderList;
 
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="inventories_uid")
+    Inventories inventory;
+
 //    @ManyToOne(fetch= FetchType.LAZY)
 //    @JoinColumn(name="process_statuses_uid")
 //    ProcessStatuses processStatus;
@@ -44,9 +49,5 @@ public class Orders {
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="coupones_uid")
     Coupons coupon;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_options_uid")
-    ProductOptions productOptions;
 
 }

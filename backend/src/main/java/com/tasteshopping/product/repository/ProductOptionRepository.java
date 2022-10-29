@@ -14,5 +14,18 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptions,In
     public Optional<Integer> getMaxUid();
 
     @Query(value="select * from product_options where products_uid=:productsUid",nativeQuery = true)
-    public Optional<ProductOptions> findByProductsUid(Integer productsUid);
+    public List<ProductOptions> findByProductsUid(Integer productsUid);
+
+//    @Transactional
+//    @Modifying
+//    @Query(value=" delete from product_options where product_options_uid=:productsOptionsUid",nativeQuery = true)
+//    void deleteByProductOptionsUid(int productsOptionsUid);
+
+
+    @Query(value="select p from ProductOptions p where p.product.uid = :productsUid")
+    List<Optional<ProductOptions>> findByProductsUid(int productsUid);
+
+    @Query(value="delete from ProductOptions po where po.product.uid = :productUid")
+    void deletByProduct(int productUid);
+
 }

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
@@ -26,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     ProductOptionService productOptionService;
 
     @Autowired
-    ProductOptionListService productOptionListService;
+    ProductOptionService productOptionListService;
 
     @Autowired
     ProductKeywordService productKeywordService;
@@ -46,12 +45,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductOptionRepository productOptionRepository;
 
-    @Autowired
-    ProductOptionListRepository productOptionListRepository;
 
     @Autowired
     ProductKeywordRepository productKeywordRepository;
 
+    @Autowired
+    InventoryRepository inventoryRepository;
     @Autowired
     AwsS3Service awsS3Service;
 
@@ -63,12 +62,12 @@ public class ProductServiceImpl implements ProductService {
         3. 상품 옵션 리스트를 비우고 다시 생성한다.
          */
         Integer productsUid = productCreateDto.getProductsUid();
-        Optional<ProductOptions> option = productOptionRepository.findByProductsUid(productsUid);
-        int optionUid = 1;
+        Products product = productRepository.findById(productsUid).get();
+        List<ProductOptions> option = productOptionRepository.findByProductsUid(productsUid);
         // 해당 옵션의 옵션 리스트 제거
-        if (option.isPresent()) {
-            optionUid = option.get().getUid();
-            productOptionListRepository.deleteByProductOptionsUid(optionUid);
+
+        for(int i=0;i<option.size();++i){
+            productOptionRepository.deletByProduct(product.getUid());
         }
 
         // 옵션 리스트 추가
@@ -77,29 +76,10 @@ public class ProductServiceImpl implements ProductService {
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
             for (int i = 0; i < sList.length; ++i) {
-                productOptionListService.createProductOptionList(key, sList[i].trim(), optionUid);
+                productOptionListService.createProductOptionList(product, key, sList[i].trim());
             }
         }
     }
-
-//    @Override
-//    public void modifyProductPicture(ProductCreateDto productCreateDto) {
-//        // product 변경
-//        productPictureRepository.deleteByProductsUid(productCreateDto.getProductsUid());
-//
-//        // save imgs
-//        int count = 0;
-//        Products pp = productRepository.findById(productCreateDto.getProductsUid()).get();
-//        for (String key : imgs.keySet()) {
-//            if (count == 0) {
-//                //save product
-//                count += 1;
-//                pp.setRepImg(imgs.get(key));
-//                productRepository.save(pp);
-//            }
-//            productPictureService.createProductPicture(productCreateDto.getProductsUid(), imgs.get(key));
-//        }
-//    }
 
 
     @Override
@@ -117,10 +97,10 @@ public class ProductServiceImpl implements ProductService {
         // save imgs
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
-        if(multipartFiles.length==0){
+        if (multipartFiles.length == 0) {
             productRepository.save(pp);
         }
-        for (int i=0;i<multipartFiles.length;++i) {
+        for (int i = 0; i < multipartFiles.length; ++i) {
             try {
                 imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
                 if (count == 0) {
@@ -131,69 +111,12 @@ public class ProductServiceImpl implements ProductService {
                 } else {
                     productPictureService.createProductPicture(productUid, imagePath);
                 }
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-//    @Override
-//    @Transactional
-//    public void createProductRelated(ProductCreateDto productCreateDto) {
-//        /*
-//            param 이 넘겨오면 해야할 것
-//            1. Products product 를 생성한다. ok
-//            2. product_uid 에 맞는 product_pictures 를 생성한다. ok
-//            3. product_uid 에 맞는 product_options 를 생성한다.
-//            4. product_options에 맞는 product_option_lists를 생성한다.
-//            5. product_uid 에 맞는 product_keywords 를 생성한다.
-//         */
-//
-//        registerProduct(productCreateDto);
-//        int productsUid = 1;
-//        Optional<Integer> maxUidOptional = getMaxUid();
-//        if (maxUidOptional.isPresent()) {
-//            productsUid = maxUidOptional.get();
-//        }
-//        Products pp = productRepository.findById(productsUid).get();
-//
-//        // save imgs
-//        LinkedHashMap<String, String> imgs = productCreateDto.getImgs();
-//        int count = 0;
-//        for (String key : imgs.keySet()) {
-//            if (count == 0) {
-//                //save product
-//                count += 1;
-//                pp.setRepImg(imgs.get(key));
-//                productRepository.save(pp);
-//            }
-//            productPictureService.createProductPicture(productsUid, imgs.get(key));
-//        }
-//
-//        //save product_options
-//        LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
-//
-//        productOptionService.createProductOption(productsUid,true);
-//
-//        int optionsUid = 1;
-//        Optional<Integer> maxOptionUidOptional = productOptionService.getMaxUid();
-//        if (maxOptionUidOptional.isPresent()) {
-//            optionsUid = maxOptionUidOptional.get();
-//        }
-//        // save product_option_lists
-//        for (String key : options.keySet()) {
-//            String[] sList = options.get(key).split(",");
-//            for (int i = 0; i < sList.length; ++i) {
-//                productOptionListService.createProductOptionList(key, sList[i].trim(), optionsUid);
-//            }
-//        }
-//        // save keyword lists
-//        String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
-//        for (int i = 0; i < keywordList.length; ++i) {
-//            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
-//        }
-//    }
 
     @Override
     @Transactional
@@ -201,9 +124,9 @@ public class ProductServiceImpl implements ProductService {
         /*
             param 이 넘겨오면 해야할 것
             1. Products product 를 생성한다. ok
-            2. product_uid 에 맞는 product_pictures 를 생성한다. ok
-            3. product_uid 에 맞는 product_options 를 생성한다.
-            4. product_options에 맞는 product_option_lists를 생성한다.
+            2. product_uid 에 맞는 상품 option list를 생성한다. ok
+            3. 상품 옵션 리스트에 따른 상품 옵션을 생성
+            4. 상품 옵션에 따른 상품 재고 생성
             5. product_uid 에 맞는 product_keywords 를 생성한다.
          */
 
@@ -219,10 +142,12 @@ public class ProductServiceImpl implements ProductService {
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
-        if(multipartFiles.length==0){
+        System.out.println("==================");
+        System.out.println(multipartFiles);
+        if (multipartFiles.length == 0) {
             productRepository.save(pp);
         }
-        for (int i=0;i<multipartFiles.length;++i) {
+        for (int i = 0; i < multipartFiles.length; ++i) {
             try {
                 imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
                 if (count == 0) {
@@ -233,46 +158,97 @@ public class ProductServiceImpl implements ProductService {
                 } else {
                     productPictureService.createProductPicture(productsUid, imagePath);
                 }
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
-                res = new BaseRes(202,"파일 업로드 에러", null);
+                res = new BaseRes(202, "파일 업로드 에러", null);
                 return res;
             }
         }
-        
 
-        //save product_options
+        ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
+        ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
+
         LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
-
-        productOptionService.createProductOption(productsUid,true);
-
-        int optionsUid = 1;
-        Optional<Integer> maxOptionUidOptional = productOptionService.getMaxUid();
-        if (maxOptionUidOptional.isPresent()) {
-            optionsUid = maxOptionUidOptional.get();
+        // 상품 옵션 리스트 생성 완료
+        int maxUid = 1;
+        Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
+        if (maxOptionOptional.isPresent()) {
+            maxUid = maxOptionOptional.get();
         }
-        // save product_option_lists
+        // uid는 판매자가 여러명일 때는 uid를 통한 값 추가를 하면 안된다.(컬럼하나 더만들기)
+//        int productOptionListMaxUid = productOptionListRepository.
+        int start=0;
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
+            optionKeyValueNum.add(sList.length);
+            optionValueUidOuterList.add(new LinkedList<String>());
             for (int i = 0; i < sList.length; ++i) {
-                productOptionListService.createProductOptionList(key, sList[i].trim(), optionsUid);
+                maxUid += 1; // 다음 uid 를 저장해야한다.
+                LinkedList<String> l = optionValueUidOuterList.get(start);
+                l.add(Integer.toString(maxUid));
+                optionValueUidOuterList.set(start, l);
+                productOptionListService.createProductOptionList(pp, key, sList[i].trim());
             }
+            start+=1;
         }
+
+        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList,optionValueUidOuterList.get(0),0);
+
+        // 재고 생성
+        int cartesianProductNum = 1;
+        for (int i = 0; i < optionKeyValueNum.size(); ++i) {
+            cartesianProductNum *= optionKeyValueNum.get(i);
+        }
+
+        for (int i = 0; i < cartesianProductNum; ++i) {
+            // 칼테시안 곱의 수만큼 할당
+            Inventories inventory = new Inventories();
+            inventory.setProduct(pp);
+            inventory.setProductOptionList(optionListResult.get(i));
+            inventoryRepository.save(inventory);
+        }
+
+        // 상품 옵션 리스트에 따른 상품 옵션 생성
+        /*
+        상품 옵션 리스트가 지금 DB에 저장되어 있는 상황 예를 들면
+        전체 색 빨강, 색 검정, 색 파랑, 사이즈 260, 사이즈 265, 디테일색 노랑, 디테일색 초록 과 같은 형태다.
+        그러면 해당 product 에 해당하는 각각의 uid 값을
+        1:[4,5,6], 2: [7,8] 3: [9,10] 와 같은 형식의 linked list를 만들고,
+        for 문을
+         */
+
         // save keyword lists
         String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
         for (int i = 0; i < keywordList.length; ++i) {
             productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
         }
 
-        return new BaseRes(200,"상품 등록 완료", null);
+        return new BaseRes(200, "상품 등록 완료", null);
+    }
+
+    public void getProductOptionList(ArrayList<LinkedList<Integer>> optionValueUidOuterList) {
+
+    }
+
+    public LinkedList<String> getInventoryList(ArrayList<LinkedList<String>> ll, LinkedList<String> resultList, int current) {
+        if(ll.size()-1==current){
+            return resultList;
+        }
+        LinkedList<String> l2 = ll.get(current);
+        LinkedList<String> result = new LinkedList<>();
+        for(int i = 0; i< resultList.size(); ++i) {
+            for (int j = 0; j < l2.size(); ++j) {
+                String option = resultList.get(i) + " " + l2.get(j);
+                result.add(option);
+            }
+        }
+        return getInventoryList(ll,result,current+1);
     }
 
     @Override
     public void deleteProduct(Integer uid) {
 
         Products product = productRepository.findById(uid).get();
-
         productRepository.delete(product);
     }
 
@@ -283,7 +259,7 @@ public class ProductServiceImpl implements ProductService {
         modifyProduct(productCreateDto);
 
         // 상품 이미지 변경 (삭제 후 생성)
-        if(multipartFiles!=null) {
+        if (multipartFiles != null) {
             modifyProductPicture(productCreateDto, multipartFiles);
         }
         // product_options 변경 (삭제 후 생성)
@@ -419,7 +395,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getOneProduct(Integer productsUid) {
         Optional<Products> p = productRepository.findById(productsUid);
         ProductDto productDto = null;
-        if(p.isPresent()){
+        if (p.isPresent()) {
             productDto = p.get().toDto();
         }
         return productDto;
@@ -430,22 +406,22 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Products> l = productRepository.findProductDetailByProductsUid(productsUid);
         ProductDetailDto productDetailDto = new ProductDetailDto();
-        if(l.isPresent()){
+        if (l.isPresent()) {
             Products p = l.get();
             productDetailDto.setProducts(p.toDto());
             List<ProductPictures> productPicturesList = p.getProductPictures();
-            List<ProductOptions> productOptionsList= p.getProductOptions();
-            List<ProductOptionLists> productOptionLists = new ArrayList<>();
-            if(productOptionsList.size()!=0){
-                productOptionLists = productOptionsList.get(0).getProductOptionLists();
-            }
+//            List<ProductOptions> productOptionsList= p.getProductOptions();
+            List<ProductOptions> productOptionLists = new ArrayList<>();
+//            if(productOptionsList.size()!=0){
+//                productOptionLists = productOptionsList.get(0).getProductOptionLists();
+//            }
             List<ProductOptionListDto> productOptionListDtoList = new ArrayList<>();
 
-            for(int i=0;i<productOptionLists.size();++i){
+            for (int i = 0; i < productOptionLists.size(); ++i) {
                 productOptionListDtoList.add(productOptionLists.get(i).toDto());
             }
             List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
-            for(int i=0;i<productPicturesList.size();++i){
+            for (int i = 0; i < productPicturesList.size(); ++i) {
                 productPictureDtoList.add(productPicturesList.get(i).toDto());
             }
             productDetailDto.setProductOptionListDtoList(productOptionListDtoList);
@@ -471,7 +447,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto) {
 
         // 반환할 리스트
-        List<ProductDto> l= new ArrayList<>();
+        List<ProductDto> l = new ArrayList<>();
 
         Integer startPrice = searchDto.getStartPrice();
         Integer endPrice = searchDto.getEndPrice();
@@ -479,11 +455,11 @@ public class ProductServiceImpl implements ProductService {
         Integer deliveryFeeId = searchDto.getDeliveryFeeUid();
         Integer bigCategoriesUid = searchDto.getBigCategoriesUid();
         l.addAll(newL);
-        if(bigCategoriesUid!=null){
+        if (bigCategoriesUid != null) {
             l.clear();
-            for(int i=0;i<newL.size();++i){
+            for (int i = 0; i < newL.size(); ++i) {
                 int bigCategoryUid = newL.get(i).getBigCategoryUid();
-                if(bigCategoryUid==bigCategoriesUid){
+                if (bigCategoryUid == bigCategoriesUid) {
                     l.add(newL.get(i));
                 }
             }
@@ -491,7 +467,7 @@ public class ProductServiceImpl implements ProductService {
             newL.addAll(l);
         }
 
-        if(priceId !=null && (startPrice==null || endPrice==null)){
+        if (priceId != null && (startPrice == null || endPrice == null)) {
             l.clear();
             int start = 0;
             int end = 30000;
@@ -506,16 +482,16 @@ public class ProductServiceImpl implements ProductService {
                 start = 300001;
                 end = Integer.MAX_VALUE;
             }
-            for(int i=0;i< newL.size();++i){
+            for (int i = 0; i < newL.size(); ++i) {
                 int price = newL.get(i).getPrice();
-                if(price>=start && price<=end){
+                if (price >= start && price <= end) {
                     l.add(newL.get(i));
                 }
             }
             newL.clear();
             newL.addAll(l);
         }
-        if(deliveryFeeId!=null){
+        if (deliveryFeeId != null) {
             l.clear();
             int startDeliveryFee = 0;
             int endDeliveryFee = 0;
@@ -526,9 +502,9 @@ public class ProductServiceImpl implements ProductService {
                 startDeliveryFee = 3001;
                 endDeliveryFee = Integer.MAX_VALUE;
             }
-            for(int i=0;i< newL.size();++i){
+            for (int i = 0; i < newL.size(); ++i) {
                 int price = newL.get(i).getPrice();
-                if(price>=startDeliveryFee && price<=endDeliveryFee){
+                if (price >= startDeliveryFee && price <= endDeliveryFee) {
                     l.add(newL.get(i));
                 }
             }
@@ -537,11 +513,11 @@ public class ProductServiceImpl implements ProductService {
         }
         System.out.println(newL.size());
         // 시작 가격과 끝 가격이 있다면 체크
-        if(startPrice!=null && endPrice!=null){
+        if (startPrice != null && endPrice != null) {
             l.clear();
-            for(int i=0;i< newL.size();++i){
+            for (int i = 0; i < newL.size(); ++i) {
                 int price = newL.get(i).getPrice();
-                if(price>=startPrice && price<=endPrice){
+                if (price >= startPrice && price <= endPrice) {
                     l.add(newL.get(i));
                 }
             }

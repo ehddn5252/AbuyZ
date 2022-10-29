@@ -1,6 +1,6 @@
 package com.tasteshopping.cart.entity;
 
-import com.tasteshopping.product.entity.ProductOptions;
+import com.tasteshopping.product.entity.Inventories;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
@@ -27,20 +27,19 @@ public class Carts {
     @JoinColumn(name="users_uid")
     Users user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name="inventories_uid")
+    Inventories inventory;
+
+    
+    // 없어도 됨
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name="products_uid")
     Products product;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name="product_options_uid")
-    ProductOptions productOption;
-
-
-    public void modifyInfo(int productCount, Users user, Products product, ProductOptions productOptions){
+    public void modifyInfo(int productCount, Users user, Products product){
         this.productCount = productCount;
         this.user = user;
-        this.product = product;
-        this.productOption = productOptions;
     }
 
 }
