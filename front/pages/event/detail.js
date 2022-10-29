@@ -2,20 +2,12 @@ import React from "react";
 import styled from "styled-components";
 export default function Detail() {
   return (
-    <div>
-      <AllDiv>
-        <h1>이벤트 몰</h1>
-      </AllDiv>
-      <TitleDiv>
-        <h3>이벤트 이름</h3>
-      </TitleDiv>
-      <DateDiv>
-        <br></br>
-        <h5>이벤트 시작 일자: 2022.10.31 - 2022.12.25</h5>
-      </DateDiv>
+    <div style={{ height: "80vh" }}>
       <ImgDiv>
-        {/* 진짜 파일 이미지 */}
-        <img src={"/images/event.png"} style={{ width: "900" }}></img>
+        <img
+          src={"/images/halloween.png"}
+          style={{ width: "100%", objectFit: "cover" }}
+        ></img>
       </ImgDiv>
       <ButtonDiv>
         <StyledButton>쿠폰 받기</StyledButton>
@@ -29,31 +21,13 @@ export default function Detail() {
 
 const StyledButton = styled.button`
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 5px;
   font-size: 1rem;
   line-height: 1.5;
-  border: 1px solid lightgray;
   width: 8rem;
   color: white;
-  background: rgba(255, 99, 71, 0.6);
-`;
-
-const AllDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TitleDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-const DateDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  border: none;
+  background: #56a9f1;
 `;
 
 const ImgDiv = styled.div`
