@@ -22,6 +22,7 @@ public class ProductOptionListServiceImpl implements ProductOptionService {
         ProductOptions productOptionList = new ProductOptions();
         productOptionList.setName(name);
         productOptionList.setValue(value);
+        productOptionList.setProduct(p);
         productOptionRepository.save(productOptionList);
     }
 
