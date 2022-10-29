@@ -9,15 +9,20 @@ export default function ProductSaleInfo() {
       price: 5000,
       discount: 25,
       count: 4,
+      category: "식품",
     },
     {
       price: 10000,
       discount: 10,
       count: 2,
+      category: "의류",
     },
   ];
   const [modalOpen, setModalOpen] = useState(false);
-
+  let categoryList = [];
+  for (var i = 0; i < productList.length; i++) {
+    categoryList.push(productList[i].category);
+  }
   let priceadd = 0;
   for (var i = 0; i < productList.length; i++) {
     priceadd += productList[i].price * productList[i].count;
@@ -55,7 +60,7 @@ export default function ProductSaleInfo() {
       </AllDiv>
       <div
         style={{
-          backgroundColor: "rgb(127,127,127,0.2)",
+          backgroundColor: "rgb(127,127,127,0.1)",
           borderRadius: "5px",
           padding: "0.1rem",
           marginLeft: "2.5rem",
@@ -106,22 +111,11 @@ export default function ProductSaleInfo() {
                 fontSize: "0.9rem",
               }}
             >
-              {discountprice.toLocaleString("ko-KR")}원
+              -{discountprice.toLocaleString("ko-KR")}원
             </span>
           </RightDiv>
         </AllDiv>
       </div>
-
-      <AllDiv>
-        <LeftDiv>
-          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>배송비</span>
-        </LeftDiv>
-        <RightDiv>
-          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-            {deliveryFee.toLocaleString("ko-KR")}원
-          </span>
-        </RightDiv>
-      </AllDiv>
       <AllDiv>
         <LeftDiv>
           <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
@@ -141,6 +135,16 @@ export default function ProductSaleInfo() {
           )}
         </RightDiv>
       </AllDiv>
+      <AllDiv>
+        <LeftDiv>
+          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>배송비</span>
+        </LeftDiv>
+        <RightDiv>
+          <span style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+            {deliveryFee.toLocaleString("ko-KR")}원
+          </span>
+        </RightDiv>
+      </AllDiv>
       <hr></hr>
       <AllDiv>
         <LastLeftDiv>
@@ -149,21 +153,29 @@ export default function ProductSaleInfo() {
           </span>
         </LastLeftDiv>
         <RightDiv>
-          <span style={{ fontWeight: "bold", fontSize: "1.9rem" }}>
-            {(
-              priceadd -
-              discountprice +
-              deliveryFee -
-              couponDiscount
-            ).toLocaleString("ko-KR")}
-            원
-          </span>
+          {couponDiscount === -1 ? (
+            <span style={{ fontWeight: "bold", fontSize: "1.9rem" }}>
+              {(priceadd - discountprice + deliveryFee).toLocaleString("ko-KR")}
+              원
+            </span>
+          ) : (
+            <span style={{ fontWeight: "bold", fontSize: "1.9rem" }}>
+              {(
+                priceadd -
+                discountprice +
+                deliveryFee -
+                couponDiscount
+              ).toLocaleString("ko-KR")}
+              원
+            </span>
+          )}
         </RightDiv>
       </AllDiv>
       {modalOpen && (
         <MyCouponSelectModal
           setModalOpen={setModalOpen}
           setCouponDiscount={setCouponDiscount}
+          categoryList={categoryList}
         ></MyCouponSelectModal>
       )}
     </div>
