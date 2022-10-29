@@ -4,7 +4,11 @@ import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartResDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
+import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.product.entity.Inventories;
+import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.repository.InventoryRepository;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.ProductOptionService;
@@ -36,44 +40,46 @@ public class CartServiceImpl implements CartService {
     @Autowired
     ProductOptionRepository productOptionRepository;
 
+    @Autowired
+    InventoryRepository inventoryRepository;
     @Override
     @Transactional
     public void putCart(String email, CartDto cartsDto) {
         int productsUid = cartsDto.getProductsUid();
         HashMap<String, String> optionValues = cartsDto.getOptionValues();
-        Products p = productRepository.findById(productsUid).get();
-        // 상품 옵션 생성
-
         // 상품 옵션 리스트 생성
+        Optional<Users> user = userRepository.findByEmail(email);
+        String optionListString ="";
+        Carts carts= new Carts();
         for (String key : optionValues.keySet()) {
-            productOptionService.createProductOptionList(p, key, optionValues.get(key).trim());
-
+            ProductOptions optionsOptional = productOptionRepository.findByKeyAndValueAndProductsUid(key, optionValues.get(key), productsUid).get();
+            optionListString += optionsOptional.getUid()+" ";
             // 장바구니에 저장할 것들 가져옴
-            Optional<Users> user = userRepository.findByEmail(email);
-
-            Carts carts = new Carts();
-            carts.modifyInfo(cartsDto.getProductCount(), user.get(), p);
-            cartRepository.save(carts);
         }
+        System.out.println("optionListString");
+        System.out.println(optionListString);
+        Optional<Inventories> inventory = inventoryRepository.findByOptionList(optionListString.trim());
+        carts.modifyInfo(cartsDto.getProductCount(), user.get(), inventory.get());
+        cartRepository.save(carts);
     }
 
     @Override
     @Transactional
-    public void deleteCart(String email, int cartsUid) {
+    public BaseRes deleteCart(String email, int cartsUid) {
         Optional<Carts> cartsOptional = cartRepository.findById(cartsUid);
         Carts carts = null;
         if (cartsOptional.isPresent()) {
             carts = cartsOptional.get();
             if (carts.getUser().getEmail().equals(email)){
                 cartRepository.delete(carts);
-                System.out.println("삭제 성공");
+                return new BaseRes(200,"삭제 성공.",null);
 
             }
             else{
-                System.out.println("적잘하지 않은 접근");
+                return new BaseRes(404,"적절하지 않은 접근입니다.",null);
             }
         } else {
-            System.out.println("not found cartsUid");
+            return new BaseRes(204,"해당 cart가 없습니다.",null);
         }
     }
 
@@ -82,19 +88,15 @@ public class CartServiceImpl implements CartService {
         Users user = userRepository.findByEmail(email).get();
         List<Carts> cartsList = cartRepository.findByUsersUid(user.getUid());
         List<CartResDto> cartResDtoList = new ArrayList<>();
-//        for (int i = 0; i < cartsList.size(); ++i) {
-//            CartResDto cartResDto = new CartResDto();
-//            List<ProductOptions> productOptionLists = cartsList.get(i).getProductOption().getProductOptionLists();
-//            List<ProductOptionListDto> productOptionListDtos = new ArrayList<>();
-//            for (int j = 0; j < productOptionLists.size(); ++j) {
-//                productOptionListDtos.add(productOptionLists.get(j).toDto());
-//            }
-//            cartResDto.setProductOptionListDto(productOptionListDtos);
-//            cartResDto.setProductDto(cartsList.get(i).getProduct().toDto());
-//            cartResDto.setProductCount(cartsList.get(i).getProductCount());
-//            cartResDto.setUid(cartsList.get(i).getUid());
-//            cartResDtoList.add(cartResDto);
-//        }
+        for (int i = 0; i < cartsList.size(); ++i) {
+            CartResDto cartResDto = new CartResDto();
+            Inventories inventories = cartsList.get(i).getInventory();
+            cartResDto.setProductDto(cartsList.get(i).getInventory().getProduct().toDto());
+            cartResDto.setProductCount(cartsList.get(i).getProductCount());
+            cartResDto.setUid(cartsList.get(i).getUid());
+            cartResDto.setInventoryDto(cartsList.get(i).getInventory().toDto());
+            cartResDtoList.add(cartResDto);
+        }
 
         return cartResDtoList;
     }

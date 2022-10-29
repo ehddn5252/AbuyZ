@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductOptionRepository extends JpaRepository<ProductOptions,Integer> {
-    @Query(value="select max(uid) from ProductOptions")
+    @Query(value="select max(o.uid) from ProductOptions o")
     public Optional<Integer> getMaxUid();
 
     @Query(value="select * from product_options where products_uid=:productsUid",nativeQuery = true)
@@ -30,4 +30,8 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptions,In
     @Modifying
     @Query(value="delete from ProductOptions po where po.product.uid = :productUid")
     void deletByProduct(int productUid);
+
+
+    @Query(value = "select o from ProductOptions o where o.name = :key and o.value = :value and o.product.uid=:productsUid")
+    Optional<ProductOptions> findByKeyAndValueAndProductsUid(String key, String value, Integer productsUid);
 }

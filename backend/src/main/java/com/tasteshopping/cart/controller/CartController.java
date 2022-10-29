@@ -25,6 +25,7 @@ public class CartController {
     @PostMapping()
     public ResponseEntity<BaseRes> putCart(@AuthenticationPrincipal String email, @RequestBody CartReqDto cartsReqDto) {
         CartDto cartsDto = cartsReqDto.toDto();
+        System.out.println(cartsReqDto.getOption_values());
         cartService.putCart(email, cartsDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 담기 성공!"));
     }
@@ -33,8 +34,8 @@ public class CartController {
     public ResponseEntity<BaseRes> deleteCart(@AuthenticationPrincipal String email, @RequestBody CartUidReqDto cartUidReqDto) {
 
         int cartsUid = cartUidReqDto.getCarts_uid();
-        cartService.deleteCart(email,cartsUid);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 삭제 성공!"));
+        BaseRes baseRes = cartService.deleteCart(email,cartsUid);
+        return ResponseEntity.status(baseRes.getStatusCode()).body(baseRes);
     }
 
     @GetMapping()

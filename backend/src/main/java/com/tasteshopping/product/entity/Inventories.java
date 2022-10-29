@@ -2,6 +2,8 @@ package com.tasteshopping.product.entity;
 
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.order.entity.Orders;
+import com.tasteshopping.product.dto.InventoryDto;
+import com.tasteshopping.product.dto.ProductOptionListDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,9 +32,18 @@ public class Inventories {
     Products product;
 
     // 양방향 설정해주기
-    @OneToMany(mappedBy = "inventory",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "inventory")
     List<Carts> cartsList;
 
     @OneToMany(mappedBy = "inventory",fetch = FetchType.LAZY)
     List<Orders> ordersList;
+
+    public InventoryDto toDto(){
+        InventoryDto inventoryDto = new InventoryDto();
+        inventoryDto.setUid(uid);
+        inventoryDto.setCount(count);
+        inventoryDto.setPrice(price);
+        inventoryDto.setProductOptionList(productOptionList);
+        return inventoryDto;
+    }
 }
