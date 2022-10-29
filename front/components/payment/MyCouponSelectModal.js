@@ -6,10 +6,13 @@ import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOu
 export default function MyCouponSelectModal({
   setModalOpen,
   setCouponDiscount,
+  categoryList,
 }) {
   const closeModal = () => {
     setModalOpen(false);
     setCouponDiscount(CouponList[selected].discountprice);
+    CouponList[selected].isused = true;
+    console.log(CouponList);
   };
   const [selected, setSelected] = useState(0);
 
@@ -20,9 +23,10 @@ export default function MyCouponSelectModal({
       id: 0,
       couponname: "abuyz 처음 구매 고객 3000원 쿠폰",
       discountprice: "3000",
-      category: "식품",
+      category: "의류",
       startdate: "2022.10.28",
       finishdate: "2022.10.31",
+      isused: false,
     },
     {
       id: 1,
@@ -32,6 +36,7 @@ export default function MyCouponSelectModal({
       info: "중복 사용 불가",
       startdate: "2022.10.28",
       finishdate: "2022.10.31",
+      isused: false,
     },
   ];
   useEffect(() => {
@@ -54,78 +59,87 @@ export default function MyCouponSelectModal({
     };
   });
   return (
-    <Container ref={modalRef}>
-      <CloseIconDiv>
-        <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
-      </CloseIconDiv>
-      <h1>쿠폰 선택</h1>
-      <br></br>
-      {CouponList.map((e) => (
-        <Card
-          key={e.id}
-          style={{
-            ...cardStyle,
-            display: "flex",
-            flexDirection: "row",
-            height: "100%",
-          }}
-          onClick={() => setSelected(e.id)}
-        >
-          <div style={{ flex: 2, display: "flex", justifyContent: "center" }}>
-            <IconDiv>
-              {selected === e.id ? (
-                <ExpandCircleDownOutlinedIcon
-                  sx={{ color: "#56a9f1" }}
-                ></ExpandCircleDownOutlinedIcon>
-              ) : (
-                <div>
-                  <CircleOutlinedIcon
-                    sx={{ color: "rgb(128, 128, 128, 0.7)" }}
-                  ></CircleOutlinedIcon>
-                </div>
-              )}
-            </IconDiv>
-          </div>
-          <div style={{ flex: 10 }}>
-            <TextDiv>
-              <div>
-                <span style={{ fontWeight: "bold" }}>{e.couponname}</span>
-              </div>
-              <br></br>
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "1.5rem",
-                }}
+    <div style={{ position: "relative" }}>
+      <Container ref={modalRef}>
+        <CloseIconDiv>
+          <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
+        </CloseIconDiv>
+        <h1>쿠폰 선택</h1>
+        <br></br>
+        {CouponList.map((e) =>
+          categoryList.includes(e.category) && e.isused == false ? (
+            <Card
+              key={e.id}
+              style={{
+                ...cardStyle,
+                display: "flex",
+                flexDirection: "row",
+                height: "100%",
+              }}
+              onClick={() => setSelected(e.id)}
+            >
+              <div
+                style={{ flex: 2, display: "flex", justifyContent: "center" }}
               >
-                {e.discountprice}원
-              </span>
-              <span> 할인</span>
-              <br></br>
-              <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
-                {e.category} 카테고리 구매 시 사용 가능
-              </span>
-              <br></br>
-              <span style={{ fontSize: "0.9rem", color: "pink" }}>
-                {e.startdate} ~ {e.finishdate}
-              </span>
-            </TextDiv>
-            <br></br>
-          </div>
-        </Card>
-      ))}
+                <IconDiv>
+                  {selected === e.id ? (
+                    <ExpandCircleDownOutlinedIcon
+                      sx={{ color: "#56a9f1" }}
+                    ></ExpandCircleDownOutlinedIcon>
+                  ) : (
+                    <div>
+                      <CircleOutlinedIcon
+                        sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                      ></CircleOutlinedIcon>
+                    </div>
+                  )}
+                </IconDiv>
+              </div>
+              <div style={{ flex: 10 }}>
+                <TextDiv>
+                  <div>
+                    <span style={{ fontWeight: "bold" }}>{e.couponname}</span>
+                  </div>
+                  <br></br>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5rem",
+                    }}
+                  >
+                    {e.discountprice}원
+                  </span>
+                  <span> 할인</span>
+                  <br></br>
+                  <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
+                    {e.category} 카테고리 구매 시 사용 가능
+                  </span>
+                  <br></br>
+                  <span style={{ fontSize: "0.9rem", color: "pink" }}>
+                    {e.startdate} ~ {e.finishdate}
+                  </span>
+                </TextDiv>
+                <br></br>
+              </div>
+            </Card>
+          ) : null
+        )}
 
-      <ButtonDiv>
-        <Button onClick={closeModal}>선택완료</Button>
-      </ButtonDiv>
-    </Container>
+        <ButtonDiv>
+          <Button onClick={closeModal}>선택완료</Button>
+        </ButtonDiv>
+      </Container>
+    </div>
   );
 }
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  transform: translate(30%, -60%);
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  transform: translate(40%, -90%);
   width: 30rem;
   border: 2px solid #000;
   background-color: #fff;
@@ -133,6 +147,7 @@ const Container = styled.div`
   border-radius: 5px;
   border-color: #56a9f1;
   padding: 2rem;
+  z-index: 999;
 `;
 
 const CloseIconDiv = styled.div`
