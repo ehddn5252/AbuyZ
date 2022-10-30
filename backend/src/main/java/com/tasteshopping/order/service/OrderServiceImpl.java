@@ -1,5 +1,6 @@
 package com.tasteshopping.order.service;
 
+import com.tasteshopping.cart.Exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
@@ -9,7 +10,7 @@ import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
-import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.entity.Inventories;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService{
     public void cartPay(String email) {
         Users user =  userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
-        List<Carts> cartList = cartRepository.findByUsersUid(user.getUid());
+        List<Carts> cartList = cartRepository.findByUser(user);
         OrderLists orderLists = new OrderLists();
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
@@ -70,23 +71,28 @@ public class OrderServiceImpl implements OrderService{
         orderListRepository.save(orderLists);
 
         // 이 과정을 줄일 수 있나?
-        Integer uid = orderListRepository.findMaxUid();
-        orderLists = orderListRepository.findById(uid).get();
+        List<OrderLists> orderListsList = orderListRepository.findByDate(date);
 
         int totalPrice = 0;
         for(int i = 0; i< cartList.size(); ++i){
             Carts cart= cartList.get(i);
             Orders orders = new Orders();
-            orders.setOrderList(orderLists);
+            orders.setOrderList(orderListsList.get(0));
             orders.setCount(cart.getProductCount());
             orders.setStatus(Status.PROCESS.toString());
-            Products products = null;
-//            Products products = cart.getProduct();
-//            orders.setPrice(products.getPrice());
-//            ProductOptions productOptions = cart.getProductOption();
-//            orders.setProduct(products);
-//            orders.setProductOptions(productOptions);
-            totalPrice += products.getPrice() * cart.getProductCount();
+            Inventories inventory = cart.getInventory();
+            orders.setPrice(inventory.getPrice());
+            orders.setInventory(inventory);
+            int remainingStoke = inventory.getCount()-cart.getProductCount();
+            if(remainingStoke>=0) {
+                inventory.setCount(remainingStoke);
+            }
+            else{
+                throw new OutOfStockException();
+
+            }
+            orders.getInventory();
+            totalPrice += inventory.getPrice() * cart.getProductCount();
 
             orderRepository.save(orders);
             cartRepository.delete(cart);
@@ -107,12 +113,10 @@ public class OrderServiceImpl implements OrderService{
 
         Users user =  userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
-        List<Carts> l = cartRepository.findByUsersUid(user.getUid());
         OrderLists orderLists = new OrderLists();
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
         orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-
 
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
@@ -128,29 +132,32 @@ public class OrderServiceImpl implements OrderService{
         orderListRepository.save(orderLists);
 
         // 이 과정을 줄일 수 있나?
-        Integer uid = orderListRepository.findMaxUid();
-        orderLists = orderListRepository.findById(uid).get();
+        List<OrderLists> orderListsList = orderListRepository.findByDate(date);
 
         int totalPrice = 0;
-        Carts cart= l.get(l.size()-1);
+        Carts cart= cartRepository.findByUserAndUid(user);
         Orders orders = new Orders();
-        orders.setOrderList(orderLists);
+        orders.setOrderList(orderListsList.get(0));
         orders.setCount(cart.getProductCount());
         orders.setStatus(Status.PROCESS.toString());
+        Inventories inventory = cart.getInventory();
+        orders.setPrice(inventory.getPrice());
+        orders.setInventory(inventory);
+        int remainingStoke = inventory.getCount()-cart.getProductCount();
+        if(remainingStoke>=0) {
+            inventory.setCount(remainingStoke);
+        }
+        else{
+            throw new OutOfStockException();
 
-        Products products = null;
-//        Products products = cart.getProduct();
-//        orders.setPrice(products.getPrice());
-//        ProductOptions productOptions = cart.getProductOption();
-//        orders.setProduct(products);
-//        orders.setProductOptions(productOptions);
+        }
+        orders.getInventory();
+        totalPrice += inventory.getPrice() * cart.getProductCount();
+
         orderRepository.save(orders);
-
-        totalPrice += products.getPrice() * cart.getProductCount();
+        cartRepository.delete(cart);
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);
         orderListRepository.save(orderLists);
-        // 장바구니에서 삭제
-        cartRepository.delete(cart);
     }
 }

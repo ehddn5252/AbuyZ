@@ -1,5 +1,6 @@
 package com.tasteshopping.order.controller;
 
+import com.tasteshopping.cart.Exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.cart.service.CartService;
@@ -39,7 +40,13 @@ public class OrderController {
 
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
-        orderService.cartPay(email);
+        try{
+            orderService.cartPay(email);
+        }
+        catch (OutOfStockException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "남은 재고가 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 

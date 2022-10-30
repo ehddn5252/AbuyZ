@@ -23,16 +23,13 @@ public class CartController {
     @Autowired
     CartService cartService;
     @PostMapping()
-    public ResponseEntity<BaseRes> putCart(@AuthenticationPrincipal String email, @RequestBody CartReqDto cartsReqDto) {
-        CartDto cartsDto = cartsReqDto.toDto();
-        System.out.println(cartsReqDto.getOption_values());
-        cartService.putCart(email, cartsDto);
+    public ResponseEntity<BaseRes> putCart(@AuthenticationPrincipal String email, @RequestBody CartDto cartDto) {
+        cartService.putCart(email, cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 담기 성공!"));
     }
 
     @DeleteMapping()
     public ResponseEntity<BaseRes> deleteCart(@AuthenticationPrincipal String email, @RequestBody CartUidReqDto cartUidReqDto) {
-
         int cartsUid = cartUidReqDto.getCarts_uid();
         BaseRes baseRes = cartService.deleteCart(email,cartsUid);
         return ResponseEntity.status(baseRes.getStatusCode()).body(baseRes);

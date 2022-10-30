@@ -7,7 +7,6 @@ import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
-import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.InventoryRepository;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductRepository;
@@ -86,7 +85,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartResDto> getCart(String email) {
         Users user = userRepository.findByEmail(email).get();
-        List<Carts> cartsList = cartRepository.findByUsersUid(user.getUid());
+        List<Carts> cartsList = cartRepository.findByUser(user);
         List<CartResDto> cartResDtoList = new ArrayList<>();
         for (int i = 0; i < cartsList.size(); ++i) {
             CartResDto cartResDto = new CartResDto();

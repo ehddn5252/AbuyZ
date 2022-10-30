@@ -1,6 +1,7 @@
 package com.tasteshopping.cart.repository;
 
 import com.tasteshopping.cart.entity.Carts;
+import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public interface CartRepository extends JpaRepository<Carts,Integer> {
             "join fetch s.bigCategory")
     List<Carts> findAll();
 
-    @Query(value=" select c from Carts c join fetch Users u on c.user = u where u.uid = :usersUid")
-    List<Carts> findByUsersUid(int usersUid);
+    List<Carts> findByUser(Users user);
+
+    @Query(value="select c from Carts c where c.uid = (select max(c2.uid) from Carts c2 where c2.user=:user)")
+    Carts findByUserAndUid(Users user);
 }
