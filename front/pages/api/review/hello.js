@@ -109,3 +109,68 @@ export function replyreview(replyDto) {
       }
     });
 }
+
+// 리뷰 답글 삭제
+export function delreplyreview(replydel) {
+  const accessToken = localStorage.getItem("access-Token");
+  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+  https
+    .delete("/review/reply", {
+      review_uid: replydel.review_uid,
+    })
+    .then((response) => {
+      if (response === 200) {
+        console.log("리뷰 삭제 완료", response);
+        return response;
+      } else {
+        console.log("리뷰 삭제 실패", response);
+        return response;
+      }
+    });
+}
+
+// 해당 상품의 리뷰 조회
+// 해당 상품은 왜 주소가 review/1/1??
+export function review(product_uid) {
+  const accessToken = localStorage.getItem("access-Token");
+  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+  https.get(`/review/${product_uid}`).then((response) => {
+    if (response === 200) {
+      console.log("리뷰 조회 성공", response);
+      return response;
+    } else {
+      console.log("리뷰 조회 실패", response);
+      return response;
+    }
+  });
+}
+
+// 리뷰 신고
+export function reportreview(review) {
+  const accessToken = localStorage.getItem("access-Token");
+  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+  https
+    .post("/review/report", {
+      review_uid: review.review_uid,
+    })
+    .then((response) => {
+      if (response === 200) {
+        console.log("리뷰 신고 완료");
+        return response;
+      } else {
+        console.log("리뷰 신고 실패");
+        return response;
+      }
+    });
+}
+
+// 이미지 업로드 테스트
+
+// 포토 리뷰 모아보기 - 일부
+
+// 포토 리뷰 모아보기 - 전체
+
+// 포토 리뷰 상세보기
