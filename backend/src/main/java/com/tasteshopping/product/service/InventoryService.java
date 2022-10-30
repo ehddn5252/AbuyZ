@@ -1,14 +1,12 @@
 package com.tasteshopping.product.service;
 
-import com.tasteshopping.product.entity.Inventories;
-
-import java.util.List;
+import com.tasteshopping.common.dto.BaseRes;
 
 public interface InventoryService {
 
     void setPriceAndCount(int price,int count);
 
-    List<Inventories> getInventoryList(int productsUid);
+    BaseRes getInventoryList(int productsUid);
 
     void putInventoryList(int productsUid);
 }

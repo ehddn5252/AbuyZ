@@ -1,4 +1,4 @@
-package com.tasteshopping.cart.Exception;
+package com.tasteshopping.cart.exception;
 
 public class OutOfStockException extends RuntimeException  {
     public OutOfStockException() {

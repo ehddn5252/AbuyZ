@@ -1,6 +1,6 @@
 package com.tasteshopping.order.service;
 
-import com.tasteshopping.cart.Exception.OutOfStockException;
+import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
