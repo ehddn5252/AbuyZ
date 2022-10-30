@@ -13,11 +13,19 @@ export function regisreview(reviewDto) {
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https
-    .post("/review", {
-      product_uid: reviewDto.product_uid,
-      rating: reviewDto.rating,
-      content: reviewDto.content,
-    })
+    .post(
+      "/review",
+      {
+        product_uid: reviewDto.product_uid,
+        rating: reviewDto.rating,
+        content: reviewDto.content,
+      },
+      {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      }
+    )
     .then((response) => {
       if (response === 200) {
         console.log("리뷰 작성 완료", response);
