@@ -1,10 +1,13 @@
 package com.tasteshopping.product.service;
 
 
-import java.util.Optional;
+import com.tasteshopping.product.dto.ProductOptionListDto;
+import com.tasteshopping.product.entity.Products;
+
+import java.util.List;
 
 public interface ProductOptionService {
-    public void createProductOption(int productsUid, Boolean isDefaultOption);
+    public void createProductOptionList(Products p, String name, String value);
 
-    public Optional<Integer> getMaxUid();
+//    List<ProductOptionListDto> getOptionListByUid(int productsUid);
 }

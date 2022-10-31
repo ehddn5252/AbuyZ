@@ -29,7 +29,7 @@ public interface ProductRepository extends JpaRepository<Products,Integer> {
     List<Optional<Products>> findByDeliveryFeeBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
-    List<Optional<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
+    Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
 //    @Query(value = "select p,pp from Products p left join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
 //    List<Optional<Products>> findProductDetailByProductsUid(int productsUid);

@@ -1,9 +1,6 @@
 package com.tasteshopping.product.dto;
 
-import com.tasteshopping.product.entity.ProductOptions;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
