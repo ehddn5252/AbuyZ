@@ -104,10 +104,8 @@ public class ProductController {
         }
         for(int i=0;i<newL.size();++i){
             System.out.println(newL.get(i).getBigCategoryUid());
-
         }
         newL =productService.findByKeywordAndFilter(newL,searchDto);
-
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
 

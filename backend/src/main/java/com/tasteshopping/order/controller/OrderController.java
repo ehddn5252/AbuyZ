@@ -4,7 +4,9 @@ import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
+import com.tasteshopping.order.dto.OrderListUidReqDto;
 import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,17 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",orderListDtos));
     }
 
+    @GetMapping("/{order_lists_uid}")
+    public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email, @PathVariable Integer order_lists_uid) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email){
+        //
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제 취소하기 성공!"));
+    }
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
         try{

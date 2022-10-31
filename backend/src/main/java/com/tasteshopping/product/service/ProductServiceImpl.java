@@ -141,26 +141,26 @@ public class ProductServiceImpl implements ProductService {
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
-        System.out.println("==================");
-        System.out.println(multipartFiles);
-        if (multipartFiles.length == 0) {
+        if (multipartFiles == null) {
             productRepository.save(pp);
         }
-        for (int i = 0; i < multipartFiles.length; ++i) {
-            try {
-                imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
-                if (count == 0) {
-                    //save product
-                    count += 1;
-                    pp.setRepImg(imagePath);
-                    productRepository.save(pp);
-                } else {
-                    productPictureService.createProductPicture(productsUid, imagePath);
+        else {
+            for (int i = 0; i < multipartFiles.length; ++i) {
+                try {
+                    imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+                    if (count == 0) {
+                        //save product
+                        count += 1;
+                        pp.setRepImg(imagePath);
+                        productRepository.save(pp);
+                    } else {
+                        productPictureService.createProductPicture(productsUid, imagePath);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    res = new BaseRes(202, "파일 업로드 에러", null);
+                    return res;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                res = new BaseRes(202, "파일 업로드 에러", null);
-                return res;
             }
         }
 
@@ -202,6 +202,8 @@ public class ProductServiceImpl implements ProductService {
         for (int i = 0; i < cartesianProductNum; ++i) {
             // 칼테시안 곱의 수만큼 할당
             Inventories inventory = new Inventories();
+            inventory.setCount(0);
+            inventory.setPrice(0);
             inventory.setProduct(pp);
             inventory.setProductOptionList(optionListResult.get(i));
             inventoryRepository.save(inventory);

@@ -51,7 +51,7 @@ public class OrderReqDto {
         LocalDateTime dateTime = LocalDateTime.parse(product_dto.get("date"),formatter);
         productDto.setDate(dateTime);
         productDto.setReviewNum(Integer.parseInt(product_dto.get("reviewNum")));
-        orderDto.setProductdto(productDto);
+//        orderDto.setProductdto(productDto);
         // orderDto.setProcessStatusDto();
 
         // List<productOptionListDto> 설정
