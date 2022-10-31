@@ -21,6 +21,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/order")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OrderController {
 
     @Autowired

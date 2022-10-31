@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/coupon")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CouponController {
     private final CouponServiceImpl couponService;
     @PostMapping("/create")

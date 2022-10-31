@@ -32,6 +32,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/review")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ReviewController {
 
     private final ReviewService reviewService;

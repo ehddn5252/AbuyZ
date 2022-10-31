@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/cart")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://k7e201.p.ssafy.io")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CartController {
 
     @Autowired

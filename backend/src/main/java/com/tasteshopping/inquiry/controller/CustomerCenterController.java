@@ -22,6 +22,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/customer-center")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CustomerCenterController {
 
 
