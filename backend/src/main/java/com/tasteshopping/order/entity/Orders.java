@@ -1,6 +1,7 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.inventory.entity.Inventories;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.coupon.entity.Coupons;
 import lombok.*;
@@ -47,4 +48,14 @@ public class Orders {
     @JoinColumn(name="coupones_uid")
     Coupons coupon;
 
+
+    public OrderDto toDto() {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setPrice(price);
+        orderDto.setUid(uid);
+        orderDto.setStatus(status);
+//        orderDto.setCouponResDto(coupon.toDto());
+        orderDto.setInventoryDto(inventory.toDto());
+        return orderDto;
+    }
 }

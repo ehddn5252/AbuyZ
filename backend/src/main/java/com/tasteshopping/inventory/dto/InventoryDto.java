@@ -12,7 +12,9 @@ public class InventoryDto {
 
     Integer uid;
     Integer price;
+    Integer productsUid;
     Integer count;
     String productOptionUidString;
     String[] productOptions;
+    String repImg;
 }
