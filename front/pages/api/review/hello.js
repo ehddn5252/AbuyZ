@@ -8,24 +8,15 @@ export default function handler(req, res) {
 
 // 리뷰 작성
 export function regisreview(reviewDto) {
-  // multipart는 어떻게 처리?
   const accessToken = localStorage.getItem("access-Token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["Content-type"] = "multipart/form-data";
   https
-    .post(
-      "/review",
-      {
-        product_uid: reviewDto.product_uid,
-        rating: reviewDto.rating,
-        content: reviewDto.content,
-      },
-      {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      }
-    )
+    .post("/review", {
+      product_uid: reviewDto.product_uid,
+      rating: reviewDto.rating,
+      content: reviewDto.content,
+    })
     .then((response) => {
       if (response === 200) {
         console.log("리뷰 작성 완료", response);
