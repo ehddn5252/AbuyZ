@@ -2,7 +2,10 @@ package com.tasteshopping.product.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
+import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.*;
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 @RestController
 @Slf4j
@@ -32,14 +37,60 @@ public class ProductController {
     @Autowired
     ProductOptionService productOptionListService;
 
+    private final ProductRepository productRepository;
+
     @PostMapping("/test")
     public ResponseEntity<BaseRes> test(@RequestBody ProductCreateReqDto productCreateReqDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 test 성공!"));
+        String name = null;
+        String brandName = null;
+        Date startDate = null;
+        Date endDate = null;
+        Integer bigCategoriesUid = null;
+        Integer smallCategoriesUid = null;
+        String status = null;
+        if(name==null){
+            name = "%%";
+        }
+        else{
+            name = "%"+ status + "%";
+        }
+
+        if(endDate==null){
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                endDate = format.parse("2300-1-1 13:53:19");
+            }
+            catch (Exception e){
+
+            }
+        }
+        if(startDate==null){
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                startDate = format.parse("1900-1-1 13:53:19");
+            }
+            catch (Exception e){
+
+            }
+
+        }
+        if(smallCategoriesUid==null){
+            smallCategoriesUid = null; //name = "%%";
+        }
+//        if(status==null){
+//            status = "%%";
+//        }
+//        else{
+//            status = "%"+status+"%";
+//        }
+//        List<Products> productsList = productRepository.boFiltering(name,brandName,startDate,endDate,bigCategoryUid,smallCategoryUId,status);
+        List<Products> productsList = productRepository.boFiltering(name, startDate, endDate, smallCategoriesUid);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 필터링 null test 성공!", productsList.size()));
     }
 
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email, @RequestBody BoSearchReqDto boSearchReqDto) {
-
+        BaseRes baseRes = productService.boSearch(email, boSearchReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
     }
 
@@ -50,13 +101,11 @@ public class ProductController {
         List<ProductDto> l = new ArrayList<>();
 
         // price 로 찾기
-        if(searchDto.getStartPrice() !=null && searchDto.getEndPrice() !=null){
-            l = productService.getProductBySmallCategoryAndPriceBetween(searchDto.getSmallCategoriesUid(),searchDto.getStartPrice(),searchDto.getEndPrice());
-        }
-
-        else if (searchDto.getPriceUid() != null) {
+        if (searchDto.getStartPrice() != null && searchDto.getEndPrice() != null) {
+            l = productService.getProductBySmallCategoryAndPriceBetween(searchDto.getSmallCategoriesUid(), searchDto.getStartPrice(), searchDto.getEndPrice());
+        } else if (searchDto.getPriceUid() != null) {
 //            l = productService.getProductByPrice(searchDto.getPriceUid());
-            l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(),searchDto.getPriceUid());
+            l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(), searchDto.getPriceUid());
         }
 
         // deliveryFee 로 찾기
@@ -102,10 +151,10 @@ public class ProductController {
         if (newL.size() == 0) {
             newL = productKeywordService.findByParamInKeyword(searchDto.getKeyword());
         }
-        for(int i=0;i<newL.size();++i){
+        for (int i = 0; i < newL.size(); ++i) {
             System.out.println(newL.get(i).getBigCategoryUid());
         }
-        newL =productService.findByKeywordAndFilter(newL,searchDto);
+        newL = productService.findByKeywordAndFilter(newL, searchDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
 
@@ -114,10 +163,10 @@ public class ProductController {
     public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
         ProductUidDto productUidDto = productUidReqDto.toDto();
         ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
-        if(l==null){
+        if (l == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 uid의 product가 없습니다."));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!",l));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
     }
 
     @GetMapping()
@@ -130,10 +179,10 @@ public class ProductController {
 
     @PostMapping("/register")
     public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
-                                            @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
+                                            @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto,multipartFiles));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles));
     }
 
 
@@ -142,8 +191,7 @@ public class ProductController {
         Integer uid = productUidReqDto.getProducts_uid();
         try {
             productService.deleteProduct(uid);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 상품이 없습니다."));
         }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
@@ -151,9 +199,9 @@ public class ProductController {
 
     @PutMapping("/modify")
     public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
-                                          @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
+                                          @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-        productService.modifyProductRelated(productCreateDto,multipartFiles);
+        productService.modifyProductRelated(productCreateDto, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
     }
 }
