@@ -12,13 +12,12 @@ import com.tasteshopping.wish.entity.WishLists;
 import com.tasteshopping.wish.repository.WishRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,10 +28,9 @@ public class WishServiceImpl implements WishService {
     private final WishRepository wishRepository;
     private final ProductRepository productRepository;
     @Override
-    public ResponseDto getWishList(String email) {
+    public ResponseDto getWishList(String email, Pageable pageable) {
         ResponseDto responseDto = new ResponseDto();
-        Optional<Users> user = userRepository.findByEmail(email);
-        List<WishLists> result = wishRepository.findByUser(user.get());
+        Page<WishLists> result = wishRepository.findByUserEmail(email, pageable);
 
         WishListDto listDto = new WishListDto(new ArrayList<>(),0);
 
