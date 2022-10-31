@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductStatisticsDto {
+public class ProductStatisticsDto implements Comparable<ProductStatisticsDto>{
     private String big_category_name;
     private String small_category_name;
     private int count;
@@ -25,5 +25,8 @@ public class ProductStatisticsDto {
     public void updateSalesAmount(int sales_amount){
         this.sales_amount+=sales_amount;
     }
-
+    @Override
+    public int compareTo(ProductStatisticsDto productStatisticsDto) {
+        return productStatisticsDto.getSales_amount()-this.sales_amount;
+    }
 }
