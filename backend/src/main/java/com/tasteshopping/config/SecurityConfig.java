@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/*").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
