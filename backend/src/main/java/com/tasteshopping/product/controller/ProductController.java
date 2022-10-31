@@ -2,13 +2,13 @@ package com.tasteshopping.product.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
-import com.tasteshopping.product.repository.ProductPictureRepository;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,18 +29,16 @@ public class ProductController {
     ProductKeywordService productKeywordService;
     // for test
 
-
     @Autowired
-    ProductOptionListService productOptionListService;
+    ProductOptionService productOptionListService;
 
     @PostMapping("/test")
     public ResponseEntity<BaseRes> test(@RequestBody ProductCreateReqDto productCreateReqDto) {
-
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 test 성공!"));
     }
 
     @PostMapping("/bo-search")
-    public ResponseEntity<BaseRes> boSearch(@RequestBody BoSearchReqDto boSearchReqDto) {
+    public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email, @RequestBody BoSearchReqDto boSearchReqDto) {
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
     }
@@ -114,30 +112,15 @@ public class ProductController {
     }
 
 
-//    @PostMapping("/detail")
-//    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
-//        /*
-//        상품 detail 에서는 상품, 사진, 옵션 dto 를 가져와야함 SQL에서 처리 안하는 따로버전
-//         */
-//        ProductUidDto productUidDto = productUidReqDto.toDto();
-//        // 상품 가져옴
-//        ProductDto p = productService.getOneProduct(productUidDto.getProductsUid());
-//
-//        // 상품 사진 가져옴
-//        List<ProductPictureDto> productPictureDto = productPictureService.getProductPictureByPicturesUid(productUidDto.getProductsUid());
-//        // 상품 옵션 가져옴
-////        List<ProductOptionListDto> productOptionListDtos = productOptionListService.getOptionListByUid(productUidDto.getProductsUid());
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!"));
-//    }
-
     @PostMapping("/detail")
     public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
         ProductUidDto productUidDto = productUidReqDto.toDto();
         ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
+        if(l==null){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 uid의 product가 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!",l));
     }
-
 
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {
@@ -146,33 +129,30 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
 
-//    @PostMapping("/register")
-//    public ResponseEntity<BaseRes> register(@RequestBody ProductCreateReqDto productCreateReqDto) {
-//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-//        // 상품 관련된 모든 것 생성
-//        productService.createProductRelated(productCreateDto);
-//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 생성 성공!"));
-//    }
 
     @PostMapping("/register")
-    public ResponseEntity<BaseRes> registerImgTest(@RequestPart ProductCreateReqDto productCreateReqDto,
-                                                   @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
+    public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
+                                            @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-        // 상품 관련된 모든 것 생성
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto,multipartFiles));
     }
 
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> delete(@AuthenticationPrincipal String email, @RequestBody ProductUidReqDto productUidReqDto) {
         Integer uid = productUidReqDto.getProducts_uid();
-        productService.deleteProduct(uid);
+        try {
+            productService.deleteProduct(uid);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 상품이 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<BaseRes> modify(@RequestPart ProductCreateReqDto productCreateReqDto,
+    public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
                                           @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto,multipartFiles);

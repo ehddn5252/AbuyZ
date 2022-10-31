@@ -1,18 +1,16 @@
 package com.tasteshopping.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tasteshopping.cart.entity.Carts;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 
@@ -38,17 +36,12 @@ public class Products {
     @Column(name = "description_img", columnDefinition = "varchar(500)")
     private String descriptionImg;
 
-    //    @Column(columnDefinition = "varchar(200)")
-//    private String origin;
-//
     @Column(name = "rep_img", columnDefinition = "varchar(3000)")
     private String repImg;
 
     @Column(columnDefinition = "varchar(40)")
     private String status;
-//
-//    @Column(columnDefinition = "varchar(200)")
-//    private String producer;
+
 
     @Column(name = "discount_rate", nullable = false)
     @ColumnDefault("0")
@@ -69,25 +62,23 @@ public class Products {
     @JoinColumn(name = "brands_uid")
     private Brands brand;
 
-    // 양방향 설정
-    @OneToMany(mappedBy ="product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Inventories> inventories;
+    @CreatedDate
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdDate;
 
+
+    // 양방향 설정
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductKeywords> productKeywords;
 
     @OneToMany(mappedBy ="product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductPictures> productPictures;
 
-    @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Inventories> inventories;
+
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
-
-    @OneToMany( mappedBy = "product",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Carts> carts;
-
-    @CreatedDate
-    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdDate;
 
 
     public ProductDto toDto() {

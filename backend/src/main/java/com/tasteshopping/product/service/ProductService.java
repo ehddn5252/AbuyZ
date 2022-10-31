@@ -15,13 +15,16 @@ public interface ProductService {
 
     Optional<Integer> getMaxUid();
 
+    // 2022.10.29 재고 방식 -> 수정 요함
     BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
 
     void deleteProduct(Integer uid);
 
+    // 2022.10.29 재고 방식 -> 수정 요함
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
 
+    // 재고 방식 -> 수정 요함
     void modifyProductOption(ProductCreateDto productCreateDto);
 
     void modifyProductPicture(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);

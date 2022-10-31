@@ -1,8 +1,8 @@
 package com.tasteshopping.order.controller;
 
+import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
-import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.order.service.OrderListService;
@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -39,7 +37,13 @@ public class OrderController {
 
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
-        orderService.cartPay(email);
+        try{
+            orderService.cartPay(email);
+        }
+        catch (OutOfStockException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "남은 재고가 없습니다."));
+        }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 

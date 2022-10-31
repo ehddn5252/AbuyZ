@@ -22,7 +22,7 @@ public class OrderListServiceImpl implements OrderListService {
     @Override
     public List<OrderListDto> getOrderLists(String email) {
         Users user = userRepository.findByEmail(email).get();
-        List<OrderLists> orderLists = orderListRepository.findByUsersUid(user.getUid());
+        List<OrderLists> orderLists = orderListRepository.findByUser(user);
         List<OrderListDto> orderListDtos = new ArrayList<>();
         for(int i=0;i< orderLists.size();++i){
             OrderListDto orderListDto = orderLists.get(i).toDto();
