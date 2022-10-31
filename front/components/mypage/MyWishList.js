@@ -77,6 +77,7 @@ const MyOrderContainer = styled.div`
   margin-bottom: 4rem;
   width: 100%;
   width: 56rem;
+  height: 80vh;
 `;
 
 const MajorTitle = styled.span`

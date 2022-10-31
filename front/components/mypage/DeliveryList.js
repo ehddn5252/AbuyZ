@@ -15,7 +15,7 @@ export default function DeliveryList() {
   const [valuenumber, setValueNumber] = useState(0);
   const [addOpen, setAddOpen] = useState(false);
   const [modifyOpen, setModifyOpen] = useState(false);
-  const [realAddress, setRealAddress] = useState(0);
+  const [basicDeliveryNumber, setBasicDeliveryNumber] = useState(0);
   const datas = [
     {
       id: 0,
@@ -40,11 +40,20 @@ export default function DeliveryList() {
   const dataList = datas.map((e) => (
     <TableRow key={e.id} style={{ padding: "1rem" }}>
       <td style={{ textAlign: "center", padding: "1rem" }}>
-        <input
-          type="radio"
-          name="address"
-          onClick={() => setRealAddress(e.id)}
-        />
+        {e.id === basicDeliveryNumber ? (
+          <input
+            type="radio"
+            name="address"
+            checked
+            onClick={() => setBasicDeliveryNumber(e.id)}
+          />
+        ) : (
+          <input
+            type="radio"
+            name="address"
+            onClick={() => setBasicDeliveryNumber(e.id)}
+          />
+        )}
       </td>
       <td style={{ textAlign: "center", padding: "1rem" }}>
         {e.address} {e.detailaddress}
@@ -120,7 +129,7 @@ const Button = styled.button`
   background-color: white;
   border: 1px solid;
   border-color: #56a9f1;
-  height: 3rem;
+  height: 2rem;
   width: 8rem;
   color: #56a9f1;
   border-radius: 5px;
