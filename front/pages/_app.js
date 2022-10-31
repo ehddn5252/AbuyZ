@@ -7,6 +7,8 @@ import AdminSideNav from "../components/nav/AdminSideNav.js";
 import Footer from "../components/nav/Footer.js";
 import styled from "@emotion/styled";
 import ScrollNav from "../components/nav/ScrollNav";
+import { RecoilRoot } from "recoil";
+
 function MyApp({ Component, pageProps }) {
   // 관리자 체크
   const [adminCheck, setAdminCheck] = useState(false);
@@ -36,15 +38,18 @@ function MyApp({ Component, pageProps }) {
       setAdminCheck(false);
     }
   }, []);
+
   return (
-    <MainContainer>
-      {adminCheck === false && scrollY > 125 ? <ScrollNav /> : null}
-      {adminCheck === false ? <Nav /> : null}
-      {adminCheck ? <AdminSideNav /> : null}
-      {adminCheck ? <AdminNav /> : null}
-      <Component {...pageProps} />
-      {isNav && adminCheck === false ? <Footer /> : null}
-    </MainContainer>
+    <RecoilRoot>
+      <MainContainer>
+        {adminCheck === false && scrollY > 125 ? <ScrollNav /> : null}
+        {adminCheck === false ? <Nav /> : null}
+        {adminCheck ? <AdminSideNav /> : null}
+        {adminCheck ? <AdminNav /> : null}
+        <Component {...pageProps} />
+        {isNav && adminCheck === false ? <Footer /> : null}
+      </MainContainer>
+    </RecoilRoot>
   );
 }
 
