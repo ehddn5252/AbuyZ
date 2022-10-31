@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import Button from "@mui/material/Button";
 
 // StyledComponents
 import styled from "styled-components";
@@ -47,8 +46,6 @@ export default function CanReview() {
         <ProductListBox>
           <MyReviewItem product={productList[0]} />
           <MyReviewItem product={productList[0]} />
-          <MyReviewItem product={productList[0]} />
-          <MyReviewItem product={productList[0]} />
         </ProductListBox>
       ) : (
         <BlankBox>
@@ -63,10 +60,10 @@ export default function CanReview() {
 const MyOrderContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  width: 100%;
+  width: 56rem;
 `;
 
-const MajorTitle = styled.h1`
+const MajorTitle = styled.span`
   font-size: 2rem;
 `;
 
@@ -86,10 +83,4 @@ const BlankBox = styled.div`
   font-size: 3rem;
   font-weight: bolder;
   color: #aaaaaa;
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
 `;

@@ -55,10 +55,8 @@ export default function DeliveryAddModal({ setAddOpen }) {
           marginTop: "2rem",
         }}
       >
-        <div style={{ flex: "2", marginTop: "0.5rem" }}>
+        <div>
           <span>주소</span>
-        </div>
-        <div style={{ flex: "10" }}>
           <SearchButton onClick={() => setAddressOpen(true)}>
             주소 검색
           </SearchButton>
@@ -74,6 +72,7 @@ export default function DeliveryAddModal({ setAddOpen }) {
                 <TextField
                   placeholder="상세주소를 입력하세요"
                   fullWidth
+                  required
                   onChange={(event) =>
                     setDetailAddress(event.currentTarget.value)
                   }
@@ -120,7 +119,7 @@ const CloseIconDiv = styled.div`
 `;
 
 const SearchButton = styled.button`
-  width: 100%;
+  width: 25.5rem;
   height: 3rem;
   background-color: #fff;
   border: 1px solid;

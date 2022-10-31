@@ -1,6 +1,8 @@
 // React
 import React, { useState, useEffect } from "react";
-
+import { Grid } from "@mui/material";
+import Image from "next/image";
+import Coupon from "../../public/images/coupon.png";
 // MUI
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
@@ -14,44 +16,87 @@ export default function MyCouponList() {
   const [couponList, setCouponList] = useState([
     {
       id: 0,
-      couponName: "잇다 출시기념 감사 쿠폰",
+      couponName: "잇다 출시기념 감사 쿠폰, 사용 불가능",
       saleprice: "3000 원",
       startPeriod: "2022.10.18",
       expirationPeriod: "2022.10.19",
-      used: false,
+      used: 0,
+      category: "의류",
     },
     {
       id: 1,
-      couponName: "잇다 출시기념 감사 쿠폰123",
+      couponName: "잇다 출시기념 감사 쿠폰, 만료",
       saleprice: "3000 원",
       startPeriod: "2022.10.18",
       expirationPeriod: "2022.10.19",
-      used: true,
+      used: 1,
+      category: "식품",
+    },
+    {
+      id: 2,
+      couponName: "잇다 출시기념 감사 쿠폰, 사용 불가능",
+      saleprice: "3000 원",
+      startPeriod: "2022.10.18",
+      expirationPeriod: "2022.10.19",
+      used: 2,
+      category: "의류",
+    },
+    {
+      id: 3,
+      couponName: "잇다 출시기념 감사 쿠폰123, 사용 가능",
+      saleprice: "3000 원",
+      startPeriod: "2022.10.18",
+      expirationPeriod: "2022.10.19",
+      used: 1,
+      category: "가구",
     },
   ]); // eslint-disable-line no-unused-vars
   // const [couponList, setCouponList] = useState([]);
+
+  couponList.sort((a, b) => a.used - b.used);
+  console.log(couponList);
   useEffect(() => {
     setCouponList([
       {
         id: 0,
-        couponName: "잇다 출시기념 감사 쿠폰",
+        couponName: "잇다 출시기념 감사 쿠폰, 사용 가능",
         saleprice: "3000 원",
         startPeriod: "2022.10.18",
         expirationPeriod: "2022.10.19",
-        used: false,
+        used: 0,
+        category: "의류",
       },
       {
         id: 1,
-        couponName: "잇다 출시기념 감사 쿠폰123",
+        couponName: "잇다 출시기념 감사 쿠폰, 사용 불가능",
         saleprice: "3000 원",
         startPeriod: "2022.10.18",
         expirationPeriod: "2022.10.19",
-        used: true,
+        used: 1,
+        category: "식품",
+      },
+      {
+        id: 2,
+        couponName: "잇다 출시기념 감사 쿠폰, 사용 만료",
+        saleprice: "3000 원",
+        startPeriod: "2022.10.18",
+        expirationPeriod: "2022.10.19",
+        used: 2,
+        category: "의류",
+      },
+      {
+        id: 3,
+        couponName: "잇다 출시기념 감사 쿠폰123, 사용 불가능",
+        saleprice: "3000 원",
+        startPeriod: "2022.10.18",
+        expirationPeriod: "2022.10.19",
+        used: 1,
+        category: "가구",
       },
     ]);
   }, []);
   return (
-    <MyComplainContainer>
+    <MyCouponContainer>
       <MajorTitle>쿠폰</MajorTitle>
       <hr
         style={{
@@ -60,29 +105,91 @@ export default function MyCouponList() {
           borderRadius: "1rem",
         }}
       />
+      {/* <MyCouponItem couponList={couponList}></MyCouponItem> */}
       {couponList.length ? (
-        <MyCouponItem couponList={couponList}></MyCouponItem>
+        <Grid container spacing={1} style={{ width: "100%", height: "100%" }}>
+          {couponList.map((coupon) => (
+            <Grid
+              key={coupon.id}
+              item
+              xs={6}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <div
+                style={
+                  coupon.used === 0
+                    ? {
+                        backgroundImage: "url(/images/coupon.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        width: "100%",
+                        height: "14rem",
+                      }
+                    : coupon.used === 1
+                    ? {
+                        backgroundImage: "url(/images/coupon_completed.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        width: "100%",
+                        height: "14rem",
+                      }
+                    : {
+                        backgroundImage: "url(/images/coupon_expired.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        // backgroundColor: "black",
+                        width: "100%",
+                        height: "14rem",
+                      }
+                }
+              >
+                <div
+                  style={
+                    coupon.used === 0
+                      ? { padding: "2rem", color: "black" }
+                      : { padding: "2rem", color: "#aaaaaa" }
+                  }
+                >
+                  <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
+                    {coupon.saleprice}
+                  </span>
+                  <br></br>
+                  <p>{coupon.couponName}</p>
+                  <br></br>
+                  <span>사용 카테고리: {coupon.category}</span>
+                  <br></br>
+                  <span style={{ color: "#aaaaaa" }}>
+                    {coupon.startPeriod} ~ {coupon.expirationPeriod}
+                  </span>
+                </div>
+              </div>
+            </Grid>
+          ))}
+        </Grid>
       ) : (
         <BlankBox>
           <LocalOfferOutlinedIcon sx={{ fontSize: "6rem" }} />
           <p>보유하신 쿠폰이 없습니다</p>
         </BlankBox>
       )}
-    </MyComplainContainer>
+    </MyCouponContainer>
   );
 }
 
-const MyComplainContainer = styled.div`
+const MyCouponContainer = styled.div`
   margin-top: 4.5rem;
   width: 56rem;
+  min-height: 80vh;
 `;
 
 const MajorTitle = styled.span`
   font-size: 2rem;
-`;
-
-const CouponListBox = styled.div`
-  margin-top: 3rem;
 `;
 
 const BlankBox = styled.div`
@@ -97,6 +204,10 @@ const BlankBox = styled.div`
   color: #aaaaaa;
 `;
 
-const DailyTable = styled.table`
-  width: 100%;
-`;
+// const Back = styled.div`
+//   /* background-image: url("../../public/images/coupon.png"); */
+//   background-image: `url(${coupon})`;
+//   /* background-color: black; */
+//   height: 100%;
+//   width: 100%;
+// `;

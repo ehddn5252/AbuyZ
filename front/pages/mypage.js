@@ -1,8 +1,6 @@
 // React
 import React, { useState } from "react";
 import { Container } from "@mui/system";
-// StyledComponents
-import styled from "styled-components";
 
 // 하위컴포넌트
 import MypageSideNav from "../components/nav/MypageSideNav";
@@ -20,7 +18,7 @@ export default function Mypage() {
   return (
     <div>
       <div style={{ margin: "0" }}>
-        <MyInfo />
+        <MyInfo setTap={setTap} />
       </div>
       <Container
         maxWidth="lg"
@@ -42,16 +40,12 @@ export default function Mypage() {
           </div>
           <div style={{ flex: 4 }}>
             {tap === 0 ? <MyOrderList /> : null}
-            {tap === 1 ? (
-              <div>
-                <MyWishList />
-                <CanReview />
-              </div>
-            ) : null}
+            {tap === 1 ? <MyWishList /> : null}
             {tap === 2 ? <MyComplainList /> : null}
             {tap === 3 ? <MyCouponList /> : null}
             {tap === 4 ? <MyInfoChange /> : null}
             {tap === 5 ? <DeliveryList /> : null}
+            {tap === 6 ? <CanReview /> : null}
           </div>
         </div>
       </Container>

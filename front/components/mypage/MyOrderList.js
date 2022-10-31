@@ -50,6 +50,9 @@ export default function MyOrderList() {
     <MyOrderContainer>
       <MajorTitle>주문/리뷰</MajorTitle>
       <Hr />
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <span>총 주문 상품 건수: {productList.length}건</span>
+      </div>
       {productList.length === 0 ? (
         <BlankBox>
           <ShoppingCartOutlinedIcon sx={{ fontSize: "6rem" }} />
@@ -57,8 +60,6 @@ export default function MyOrderList() {
         </BlankBox>
       ) : (
         <ProductListBox>
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[1]} />
           <MyOrderItem product={productList[0]} />
           <MyOrderItem product={productList[1]} />
         </ProductListBox>
