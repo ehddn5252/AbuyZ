@@ -16,7 +16,8 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
 
     @Query("select o from Orders o " +
             "join fetch o.orderList ol " +
-            "join fetch o.product p " +
+            "join fetch o.inventory i " +
+            "join fetch i.product p " +
             "join fetch p.smallCategory s " +
             "join fetch s.bigCategory b " +
             "where ol.date between :#{#start_date} and :#{#end_date}")

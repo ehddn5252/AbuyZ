@@ -104,11 +104,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                 CartStatisticsListDto cartStatisticsListDto = new CartStatisticsListDto();
                 List<Carts>carts = cartRepository.findAll();
                 for(Carts cart:carts){
-                    String big_category_name = cart.getProduct().
+                    String big_category_name = cart.getInventory().getProduct().
                                                 getSmallCategory().getBigCategory()
                                                 .getCategoryName();
 
-                    String small_category_name = cart.getProduct().
+                    String small_category_name = cart.getInventory().getProduct().
                                                     getSmallCategory().getSmallCategoryName();
 
                     CartBigCategoryDto cartBigCategoryDto = cartStatisticsListDto.getBig_category()
@@ -133,9 +133,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                 List<Orders>orders = orderRepository.findAllByDateBetween(start_date,end_date);
                 if(menu==2){
                     for(Orders order:orders){
-                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getProduct().getName(),
-                                new ProductStatisticsDto(order.getProduct().getSmallCategory().getBigCategory().getCategoryName(),
-                                        order.getProduct().getSmallCategory().getSmallCategoryName()));
+                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getInventory().getProduct().getName(),
+                                new ProductStatisticsDto(order.getInventory().getProduct().getSmallCategory().getBigCategory().getCategoryName(),
+                                        order.getInventory().getProduct().getSmallCategory().getSmallCategoryName()));
 
                         productStatisticsDto.updateCount(order.getCount());
                         productStatisticsDto.updateSalesAmount(order.getPrice());
@@ -147,11 +147,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                     for(Orders order:orders){
                         percentStatistics.updateTotalSales(order.getCount()*order.getPrice());
 
-                        String big_category_name = order.getProduct().
+                        String big_category_name = order.getInventory().getProduct().
                                 getSmallCategory().getBigCategory()
                                 .getCategoryName();
 
-                        String small_category_name = order.getProduct().
+                        String small_category_name = order.getInventory().getProduct().
                                 getSmallCategory().getSmallCategoryName();
 
                         BigCategoryPercentDto bigCategoryPercentDto = percentStatistics.getBig_category()
