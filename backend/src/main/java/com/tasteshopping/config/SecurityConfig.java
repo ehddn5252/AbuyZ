@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf().disable()
-
+                .cors().and()
                 // exception을 핸들링할때 만들었던 에러처리 클래스들을 추가해준다.
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
