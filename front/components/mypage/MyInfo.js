@@ -4,7 +4,18 @@ import React from "react";
 // StyledComponent
 import styled from "styled-components";
 
-export default function Myinfo() {
+export default function Myinfo({ setTap }) {
+  const tap6Change = () => {
+    setTap(6);
+  };
+
+  const tap3Change = () => {
+    setTap(3);
+  };
+
+  const tap2Change = () => {
+    setTap(2);
+  };
   return (
     <InfoContainer>
       <MainBox>
@@ -13,22 +24,22 @@ export default function Myinfo() {
         </MyImgDiv> */}
         <MyName>권도건님</MyName>
         <HistoryDiv>
-          <HistoryTitle>주문 내역</HistoryTitle>
-          <HistoryCount>
-            <span style={{ color: "#56a9f1" }}>4</span>건
-          </HistoryCount>
-        </HistoryDiv>
-        <HistoryDiv>
-          <HistoryTitle>문의 내역</HistoryTitle>
+          <HistoryTitle onClick={tap2Change}>문의 내역</HistoryTitle>
           <HistoryCount>
             <span style={{ color: "#56a9f1" }}>1</span>건
           </HistoryCount>
         </HistoryDiv>
-        <HhistoryDiv>
+        <HistoryDiv onClick={tap3Change}>
           <HistoryTitle>나의 쿠폰</HistoryTitle>
           <HistoryCount>
             {" "}
             <span style={{ color: "#56a9f1" }}>1</span>개
+          </HistoryCount>
+        </HistoryDiv>
+        <HhistoryDiv onClick={tap6Change}>
+          <HistoryTitle>작성 가능한 리뷰</HistoryTitle>
+          <HistoryCount>
+            <span style={{ color: "#56a9f1" }}>1</span>건
           </HistoryCount>
         </HhistoryDiv>
       </MainBox>
@@ -69,6 +80,10 @@ const HistoryDiv = styled.div`
   padding-right: 3rem;
   border-right: 1px solid;
   border-color: rgba(128, 128, 128, 0.23);
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const HhistoryDiv = styled.div`
@@ -78,6 +93,10 @@ const HhistoryDiv = styled.div`
   align-items: center;
   margin: 1.5rem;
   padding-right: 3rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const HistoryTitle = styled.div`
   display: flex;
