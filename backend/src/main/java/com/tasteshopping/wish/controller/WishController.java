@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/wish")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class WishController {
     private final WishServiceImpl wishService;
     @GetMapping("/list")

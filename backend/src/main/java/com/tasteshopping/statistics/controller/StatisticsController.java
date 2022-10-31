@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/statistics")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StatisticsController {
     private final StatisticsServiceImpl statisticsService;
     @PostMapping("/sales")

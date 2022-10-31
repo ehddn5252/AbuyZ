@@ -21,7 +21,6 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/category")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoryController {
 
     @Autowired

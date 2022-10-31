@@ -18,7 +18,6 @@ import java.util.*;
 @Slf4j
 @RequestMapping("/product")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProductController {
 
     @Autowired
