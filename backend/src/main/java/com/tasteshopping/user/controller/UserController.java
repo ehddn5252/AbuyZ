@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://k7e201.p.ssafy.io", allowedHeaders = "*")
 public class UserController {
 
     private final UserServiceImpl userService;
