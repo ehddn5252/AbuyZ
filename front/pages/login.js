@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Container from "@mui/material/Container";
@@ -10,10 +10,26 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+// API
+import { login } from "./api/user/hello.js";
 // StyledComponent
 import styled from "styled-components";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const LoginDto = {
+      email: email,
+      password: password,
+    };
+    console.log(LoginDto);
+    const res = login(LoginDto);
+
+    console.log(res);
+  };
   return (
     <div>
       <AllContainer>
@@ -30,7 +46,7 @@ export default function Login() {
         </div>
       </AllContainer>
       <LoginContainer component="main">
-        <LoginBox>
+        <LoginBox component="form" onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -40,6 +56,10 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            value={email}
             sx={{ backgroundColor: "white" }}
           />
 
@@ -52,6 +72,10 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            value={password}
             sx={{ backgroundColor: "white" }}
           />
           <Grid
@@ -61,7 +85,12 @@ export default function Login() {
           >
             <LoginLink href="/pwf">PW 찾기</LoginLink>
           </Grid>
-          <LoginButton fullWidth href="/" variant="contained">
+          <LoginButton
+            fullWidth
+            type="submit"
+            onClick={handleSubmit}
+            variant="contained"
+          >
             로그인
           </LoginButton>
           <SignupButton fullWidth href="/signup" variant="contained">

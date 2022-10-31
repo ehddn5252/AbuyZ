@@ -29,10 +29,7 @@ export function signup(signDto) {
 // 로그인
 export function login(loginDto) {
   https
-    .post("/user/login", {
-      email: loginDto.email,
-      password: loginDto.password,
-    })
+    .post("/user/login", loginDto)
     // .post("/user/loginDto", loginDto) // 보낼때 형식이 동일하다면 바로 써도 됨
     .then((response) => {
       if (response === 200) {
