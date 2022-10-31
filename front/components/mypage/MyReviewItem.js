@@ -71,4 +71,5 @@ const ReviewButton = styled.button`
   height: 1.8rem;
   width: 7rem;
   color: white;
+  border-radius: 5px;
 `;
