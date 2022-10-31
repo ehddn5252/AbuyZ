@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function SaleProductCategory() {
+export default function AddEditCategory() {
   // 대분류
   const [bigCategory, setBigCategory] = useState("");
   // 소분류
@@ -100,6 +100,7 @@ export default function SaleProductCategory() {
           </FormControl>
         </CategoryBox>
       </ContentBox>
+      <input type="file" />
     </ContainerBox>
   );
 }

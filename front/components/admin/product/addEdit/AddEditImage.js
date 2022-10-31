@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ContainerBox } from "./SaleProductCategory";
+import { ContainerBox } from "./AddEditCategory";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
