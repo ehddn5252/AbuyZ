@@ -1,6 +1,6 @@
 package com.tasteshopping.order.entity;
 
-import com.tasteshopping.product.entity.Inventories;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.coupon.entity.Coupons;
 import lombok.*;

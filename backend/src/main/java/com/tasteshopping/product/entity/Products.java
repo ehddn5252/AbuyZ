@@ -1,18 +1,16 @@
 package com.tasteshopping.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tasteshopping.cart.entity.Carts;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 

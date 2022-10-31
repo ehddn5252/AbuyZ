@@ -1,6 +1,8 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;

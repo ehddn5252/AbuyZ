@@ -3,11 +3,12 @@ package com.tasteshopping.cart.service;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartResDto;
 import com.tasteshopping.cart.entity.Carts;
+import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.product.entity.Inventories;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
-import com.tasteshopping.product.repository.InventoryRepository;
+import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.ProductOptionService;
@@ -43,7 +44,8 @@ public class CartServiceImpl implements CartService {
     InventoryRepository inventoryRepository;
     @Override
     @Transactional
-    public void putCart(String email, CartDto cartsDto) {
+    public BaseRes putCart(String email, CartDto cartsDto) {
+        System.out.println(cartsDto.toString());
         int productsUid = cartsDto.getProductsUid();
         HashMap<String, String> optionValues = cartsDto.getOptionValues();
         // 상품 옵션 리스트 생성
@@ -55,11 +57,18 @@ public class CartServiceImpl implements CartService {
             optionListString += optionsOptional.getUid()+" ";
             // 장바구니에 저장할 것들 가져옴
         }
-        System.out.println("optionListString");
-        System.out.println(optionListString);
-        Optional<Inventories> inventory = inventoryRepository.findByOptionList(optionListString.trim());
-        carts.modifyInfo(cartsDto.getProductCount(), user.get(), inventory.get());
-        cartRepository.save(carts);
+        Optional<Inventories> inventory = inventoryRepository.findByOptionListString(optionListString.trim());
+
+        if(inventory.isPresent()){
+                if (inventory.get().getCount() < cartsDto.getProductCount()) {
+                    throw new OutOfStockException();
+                }
+                else{
+                    carts.modifyInfo(cartsDto.getProductCount(), user.get(), inventory.get());
+                    cartRepository.save(carts);
+                }
+        }
+        return new BaseRes(200,"장바구니 담기 성공",null);
     }
 
     @Override

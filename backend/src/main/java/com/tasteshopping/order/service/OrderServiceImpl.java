@@ -10,7 +10,7 @@ import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
-import com.tasteshopping.product.entity.Inventories;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

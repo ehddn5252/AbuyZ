@@ -1,9 +1,9 @@
-package com.tasteshopping.product.entity;
+package com.tasteshopping.inventory.entity;
 
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.order.entity.Orders;
-import com.tasteshopping.product.dto.InventoryDto;
-import com.tasteshopping.product.dto.ProductOptionListDto;
+import com.tasteshopping.inventory.dto.InventoryDto;
+import com.tasteshopping.product.entity.Products;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,7 +43,19 @@ public class Inventories {
         inventoryDto.setUid(uid);
         inventoryDto.setCount(count);
         inventoryDto.setPrice(price);
-        inventoryDto.setProductOptionList(productOptionList);
+        inventoryDto.setProductOptionUidString(productOptionList);
+
+        return inventoryDto;
+    }
+
+    public InventoryDto toResDto(){
+        InventoryDto inventoryDto = new InventoryDto();
+        inventoryDto.setUid(uid);
+        inventoryDto.setCount(count);
+        inventoryDto.setPrice(price);
+        inventoryDto.setProductOptionUidString(productOptionList);
+
+
         return inventoryDto;
     }
 }

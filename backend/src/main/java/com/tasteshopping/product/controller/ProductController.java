@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping("/bo-search")
-    public ResponseEntity<BaseRes> boSearch(@RequestBody BoSearchReqDto boSearchReqDto) {
+    public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email, @RequestBody BoSearchReqDto boSearchReqDto) {
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
     }
@@ -130,8 +131,8 @@ public class ProductController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<BaseRes> register(@RequestPart ProductCreateReqDto productCreateReqDto,
-                                                   @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
+    public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
+                                            @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto,multipartFiles));
@@ -139,7 +140,7 @@ public class ProductController {
 
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> delete(@RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> delete(@AuthenticationPrincipal String email, @RequestBody ProductUidReqDto productUidReqDto) {
         Integer uid = productUidReqDto.getProducts_uid();
         try {
             productService.deleteProduct(uid);
@@ -151,7 +152,7 @@ public class ProductController {
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<BaseRes> modify(@RequestPart ProductCreateReqDto productCreateReqDto,
+    public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
                                           @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto,multipartFiles);

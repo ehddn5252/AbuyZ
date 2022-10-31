@@ -1,6 +1,6 @@
 package com.tasteshopping.cart.dto;
 
-import com.tasteshopping.product.dto.InventoryDto;
+import com.tasteshopping.inventory.dto.InventoryDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.product.dto.ProductOptionListDto;
 import lombok.*;

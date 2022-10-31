@@ -1,6 +1,7 @@
 package com.tasteshopping.cart.controller;
 
 import com.tasteshopping.cart.dto.*;
+import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.user.entity.Users;
@@ -22,10 +23,16 @@ public class CartController {
 
     @Autowired
     CartService cartService;
+
     @PostMapping()
     public ResponseEntity<BaseRes> putCart(@AuthenticationPrincipal String email, @RequestBody CartDto cartDto) {
-        cartService.putCart(email, cartDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 담기 성공!"));
+        System.out.println(cartDto);
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(cartService.putCart(email, cartDto));
+        }
+        catch (OutOfStockException e){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "재고가 없습니다."));
+        }
     }
 
     @DeleteMapping()
