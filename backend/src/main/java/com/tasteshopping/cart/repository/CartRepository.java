@@ -12,7 +12,8 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Carts,Integer> {
     @Override
     @Query("select c from Carts c " +
-            "join fetch c.product p " +
+            "join fetch c.inventory i " +
+            "join fetch i.product p " +
             "join fetch p.smallCategory s " +
             "join fetch s.bigCategory")
     List<Carts> findAll();

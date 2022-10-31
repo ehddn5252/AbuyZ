@@ -31,11 +31,6 @@ public class Carts {
     @JoinColumn(name="inventories_uid")
     Inventories inventory;
 
-    
-    // 없어도 됨 통계 페이지 살리려고 임시로 둔 것
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name="products_uid")
-    Products product;
 
     public void modifyInfo(int productCount, Users user, Inventories inventory){
         this.productCount = productCount;

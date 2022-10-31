@@ -27,9 +27,6 @@ public class Orders {
     @ColumnDefault("0")
     Integer price;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="products_uid")
-    Products product;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="order_lists_uid")
