@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 // 컴포넌트
 import InquireList from "./InquireList";
-import { ContainerBox } from "../addEdit/SaleProductCategory";
+import { ContainerBox } from "../addEdit/AddEditCategory";
 import SearchWord from "./SearchWord";
 import SaleStatus from "./SaleStatus";
 import Category from "./Category";
