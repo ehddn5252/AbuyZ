@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ContainerBox } from "./SaleProductCategory";
-import { ContentBox } from "./SaleProductCategory";
+import { ContainerBox } from "./AddEditCategory";
+import { ContentBox } from "./AddEditCategory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 

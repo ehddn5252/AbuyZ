@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import AddProduct from "../../../components/admin/product/addEdit/AddProduct";
 
 export default function Add() {
   return (
     <ProductPage>
-      <h1>준비중입니다.</h1>
+      <AddProduct></AddProduct>
     </ProductPage>
   );
 }

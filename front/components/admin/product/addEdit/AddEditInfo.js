@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ContainerBox } from "./SaleProductCategory";
+import { ContainerBox } from "./AddEditCategory";
 
 export default function SaleProductInfo() {
   // 상품명
