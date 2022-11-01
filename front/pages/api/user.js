@@ -79,12 +79,12 @@ export function withdrawal() {
 }
 
 // 카카오 로그인
-export function kakaoLogin() {
-  https.post("/user/kakao-login").then((response) => {
-    if (response === 200) {
+export function kakaoLogin(tokenDto) {
+  https.post("/user/kakao-login", tokenDto).then((response) => {
+    if (response.status === 200) {
       console.log("로그인 성공", response);
       // 토큰 저장
-      window.localStorage.setItem("access-Token", response.data.accessToken);
+      window.localStorage.setItem("access-Token", tokenDto.access_token);
       return response;
     } else {
       console.log("로그인 실패", response);
@@ -148,15 +148,19 @@ export function checkNickname(nickname) {
 
 // 이메일 중복 확인
 export function checkEmail(email) {
-  https.get(`/user/check-email/${email}`).then((response) => {
-    if (response === 200) {
-      console.log("이메일 중복 확인 성공", response);
-      return response;
-    } else {
-      console.log("이메일 중복 확인 실패", response);
-      return response;
-    }
-  });
+  try {
+    https.get(`/user/check-email/${email}`).then((response) => {
+      if (response.status === 200) {
+        console.log("이메일 중복 확인 성공", response);
+        return response.data;
+      } else {
+        console.log("이메일 중복 확인 실패", response);
+        return response;
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 // 주소 추가
