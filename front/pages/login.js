@@ -44,7 +44,7 @@ export default function Login() {
           })
           .then((res) => {
             if (res.status == 200) {
-              localStorage.setItem("access-token", res.data.token);
+              sessionStorage.setItem("access-token", authObj.access_token);
               router.push("/");
             }
           })
