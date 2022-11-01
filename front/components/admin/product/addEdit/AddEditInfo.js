@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ContainerBox } from "./AddEditCategory";
+
+// mui
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductInfo() {
   // 상품명
@@ -10,15 +12,17 @@ export default function SaleProductInfo() {
   // 할인
   const [sale, setSale] = useState("");
   const [salePlaceholder, setSalePlaceholder] =
-    useState("할인율을 입력해주세요.");
+    useState("숫자만 입력해주세요. ex) 13");
   // 판매가
   const [price, setPrice] = useState("");
-  const [pricePlaceholder, setPricePlaceholder] =
-    useState("판매가를 입력해주세요.");
+  const [pricePlaceholder, setPricePlaceholder] = useState(
+    "숫자만 입력해주세요. ex) 3000"
+  );
   // 할인
   const [fee, setFee] = useState("");
-  const [feePlaceholder, setFeePlaceholder] =
-    useState("배송비를 입력해주세요.");
+  const [feePlaceholder, setFeePlaceholder] = useState(
+    "숫자만 입력해주세요. ex) 19000"
+  );
 
   // 상품명
   const nameChange = (event) => {
@@ -38,7 +42,7 @@ export default function SaleProductInfo() {
     setSalePlaceholder("");
   };
   const saleBlur = () => {
-    setSalePlaceholder("할인율을 입력해주세요.");
+    setSalePlaceholder("숫자만 입력해주세요. ex) 13");
   };
   // 판매가
   const priceChange = (event) => {
@@ -48,7 +52,7 @@ export default function SaleProductInfo() {
     setPricePlaceholder("");
   };
   const priceBlur = () => {
-    setPricePlaceholder("판매가를 입력해주세요.");
+    setPricePlaceholder("숫자만 입력해주세요. ex) 3000");
   };
   // 배송비
   const feeChange = (event) => {
@@ -58,20 +62,53 @@ export default function SaleProductInfo() {
     setFeePlaceholder("");
   };
   const feeBlur = () => {
-    setFeePlaceholder("배송비를 입력해주세요.");
+    setFeePlaceholder("숫자만 입력해주세요. ex) 19000");
   };
 
   return (
-    <ContainerBox>
-      <h1 style={{ paddingLeft: "2rem" }}>판매 정보</h1>
-      <hr style={{ background: "#ff9494", width: "95%" }}></hr>
-      {/* 상품명, 할인 */}
-      <SalesInfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>상품명</Title>
-          </TitleBox>
-          <InputContainer>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        판매정보
+      </Grid2>
+      <Grid2
+        container
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          alignContent: "center",
+        }}
+      >
+        {/* 상품명, 할인 */}
+        <Grid2
+          xs={12}
+          sx={{
+            padding: "0",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            display: "flex",
+            alignContent: "center",
+          }}
+        >
+          <InfoBox>
+            <TitleBox>
+              <Title>상품명</Title>
+            </TitleBox>
             <Input
               placeholder={namePlaceholder}
               onChange={nameChange}
@@ -79,69 +116,56 @@ export default function SaleProductInfo() {
               onBlur={nameBlur}
               style={{ height: "3rem" }}
             />
-          </InputContainer>
-        </InfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>할인</Title>
-            <p style={{ margin: 0 }}>(%)</p>
-          </TitleBox>
-          <InputContainer>
+            <TitleBox>
+              <Title>할인</Title>
+              <p style={{ margin: 0 }}>(%)</p>
+            </TitleBox>
             <Input
               placeholder={salePlaceholder}
               onChange={saleChange}
               onFocus={saleFocus}
               onBlur={saleBlur}
             />
-            <Description>0 ~ 100 까지 숫자만 입력해주세요.</Description>
-          </InputContainer>
-        </InfoBox>
-      </SalesInfoBox>
-      {/* 판매가, 배송비 */}
-      <SalesInfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>판매가</Title>
-            <p style={{ margin: 0 }}>(원)</p>
-          </TitleBox>
-          <InputContainer>
+          </InfoBox>
+        </Grid2>
+        {/* 판매가, 배송비 */}
+        <Grid2
+          xs={12}
+          sx={{
+            padding: "0",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            display: "flex",
+            alignContent: "center",
+          }}
+        >
+          <InfoBox>
+            <TitleBox>
+              <Title>판매가</Title>
+              <p style={{ margin: 0 }}>(원)</p>
+            </TitleBox>
             <Input
               placeholder={pricePlaceholder}
               onChange={priceChange}
               onFocus={priceFocus}
               onBlur={priceBlur}
             />
-            <Description>숫자만 입력해주세요. ex) 12000</Description>
-          </InputContainer>
-        </InfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>배송비</Title>
-            <p style={{ margin: 0 }}>(원)</p>
-          </TitleBox>
-          <InputContainer>
+            <TitleBox>
+              <Title>배송비</Title>
+              <p style={{ margin: 0 }}>(원)</p>
+            </TitleBox>
             <Input
               placeholder={feePlaceholder}
               onChange={feeChange}
               onFocus={feeFocus}
               onBlur={feeBlur}
             />
-            <Description>
-              숫자만 입력해주세요. (0은 무료배송입니다.)
-              <br />
-              ex) 3000 or 0
-            </Description>
-          </InputContainer>
-        </InfoBox>
-      </SalesInfoBox>
-    </ContainerBox>
+          </InfoBox>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }
-
-const SalesInfoBox = styled.div`
-  display: flex;
-  margin-left: 4rem;
-`;
 
 const InfoBox = styled.div`
   display: flex;
@@ -152,39 +176,24 @@ const InfoBox = styled.div`
 const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-right: 2rem;
+  margin-left: 5.5rem;
   width: 7rem;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 800;
 `;
 
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 50%;
-`;
-
 const Input = styled.input`
-  border: 0.1rem solid #ff9494;
-  border-radius: 0.5rem;
-  width: 15rem;
-  height: 7rem;
-  padding-left: 0.5rem;
+  border: 0.1rem solid #000000;
+  width: 17rem;
+  height: 3rem;
   font-size: 1.3rem;
 
   &::placeholder {
     color: gray;
     font-size: 1rem;
+    padding-left: 1rem;
   }
-`;
-
-const Description = styled.div`
-  font-size: 0.9rem;
-  padding-top: 0.5rem;
-  padding-left: 0.8rem;
-  color: gray;
 `;
