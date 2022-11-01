@@ -20,6 +20,7 @@ import DaumPostcode from "react-daum-postcode";
 import { signup, checkEmail } from "./api/user";
 
 export default function Signup() {
+  const [numberopen, setnumberOpen] = useState(false);
   // 회원가입 정보
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -127,6 +128,7 @@ export default function Signup() {
     const res = await checkEmail(email);
     console.log(res);
     setButtonCheck(true);
+    setnumberOpen(true);
   };
 
   const [open, setOpen] = useState(false);
@@ -198,9 +200,11 @@ export default function Signup() {
               />
             </Grid>
             <Grid item xs={2} style={{ marginTop: "1rem" }}>
-              <button style={inputbutton} onClick={isDuplicateEmailCheck}>
-                중복확인
-              </button>
+              {isDuplicateEmail === true && emailValid === true ? (
+                <button style={inputbutton} onClick={isDuplicateEmailCheck}>
+                  중복확인
+                </button>
+              ) : null}
             </Grid>
             {defaultEmail && !emailValid ? (
               <ErrorText>유효하지 않은 이메일입니다.</ErrorText>
@@ -215,6 +219,29 @@ export default function Signup() {
               <SuccessText>사용가능한 이메일입니다</SuccessText>
             ) : null}
           </Grid>
+
+          {/* 이메일 인증번호 입력창 보여주기 */}
+          {numberopen === true ? (
+            <Grid container spacing={1}>
+              <Grid item xs={2} style={{ marginTop: "2rem" }}>
+                <span style={{ fontWeight: "bold" }}>이메일 인증</span>
+              </Grid>
+              <Grid item xs={8}>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="password"
+                  label="이메일로 발송된 인증번호를 입력해주세요"
+                  name="password"
+                  autoComplete="password"
+                  autoFocus
+                  sx={{ backgroundColor: "white" }}
+                />
+              </Grid>
+            </Grid>
+          ) : null}
+
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>비밀번호</span>

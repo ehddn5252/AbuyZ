@@ -1,6 +1,6 @@
 // React
 import React, { useEffect, useState } from "react";
-
+import axios from "axios";
 // MUI
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import CheckBox from "@mui/material/Checkbox";
@@ -12,6 +12,26 @@ import BasketItem from "./BasketItem";
 
 export default function BasketList() {
   const [basketList, setBasketList] = useState([]);
+
+  const [data, setData] = useState("");
+
+  async function getData() {
+    try {
+      const response = await axios.get(
+        "https://k7e201.p.ssafy.io:8081/api/cart"
+      );
+      const res = response.data;
+      setData(res);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  console.log(data);
 
   useEffect(() => {
     setBasketList([
