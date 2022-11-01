@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -76,12 +77,64 @@ public class ProductServiceImpl implements ProductService {
         String brandName = boSearchReqDto.getBrand_name();
         String status = boSearchReqDto.getStatus();
 
-        List<Products> productsList = productRepository.boFiltering(name, startDate,  endDate,  smallCategoriesUid,status);
-
-        if (status != null) {
-            //상품 상태로 조회
+        // 여기에서 시작, 끝날짜, 이름, smallCategories로 한번 거르고
+        if (endDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                endDate = format.parse("2300-1-1");
+            } catch (Exception e) {
+            }
         }
-        return null;
+        if (startDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                startDate = format.parse("1900-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if (name == null) {
+            name = "%%";
+        } else {
+            name = "%" + name + "%";
+        }
+
+        if (brandName == null) {
+            brandName = "%%";
+        } else {
+            brandName = "%" + brandName + "%";
+        }
+
+        if (status == null) {
+            status = "%%";
+        }
+        List<ProductDto> productDtoList = new ArrayList<>();
+        // 조인한 결과가나와서 길어짐
+        List<Products> productsList = productRepository.boFiltering(name, startDate, endDate, bigCategoryUid, smallCategoriesUid, brandName, status);
+        List<Products> retProductsList = new ArrayList<>();
+        if(keyword!=null) {
+            for (int i = 0; i < productsList.size(); ++i) {
+                List<ProductKeywords> productKeywords = productsList.get(i).getProductKeywords();
+                for (int j = 0; j < productKeywords.size(); ++j) {
+                    if (productKeywords.get(j).getName().equals(keyword)) {
+                        retProductsList.add(productsList.get(j));
+                    }
+                }
+            }
+            productsList.clear();
+            productsList.addAll(retProductsList);
+        }
+
+        for (int i = 0; i < productsList.size(); ++i) {
+            int inventorySum = inventoryRepository.getInventoriesSum(productsList.get(i));
+            ProductDto productDto = productsList.get(i).toDto();
+            productDto.setInventoryNum(inventorySum);
+            productDtoList.add(productDto);
+        }
+
+        for(int i=0;i<productDtoList.size();++i){
+
+        }
+        return new BaseRes(200, "bo search 완료", productDtoList);
     }
 
     @Override
@@ -122,8 +175,6 @@ public class ProductServiceImpl implements ProductService {
 
         // save imgs
         Products pp = productRepository.findById(productUid).get();
-        System.out.println("=================================");
-        System.out.println(pp);
         // save imgs
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
@@ -456,7 +507,6 @@ public class ProductServiceImpl implements ProductService {
                 newL.add(l.get().get(i).toDto());
             }
         }
-
         return null;
     }
 

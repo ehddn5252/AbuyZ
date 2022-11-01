@@ -5,7 +5,6 @@ import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.*;
-import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.SimpleFormatter;
 
 @RestController
 @Slf4j
@@ -39,59 +37,14 @@ public class ProductController {
 
     private final ProductRepository productRepository;
 
-    @PostMapping("/test")
-    public ResponseEntity<BaseRes> test(@RequestBody ProductCreateReqDto productCreateReqDto) {
-        String name = null;
-        String brandName = null;
-        Date startDate = null;
-        Date endDate = null;
-        Integer bigCategoriesUid = null;
-        Integer smallCategoriesUid = null;
-        String status = null;
-        if(name==null){
-            name = "%%";
-        }
-        else{
-            name = "%"+ status + "%";
-        }
-
-        if(endDate==null){
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                endDate = format.parse("2300-1-1 13:53:19");
-            }
-            catch (Exception e){
-
-            }
-        }
-        if(startDate==null){
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                startDate = format.parse("1900-1-1 13:53:19");
-            }
-            catch (Exception e){
-
-            }
-
-        }
-        if(smallCategoriesUid==null){
-            smallCategoriesUid = null; //name = "%%";
-        }
-//        if(status==null){
-//            status = "%%";
-//        }
-//        else{
-//            status = "%"+status+"%";
-//        }
-//        List<Products> productsList = productRepository.boFiltering(name,brandName,startDate,endDate,bigCategoryUid,smallCategoryUId,status);
-        List<Products> productsList = productRepository.boFiltering(name, startDate, endDate, smallCategoriesUid);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 필터링 null test 성공!", productsList.size()));
-    }
-
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email, @RequestBody BoSearchReqDto boSearchReqDto) {
-        BaseRes baseRes = productService.boSearch(email, boSearchReqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "bo-search 성공!", productService.getMaxUid()));
+        System.out.println("=============================");
+        System.out.println(boSearchReqDto.getName());
+        System.out.println(boSearchReqDto.getName());
+        System.out.println(boSearchReqDto.getName());
+
+        return ResponseEntity.status(HttpStatus.OK).body(productService.boSearch(email, boSearchReqDto));
     }
 
     @PostMapping("/fo-search/detail")
