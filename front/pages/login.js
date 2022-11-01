@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login, kakaoLogin } from "./api/user.js";
+import { login } from "./api/user.js";
 // StyledComponent
 import styled from "styled-components";
 
