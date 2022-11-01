@@ -53,7 +53,7 @@ export default function ScrollNav() {
           <IconBox>
             <Link href="/event">
               <FavoriteBorderOutlinedIcon
-                fontSize="large"
+                fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>
@@ -62,7 +62,7 @@ export default function ScrollNav() {
           <IconBox>
             <Link href="/mypage">
               <PersonOutlineOutlinedIcon
-                fontSize="large"
+                fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>
@@ -71,7 +71,7 @@ export default function ScrollNav() {
           <IconBox>
             <Link href="/basket">
               <ShoppingBasketOutlinedIcon
-                fontSize="large"
+                fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>

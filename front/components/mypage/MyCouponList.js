@@ -4,6 +4,7 @@ import { Grid } from "@mui/material";
 import Image from "next/image";
 import Coupon from "../../public/images/coupon.png";
 // MUI
+import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
 // StyledComponents
@@ -93,6 +94,15 @@ export default function MyCouponList() {
         used: 1,
         category: "가구",
       },
+      {
+        id: 4,
+        couponName: "잇다 출시기념 감사 쿠폰123, 사용 가능",
+        saleprice: "3000 원",
+        startPeriod: "2022.10.18",
+        expirationPeriod: "2022.10.19",
+        used: 0,
+        category: "반려/",
+      },
     ]);
   }, []);
   return (
@@ -149,25 +159,62 @@ export default function MyCouponList() {
                       }
                 }
               >
-                <div
-                  style={
-                    coupon.used === 0
-                      ? { padding: "2rem", color: "black" }
-                      : { padding: "2rem", color: "#aaaaaa" }
-                  }
-                >
-                  <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
-                    {coupon.saleprice}
-                  </span>
-                  <br></br>
-                  <p>{coupon.couponName}</p>
-                  <br></br>
-                  <span>사용 카테고리: {coupon.category}</span>
-                  <br></br>
-                  <span style={{ color: "#aaaaaa" }}>
-                    {coupon.startPeriod} ~ {coupon.expirationPeriod}
-                  </span>
-                </div>
+                {coupon.used === 0 ? (
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div
+                      style={{
+                        color: "black",
+                        flex: 8,
+                        marginLeft: "2.5rem",
+                        marginTop: "2rem",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
+                        {coupon.saleprice}
+                      </span>
+                      <br></br>
+                      <p>{coupon.couponName}</p>
+                      <br></br>
+                      <span>사용 카테고리: {coupon.category}</span>
+                      <br></br>
+                      <span style={{ color: "#aaaaaa" }}>
+                        {coupon.startPeriod} ~ {coupon.expirationPeriod}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        flex: 4,
+                        marginTop: "4rem",
+                        textAlign: "center",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                        [{coupon.category}]
+                      </span>
+                      <br></br>
+                      <span>쇼핑하기</span>
+                      <br></br>
+                      <br></br>
+                      <ArrowCircleRightOutlinedIcon
+                        sx={{ width: "2.5rem", height: "2.5rem" }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ padding: "2rem", color: "#aaaaaa" }}>
+                    <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
+                      {coupon.saleprice}
+                    </span>
+                    <br></br>
+                    <p>{coupon.couponName}</p>
+                    <br></br>
+                    <span>사용 카테고리: {coupon.category}</span>
+                    <br></br>
+                    <span style={{ color: "#aaaaaa" }}>
+                      {coupon.startPeriod} ~ {coupon.expirationPeriod}
+                    </span>
+                  </div>
+                )}
               </div>
             </Grid>
           ))}

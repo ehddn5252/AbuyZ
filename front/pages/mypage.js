@@ -16,7 +16,7 @@ import CanReview from "../components/mypage/CanReview";
 export default function Mypage() {
   const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
   return (
-    <div>
+    <div style={{ minHeight: "80vh" }}>
       <div style={{ margin: "0" }}>
         <MyInfo setTap={setTap} />
       </div>
