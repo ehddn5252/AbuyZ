@@ -1,4 +1,4 @@
-import https from "../https";
+import https from "./https.js";
 
 // 이벤트등록
 export function createEvent(eventDto) {

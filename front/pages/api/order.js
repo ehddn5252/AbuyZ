@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 장바구니 결제
 export function payBasket(cartDto) {

@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 회원가입
 export function signup(signDto) {
@@ -32,7 +32,7 @@ export function login(loginDto) {
     .post("/user/login", loginDto)
     // .post("/user/loginDto", loginDto) // 보낼때 형식이 동일하다면 바로 써도 됨
     .then((response) => {
-      if (response === 200) {
+      if (response.status === 200) {
         console.log("로그인 완료", response);
         // 토큰 저장
         window.localStorage.setItem("access-Token", response.data.accessToken);

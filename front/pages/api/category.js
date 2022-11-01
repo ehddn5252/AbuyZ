@@ -1,4 +1,4 @@
-import https from "../https";
+import https from "./https";
 
 // 소분류를 1개 uid로 조회 - tmp
 export function inquireSmallCategory(smallcategory_num) {

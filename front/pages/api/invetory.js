@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 상품 번호로 재고 리스트 가져오기
 export function inventoryList(productnumber) {
