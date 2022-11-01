@@ -1,5 +1,4 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import https from "../https.js";
+import https from "./https.js";
 
 // 내 리뷰 내역은 아직 미완성
 export default function handler(req, res) {

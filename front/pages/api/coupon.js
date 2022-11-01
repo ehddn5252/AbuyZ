@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import https from "../https.js";
+import https from "./https.js";
 
 // 쿠폰 생성
 export function createcoupon(couponDto) {

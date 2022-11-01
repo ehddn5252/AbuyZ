@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 모든 상품 정보 조회
 export function inquireProduct() {
