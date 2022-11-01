@@ -44,6 +44,9 @@ public class CartController {
 
     @GetMapping()
     public ResponseEntity<BaseRes> getCart(@AuthenticationPrincipal String email) {
+        System.out.println("==========================");
+        System.out.println("==========================");
+        System.out.println(email);
         List<CartResDto> cartDtoList  =cartService.getCart(email);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 조회 성공!",cartDtoList));
     }

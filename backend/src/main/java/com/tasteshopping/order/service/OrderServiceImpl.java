@@ -5,6 +5,7 @@ import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.dto.Status;
@@ -159,5 +160,12 @@ public class OrderServiceImpl implements OrderService{
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);
         orderListRepository.save(orderLists);
+    }
+
+
+    @Override
+    public BaseRes orderCancel(Integer orderListUid) {
+        OrderLists orderLists = orderListRepository.findById(orderListUid).get();
+        return null;
     }
 }

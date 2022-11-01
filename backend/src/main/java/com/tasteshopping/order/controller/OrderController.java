@@ -4,6 +4,7 @@ import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderCancelReqDto;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.order.dto.OrderListUidReqDto;
@@ -43,13 +44,20 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
     }
 
+
     @PostMapping("/cancel")
-    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email){
+    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email, @RequestBody OrderCancelReqDto orderCancelReqDto){
+
+        BaseRes baseRes = orderService.orderCancel(orderCancelReqDto.getOrder_list_uid());
         //
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제 취소하기 성공!"));
     }
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
+
+        System.out.println("==========================");
+        System.out.println("==========================");
+        System.out.println(email);
         try{
             orderService.cartPay(email);
         }
@@ -62,6 +70,9 @@ public class OrderController {
 
     @PostMapping("/basic")
     public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,@RequestBody CartReqDto cartReqDto){
+        System.out.println("==========================");
+        System.out.println("==========================");
+        System.out.println(email);
         CartDto cartDto = cartReqDto.toDto();
         orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
