@@ -2,14 +2,17 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `https://k7e201.p.ssafy.io/api/:path*`,
-      },
-    ];
-  },
+  // publicRuntimeConfig: {
+  //   apiBaseUrl: "https://k7e201.p.ssafy.io:8081/api",
+  // },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/:path*",
+  //       destination: "https://k7e201.p.ssafy.io:8081/api/:path*",
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;
