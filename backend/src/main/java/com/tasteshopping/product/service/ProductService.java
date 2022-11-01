@@ -51,4 +51,6 @@ public interface ProductService {
     List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice);
 
     List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
+
+    BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto);
 }

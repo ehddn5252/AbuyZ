@@ -67,11 +67,8 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public BaseRes putInventoryList(InventoryReqDto2 inventoryReqDto) {
-        System.out.println("=====================");
-        System.out.println(inventoryReqDto);
         try {
             for (String productOptionString : inventoryReqDto.getInventory_option_list().keySet()) {
-                System.out.println(productOptionString);
                 Inventories inventory = inventoryRepository.findByOptionListString(productOptionString).get();
                 inventory.setCount(Integer.parseInt(inventoryReqDto.getInventory_option_list().get(productOptionString).get("count")));
                 inventory.setPrice(Integer.parseInt(inventoryReqDto.getInventory_option_list().get(productOptionString).get("price")));

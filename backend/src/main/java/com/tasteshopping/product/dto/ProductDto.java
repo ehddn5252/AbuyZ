@@ -33,4 +33,5 @@ public class ProductDto {
     private LocalDateTime date;
 
     private Integer reviewNum;
+    private Integer inventoryNum;
 }
