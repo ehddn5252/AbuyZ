@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ContainerBox } from "./AddEditCategory";
+
+// mui
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductMore() {
   // 브랜드
@@ -48,16 +50,49 @@ export default function SaleProductMore() {
   };
 
   return (
-    <ContainerBox>
-      <h1 style={{ paddingLeft: "2rem" }}>판매 정보</h1>
-      <hr style={{ background: "#ff9494", width: "95%" }}></hr>
-      {/* 브랜드, 키워드 */}
-      <SalesInfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>브랜드</Title>
-          </TitleBox>
-          <InputContainer>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        마케팅 정보
+      </Grid2>
+      <Grid2
+        container
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          alignContent: "center",
+        }}
+      >
+        {/* 브랜드, 키워드 */}
+        <Grid2
+          xs={12}
+          sx={{
+            padding: "0",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            display: "flex",
+            alignContent: "center",
+          }}
+        >
+          <InfoBox>
+            <TitleBox>
+              <Title>브랜드</Title>
+            </TitleBox>
             <Input
               placeholder={brandPlaceholder}
               onChange={brandChange}
@@ -65,51 +100,44 @@ export default function SaleProductMore() {
               onBlur={brandBlur}
               style={{ height: "3rem" }}
             />
-          </InputContainer>
-        </InfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>키워드</Title>
-          </TitleBox>
-          <InputContainer>
+            <TitleBox>
+              <Title>키워드</Title>
+            </TitleBox>
             <Input
               placeholder={keyWordPlaceholder}
               onChange={keyWordChange}
               onFocus={keyWordFocus}
               onBlur={keyWordBlur}
             />
-            <Description>ex) 최고, 가성비 ( , 로 구분)</Description>
-          </InputContainer>
-        </InfoBox>
-      </SalesInfoBox>
-      {/* 메타태그 */}
-      <SalesInfoBox>
-        <InfoBox>
-          <TitleBox>
-            <Title>메타태그</Title>
-          </TitleBox>
-          <InputContainer>
+          </InfoBox>
+        </Grid2>
+        {/* 메타태그 */}
+        <Grid2
+          xs={12}
+          sx={{
+            padding: "0",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+            display: "flex",
+            alignContent: "center",
+          }}
+        >
+          <InfoBox>
+            <TitleBox>
+              <Title>메타태그</Title>
+            </TitleBox>
             <Input
               placeholder={metaTagPlaceholder}
               onChange={metaTagChange}
               onFocus={metaTagFocus}
               onBlur={metaTagBlur}
             />
-            <Description>
-              상품을 공유할 때 소개할 수 있는 단어 <br /> ex) 사과, 청바지 ( ,
-              로 구분)
-            </Description>
-          </InputContainer>
-        </InfoBox>
-      </SalesInfoBox>
-    </ContainerBox>
+          </InfoBox>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }
-
-const SalesInfoBox = styled.div`
-  display: flex;
-  margin-left: 4rem;
-`;
 
 const InfoBox = styled.div`
   display: flex;
@@ -120,39 +148,24 @@ const InfoBox = styled.div`
 const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-right: 2rem;
+  margin-left: 5.5rem;
+  width: 7rem;
 `;
 
 const Title = styled.div`
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 800;
-  width: 8rem;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  height: 50%;
 `;
 
 const Input = styled.input`
-  border: 0.1rem solid #ff9494;
-  border-radius: 0.5rem;
-  width: 15rem;
-  height: 7rem;
-  padding-left: 0.5rem;
+  border: 0.1rem solid #000000;
+  width: 17rem;
+  height: 3rem;
   font-size: 1.3rem;
 
   &::placeholder {
     color: gray;
     font-size: 1rem;
+    padding-left: 1rem;
   }
-`;
-
-const Description = styled.div`
-  font-size: 0.9rem;
-  padding-top: 0.5rem;
-  padding-left: 0.8rem;
-  color: gray;
 `;

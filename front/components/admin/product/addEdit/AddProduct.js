@@ -6,7 +6,7 @@ import AddEditCategory from "./AddEditCategory";
 import AddEditInfo from "./AddEditInfo";
 import AddEditOption from "./AddEditOption";
 import AddEditImage from "./AddEditImage";
-import AddEditMore from "./AddEditMore";
+import AddEditMarketing from "./AddEditMarketing";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -24,8 +24,8 @@ export default function AddProduct() {
         {/* 옵션 */}
         <AddEditOption />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-        {/* 판매상태 */}
-        <AddEditMore />
+        {/* 마케팅 정보 */}
+        <AddEditMarketing />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 이미지 */}
         <AddEditImage />
