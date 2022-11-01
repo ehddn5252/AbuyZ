@@ -36,7 +36,10 @@ export function login(loginDto) {
       if (response.status === 200) {
         console.log("로그인 완료", response);
         // 토큰 저장
-        window.localStorage.setItem("access-Token", response.data.accessToken);
+        window.sessionStorage.setItem(
+          "access-Token",
+          response.data.accessToken
+        );
         return response;
       } else {
         console.log("로그인 실패", response);
@@ -48,7 +51,7 @@ export function login(loginDto) {
 // 유저 정보 조회
 export function getMyInfo() {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-Token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.get("/user").then((response) => {
