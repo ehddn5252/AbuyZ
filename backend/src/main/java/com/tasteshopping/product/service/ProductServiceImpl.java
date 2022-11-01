@@ -6,10 +6,12 @@ import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;
+import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.Role;
+import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
         // 조인한 결과가나와서 길어짐
         List<Products> productsList = productRepository.boFiltering(name, startDate, endDate, bigCategoryUid, smallCategoriesUid, brandName, status);
         List<Products> retProductsList = new ArrayList<>();
-        if(keyword!=null) {
+        if (keyword != null) {
             for (int i = 0; i < productsList.size(); ++i) {
                 List<ProductKeywords> productKeywords = productsList.get(i).getProductKeywords();
                 for (int j = 0; j < productKeywords.size(); ++j) {
@@ -131,10 +133,23 @@ public class ProductServiceImpl implements ProductService {
             productDtoList.add(productDto);
         }
 
-        for(int i=0;i<productDtoList.size();++i){
+        for (int i = 0; i < productDtoList.size(); ++i) {
 
         }
         return new BaseRes(200, "bo search 완료", productDtoList);
+    }
+
+    @Override
+    public BaseRes modifyStatus(String email, int products_uid, String status) {
+        Users user = userRepository.findByEmail(email).get();
+        if(user.getUserRoles()!= Role.ADMIN){
+            throw new NoAuthorizationException();
+        }
+        Products product = productRepository.findById(products_uid).get();
+        product.setStatus(status);
+        productRepository.save(product);
+        return new BaseRes(200, "상품 상태 변경 성공", null);
+
     }
 
     @Override

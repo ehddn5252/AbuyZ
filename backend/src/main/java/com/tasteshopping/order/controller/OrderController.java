@@ -4,9 +4,7 @@ import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.order.dto.OrderDto;
-import com.tasteshopping.order.dto.OrderListDto;
-import com.tasteshopping.order.dto.OrderListUidReqDto;
+import com.tasteshopping.order.dto.*;
 import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -39,15 +37,27 @@ public class OrderController {
 
     @GetMapping("/{order_lists_uid}")
     public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email, @PathVariable Integer order_lists_uid) {
-
         return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email){
-        //
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제 취소하기 성공!"));
+    @PutMapping("/status")
+    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,@RequestBody OrderUidReqDto orderUidReqDto){
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(orderUidReqDto.getOrder_uid(),orderUidReqDto.getStatus()));
     }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email, @RequestBody OrderUidReqDto orderCancelReqDto){
+        // ORDER의 상태에는 PROCESS,
+        // 관리자가 취소 누르는 것
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.orderCancel(orderCancelReqDto.getOrder_uid()));
+    }
+
+    @PostMapping("/cancel-register")
+    public ResponseEntity<BaseRes> cancelRegister(@AuthenticationPrincipal String email, @RequestBody AdminOrderCancelReqDto adminOrderCancelReqDto){
+        // 사용자가 취소 누르는 것 ( order 의 status를 취소 요청으로(CANCEL_REQUEST)
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.orderRegisterCancel(adminOrderCancelReqDto.getOrder_uids()));
+    }
+
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
         try{

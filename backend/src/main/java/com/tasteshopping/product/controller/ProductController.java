@@ -1,8 +1,10 @@
 package com.tasteshopping.product.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderUidReqDto;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +97,18 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
 
+    @PutMapping("/status")
+    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,@RequestBody ProductUidReqDto productUidReqDto) {
+
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.modifyStatus(email,productUidReqDto.getProducts_uid(), productUidReqDto.getStatus()));
+        }
+        catch (NoAuthorizationException e){
+            e.printStackTrace();
+            return ResponseEntity.status(403).body(new BaseRes(403,"권한이 없습니다.",null));
+        }
+    }
+
     @PostMapping("/fo-search/keyword/detail")
     public ResponseEntity<BaseRes> foSearchKeywordAndFilter(@RequestBody SearchReqDto searchReqDto) {
         SearchDto searchDto = searchReqDto.toDto();
@@ -114,8 +128,7 @@ public class ProductController {
 
     @PostMapping("/detail")
     public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
-        ProductUidDto productUidDto = productUidReqDto.toDto();
-        ProductDetailDto l = productService.getDetailProduct(productUidDto.getProductsUid());
+        ProductDetailDto l = productService.getDetailProduct(productUidReqDto.getProducts_uid());
         if (l == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 uid의 product가 없습니다."));
         }

@@ -53,4 +53,6 @@ public interface ProductService {
     List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
 
     BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto);
+
+    BaseRes modifyStatus(String email, int products_uid, String status);
 }
