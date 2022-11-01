@@ -53,10 +53,11 @@ export default function MyinfoChange() {
       <InfoChangeContainer component="main">
         <ContentDiv>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>아이디</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <TextField
                 placeholder={userId}
                 margin="normal"
@@ -64,27 +65,36 @@ export default function MyinfoChange() {
                 id="id"
                 name="id"
                 autoComplete="id"
-                autoFocus
                 sx={{ backgroundColor: "white" }}
                 disabled
               ></TextField>
             </Grid>
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={4}></Grid>
+            <Grid item xs={6}>
+              <span style={{ color: "#56a9f1" }}>
+                * 아이디는 변경 불가능합니다.
+              </span>
+            </Grid>
+          </Grid>
+          <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>비밀번호 변경</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <SubButton variant="outlined" onClick={showModal}>
                 수정
               </SubButton>
             </Grid>
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>이름</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <TextField
                 placeholder={userName}
                 margin="normal"
@@ -92,17 +102,17 @@ export default function MyinfoChange() {
                 id="name"
                 name="name"
                 autoComplete="name"
-                autoFocus
                 sx={{ backgroundColor: "white" }}
                 onChange={(event) => setUserName(event.currentTarget.value)}
               ></TextField>
             </Grid>
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>이메일</span>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <TextField
                 placeholder={userEmail}
                 margin="normal"
@@ -117,11 +127,12 @@ export default function MyinfoChange() {
             </Grid>
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>휴대폰</span>
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <TextField
                 placeholder={userPhone}
                 margin="normal"
@@ -129,7 +140,6 @@ export default function MyinfoChange() {
                 id="number"
                 name="number"
                 autoComplete="number"
-                autoFocus
                 sx={{ backgroundColor: "white" }}
                 onChange={(event) => setUserPhone(event.currentTarget.value)}
               ></TextField>
@@ -171,10 +181,11 @@ export default function MyinfoChange() {
             </Grid> */}
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>성별</span>
             </Grid>
-            <Grid item xs={8} style={{ marginTop: "1rem" }}>
+            <Grid item xs={6} style={{ marginTop: "1rem" }}>
               <FormControl>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
@@ -206,10 +217,11 @@ export default function MyinfoChange() {
             </Grid>
           </Grid>
           <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2.5rem" }}>
               <span style={{ fontWeight: "bold" }}>생년월일</span>
             </Grid>
-            <Grid item xs={8} style={{ marginTop: "1.5rem" }}>
+            <Grid item xs={6} style={{ marginTop: "1.5rem" }}>
               <TextField
                 id="date"
                 type="date"
@@ -226,7 +238,7 @@ export default function MyinfoChange() {
             style={{
               display: "flex",
               justifyContent: "space-evenly",
-              marginTop: "3rem",
+              marginTop: "5rem",
             }}
           >
             <QuitButton>탈퇴하기</QuitButton>
@@ -278,8 +290,8 @@ const QuitButton = styled.button`
   background-color: white;
   border: 1px solid;
   border-color: rgba(128, 128, 128, 0.5);
-  height: 3.3rem;
-  width: 8rem;
+  height: 3rem;
+  width: 7rem;
   color: rgba(128, 128, 128, 0.5);
   border-radius: 5px;
 `;
@@ -287,8 +299,8 @@ const QuitButton = styled.button`
 const ModifyButton = styled.button`
   background-color: #56a9f1;
   border: none;
-  height: 3.3rem;
-  width: 8rem;
+  height: 3rem;
+  width: 7rem;
   color: white;
   border-radius: 5px;
 `;
