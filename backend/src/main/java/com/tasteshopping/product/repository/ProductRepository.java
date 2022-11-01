@@ -1,5 +1,6 @@
 package com.tasteshopping.product.repository;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;

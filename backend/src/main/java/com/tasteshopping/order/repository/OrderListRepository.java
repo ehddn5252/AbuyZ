@@ -1,6 +1,7 @@
 package com.tasteshopping.order.repository;
 
 import com.tasteshopping.order.entity.OrderLists;
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderListRepository extends JpaRepository<OrderLists, Integer> {
@@ -20,5 +22,6 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
 
     List<OrderLists> findByDate(Date date);
 
+    Optional<OrderLists> findByOrder(Orders order);
 }
 

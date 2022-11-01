@@ -1,9 +1,17 @@
 package com.tasteshopping.inventory.service;
 
+import com.tasteshopping.cart.controller.CartController;
+import com.tasteshopping.cart.dto.CartDto;
+import com.tasteshopping.cart.entity.Carts;
+import com.tasteshopping.cart.exception.OutOfStockException;
+import com.tasteshopping.cart.repository.CartRepository;
+import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.dto.InventoryReqDto2;
 import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
+import com.tasteshopping.order.dto.Status;
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.inventory.exception.InventoryNotFoundException;
@@ -11,6 +19,8 @@ import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductRepository;
+import com.tasteshopping.user.entity.Users;
+import com.tasteshopping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +40,10 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final ProductOptionRepository productOptionRepository;
 
+    private final UserRepository userRepository;
 
+    private final CartRepository cartRepository;
+    private final CartService cartService;
 
     @Override
     public BaseRes getInventoryList(int productsUid) {
@@ -80,5 +93,42 @@ public class InventoryServiceImpl implements InventoryService {
         }
         return new BaseRes(200,"상품 재고 변경 성공",null);
 
+    }
+
+    @Override
+    public BaseRes checkCartByInventory(String email) {
+
+        Users user = userRepository.findByEmail(email).get();
+        // 장바구니 가져와서 orderList 만들기
+
+        List<Carts> cartList = cartRepository.findByUser(user);
+        for (int i = 0; i < cartList.size(); ++i) {
+            Carts cart = cartList.get(i);
+            Inventories inventory = cart.getInventory();
+            int remainingStoke = inventory.getCount() - cart.getProductCount();
+            if (remainingStoke >= 0) {
+                inventory.setCount(remainingStoke);
+            } else {
+                throw new OutOfStockException();
+            }
+        }
+        return new BaseRes(200, "재고 남아있음", null);
+    }
+
+    @Override
+    public BaseRes checkBasicByInventory(String email, CartDto cartDto) {
+        cartService.putCart(email,cartDto);
+        Users user =  userRepository.findByEmail(email).get();
+        Carts cart= cartRepository.findByUserAndUid(user);
+        Inventories inventory = cart.getInventory();
+        
+        int remainingStoke = inventory.getCount()-cart.getProductCount();
+        if(remainingStoke>=0) {
+            inventory.setCount(remainingStoke);
+        }
+        else{
+            throw new OutOfStockException();
+        }
+        return new BaseRes(200, "재고 남아있음", null);
     }
 }

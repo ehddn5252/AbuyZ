@@ -1,4 +1,4 @@
 package com.tasteshopping.product.exception;
 
-public class PageNotFoundException {
+public class PageNotFoundException  {
 }

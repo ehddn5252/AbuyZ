@@ -1,5 +1,6 @@
 package com.tasteshopping.order.entity;
 
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
