@@ -38,7 +38,11 @@ function MyApp({ Component, pageProps }) {
       setAdminCheck(false);
     }
   }, []);
-
+  useEffect(() => {
+    if (!Kakao.isInitialized()) {
+      Kakao.init("204f7abed9a6558eb3411fabf8202302");
+    }
+  }, []);
   return (
     <RecoilRoot>
       <MainContainer>
