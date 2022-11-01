@@ -44,7 +44,7 @@ export default function Signup() {
   // 중복 검사
   // t: 사용가능, f: 사용불가능
   const [isDuplicateNickname, setisDuplicateNickname] = useState(false);
-  const [isDuplicateEmail, setisDuplicateEmail] = useState(false);
+  const [isDuplicateEmail, setIsDuplicateEmail] = useState(false);
   const [buttonCheck, setButtonCheck] = useState(false);
   // 비밀번호 재확인
   const [checkPassword, setCheckPassword] = useState(true);
@@ -96,6 +96,7 @@ export default function Signup() {
     } else {
       setEmailValid(false);
     }
+    isDuplicateEmailCheck();
   };
 
   /** 비밀번호 유효성 */
@@ -127,10 +128,15 @@ export default function Signup() {
     console.log(email);
     const res = await checkEmail(email);
     console.log(res);
-    setButtonCheck(true);
-    setnumberOpen(true);
+    if (res.data.result === true) {
+      setIsDuplicateEmail(true);
+    }
   };
 
+  // 이메일인증
+  const checkEmail2 = async () => {
+    setnumberOpen(true);
+  };
   const [open, setOpen] = useState(false);
 
   const handleComplete = (data) => {
@@ -201,8 +207,8 @@ export default function Signup() {
             </Grid>
             <Grid item xs={2} style={{ marginTop: "1rem" }}>
               {isDuplicateEmail === true && emailValid === true ? (
-                <button style={inputbutton} onClick={isDuplicateEmailCheck}>
-                  중복확인
+                <button style={inputbutton} onClick={checkEmail2}>
+                  인증
                 </button>
               ) : null}
             </Grid>

@@ -1,3 +1,4 @@
+import { resolve } from "styled-jsx/css";
 import https from "./https.js";
 
 // 회원가입
@@ -147,20 +148,20 @@ export function checkNickname(nickname) {
 }
 
 // 이메일 중복 확인
-export function checkEmail(email) {
-  try {
+export async function checkEmail(email) {
+  return new Promise((resolve) => {
     https.get(`/user/check-email/${email}`).then((response) => {
       if (response.status === 200) {
         console.log("이메일 중복 확인 성공", response);
-        return response.data;
+        resolve(response.data);
       } else {
         console.log("이메일 중복 확인 실패", response);
-        return response;
+        resolve(response);
       }
     });
-  } catch (e) {
+  }).catch((e) => {
     console.log(e);
-  }
+  });
 }
 
 // 주소 추가
