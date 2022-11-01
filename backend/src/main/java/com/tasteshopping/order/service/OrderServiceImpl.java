@@ -14,7 +14,7 @@ import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import javax.transaction.Transactional;
@@ -24,28 +24,25 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
-    @Autowired
-    OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
-    @Autowired
-    OrderListRepository orderListRepository;
+    private final OrderListRepository orderListRepository;
 
-    @Autowired
-    CartService cartService;
+    private final CartService cartService;
 
     @Override
     public Integer getLastOrder() {
 
         return null;
     }
+
 
     @Override
     @Transactional
@@ -58,7 +55,8 @@ public class OrderServiceImpl implements OrderService{
         orderLists.setTotalPrice(0);
         orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date(System.currentTimeMillis());
         String s = formatter.format(date).toString();
         try{
@@ -90,7 +88,6 @@ public class OrderServiceImpl implements OrderService{
             }
             else{
                 throw new OutOfStockException();
-
             }
             orders.getInventory();
             totalPrice += inventory.getPrice() * cart.getProductCount();
@@ -98,6 +95,7 @@ public class OrderServiceImpl implements OrderService{
             orderRepository.save(orders);
             cartRepository.delete(cart);
         }
+        // 오늘 날짜 date 가져와서 만약에 있으면 가져와서 가격만 더해주고, 없으면 새로 생성해서 저장해준다.
         orderLists.setStatus(Status.PROCESS.toString());
         orderLists.setTotalPrice(totalPrice);
         orderListRepository.save(orderLists);
@@ -150,7 +148,6 @@ public class OrderServiceImpl implements OrderService{
         }
         else{
             throw new OutOfStockException();
-
         }
         orders.getInventory();
         totalPrice += inventory.getPrice() * cart.getProductCount();
@@ -164,8 +161,26 @@ public class OrderServiceImpl implements OrderService{
 
 
     @Override
+    @Transactional
     public BaseRes orderCancel(Integer orderListUid) {
         OrderLists orderLists = orderListRepository.findById(orderListUid).get();
+        if(orderLists.getStatus().equals("CANCEL_REQUEST")){
+            orderLists.setStatus("CANCELED");
+            orderListRepository.save(orderLists);
+        }
+        List<Orders> orders = orderRepository.findByOrderList(orderLists);
+        for(int i=0;i< orders.size();++i){
+            // 재고 다시 돌려 놓음
+            orders.get(i).getInventory().setCount(orders.get(i).getInventory().getCount()+orders.get(i).getCount());
+        }
+        return null;
+    }
+
+    @Override
+    public BaseRes orderRegisterCancel(Integer orderListUid) {
+        // 여기에서 주문에 대한 상태를 바꿔주어야 한다.
+        OrderLists orderLists = orderListRepository.findById(orderListUid).get();
+        orderLists.setStatus("CANCEL_REQUEST");
         return null;
     }
 }

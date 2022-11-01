@@ -2,7 +2,6 @@ package com.tasteshopping.order.entity;
 
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.order.dto.OrderDto;
-import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.coupon.entity.Coupons;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -47,7 +46,6 @@ public class Orders {
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="coupones_uid")
     Coupons coupon;
-
 
     public OrderDto toDto() {
         OrderDto orderDto = new OrderDto();

@@ -15,4 +15,6 @@ public interface OrderService {
     void basicPay(String email, CartDto cartDto);
 
     BaseRes orderCancel(Integer orderListUid);
+
+    BaseRes orderRegisterCancel(Integer orderListUid);
 }

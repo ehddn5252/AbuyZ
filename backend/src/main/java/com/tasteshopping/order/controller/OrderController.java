@@ -40,24 +40,24 @@ public class OrderController {
 
     @GetMapping("/{order_lists_uid}")
     public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email, @PathVariable Integer order_lists_uid) {
-
         return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
     }
 
 
     @PostMapping("/cancel")
     public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email, @RequestBody OrderCancelReqDto orderCancelReqDto){
-
         BaseRes baseRes = orderService.orderCancel(orderCancelReqDto.getOrder_list_uid());
-        //
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제 취소하기 성공!"));
     }
+
+    @PostMapping("/cancel-register")
+    public ResponseEntity<BaseRes> cancelRegister(@AuthenticationPrincipal String email, @RequestBody OrderCancelReqDto orderCancelReqDto){
+        BaseRes baseRes = orderService.orderCancel(orderCancelReqDto.getOrder_list_uid());
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제 취소하기 성공!"));
+    }
+
     @PostMapping("/cart")
     public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
-
-        System.out.println("==========================");
-        System.out.println("==========================");
-        System.out.println(email);
         try{
             orderService.cartPay(email);
         }
@@ -70,9 +70,6 @@ public class OrderController {
 
     @PostMapping("/basic")
     public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,@RequestBody CartReqDto cartReqDto){
-        System.out.println("==========================");
-        System.out.println("==========================");
-        System.out.println(email);
         CartDto cartDto = cartReqDto.toDto();
         orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));

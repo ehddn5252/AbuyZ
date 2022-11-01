@@ -45,7 +45,6 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public BaseRes putCart(String email, CartDto cartsDto) {
-        System.out.println(cartsDto.toString());
         int productsUid = cartsDto.getProductsUid();
         HashMap<String, String> optionValues = cartsDto.getOptionValues();
         // 상품 옵션 리스트 생성
