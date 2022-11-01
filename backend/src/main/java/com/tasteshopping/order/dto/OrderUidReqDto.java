@@ -1,5 +1,6 @@
 package com.tasteshopping.order.dto;
 
+import com.tasteshopping.order.entity.ProcessStatuses;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderCancelReqDto {
-    Integer order_list_uid;
+public class OrderUidReqDto {
+    Integer order_uid;
+    String status;
 }
