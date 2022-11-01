@@ -1,6 +1,7 @@
 // React
 import React, { useState } from "react";
-
+import { useRouter } from "next/router";
+import https from "./api/https.js";
 // MUI
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -11,11 +12,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login } from "./api/user.js";
+import { login, kakaoLogin } from "./api/user.js";
 // StyledComponent
 import styled from "styled-components";
 
 export default function Login() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,6 +33,31 @@ export default function Login() {
 
     console.log(res);
   };
+
+  const socialLogin = (event) => {
+    event.preventDefault();
+    Kakao.Auth.loginForm({
+      success: (authObj) => {
+        https
+          .post("/user/kakao-login", {
+            access_token: authObj.access_token,
+          })
+          .then((res) => {
+            if (res.status == 200) {
+              localStorage.setItem("access-token", res.data.token);
+              router.push("/");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      },
+      fail: (err) => {
+        console.log(err);
+      },
+    });
+  };
+
   return (
     <div>
       <AllContainer>
@@ -107,7 +135,7 @@ export default function Login() {
         }}
       ></hr>
       <KakaoContainer>
-        <KakaoButton>카카오로 시작하기</KakaoButton>
+        <KakaoButton onClick={socialLogin}>카카오로 시작하기</KakaoButton>
       </KakaoContainer>
     </div>
   );
