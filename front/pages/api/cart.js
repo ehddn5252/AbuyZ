@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import https from "../https.js";
+import https from "./https.js";
 
 // 장바구니에 담기
 // content type 넣는건 어떻게 하는거지?

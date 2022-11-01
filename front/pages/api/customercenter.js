@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 내 문의 내역 가져오기
 export function mycenter() {
