@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
 import { ContainerBox } from "./AddEditCategory";
 import { ContentBox } from "./AddEditCategory";
+
+// mui
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 
@@ -19,7 +22,6 @@ export default function SaleProductOption() {
       setOptionCount([...optionCount, 1]);
     }
   };
-  console.log(optionCount.length);
 
   return (
     <ContainerBox>

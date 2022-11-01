@@ -158,14 +158,6 @@ const CategoryBox = styled.div`
   margin-left: 5rem;
 `;
 
-const CategoryTitle = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: 1000;
-  /* margin-left: 5rem; */
-`;
-
 const Title = styled.p`
   font-size: 1.3rem;
   font-weight: 1000;

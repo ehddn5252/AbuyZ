@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+// mui
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function AddEditCategory() {
   // 대분류
@@ -45,23 +48,55 @@ export default function AddEditCategory() {
   };
 
   return (
-    <ContainerBox>
-      <h1 style={{ paddingLeft: "2rem" }}>카테고리</h1>
-      <hr style={{ background: "#ff9494", width: "95%" }}></hr>
-      <ContentBox>
+    <Grid2 sx={{ padding: "0", display: "flex" }}>
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        카테고리
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+        }}
+      >
         <CategoryBox>
           <Title>대분류</Title>
-          <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
+          <FormControl sx={{ minWidth: 200, width: 300 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
               대분류
             </InputLabel>
             <Select
-              labelId="demo-simple-select-autowidth-label"
-              id="demo-simple-select-autowidth"
               value={bigCategory}
               onChange={handleChange}
-              autoWidth
               label="대분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+                getContentAnchorEl: null,
+              }}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
               <MenuItem value="대분류">
                 <em>대분류</em>
@@ -76,17 +111,26 @@ export default function AddEditCategory() {
         </CategoryBox>
         <CategoryBox>
           <Title>소분류</Title>
-          <FormControl sx={{ m: 1, minWidth: 100, width: 200 }}>
+          <FormControl sx={{ minWidth: 100, width: 300 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
               소분류
             </InputLabel>
             <Select
-              labelId="demo-simple-select-autowidth-label"
-              id="demo-simple-select-autowidth"
               value={smallCategory}
               onChange={smallHandleChange}
-              autoWidth
               label="소분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+                getContentAnchorEl: null,
+              }}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
               <MenuItem value="소분류">
                 <em>소분류</em>
@@ -99,9 +143,8 @@ export default function AddEditCategory() {
             </Select>
           </FormControl>
         </CategoryBox>
-      </ContentBox>
-      <input type="file" />
-    </ContainerBox>
+      </Grid2>
+    </Grid2>
   );
 }
 
@@ -119,12 +162,13 @@ export const ContentBox = styled.div`
 
 const CategoryBox = styled.div`
   display: flex;
-  width: 100%;
   align-items: center;
+  margin-left: 5rem;
 `;
 
 const Title = styled.p`
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-weight: 800;
   margin-right: 3rem;
+  padding: 0;
 `;
