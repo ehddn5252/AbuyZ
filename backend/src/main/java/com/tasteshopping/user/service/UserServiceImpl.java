@@ -53,7 +53,13 @@ public class UserServiceImpl implements UserService{
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        TokenDto tokenDto = new TokenDto(tokenProvider.createToken(authentication));
+
+        String accessToken = tokenProvider.createToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
+
+        redisService.setData(loginDto.getEmail(),refreshToken);
+
+        TokenDto tokenDto = new TokenDto(accessToken,authentication.getAuthorities().toString());
         ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공");
 
         return responseDto;
@@ -163,6 +169,7 @@ public class UserServiceImpl implements UserService{
         if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("불일치");
+            return responseDto;
         }
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("일치");
