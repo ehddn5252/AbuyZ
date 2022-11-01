@@ -9,49 +9,133 @@ import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
 import com.tasteshopping.review.service.AwsS3Service;
+import com.tasteshopping.user.dto.Role;
+import com.tasteshopping.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
-    ProductPictureService productPictureService;
-
-    @Autowired
-    ProductOptionService productOptionService;
-
-    @Autowired
-    ProductKeywordService productKeywordService;
-
-    @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    BrandRepository brandRepository;
-
-    @Autowired
-    SmallCategoryRepository smallCategoryRepository;
-
-    @Autowired
-    ProductPictureRepository productPictureRepository;
-
-    @Autowired
-    ProductOptionRepository productOptionRepository;
+    private final ProductPictureService productPictureService;
 
 
-    @Autowired
-    ProductKeywordRepository productKeywordRepository;
+    private final ProductOptionService productOptionService;
 
-    @Autowired
-    InventoryRepository inventoryRepository;
-    @Autowired
-    AwsS3Service awsS3Service;
+    private final ProductKeywordService productKeywordService;
+
+    private final ProductRepository productRepository;
+
+    private final BrandRepository brandRepository;
+
+    private final SmallCategoryRepository smallCategoryRepository;
+
+    private final ProductPictureRepository productPictureRepository;
+
+    private final ProductOptionRepository productOptionRepository;
+
+    private final ProductKeywordRepository productKeywordRepository;
+
+    private final InventoryRepository inventoryRepository;
+    private final AwsS3Service awsS3Service;
+
+    private final UserRepository userRepository;
+
+    @Override
+    public BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto) {
+        if (userRepository.findByEmail(email).get().getUserRoles() != Role.ADMIN) {
+            return new BaseRes(401, "관리자 계정이 아닙니다.", null);
+        }
+        /*
+        대분류 uid
+        소분류 uid
+        상품명
+        브랜드명
+        키워드
+        판매 상태(전체, 판매 중, 승인 대기, 교환/환불/판매 완료)
+         */
+
+        List<Products> l = new ArrayList<>();
+        // 키워드로 검색, 시작날짜와 끝날짜로
+//        productDtoList.add();
+        List<Products> newL = productRepository.findAll();
+        // init 에서 모두 가져오고 모든 조건을 한번씩 확인해서 추가한다.
+        String keyword = boSearchReqDto.getKeyword();
+        Date startDate = boSearchReqDto.getStart_date();
+        Date endDate = boSearchReqDto.getEnd_date();
+        Integer bigCategoryUid = boSearchReqDto.getBig_categories_uid();
+        Integer smallCategoriesUid = boSearchReqDto.getSmall_categories_uid();
+        String name = boSearchReqDto.getName();
+        String brandName = boSearchReqDto.getBrand_name();
+        String status = boSearchReqDto.getStatus();
+
+        // 여기에서 시작, 끝날짜, 이름, smallCategories로 한번 거르고
+        if (endDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                endDate = format.parse("2300-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if (startDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                startDate = format.parse("1900-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if (name == null) {
+            name = "%%";
+        } else {
+            name = "%" + name + "%";
+        }
+
+        if (brandName == null) {
+            brandName = "%%";
+        } else {
+            brandName = "%" + brandName + "%";
+        }
+
+        if (status == null) {
+            status = "%%";
+        }
+        List<ProductDto> productDtoList = new ArrayList<>();
+        // 조인한 결과가나와서 길어짐
+        List<Products> productsList = productRepository.boFiltering(name, startDate, endDate, bigCategoryUid, smallCategoriesUid, brandName, status);
+        List<Products> retProductsList = new ArrayList<>();
+        if(keyword!=null) {
+            for (int i = 0; i < productsList.size(); ++i) {
+                List<ProductKeywords> productKeywords = productsList.get(i).getProductKeywords();
+                for (int j = 0; j < productKeywords.size(); ++j) {
+                    if (productKeywords.get(j).getName().equals(keyword)) {
+                        retProductsList.add(productsList.get(j));
+                    }
+                }
+            }
+            productsList.clear();
+            productsList.addAll(retProductsList);
+        }
+
+        for (int i = 0; i < productsList.size(); ++i) {
+            int inventorySum = inventoryRepository.getInventoriesSum(productsList.get(i));
+            ProductDto productDto = productsList.get(i).toDto();
+            productDto.setInventoryNum(inventorySum);
+            productDtoList.add(productDto);
+        }
+
+        for(int i=0;i<productDtoList.size();++i){
+
+        }
+        return new BaseRes(200, "bo search 완료", productDtoList);
+    }
 
     @Override
     public void modifyProductOption(ProductCreateDto productCreateDto) {
@@ -65,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
         List<ProductOptions> option = productOptionRepository.findByProductsUid(productsUid);
         // 해당 옵션의 옵션 리스트 제거
 
-        for(int i=0;i<option.size();++i){
+        for (int i = 0; i < option.size(); ++i) {
             productOptionRepository.deletByProduct(product.getUid());
         }
 
@@ -91,8 +175,6 @@ public class ProductServiceImpl implements ProductService {
 
         // save imgs
         Products pp = productRepository.findById(productUid).get();
-        System.out.println("=================================");
-        System.out.println(pp);
         // save imgs
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
@@ -143,8 +225,7 @@ public class ProductServiceImpl implements ProductService {
         BaseRes res = null;
         if (multipartFiles == null) {
             productRepository.save(pp);
-        }
-        else {
+        } else {
             for (int i = 0; i < multipartFiles.length; ++i) {
                 try {
                     imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
@@ -175,8 +256,7 @@ public class ProductServiceImpl implements ProductService {
             maxUid = maxOptionOptional.get();
         }
         // uid는 판매자가 여러명일 때는 uid를 통한 값 추가를 하면 안된다.(컬럼하나 더만들기)
-//        int productOptionListMaxUid = productOptionListRepository.
-        int start=0;
+        int start = 0;
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
             optionKeyValueNum.add(sList.length);
@@ -188,10 +268,10 @@ public class ProductServiceImpl implements ProductService {
                 productOptionService.createProductOptionList(pp, key, sList[i].trim());
             }
             optionValueUidOuterList.set(start, l);
-            start+=1;
+            start += 1;
         }
 
-        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList,optionValueUidOuterList.get(0),1);
+        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList, optionValueUidOuterList.get(0), 1);
 
         // 재고 생성
         int cartesianProductNum = 1;
@@ -209,38 +289,28 @@ public class ProductServiceImpl implements ProductService {
             inventoryRepository.save(inventory);
         }
 
-        // 상품 옵션 리스트에 따른 상품 옵션 생성
-        /*
-        상품 옵션 리스트가 지금 DB에 저장되어 있는 상황 예를 들면
-        전체 색 빨강, 색 검정, 색 파랑, 사이즈 260, 사이즈 265, 디테일색 노랑, 디테일색 초록 과 같은 형태다.
-        그러면 해당 product 에 해당하는 각각의 uid 값을
-        1:[4,5,6], 2: [7,8] 3: [9,10] 와 같은 형식의 linked list를 만들고,
-        for 문을
-         */
-
         // save keyword lists
         String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
         for (int i = 0; i < keywordList.length; ++i) {
             productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
         }
-
         return new BaseRes(200, "상품 등록 완료", null);
     }
 
 
     public LinkedList<String> getInventoryList(ArrayList<LinkedList<String>> ll, LinkedList<String> resultList, int current) {
-        if(ll.size()==current){
+        if (ll.size() == current) {
             return resultList;
         }
         LinkedList<String> l2 = ll.get(current);
         LinkedList<String> result = new LinkedList<>();
-        for(int i = 0; i< resultList.size(); ++i) {
+        for (int i = 0; i < resultList.size(); ++i) {
             for (int j = 0; j < l2.size(); ++j) {
                 String option = resultList.get(i) + " " + l2.get(j);
                 result.add(option);
             }
         }
-        return getInventoryList(ll,result,current+1);
+        return getInventoryList(ll, result, current + 1);
     }
 
     @Override
@@ -383,7 +453,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Optional<List<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
-        if(l.isPresent()) {
+        if (l.isPresent()) {
             for (int i = 0; i < l.get().size(); ++i) {
                 newL.add(l.get().get(i).toDto());
             }
@@ -410,7 +480,7 @@ public class ProductServiceImpl implements ProductService {
             Products p = l.get();
             productDetailDto.setProducts(p.toDto());
             List<ProductPictures> productPicturesList = p.getProductPictures();
-            List<ProductOptions> productOptionsList= p.getProductOptions();
+            List<ProductOptions> productOptionsList = p.getProductOptions();
             List<ProductOptionListDto> productOptionListDtoList = new ArrayList<>();
 
             for (int i = 0; i < productOptionsList.size(); ++i) {
@@ -432,12 +502,11 @@ public class ProductServiceImpl implements ProductService {
         int end = endPrice;
         Optional<List<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
         List<ProductDto> newL = new ArrayList<>();
-        if(l.isPresent()) {
+        if (l.isPresent()) {
             for (int i = 0; i < l.get().size(); ++i) {
                 newL.add(l.get().get(i).toDto());
             }
         }
-
         return null;
     }
 
