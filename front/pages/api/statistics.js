@@ -1,4 +1,4 @@
-import https from "../https.js";
+import https from "./https.js";
 
 // 총 매출 조회
 export function getTotalsales(DateDto) {

@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login } from "./api/user/hello.js";
+import { login } from "./api/user.js";
 // StyledComponent
 import styled from "styled-components";
 
