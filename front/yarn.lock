@@ -898,6 +898,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.9.2":
+  version "7.20.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.0.tgz#824a9ef325ffde6f78056059db3168c08785e24a"
+  integrity sha512-NDYdls71fTXoU8TZHfbBWg7DiZfNzClcKui/+kyi6ppD2L1qnWW3VV6CjtaBXSUGGhiTWJ6ereOIkUvenif66Q==
+  dependencies:
+    regenerator-runtime "^0.13.10"
+
 "@babel/template@^7.18.10", "@babel/template@^7.3.3":
   version "7.18.10"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.18.10.tgz#6f9134835970d1dbf0835c0d100c9f38de0c5e71"
@@ -1770,6 +1777,14 @@
   version "2.11.6"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
+
+"@redux-devtools/extension@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@redux-devtools/extension/-/extension-3.2.3.tgz#589361d9a62326558c39c8a2e09c4acdbe6393e0"
+  integrity sha512-y90IIqdQF6kIkP4KfBCfiFrnu9KMrEPUmcnb5A3v12tjfwRJUXecX8vCEbFqqJLjOomvVmis0Aal7QdFjk6CRQ==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    immutable "^4.0.0"
 
 "@remix-run/router@1.0.2":
   version "1.0.2"
@@ -5547,6 +5562,11 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
 
+immutable@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.1.0.tgz#f795787f0db780183307b9eb2091fcac1f6fafef"
+  integrity sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -7318,6 +7338,11 @@ neo-async@^2.5.0, neo-async@^2.6.1:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+next-redux-wrapper@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.0.0.tgz#588f2d89146c60c77d4a40c0af7e5282acfe4773"
+  integrity sha512-zKRdpvDeqNXQr1j5DUWwsB2fz6XpHR32iy2qJGItTKLsbLB9GvtxDL9b4mFCfhDvnzy5dw97UqMjWDpFY8h0zA==
+
 next@^12.3.1:
   version "12.3.1"
   resolved "https://registry.yarnpkg.com/next/-/next-12.3.1.tgz#127b825ad2207faf869b33393ec8c75fe61e50f1"
@@ -8387,6 +8412,18 @@ recoil@^0.7.6:
   dependencies:
     hamt_plus "1.0.2"
 
+redux-thunk@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.4.1.tgz#0dd8042cf47868f4b29699941de03c9301a75714"
+  integrity sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==
+
+redux@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.2.0.tgz#46f10d6e29b6666df758780437651eeb2b969f13"
+  integrity sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==
+  dependencies:
+    "@babel/runtime" "^7.9.2"
+
 regenerate-unicode-properties@^10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-10.1.0.tgz#7c3192cab6dd24e21cb4461e5ddd7dd24fa8374c"
@@ -8399,7 +8436,7 @@ regenerate@^1.4.2:
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.2.tgz#b9346d8827e8f5a32f7ba29637d398b69014848a"
   integrity sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==
 
-regenerator-runtime@^0.13.4:
+regenerator-runtime@^0.13.10, regenerator-runtime@^0.13.4:
   version "0.13.10"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz#ed07b19616bcbec5da6274ebc75ae95634bfc2ee"
   integrity sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==
