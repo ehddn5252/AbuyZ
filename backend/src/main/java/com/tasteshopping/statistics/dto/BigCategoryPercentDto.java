@@ -5,17 +5,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BigCategoryPercentDto {
-    private HashMap<String,SmallCategoryPercentDto> small_category;
+public class BigCategoryPercentDto implements Comparable<BigCategoryPercentDto>{
+    private TreeMap<String,SmallCategoryPercentDto> small_category;
     private double percent;
     private int total_sales;
     public void updateTotalSales(int sale){
         this.total_sales += sale;
+    }
+    @Override
+    public int compareTo(BigCategoryPercentDto bigCategoryPercentDto) {
+        return bigCategoryPercentDto.getTotal_sales()-this.total_sales;
     }
 }
