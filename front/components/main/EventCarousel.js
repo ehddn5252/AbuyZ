@@ -3,7 +3,8 @@ import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import ArrowCircleRightSharpIcon from "@mui/icons-material/ArrowCircleRightSharp";
+import ArrowCircleLeftSharpIcon from "@mui/icons-material/ArrowCircleLeftSharp";
 // const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
 //   <button
 //     {...props}
@@ -16,18 +17,18 @@ import "slick-carousel/slick/slick-theme.css";
 //   />
 // );
 
-// const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
-//   <button
-//     {...props}
-//     className={
-//       "slick-next slick-arrow" +
-//       (currentSlide === slideCount - 1 ? " slick-disabled" : "")
-//     }
-//     aria-hidden="true"
-//     aria-disabled={currentSlide === slideCount - 1 ? true : false}
-//     type="button"
-//   />
-// );
+const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
+  <button
+    {...props}
+    className={
+      "slick-next slick-arrow" +
+      (currentSlide === slideCount - 1 ? " slick-disabled" : "")
+    }
+    aria-hidden="true"
+    aria-disabled={currentSlide === slideCount - 1 ? true : false}
+    type="button"
+  />
+);
 
 export default function EventCarousel() {
   // 나중에 array 지우면 될 듯
@@ -41,14 +42,13 @@ export default function EventCarousel() {
     speed: 400, // 넘어가는 속도
     slidesToShow: 1, // n장씩 보이게
     slidesToScroll: 1, // 1장씩 뒤로 넘어가게
-    // prevArrow: <SlickArrowLeft />,
-    prevArrow: <img src="/images/left-arrow.png" width="10rem" />,
-    // nextArrow: <SlickArrowRight />,
-    nextArrow: <img src="/images/right-arrow.png" width="10rem" />,
+    arrows: true,
+    prevArrow: <Pre></Pre>,
+    nextArrow: <NextTo></NextTo>,
   };
 
   return (
-    <div>
+    <div style={{ width: "100%", height: "100%" }}>
       <StyledSlider {...settings}>
         {array.map((e, idx) => (
           <CardBox key={idx}>
@@ -66,7 +66,9 @@ const StyledSlider = styled(Slider)`
     //슬라이드 스크린
     width: 100%;
     height: 100%;
-    margin-left: 0.5rem;
+    &:hover + .Pre {
+      display: block;
+    }
   }
 
   .slick-slide div {
@@ -90,9 +92,7 @@ const StyledSlider = styled(Slider)`
     /* left: 30px; */
 
     &:before {
-      /* font-family: "FontAwesome";
-      font-weight: 900;
-      content: "\f054"; */
+      /* display: none; */
       color: black;
       font-size: xx-large;
       margin-right: 4;
@@ -101,11 +101,11 @@ const StyledSlider = styled(Slider)`
 
   .slick-next {
     /* right: 30px; */
-
     &:before {
       /* content: "\f054"; */
       color: black;
       font-size: xx-large;
+      margin-right: 4;
     }
   }
 `;
@@ -121,9 +121,18 @@ const CardImg = styled.img`
   object-fit: cover;
 `;
 
-// const CardText = styled.p`
-//   /* padding: 1rem; */
-//   font-size: 1rem;
-//   font-weight: bolder;
-//   text-align: center;
-// `;
+const Pre = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 3%;
+  z-index: 3;
+`;
+
+const NextTo = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 3%;
+  z-index: 3;
+`;
