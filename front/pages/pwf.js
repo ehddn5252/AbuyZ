@@ -1,5 +1,8 @@
 // React
-import React from "react";
+import React, { useState } from "react";
+
+// Next.js
+import { useRouter } from "next/router";
 
 // MUI
 import Button from "@mui/material/Button";
@@ -11,7 +14,28 @@ import Container from "@mui/material/Container";
 // StyledComponents
 import styled from "styled-components";
 
+// API
+import { findPW } from "./api/user";
+
 export default function PasswordFind() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+
+  // 임시비밀번호 전송
+  const findPassword = async (event) => {
+    event.preventDefault();
+    const pwDto = {
+      email: email,
+      name: name,
+    };
+    const res = await findPW(pwDto);
+    if (res.data.data.result === true) {
+      router.push("/login");
+    }
+  };
+
   return (
     <div>
       <AllContainer>
@@ -38,6 +62,10 @@ export default function PasswordFind() {
             name="email"
             autoComplete="email"
             sx={{ backgroundColor: "white" }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            value={email}
           />
           <span>이메일</span>
           <TextField
@@ -49,14 +77,18 @@ export default function PasswordFind() {
             id="name"
             autoComplete="name"
             sx={{ backgroundColor: "white" }}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            value={name}
           />
 
           <ChangeButton
             fullWidth
             type="submit"
-            href="/login"
             variant="contained"
             sx={{ mt: 1, mb: 3 }}
+            onClick={findPassword}
           >
             비밀번호 변경
           </ChangeButton>
