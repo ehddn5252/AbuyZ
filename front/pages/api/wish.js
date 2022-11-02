@@ -26,7 +26,7 @@ export async function listwish() {
   https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
-    https.get("/wish/list").then((response) => {
+    https.get("/wish/list?page=0&size=12&sort=uid,asc").then((response) => {
       if (response.status === 200) {
         console.log("찜 목록 조회 완료", response);
         resolve(response.data);

@@ -1,10 +1,18 @@
 // React
-import React from "react";
-
+import React, { useEffect, useState } from "react";
+import { getMyInfo } from "../../pages/api/user";
 // StyledComponent
 import styled from "styled-components";
 
 export default function Myinfo({ setTap }) {
+  const [userName, setUserName] = useState("");
+  const uuser = async () => {
+    const res = await getMyInfo();
+    setUserName(res.data.name);
+  };
+  useEffect(() => {
+    uuser();
+  }, []);
   const tap6Change = () => {
     setTap(6);
   };
@@ -22,7 +30,7 @@ export default function Myinfo({ setTap }) {
         {/* <MyImgDiv>
           <AccountBoxIcon sx={{ fontSize: "10rem" }} />
         </MyImgDiv> */}
-        <MyName>권도건님</MyName>
+        <MyName>{userName}님</MyName>
         <HistoryDiv>
           <HistoryTitle onClick={tap2Change}>문의 내역</HistoryTitle>
           <HistoryCount>

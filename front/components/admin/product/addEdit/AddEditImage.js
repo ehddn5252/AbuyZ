@@ -9,12 +9,16 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 export default function SaleProductImage() {
   const profileRef = useRef(null);
   const extraRef = useRef(null);
+  const detailRef = useRef(null);
 
-  // 대표 이미지
+  // 대표 이미지 정보
   const [profile, setProfile] = useState(null);
 
-  // 추가 이미지
+  // 추가 이미지 정보
   const [imageFile, setImageFile] = useState(null);
+
+  // 상세 이미지 정보
+  const [detail, setDetail] = useState(null);
 
   // 추가 이미지 미리보기
   const [subImageFile, setSubImageFile] = useState([]);
@@ -27,6 +31,11 @@ export default function SaleProductImage() {
   // 추가 이미지 등록
   const handleClickExtraImage = () => {
     extraRef.current?.click();
+  };
+
+  // 상세 이미지 등록
+  const handleClickDetailImage = () => {
+    detailRef.current?.click();
   };
 
   // 대표 이미지 등록 함수
@@ -61,6 +70,19 @@ export default function SaleProductImage() {
     }
   };
 
+  // 상세 이미지 등록 함수
+  const uploadDetail = (e) => {
+    const profileList = e.target.files;
+    if (profileList && profileList[0]) {
+      const url = URL.createObjectURL(profileList[0]);
+      setDetail({
+        file: profileList[0],
+        thumbnail: url,
+        type: profileList[0].type.slice(0, 5),
+      });
+    }
+  };
+
   // 대표 이미지 미리보기
   const showProfile = useMemo(() => {
     if (!profile && profile == null) {
@@ -71,11 +93,27 @@ export default function SaleProductImage() {
         src={profile.thumbnail}
         alt={profile.type}
         onClick={handleClickProfile}
-        width="250px"
-        height="300px"
+        width="200px"
+        height="250px"
       />
     );
   }, [profile]);
+
+  // 상세 이미지 미리보기
+  const showDetail = useMemo(() => {
+    if (!detail && detail == null) {
+      return;
+    }
+    return (
+      <img
+        src={detail.thumbnail}
+        alt={detail.type}
+        onClick={handleClickProfile}
+        width="200px"
+        height="250px"
+      />
+    );
+  }, [detail]);
 
   // // 추가 이미지 미리보기
   // const showExtra = useMemo(() => {
@@ -126,12 +164,24 @@ export default function SaleProductImage() {
         <ImageBox>
           <Title>대표이미지</Title>
           {profile ? (
-            <div>{showProfile}</div>
+            <div>
+              <img
+                src={profile.thumbnail}
+                alt={profile.type}
+                onClick={handleClickProfile}
+                width="200px"
+                height="220px"
+              />
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={profileRef}
+                onChange={uploadProfile}
+                style={{ display: "none" }}
+              />
+            </div>
           ) : (
-            <Box
-              component="span"
-              sx={{ p: "5rem", border: "1px dashed grey", padding: "0" }}
-            >
+            <Box component="span" sx={{ p: "5rem", border: "1px dashed grey" }}>
               <input
                 type="file"
                 accept="image/jpg, image/jpeg, image/png"
@@ -148,30 +198,26 @@ export default function SaleProductImage() {
         {/* 추가 이미지 */}
         <ImageBox>
           <Title>추가이미지</Title>
-          {subImageFile === [] ? (
-            subImageFile.map((e, idx) => (
-              <div key={idx} style={{ marginRight: "1rem" }}>
+          <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
+            {subImageFile.map((e, idx) => (
+              <Grid2 key={idx}>
                 <img
                   src={e.thumbnail}
                   alt={e.type}
                   onClick={handleClickExtraImage}
-                  width="250px"
-                  height="300px"
+                  width="200px"
+                  height="220px"
                 />
-                헬로
-              </div>
-            ))
-          ) : (
+              </Grid2>
+            ))}
             <Box
               component="span"
               sx={{
                 p: "5rem",
                 border: "1px dashed grey",
-                padding: "0",
                 display: "flex",
               }}
             >
-              하이
               <input
                 type="file"
                 accept="image/jpg, image/jpeg, image/png"
@@ -187,14 +233,45 @@ export default function SaleProductImage() {
                 Save
               </Button>
             </Box>
-          )}
+          </Grid2>
         </ImageBox>
+        {/* 상세 이미지 */}
         <ImageBox>
-          <Title>상세설명</Title>
-          <Box component="span" sx={{ p: "5rem", border: "1px dashed grey" }}>
-            <Button sx={{ fontSize: "1.5rem" }}>Save</Button>
-          </Box>
-          <Description>권장 크기 : 600 x 1200</Description>
+          <Title>상세 이미지</Title>
+          {detail ? (
+            <div>
+              <img
+                src={detail.thumbnail}
+                alt={detail.type}
+                onClick={handleClickDetailImage}
+                width="200px"
+                height="220px"
+              />
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={detailRef}
+                onChange={uploadDetail}
+                style={{ display: "none" }}
+              />
+            </div>
+          ) : (
+            <Box component="span" sx={{ p: "5rem", border: "1px dashed grey" }}>
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={detailRef}
+                onChange={uploadDetail}
+                style={{ display: "none" }}
+              />
+              <Button
+                sx={{ fontSize: "1.5rem" }}
+                onClick={handleClickDetailImage}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
         </ImageBox>
       </Grid2>
     </Grid2>

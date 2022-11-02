@@ -12,10 +12,10 @@ import AddIcon from "@mui/icons-material/Add";
 import styled from "styled-components";
 
 export default function BasketItem({ basket }) {
-  const bc = basket.count;
+  console.log(basket);
+  const bc = basket.productCount;
   const [ccount, setCcount] = useState(bc);
-  const bp = basket.price;
-  const [pprice, setPprice] = useState(bp);
+  const bp = basket.productDto.price;
 
   const minus = () => {
     if (ccount > 0) {
@@ -29,13 +29,14 @@ export default function BasketItem({ basket }) {
       </CheckDiv>
       <ImageDiv>
         <img
-          src={basket.img}
+          src={basket.productDto.descriptionImg}
           style={{ width: "6rem", height: "8rem", objectFit: "cover" }}
         />
       </ImageDiv>
       <ContentDiv>
-        <ContentBox>{basket.name}</ContentBox>
-        <ContentOption>[{basket.option}]</ContentOption>
+        <ContentBox>{basket.productDto.name}</ContentBox>
+        {basket.option}
+        <ContentOption>[{basket.productDto.option}]</ContentOption>
       </ContentDiv>
       <CountDiv>
         <CountDiv2>
@@ -62,7 +63,7 @@ export default function BasketItem({ basket }) {
             marginTop: "2.3rem",
           }}
         >
-          {(ccount * basket.price).toLocaleString("ko-KR")}원
+          {(ccount * bp).toLocaleString("ko-KR")}원
         </p>
         <p
           style={{
@@ -71,7 +72,11 @@ export default function BasketItem({ basket }) {
             fontWeight: "bold",
           }}
         >
-          {(ccount * (basket.price - basket.salePrice)).toLocaleString("ko-KR")}
+          {(
+            ccount *
+            bp *
+            ((100 - basket.productDto.discountRate) / 100)
+          ).toLocaleString("ko-KR")}
           원
         </p>
       </PriceDiv>

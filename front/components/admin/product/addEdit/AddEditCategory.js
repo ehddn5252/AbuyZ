@@ -148,18 +148,6 @@ export default function AddEditCategory() {
   );
 }
 
-export const ContainerBox = styled.div`
-  border: 0.3rem solid #ff9494;
-  border-radius: 1rem;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-`;
-
-export const ContentBox = styled.div`
-  display: flex;
-  padding-left: 4rem;
-`;
-
 const CategoryBox = styled.div`
   display: flex;
   align-items: center;
