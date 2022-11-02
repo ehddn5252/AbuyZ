@@ -144,11 +144,14 @@ public class ProductController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
-                                            @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
+    public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email,
+                                            @RequestPart ProductCreateReqDto productCreateReqDto,
+                                            @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles,
+                                            @RequestPart(name = "descFile", required = false) MultipartFile descriptionImg
+                                            ) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles,descriptionImg));
     }
 
 

@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public BaseRes modifyStatus(String email, int products_uid, String status) {
         Users user = userRepository.findByEmail(email).get();
-        if(user.getUserRoles()!= Role.ADMIN){
+        if (user.getUserRoles() != Role.ADMIN) {
             throw new NoAuthorizationException();
         }
         Products product = productRepository.findById(products_uid).get();
@@ -216,7 +216,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles) {
+    public BaseRes createProductRelated(ProductCreateDto productCreateDto,
+                                        MultipartFile[] multipartFiles,
+                                        MultipartFile descriptionImg) {
         /*
             param 이 넘겨오면 해야할 것
             1. Products product 를 생성한다. ok
@@ -238,6 +240,16 @@ public class ProductServiceImpl implements ProductService {
         int count = 0;
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
+        if (descriptionImg != null) {
+            try {
+                imagePath = awsS3Service.uploadImgFile(descriptionImg);
+                pp.setDescriptionImg(imagePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                res = new BaseRes(202, "파일 업로드 에러", null);
+                return res;
+            }
+        }
         if (multipartFiles == null) {
             productRepository.save(pp);
         } else {
