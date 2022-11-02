@@ -1,32 +1,53 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import CheckBox from "@mui/material/Checkbox";
-
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 // StyeldComponet
 import styled from "styled-components";
 
 export default function BasketItem({ basket }) {
+  const bc = basket.count;
+  const [ccount, setCcount] = useState(bc);
+  const bp = basket.price;
+  const [pprice, setPprice] = useState(bp);
+
+  const minus = () => {
+    if (ccount > 0) {
+      setCcount(ccount - 1);
+    }
+  };
   return (
     <Container>
       <CheckDiv>
         <CheckBox defaultChecked></CheckBox>
       </CheckDiv>
       <ImageDiv>
-        <img src="/images/cloth.png" style={{ width: "9rem" }} />
+        <img
+          src={basket.img}
+          style={{ width: "6rem", height: "8rem", objectFit: "cover" }}
+        />
       </ImageDiv>
       <ContentDiv>
         <ContentBox>{basket.name}</ContentBox>
-        <ContentBox>{basket.option}</ContentBox>
+        <ContentOption>[{basket.option}]</ContentOption>
       </ContentDiv>
       <CountDiv>
-        <AddOutlinedIcon sx={{ border: "1px solid black" }} />
-        <CountBox>{basket.count}</CountBox>
-        <RemoveOutlinedIcon sx={{ border: "1px solid black" }} />
+        <CountDiv2>
+          {ccount == 0 ? (
+            <RemoveIcon fontSize="small" color="disabled" />
+          ) : (
+            <RemoveIcon fontSize="small" onClick={minus} />
+          )}
+
+          <CountBox>{ccount}</CountBox>
+          <AddIcon fontSize="small" onClick={() => setCcount(ccount + 1)} />
+        </CountDiv2>
       </CountDiv>
       <PriceDiv>
         <CloseDiv>
@@ -36,21 +57,22 @@ export default function BasketItem({ basket }) {
           style={{
             textDecoration: "line-through",
             color: "#AAAAAA",
-            fontSize: "0.7rem",
+            fontSize: "1rem",
             margin: "0",
             marginTop: "2.3rem",
           }}
         >
-          {basket.price}
+          {(ccount * basket.price).toLocaleString("ko-KR")}원
         </p>
         <p
           style={{
-            fontSize: "1rem",
+            fontSize: "1.5rem",
             margin: "0",
             fontWeight: "bold",
           }}
         >
-          {basket.price - basket.salePrice}
+          {(ccount * (basket.price - basket.salePrice)).toLocaleString("ko-KR")}
+          원
         </p>
       </PriceDiv>
     </Container>
@@ -61,9 +83,9 @@ const Container = styled.div`
   display: flex;
   padding: 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #56a9f1;
   margin-bottom: 2rem;
-  width: 90%;
+  width: 95%;
   height: 12rem;
 `;
 
@@ -75,7 +97,7 @@ const CheckDiv = styled.div`
 const ImageDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 25%;
+  width: 15%;
   height: 100%;
 `;
 
@@ -83,12 +105,20 @@ const ContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 32%;
+  width: 30%;
   height: 100%;
 `;
 
 const ContentBox = styled.p`
   margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+`;
+
+const ContentOption = styled.p`
+  margin: 0;
+  font-size: 1rem;
+  margin-top: 1rem;
 `;
 
 const CountDiv = styled.div`
@@ -96,17 +126,25 @@ const CountDiv = styled.div`
   justify-content: center;
   align-items: center;
   height: 100%;
-  width: 20%;
+  width: 15%;
 `;
 
+const CountDiv2 = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20%;
+  width: 80%;
+  border: 1px solid #aaaaaa;
+`;
 const CountBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 20%;
   height: 1.55rem;
   text-align: center;
-  border: 1px solid black;
+  padding: 1rem;
 `;
 
 const PriceDiv = styled.div`
@@ -114,8 +152,8 @@ const PriceDiv = styled.div`
   flex-direction: column;
   align-items: flex-start;
   height: 100%;
-  width: 15%;
-  padding-left: 1rem;
+  width: 25%;
+  margin-left: 3rem;
 `;
 
 const CloseDiv = styled.div`

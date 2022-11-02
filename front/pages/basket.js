@@ -26,7 +26,8 @@ const Container = styled.div`
   align-items: center;
   width: 55%;
   margin: 0 22%;
-  padding-top: 1rem;
+  padding-top: 3rem;
+  height: 80vh;
 `;
 const BasketBox = styled.div`
   display: flex;
