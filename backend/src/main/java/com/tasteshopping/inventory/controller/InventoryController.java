@@ -24,10 +24,6 @@ public class InventoryController {
 
     @PostMapping("/cart/check-inventory")
     public ResponseEntity<BaseRes> checkCartInventory(@AuthenticationPrincipal String email){
-
-        System.out.println("==========================");
-        System.out.println("==========================");
-        System.out.println(email);
         try {
             return ResponseEntity.status(HttpStatus.OK).body(inventoryService.checkCartByInventory(email));
         }
