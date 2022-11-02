@@ -3,7 +3,7 @@ import https from "./https.js";
 
 // 장바구니에 담기
 export async function regiscart(cartDto) {
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   return new Promise((resolve) => {
@@ -33,9 +33,8 @@ export async function regiscart(cartDto) {
 
 // 장바구니 목록 가져오기
 export async function cartlist() {
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
   return new Promise((resolve) => {
     https
       .get("/cart")
@@ -56,7 +55,7 @@ export async function cartlist() {
 
 // 장바구니에서 삭제하기
 export async function delcart(cartDto) {
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   return new Promise((resolve) => {
