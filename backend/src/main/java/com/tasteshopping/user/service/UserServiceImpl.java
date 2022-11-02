@@ -163,9 +163,10 @@ public class UserServiceImpl implements UserService{
         if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("불일치");
+        }else{
+            responseDto.setData(new ResultDto(true));
+            responseDto.setMessage("일치");
         }
-        responseDto.setData(new ResultDto(true));
-        responseDto.setMessage("일치");
         return responseDto;
     }
 
