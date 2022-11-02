@@ -6,6 +6,7 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -99,7 +100,22 @@ public class CartServiceImpl implements CartService {
             cartResDto.setProductDto(cartsList.get(i).getInventory().getProduct().toDto());
             cartResDto.setProductCount(cartsList.get(i).getProductCount());
             cartResDto.setUid(cartsList.get(i).getUid());
-            cartResDto.setInventoryDto(cartsList.get(i).getInventory().toDto());
+
+            InventoryResDto inventoryResDto = new InventoryResDto();
+            inventoryResDto.setUid((inventories.getUid()));
+            inventoryResDto.setCount(inventories.getCount());
+            inventoryResDto.setPrice(inventories.getPrice());
+            inventoryResDto.setProductOptionUidString(inventories.getProductOptionList());
+            String[] optionUidList = inventories.getProductOptionList().split(" ");
+            List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
+            for(int j=0;j<optionUidList.length;++j){
+                ProductOptions productOptions = productOptionRepository.findById(Integer.parseInt(optionUidList[j].trim())).get();
+                HashMap<String,String> hashMap = new HashMap<>();
+                hashMap.put(productOptions.getName(),productOptions.getValue());
+                retProductOptions.add(hashMap);
+            }
+            inventoryResDto.setProductOptions(retProductOptions);
+            cartResDto.setInventoryResDto(inventoryResDto);
             cartResDtoList.add(cartResDto);
         }
 
