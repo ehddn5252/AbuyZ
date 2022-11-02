@@ -37,19 +37,6 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final AwsS3Service awsS3Service;
 
-    @GetMapping("/{page}")
-    public ResponseEntity<BaseRes> myReviewList(@AuthenticationPrincipal String email, @PathVariable int page) {
-        return new ResponseEntity<>(reviewService.myReviewList(email, page-1), HttpStatus.OK);
-    }
-
-
-
-//    @ExceptionHandler({MaxUploadSizeExceededException.class, SizeLimitExceededException.class})
-//    public BaseRes exception(Exception e){
-//        System.out.println("----------------exception호출-----------------");
-//        e.printStackTrace();
-//        return new BaseRes(202,"파일 용량 크기 제한", null);
-//    }
 
     @PostMapping("")
     public ResponseEntity<BaseRes> reviewWrite(@AuthenticationPrincipal String email,

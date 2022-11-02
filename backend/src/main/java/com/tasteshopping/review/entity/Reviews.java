@@ -50,7 +50,7 @@ public class Reviews {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="orders_uid")
-    private Orders order;
+    private Orders order;           //주문결제 유아이디
 
 //    @Column(nullable = false, columnDefinition = "boolean default false")
 //    private Boolean report;              //신고여부
