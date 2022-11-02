@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,6 +38,9 @@ public class OrderLists {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_uid")
     Users user;
+
+    @OneToMany(mappedBy = "orderList",fetch = FetchType.LAZY)
+    List<Orders> orders;
 
     String Status;
 

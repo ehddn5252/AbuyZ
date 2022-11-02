@@ -1,5 +1,8 @@
 package com.tasteshopping.inventory.controller;
 
+import com.tasteshopping.cart.dto.CartDto;
+import com.tasteshopping.cart.dto.CartReqDto;
+import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.dto.InventoryReqDto2;
 import com.tasteshopping.product.exception.ProductNotFoundException;
@@ -18,6 +21,33 @@ import org.springframework.web.bind.annotation.*;
 public class InventoryController {
 
     private final InventoryService inventoryService;
+
+    @PostMapping("/cart/check-inventory")
+    public ResponseEntity<BaseRes> checkCartInventory(@AuthenticationPrincipal String email){
+
+        System.out.println("==========================");
+        System.out.println("==========================");
+        System.out.println(email);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(inventoryService.checkCartByInventory(email));
+        }
+        catch(OutOfStockException e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new BaseRes(204, "상품 재고가 남아있지 않습니다.",null));
+        }
+
+    }
+
+    @PostMapping("/basic/check-inventory")
+    public ResponseEntity<BaseRes> checkInventory(@AuthenticationPrincipal String email, @RequestBody CartReqDto cartReqDto){
+        CartDto cartDto = cartReqDto.toDto();
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(inventoryService.checkBasicByInventory(email, cartDto));
+        }
+        catch (OutOfStockException e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "상품 재고가 부족합니다."));
+        }
+    }
+
 
     @GetMapping("/{productsUid}")
     public ResponseEntity<BaseRes> getInventoryList(@PathVariable Integer productsUid){

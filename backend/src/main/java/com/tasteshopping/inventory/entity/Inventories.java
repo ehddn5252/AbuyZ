@@ -21,7 +21,10 @@ public class Inventories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
+
+    @Column(columnDefinition = "int default 0")
     Integer price;
+    @Column(columnDefinition = "int default 0")
     Integer count;
 
     @Column(name = "product_option_list")
@@ -42,9 +45,10 @@ public class Inventories {
         InventoryDto inventoryDto = new InventoryDto();
         inventoryDto.setUid(uid);
         inventoryDto.setCount(count);
+        inventoryDto.setProductsUid(product.getUid());
         inventoryDto.setPrice(price);
         inventoryDto.setProductOptionUidString(productOptionList);
-
+        inventoryDto.setRepImg(product.getRepImg());
         return inventoryDto;
     }
 

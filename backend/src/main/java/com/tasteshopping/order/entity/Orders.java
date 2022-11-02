@@ -1,8 +1,9 @@
 package com.tasteshopping.order.entity;
 
 import com.tasteshopping.inventory.entity.Inventories;
-import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.review.entity.Reviews;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -27,9 +28,6 @@ public class Orders {
     @ColumnDefault("0")
     Integer price;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="products_uid")
-    Products product;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="order_lists_uid")
@@ -50,4 +48,17 @@ public class Orders {
     @JoinColumn(name="coupones_uid")
     Coupons coupon;
 
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    @JoinColumn(name="orders_uid")
+    private Reviews review;
+
+    public OrderDto toDto() {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setPrice(price);
+        orderDto.setUid(uid);
+        orderDto.setStatus(status);
+//        orderDto.setCouponResDto(coupon.toDto());
+        orderDto.setInventoryDto(inventory.toDto());
+        return orderDto;
+    }
 }

@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PercentStatisticsListDto {
-    private HashMap<String,BigCategoryPercentDto>big_category;
+    private TreeMap<String,BigCategoryPercentDto> big_category;
     private int total_sales;
     public void updateTotalSales(int sale){
         this.total_sales += sale;

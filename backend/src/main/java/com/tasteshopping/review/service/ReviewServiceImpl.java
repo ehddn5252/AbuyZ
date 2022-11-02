@@ -274,6 +274,6 @@ public class ReviewServiceImpl implements ReviewService {
                 if(replyReview != null) reply = true;
                 dto = ReviewResDto.from(review, like, likeCount, reply, replyReview);
         }
-        return new BaseRes(200, "상품 포토리뷰 조회(전체) 성공", dto);
+        return new BaseRes(200, "상품 리뷰 상세보기 성공", dto);
     }
 }

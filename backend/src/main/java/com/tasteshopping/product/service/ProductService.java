@@ -16,7 +16,9 @@ public interface ProductService {
     Optional<Integer> getMaxUid();
 
     // 2022.10.29 재고 방식 -> 수정 요함
-    BaseRes createProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
+    BaseRes createProductRelated(ProductCreateDto productCreateDto,
+                                 MultipartFile[] multipartFiles,
+                                 MultipartFile descriptionImg);
 
     void deleteProduct(Integer uid);
 
@@ -51,4 +53,8 @@ public interface ProductService {
     List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice);
 
     List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
+
+    BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto);
+
+    BaseRes modifyStatus(String email, int products_uid, String status);
 }

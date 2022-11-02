@@ -5,6 +5,7 @@ import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.service.WishServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class WishController {
     private final WishServiceImpl wishService;
     @GetMapping("/list")
-    public ResponseEntity<ResponseDto> getWishLists(@AuthenticationPrincipal String email){
-        return new ResponseEntity<>(wishService.getWishList(email), HttpStatus.OK);
+    public ResponseEntity<ResponseDto> getWishLists(@AuthenticationPrincipal String email,Pageable pageable){
+        return new ResponseEntity<>(wishService.getWishList(email, pageable), HttpStatus.OK);
     }
     @GetMapping("/{product_uid}")
     public ResponseEntity<ResponseDto> add(@AuthenticationPrincipal String email,

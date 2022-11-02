@@ -26,7 +26,6 @@ public class CartController {
 
     @PostMapping()
     public ResponseEntity<BaseRes> putCart(@AuthenticationPrincipal String email, @RequestBody CartDto cartDto) {
-        System.out.println(cartDto);
         try{
             return ResponseEntity.status(HttpStatus.OK).body(cartService.putCart(email, cartDto));
         }

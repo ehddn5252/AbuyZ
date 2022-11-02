@@ -104,15 +104,15 @@ public class StatisticsServiceImpl implements StatisticsService {
                 CartStatisticsListDto cartStatisticsListDto = new CartStatisticsListDto();
                 List<Carts>carts = cartRepository.findAll();
                 for(Carts cart:carts){
-                    String big_category_name = cart.getProduct().
+                    String big_category_name = cart.getInventory().getProduct().
                                                 getSmallCategory().getBigCategory()
                                                 .getCategoryName();
 
-                    String small_category_name = cart.getProduct().
+                    String small_category_name = cart.getInventory().getProduct().
                                                     getSmallCategory().getSmallCategoryName();
 
                     CartBigCategoryDto cartBigCategoryDto = cartStatisticsListDto.getBig_category()
-                            .getOrDefault(big_category_name,new CartBigCategoryDto(new HashMap<>(),0));
+                            .getOrDefault(big_category_name,new CartBigCategoryDto(new TreeMap<>(),0));
 
                     cartBigCategoryDto.updateCount(cart.getProductCount());
 
@@ -128,14 +128,14 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 2:case 3:
-
-                HashMap<String,ProductStatisticsDto>productStatistics=new HashMap<>();
                 List<Orders>orders = orderRepository.findAllByDateBetween(start_date,end_date);
+                //상품별 통계 -> 정렬 X
                 if(menu==2){
+                    TreeMap<String,ProductStatisticsDto>productStatistics=new TreeMap<>();
                     for(Orders order:orders){
-                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getProduct().getName(),
-                                new ProductStatisticsDto(order.getProduct().getSmallCategory().getBigCategory().getCategoryName(),
-                                        order.getProduct().getSmallCategory().getSmallCategoryName()));
+                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getInventory().getProduct().getName(),
+                                new ProductStatisticsDto(order.getInventory().getProduct().getSmallCategory().getBigCategory().getCategoryName(),
+                                        order.getInventory().getProduct().getSmallCategory().getSmallCategoryName()));
 
                         productStatisticsDto.updateCount(order.getCount());
                         productStatisticsDto.updateSalesAmount(order.getPrice());
@@ -143,19 +143,19 @@ public class StatisticsServiceImpl implements StatisticsService {
                     responseDto.setData(productStatistics);
                 }
                 else{
-                    PercentStatisticsListDto percentStatistics = new PercentStatisticsListDto(new HashMap<>(),0);
+                    PercentStatisticsListDto percentStatistics = new PercentStatisticsListDto(new TreeMap<>(),0);
                     for(Orders order:orders){
                         percentStatistics.updateTotalSales(order.getCount()*order.getPrice());
 
-                        String big_category_name = order.getProduct().
+                        String big_category_name = order.getInventory().getProduct().
                                 getSmallCategory().getBigCategory()
                                 .getCategoryName();
 
-                        String small_category_name = order.getProduct().
+                        String small_category_name = order.getInventory().getProduct().
                                 getSmallCategory().getSmallCategoryName();
 
                         BigCategoryPercentDto bigCategoryPercentDto = percentStatistics.getBig_category()
-                                .getOrDefault(big_category_name,new BigCategoryPercentDto(new HashMap<>(),0,0));
+                                .getOrDefault(big_category_name,new BigCategoryPercentDto(new TreeMap<>(),0,0));
                         bigCategoryPercentDto.updateTotalSales(order.getCount()*order.getPrice());
 
                         SmallCategoryPercentDto smallCategoryPercentDto = bigCategoryPercentDto.getSmall_category()
@@ -180,6 +180,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 }
                 responseDto.setMessage("조회 성공");
                 break;
+                //요일별 통계 -> 정렬 X
             default:
                 Map<String,Integer>dayStatistics = new HashMap<>();
                 List<OrderLists> orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);

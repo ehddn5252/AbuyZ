@@ -1,5 +1,6 @@
 package com.tasteshopping.review.entity;
 
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 
@@ -46,6 +47,10 @@ public class Reviews {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="products_uid")
     private Products product;       //상품 유아이디
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="orders_uid")
+    private Orders order;
 
 //    @Column(nullable = false, columnDefinition = "boolean default false")
 //    private Boolean report;              //신고여부
