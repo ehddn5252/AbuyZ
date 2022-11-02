@@ -1,57 +1,47 @@
-import { resolve } from "styled-jsx/css";
 import https from "./https.js";
 
 // 회원가입
-export function signup(signDto) {
-  https
-    .post("/user/signup", {
-      address: signDto.address,
-      birth: signDto.birth,
-      detailAddress: signDto.detailAddress,
-      email: signDto.email,
-      gender: signDto.gender,
-      name: signDto.name,
-      nickname: signDto.nickname,
-      password: signDto.password,
-      phoneNumber: signDto.phoneNumber,
-    })
-    // .post("/user/signup", signup) // 보낼때 형식이 동일하다면 바로 써도 됨
-    .then((response) => {
-      if (response === 200) {
+export async function signup(signDto) {
+  return new Promise((resolve) => {
+    https.post("/user/signup", signDto).then((response) => {
+      if (response.status === 200) {
         console.log("회원가입 완료", response);
-        return response;
+        resolve(response);
       } else {
         console.log("회원가입 실패", response);
-        return response;
+        resolve(response);
       }
     });
+  });
 }
 
 // 로그인
-export function login(loginDto) {
-  https
-    .post("/user/login", loginDto)
-    // .post("/user/loginDto", loginDto) // 보낼때 형식이 동일하다면 바로 써도 됨
-    .then((response) => {
-      if (response.status === 200) {
-        console.log("로그인 완료", response);
-        // 토큰 저장
-        window.sessionStorage.setItem(
-          "access-Token",
-          response.data.accessToken
-        );
-        return response;
-      } else {
-        console.log("로그인 실패", response);
-        return response;
-      }
-    });
+export async function login(loginDto) {
+  return new Promise((resolve) => {
+    https
+      .post("/user/login", loginDto)
+      // .post("/user/loginDto", loginDto) // 보낼때 형식이 동일하다면 바로 써도 됨
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("로그인 완료", response);
+          // 토큰 저장
+          window.sessionStorage.setItem(
+            "access-token",
+            response.data.accessToken
+          );
+          resolve(response);
+        } else {
+          console.log("로그인 실패", response);
+          resolve(response);
+        }
+      });
+  });
 }
 
 // 유저 정보 조회
 export function getMyInfo() {
   // Header에 토큰 집어넣기
-  const accessToken = sessionStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.get("/user").then((response) => {
@@ -68,7 +58,7 @@ export function getMyInfo() {
 // 회원 탈퇴
 export function withdrawal() {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.put("/user/withdrawal").then((response) => {
@@ -96,23 +86,42 @@ export function kakaoLogin(tokenDto) {
     }
   });
 }
-
-// 이메일 인증
-export function emailCheck(emailDto) {
-  https
-    .get("/user/authentication-email", {
-      email: emailDto.email,
-      certification_number: emailDto.certification_number,
-    })
-    .then((response) => {
+// 이메일 인증 번호 전송
+export async function sendCheckNumber(email) {
+  return new Promise((resolve) => {
+    https.get(`/user/send-email/${email}`).then((response) => {
       if (response === 200) {
         console.log("이메일 인증 성공", response);
-        return response;
+        resolve(response.data);
       } else {
         console.log("이메일 인증 실패", response);
-        return response;
+        resolve(response);
       }
     });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+// 이메일 인증
+export async function emailCheck(emailDto) {
+  return new Promise((resolve) => {
+    https
+      .post("/user/authentication-email", {
+        email: emailDto.email,
+        certification_number: emailDto.certification_number,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("이메일 인증 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("이메일 인증 실패", response);
+          resolve(response);
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
 }
 
 // 비밀번호 변경
@@ -138,15 +147,19 @@ export function chnagePw(pwDto) {
 }
 
 // 닉네임 중복 확인
-export function checkNickname(nickname) {
-  https.get(`/user/check-nickname/${nickname}`).then((response) => {
-    if (response === 200) {
-      console.log("닉네임 중복 확인 성공", response);
-      return response;
-    } else {
-      console.log("닉네임 중복 확인 실패", response);
-      return response;
-    }
+export async function checkNickname(nickname) {
+  return new Promise((resolve) => {
+    https.get(`/user/check-nickname/${nickname}`).then((response) => {
+      if (response.status === 200) {
+        console.log("닉네임 중복 확인 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("닉네임 중복 확인 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
@@ -170,7 +183,7 @@ export async function checkEmail(email) {
 // 주소 추가
 export function addAddress(addressDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https
@@ -198,7 +211,7 @@ export function addAddress(addressDto) {
 // 주소 조회
 export function getAddress() {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.get("/user/addresses").then((response) => {
@@ -215,7 +228,7 @@ export function getAddress() {
 // 주소 삭제
 export function delAddress(number) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.delete(`/user/addresses/${number}`).then((response) => {
@@ -232,7 +245,7 @@ export function delAddress(number) {
 // 주소 수정
 export function changeAddress(addressDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   https.put("/user/addresses", addressDto).then((response) => {
