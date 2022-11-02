@@ -34,21 +34,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
-//    @Query(value = "select p,pp from Products p left join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
-//    List<Optional<Products>> findProductDetailByProductsUid(int productsUid);
-
-//    @Query(value = "select p,pp from Products p left join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
-//    Object findProductDetailByProductsUid(int productsUid);
-
     @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
     Optional<Products> findProductDetailByProductsUid(int productsUid);
-
-//    @Query(value = "select p from Products p " +
-//            "join fetch Inventories i on p=i.product " +
-//            "join fetch BigCategories bc on p.smallCategory.bigCategory=bc " +
-//            "join fetch Brands b on p.brand = b " +
-//            "where p.name like :name and p.createdDate between :startDate and :endDate")
-//    List<Products> boFiltering2(String name, Date startDate, Date endDate);
 
     @Query("select distinct(p) from Products p " +
             "join fetch Inventories i on p=i.product " +

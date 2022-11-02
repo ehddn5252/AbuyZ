@@ -39,55 +39,6 @@ public class OrderServiceImpl implements OrderService {
 
     private final CartService cartService;
 
-//    @Override
-//    @Transactional
-//    public void cartPay(String email) {
-//        Users user = userRepository.findByEmail(email).get();
-//        // 장바구니 가져와서 orderList 만들기
-//        OrderLists orderLists = new OrderLists();
-//        orderLists.setUser(user);
-//        orderLists.setTotalPrice(0);
-//        orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-//
-//        Date date = getDate();
-//        orderLists.setDate(date);
-//        orderListRepository.save(orderLists);
-//
-//        // 이 과정을 줄일 수 있나?
-//
-//        List<Carts> cartList = cartRepository.findByUser(user);
-//        List<OrderLists> orderListsList = orderListRepository.findByDate(date);
-//        int totalPrice = 0;
-//        for (int i = 0; i < cartList.size(); ++i) {
-//            Carts cart = cartList.get(i);
-//            Orders orders = new Orders();
-//            orders.setOrderList(orderListsList.get(0));
-//            orders.setCount(cart.getProductCount());
-//            orders.setStatus(Status.PROCESS.toString());
-//            Inventories inventory = cart.getInventory();
-//            Integer price =((100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice())/100 + inventory.getPrice();
-//            if (orders.getCoupon() != null) {
-//                price = price - orders.getCoupon().getDiscountPrice();
-//            }
-//            orders.setPrice(price);
-//            orders.setInventory(inventory);
-//            int remainingStoke = inventory.getCount() - cart.getProductCount();
-//            if (remainingStoke >= 0) {
-//                inventory.setCount(remainingStoke);
-//            } else {
-//                throw new OutOfStockException();
-//            }
-//            orders.getInventory();
-//            totalPrice += price * cart.getProductCount();
-//            orderRepository.save(orders);
-//            cartRepository.delete(cart);
-//        }
-//        // 오늘 날짜 date 가져와서 만약에 있으면 가져와서 가격만 더해주고, 없으면 새로 생성해서 저장해준다.
-//        orderLists.setStatus(Status.PROCESS.toString());
-//        orderLists.setTotalPrice(totalPrice);
-//        orderListRepository.save(orderLists);
-//    }
-
     @Override
     @Transactional
     public void cartPay(String email) {
@@ -143,7 +94,6 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new OutOfStockException();
         }
-        orders.getInventory();
         totalPrice += price * orders.getCount();
         orderRepository.save(orders);
         cartRepository.delete(cart);
@@ -153,10 +103,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void basicPay(String email, CartDto cartDto) {
-        /*
-        1. 일반 결제하기 -> 카트에 넣고 카트 마지막꺼만 결제하는 방식으로?
-         */
+    public void basicPay(String email,
+                         CartDto cartDto) {
+        // 일반 결제하기 -> 카트에 넣고 카트 마지막꺼만 결제하는 방식
         cartService.putCart(email, cartDto);
         Users user = userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
@@ -167,83 +116,12 @@ public class OrderServiceImpl implements OrderService {
         orderListRepository.save(orderLists);
     }
 
-//    @Override
-//    @Transactional
-//    public void basicPay(String email, CartDto cartDto) {
-//        /*
-//        1. 일반 결제하기 -> 카트에 넣고 카트 마지막꺼만 결제하는 방식으로?
-//         */
-//
-//        cartService.putCart(email, cartDto);
-//
-//        Users user = userRepository.findByEmail(email).get();
-//        // 장바구니 가져와서 orderList 만들기
-//        OrderLists orderLists = new OrderLists();
-//        orderLists.setUser(user);
-//        orderLists.setTotalPrice(0);
-//        orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-//
-////        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//
-//        Date date = new Date(System.currentTimeMillis());
-//        String s = formatter.format(date).toString();
-//        try {
-//            date = formatter.parse(s);
-//        } catch (ParseException pErr) {
-//            System.out.println(pErr);
-//        }
-//
-//        orderLists.setDate(date);
-//        orderListRepository.save(orderLists);
-//
-//        // 이 과정을 줄일 수 있나?
-//        List<OrderLists> orderListsList = orderListRepository.findByDate(date);
-//
-//        int totalPrice = 0;
-//        Carts cart = cartRepository.findByUserAndUid(user);
-//        Orders orders = new Orders();
-//        orders.setOrderList(orderListsList.get(0));
-//        orders.setCount(cart.getProductCount());
-//        orders.setStatus(Status.PROCESS.toString());
-//        Inventories inventory = cart.getInventory();
-//        // 상품 할인율 적용
-//        Integer price =(100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice()/100 + inventory.getPrice();
-//        System.out.println("price");
-//        System.out.println("price");
-//        System.out.println(price);
-//        System.out.println(price);
-//
-//        if (orders.getCoupon() != null) {
-//            price = price - orders.getCoupon().getDiscountPrice();
-//        }
-//        orders.setPrice(price);
-//        orders.setInventory(inventory);
-//        int remainingStoke = inventory.getCount() - cart.getProductCount();
-//        if (remainingStoke >= 0) {
-//            inventory.setCount(remainingStoke);
-//        } else {
-//            throw new OutOfStockException();
-//        }
-//        orders.getInventory();
-//        totalPrice += price * cart.getProductCount();
-//
-//        orderRepository.save(orders);
-//        cartRepository.delete(cart);
-//        orderLists.setStatus(Status.PROCESS.toString());
-//        orderLists.setTotalPrice(totalPrice);
-//        orderListRepository.save(orderLists);
-//    }
-
-
     @Override
     @Transactional
     public BaseRes orderCancel(Integer orderUid) {
         // 고객이 취소 요청한 것을 응함
-
         Orders order = orderRepository.findById(orderUid).get();
         OrderLists orderLists = orderListRepository.findById(order.getOrderList().getUid()).get();
-
         if (order.getStatus().equals(OrderStatus.CANCEL_REQUEST.toString())) {
             order.setStatus(OrderStatus.CANCEL.toString());
             order.getInventory().setCount(order.getInventory().getCount() + order.getCount());

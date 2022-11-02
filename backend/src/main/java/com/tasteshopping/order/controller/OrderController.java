@@ -87,14 +87,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 
-//    @PostMapping("/basic")
-//    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,
-//                                            @RequestBody CartReqDto cartReqDto){
-//        CartDto cartDto = cartReqDto.toDto();
-//        orderService.basicPay(email,cartDto);
-//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
-//    }
-
     @PostMapping("/basic")
     public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,
                                             @RequestBody CartReqDto cartReqDto){
