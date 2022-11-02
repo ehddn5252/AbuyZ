@@ -8,38 +8,81 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductOption() {
   // 옵션 갯수
-  const [optionCount, setOptionCount] = useState([1]);
+  const [optionCount, setOptionCount] = useState(2);
 
   // 옵션명 1
-  const [optionName1, setOptionName1] = useState([]);
+  const [optionName1, setOptionName1] = useState("");
+
+  // 옵션값 1
+  const [optionValue1, setOptionValue1] = useState([]);
 
   // 옵션명 2
   const [optionName2, setOptionName2] = useState("");
 
+  // 옵션값 2
+  const [optionValue2, setOptionValue2] = useState([]);
+
   // 옵션명 3
   const [optionName3, setOptionName3] = useState("");
 
+  // 옵션값 3
+  const [optionValue3, setOptionValue3] = useState([]);
+
   // 옵션 갯수 뺴기
   const optionMinus = () => {
-    if (optionCount.length > 1) {
-      optionCount.pop();
-      setOptionCount([...optionCount]);
+    if (optionCount > 1) {
+      setOptionCount(optionCount - 1);
     }
   };
 
   // 옵션 갯수 더하기
   const optionPlus = () => {
-    if (optionCount.length < 3) {
-      setOptionCount([...optionCount, 1]);
+    if (optionCount < 3) {
+      setOptionCount(optionCount + 1);
     }
   };
 
+  // 옵션명 구하기 1
   const changeOptionName1 = (e) => {
-    const a = e.target.value.split(", ");
-    setOptionName1(a);
+    setOptionName1(e.target.value);
   };
 
-  console.log(optionName1);
+  // 옵션값 구하기 1
+  const changeOptionValue1 = (e) => {
+    const value = e.target.value.split(",");
+    for (let i = 0; i < value.length; i++) {
+      value[i] = value[i].trim();
+    }
+    setOptionValue1(value);
+  };
+
+  // 옵션명 구하기 2
+  const changeOptionName2 = (e) => {
+    setOptionName2(e.target.value);
+  };
+
+  // 옵션값 구하기 2
+  const changeOptionValue2 = (e) => {
+    const value = e.target.value.split(",");
+    for (let i = 0; i < value.length; i++) {
+      value[i] = value[i].trim();
+    }
+    setOptionValue2(value);
+  };
+
+  // 옵션명 구하기 3
+  const changeOptionName3 = (e) => {
+    setOptionName3(e.target.value);
+  };
+
+  // 옵션값 구하기 3
+  const changeOptionValue3 = (e) => {
+    const value = e.target.value.split(",");
+    for (let i = 0; i < value.length; i++) {
+      value[i] = value[i].trim();
+    }
+    setOptionValue3(value);
+  };
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -97,20 +140,57 @@ export default function SaleProductOption() {
             alignContent: "center",
           }}
         >
-          {optionCount.map((data, idx) => (
-            <RowBox key={idx}>
+          {optionCount >= 1 ? (
+            <RowBox>
               <NameInput
                 placeholder="예시 : 사이즈"
                 onChange={changeOptionName1}
               ></NameInput>
-              <ValueInput placeholder="예시 : S, M, L ( , 로 구분)"></ValueInput>
+              <ValueInput
+                placeholder="예시 : S, M, L ( , 로 구분)"
+                onChange={changeOptionValue1}
+              ></ValueInput>
               <IndeterminateCheckBoxIcon
                 onClick={optionMinus}
                 sx={{ fontSize: "3rem", color: "gray", marginLeft: "1rem" }}
               />
               <AddBoxIcon onClick={optionPlus} sx={{ fontSize: "3rem" }} />
             </RowBox>
-          ))}
+          ) : null}
+          {optionCount >= 2 ? (
+            <RowBox>
+              <NameInput
+                placeholder="예시 : 사이즈"
+                onChange={changeOptionName2}
+              ></NameInput>
+              <ValueInput
+                placeholder="예시 : S, M, L ( , 로 구분)"
+                onChange={changeOptionValue2}
+              ></ValueInput>
+              <IndeterminateCheckBoxIcon
+                onClick={optionMinus}
+                sx={{ fontSize: "3rem", color: "gray", marginLeft: "1rem" }}
+              />
+              <AddBoxIcon onClick={optionPlus} sx={{ fontSize: "3rem" }} />
+            </RowBox>
+          ) : null}
+          {optionCount >= 3 ? (
+            <RowBox>
+              <NameInput
+                placeholder="예시 : 사이즈"
+                onChange={changeOptionName3}
+              ></NameInput>
+              <ValueInput
+                placeholder="예시 : S, M, L ( , 로 구분)"
+                onChange={changeOptionValue3}
+              ></ValueInput>
+              <IndeterminateCheckBoxIcon
+                onClick={optionMinus}
+                sx={{ fontSize: "3rem", color: "gray", marginLeft: "1rem" }}
+              />
+              <AddBoxIcon onClick={optionPlus} sx={{ fontSize: "3rem" }} />
+            </RowBox>
+          ) : null}
         </Grid2>
         <SearchButton>옵션 목록으로 적용</SearchButton>
       </Grid2>
