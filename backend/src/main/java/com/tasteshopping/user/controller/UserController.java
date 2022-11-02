@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @Slf4j
 @RequestMapping("/user")
@@ -89,5 +91,14 @@ public class UserController {
     public ResponseEntity<ResponseDto>deleteAddress(@AuthenticationPrincipal String email,
                                                     @PathVariable int address_uid){
         return new ResponseEntity<>(userService.deleteAddress(email,address_uid),HttpStatus.OK);
+    }
+    @GetMapping("/refresh")
+    public ResponseEntity<ResponseDto>getRefreshToken(HttpServletRequest httpRequest){
+        try {
+            return new ResponseEntity<>(userService.getRefreshToken(httpRequest),HttpStatus.OK);
+        }
+        catch (RuntimeException e){
+            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+        }
     }
 }
