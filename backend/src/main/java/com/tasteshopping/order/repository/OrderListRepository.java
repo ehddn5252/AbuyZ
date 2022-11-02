@@ -22,6 +22,5 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
 
     List<OrderLists> findByDate(Date date);
 
-    Optional<OrderLists> findByOrder(Orders order);
 }
 
