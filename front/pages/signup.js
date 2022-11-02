@@ -1,6 +1,6 @@
 // React
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 // MUI
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -17,14 +17,22 @@ import styled from "styled-components";
 
 import DaumPostcode from "react-daum-postcode";
 // API
-import { signup, checkEmail } from "./api/user";
+import {
+  signup,
+  checkEmail,
+  emailCheck,
+  sendCheckNumber,
+  checkNickname,
+} from "./api/user";
 
 export default function Signup() {
+  const router = useRouter();
   const [numberopen, setnumberOpen] = useState(false);
   // 회원가입 정보
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [nickname, setNickname] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [gender, setGender] = useState("");
@@ -45,7 +53,6 @@ export default function Signup() {
   // t: 사용가능, f: 사용불가능
   const [isDuplicateNickname, setisDuplicateNickname] = useState(false);
   const [isDuplicateEmail, setIsDuplicateEmail] = useState(false);
-  const [buttonCheck, setButtonCheck] = useState(false);
   // 비밀번호 재확인
   const [checkPassword, setCheckPassword] = useState(true);
 
@@ -54,6 +61,14 @@ export default function Signup() {
   const [defaultPwd, setDefaultPwd] = useState(false);
   const [defaultPwd2, setDefaultPwd2] = useState(false);
   const [defaultNickname, setDefaultNickname] = useState(false);
+
+  // 이메일 인증번호
+  const [emailNumber, setEmailNumber] = useState("");
+
+  // 이메일 인증 체크
+  const [checkEmailNumber1, setCheckEmailNumber1] = useState(false);
+  // 닉네임 확인 체크
+  const [confirmNickname, setConfirmNickname] = useState(false);
 
   /** 닉네임 유효성 검사 1~10자 */
   const validateNickName = (e) => {
@@ -100,7 +115,7 @@ export default function Signup() {
   };
 
   /** 비밀번호 유효성 */
-  const validatePwd = (ex) => {
+  const validatePwd = (e) => {
     let patternEngAtListOne = new RegExp(/[a-zA-Z]+/); // + for at least one
     let patternSpeAtListOne = new RegExp(/[~!@#$%^]+/); // + for at least one
     let patternNumAtListOne = new RegExp(/[0-9]+/); // + for at least one
@@ -118,9 +133,9 @@ export default function Signup() {
       e.target.value.length >= 8 &&
       e.target.value.length <= 15
     ) {
-      setPwdValid(true);
+      setPassowrdValid(true);
     } else {
-      setPwdValid(false);
+      setPassowrdValid(false);
     }
   };
   // 이메일 중복체크
@@ -133,10 +148,72 @@ export default function Signup() {
     }
   };
 
-  // 이메일인증
-  const checkEmail2 = async () => {
+  // 이메일인증번호전송
+  const sendEmailNumber = async () => {
+    const res = await sendCheckNumber(email);
+    console.log(res);
     setnumberOpen(true);
   };
+
+  // 이메일 인증
+  const checkEmailNumber = async () => {
+    let EmailNumberDto = {
+      email: email,
+      certification_number: emailNumber,
+    };
+    const res = await emailCheck(EmailNumberDto);
+    console.log(res);
+    if (res.data.result == true) {
+      setCheckEmailNumber1(true);
+    } else {
+      setCheckEmailNumber1(false);
+    }
+  };
+
+  // 회원가입
+  const submitSingup = async () => {
+    let signupDto = {
+      address: realNumber + realAddress,
+      birth: birthday,
+      detailAddress: realDetailAddress,
+      email: email,
+      gender: gender,
+      name: name,
+      nickname: nickname,
+      password: password,
+      phoneNumber: phoneNumber,
+    };
+    const res = await signup(signupDto);
+    if (res.status === 200) {
+      router.push("/login");
+    }
+  };
+
+  // 닉네임 중복확인
+  const checkNickname1 = async () => {
+    console.log(nickname);
+    const res = await checkNickname(nickname);
+    if (res.data.result === true) {
+      setisDuplicateNickname(true);
+    } else {
+      setConfirmNickname(true);
+    }
+  };
+
+  /** 비밀번호 재확인 */
+  const samePassword = (e) => {
+    if (e.target.value) {
+      setDefaultPwd2(true);
+    } else {
+      setDefaultPwd2(false);
+    }
+    if (password === passwordConfirm) {
+      setCheckPassword(true);
+    } else {
+      setCheckPassword(false);
+    }
+  };
+
   const [open, setOpen] = useState(false);
 
   const handleComplete = (data) => {
@@ -161,6 +238,20 @@ export default function Signup() {
     setOpen(!open);
   };
 
+  // 버튼 활성화 유무
+  let btnDisabled = true;
+  if (
+    nicknameValid && // 닉네임 유효성
+    passwordValid && // 비밀번호 유효성
+    emailValid && // 이름 유효성
+    isDuplicateNickname && // 중복 닉네임 체크
+    isDuplicateEmail && // 중복 이메일 체크
+    checkEmailNumber1 && // 이메일 인증번화 체크
+    checkPassword // 비밀번호 재확인 체크
+  ) {
+    btnDisabled = false;
+  }
+
   return (
     <div>
       <AllContainer>
@@ -183,6 +274,7 @@ export default function Signup() {
       </div>
       <SignupContainer component="main">
         <SignupBox>
+          {/* 이메일 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>이메일</span>
@@ -207,7 +299,7 @@ export default function Signup() {
             </Grid>
             <Grid item xs={2} style={{ marginTop: "1rem" }}>
               {isDuplicateEmail === true && emailValid === true ? (
-                <button style={inputbutton} onClick={checkEmail2}>
+                <button style={inputbutton} onClick={sendEmailNumber}>
                   인증
                 </button>
               ) : null}
@@ -215,17 +307,13 @@ export default function Signup() {
             {defaultEmail && !emailValid ? (
               <ErrorText>유효하지 않은 이메일입니다.</ErrorText>
             ) : null}
-            {defaultEmail && !isDuplicateEmail && emailValid && buttonCheck ? (
-              <ErrorText>이미 존재하는 이메일입니다</ErrorText>
-            ) : null}
-            {defaultEmail && !isDuplicateEmail && emailValid && !buttonCheck ? (
-              <ErrorText>중복체크를 클릭해주세요.</ErrorText>
+            {defaultEmail && !isDuplicateEmail && emailValid ? (
+              <ErrorText>중복된 이메일입니다</ErrorText>
             ) : null}
             {emailValid && isDuplicateEmail ? (
               <SuccessText>사용가능한 이메일입니다</SuccessText>
             ) : null}
           </Grid>
-
           {/* 이메일 인증번호 입력창 보여주기 */}
           {numberopen === true ? (
             <Grid container spacing={1}>
@@ -237,17 +325,32 @@ export default function Signup() {
                   margin="normal"
                   required
                   fullWidth
-                  id="password"
+                  id="emailNumber"
                   label="이메일로 발송된 인증번호를 입력해주세요"
-                  name="password"
-                  autoComplete="password"
+                  name="emailNumber"
+                  autoComplete="emailNumber"
                   autoFocus
                   sx={{ backgroundColor: "white" }}
+                  onChange={(e) => {
+                    setEmailNumber(e.target.value);
+                  }}
+                  value={emailNumber}
                 />
               </Grid>
+              <Grid item xs={2} style={{ marginTop: "1rem" }}>
+                <button style={inputbutton} onClick={checkEmailNumber}>
+                  인증
+                </button>
+              </Grid>
+              {!checkEmailNumber1 ? (
+                <ErrorText>인증번호가 불일치합니다</ErrorText>
+              ) : null}
+              {checkEmailNumber1 ? (
+                <SuccessText>인증번호가 일치합니다</SuccessText>
+              ) : null}
             </Grid>
           ) : null}
-
+          {/* 비밀번호 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>비밀번호</span>
@@ -257,16 +360,29 @@ export default function Signup() {
                 margin="normal"
                 required
                 fullWidth
+                type="password"
                 id="password"
                 label="비밀번호를 입력해주세요"
                 name="password"
                 autoComplete="password"
+                onBlur={validatePwd}
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                value={password}
               />
             </Grid>
+            {defaultPwd && !passwordValid ? (
+              <ErrorText>유효하지 않은 비밀번호입니다</ErrorText>
+            ) : null}
+            {defaultPwd && passwordValid ? (
+              <SuccessText>사용가능한 비밀번호입니다</SuccessText>
+            ) : null}
           </Grid>
 
+          {/* 비밀번호확인 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>비밀번호확인</span>
@@ -274,6 +390,7 @@ export default function Signup() {
             <Grid item xs={8}>
               <TextField
                 margin="normal"
+                type="password"
                 required
                 fullWidth
                 id="passwordConfirm"
@@ -281,11 +398,22 @@ export default function Signup() {
                 name="passwordConfirm"
                 autoComplete="passwordConfirm"
                 autoFocus
+                onBlur={samePassword}
                 sx={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setPasswordConfirm(e.target.value);
+                }}
+                value={passwordConfirm}
               />
             </Grid>
+            {defaultPwd2 && !checkPassword ? (
+              <ErrorText>비밀번호가 일치하지 않습니다</ErrorText>
+            ) : null}
+            {defaultPwd2 && checkPassword ? (
+              <SuccessText>비밀번호가 일치합니다</SuccessText>
+            ) : null}
           </Grid>
-
+          {/* 이름 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>이름</span>
@@ -301,10 +429,14 @@ export default function Signup() {
                 autoComplete="name"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                value={name}
               />
             </Grid>
           </Grid>
-
+          {/* 휴대폰 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>휴대폰</span>
@@ -313,16 +445,20 @@ export default function Signup() {
               <TextField
                 margin="normal"
                 fullWidth
-                id="phone"
+                id="phoneNumber"
                 label="휴대폰 번호를 입력해주세요"
-                name="phone"
-                autoComplete="phone"
+                name="phoneNumber"
+                autoComplete="phoneNumber"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setPhoneNumber(e.target.value);
+                }}
+                value={phoneNumber}
               />
             </Grid>
           </Grid>
-
+          {/* 주소 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>주소</span>
@@ -388,7 +524,7 @@ export default function Signup() {
               </Grid>
             </Grid>
           ) : null}
-
+          {/* 닉네임 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>닉네임</span>
@@ -404,20 +540,46 @@ export default function Signup() {
                 autoComplete="nickname"
                 autoFocus
                 sx={{ backgroundColor: "white" }}
+                onBlur={validateNickName}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                }}
+                value={nickname}
               />
             </Grid>
             <Grid item xs={2} style={{ marginTop: "1rem" }}>
-              <button style={inputbutton}>중복확인</button>
+              <button style={inputbutton} onClick={checkNickname1}>
+                중복확인
+              </button>
             </Grid>
+            {defaultNickname && !nicknameValid ? (
+              <ErrorText>유효하지 않은 닉네임입니다</ErrorText>
+            ) : null}
+            {defaultNickname &&
+            nicknameValid &&
+            !isDuplicateNickname &&
+            confirmNickname ? (
+              <ErrorText>이미 존재하는 닉네임입니다</ErrorText>
+            ) : null}
+            {defaultNickname && nicknameValid && isDuplicateNickname ? (
+              <SuccessText>사용가능한 닉네임입니다</SuccessText>
+            ) : null}
           </Grid>
-
+          {/* 성별 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "1rem" }}>
               <span style={{ fontWeight: "bold" }}>성별</span>
             </Grid>
             <Grid item xs={8}>
               <FormControl sx={{ mt: 1, mb: 1, pl: 1 }}>
-                <RadioGroup aria-required row name="gender">
+                <RadioGroup
+                  aria-required
+                  row
+                  name="gender"
+                  onChange={(e) => {
+                    setGender(e.target.value);
+                  }}
+                >
                   <FormControlLabel
                     value="MALE"
                     control={<Radio />}
@@ -437,7 +599,7 @@ export default function Signup() {
               </FormControl>
             </Grid>
           </Grid>
-
+          {/* 생일 */}
           <Grid container spacing={1}>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
               <span style={{ fontWeight: "bold" }}>생년월일</span>
@@ -450,18 +612,32 @@ export default function Signup() {
                 fullWidth
                 name="birthday"
                 id="birthday"
-                autoComplete="userBirthday"
-                defaultValue={"2000-01-01"}
+                autoComplete="birthday"
                 sx={{ backgroundColor: "white" }}
+                onChange={(e) => {
+                  setBirthday(e.target.value);
+                }}
+                value={birthday}
               />
             </Grid>
           </Grid>
-          <Grid container spacing={1}>
-            <Grid item xs={2} style={{ marginTop: "2rem" }}></Grid>
-            <Grid item xs={8} style={{ marginTop: "1rem" }}>
-              <button style={signupbutton}>회원가입</button>
+          {btnDisabled ? (
+            <Grid container spacing={1}>
+              <Grid item xs={2} style={{ marginTop: "2rem" }}></Grid>
+              <Grid item xs={8} style={{ marginTop: "1rem" }}>
+                <DisabledButton>회원가입</DisabledButton>
+              </Grid>
             </Grid>
-          </Grid>
+          ) : (
+            <Grid container spacing={1}>
+              <Grid item xs={2} style={{ marginTop: "2rem" }}></Grid>
+              <Grid item xs={8} style={{ marginTop: "1rem" }}>
+                <button style={signupbutton} onClick={submitSingup}>
+                  회원가입
+                </button>
+              </Grid>
+            </Grid>
+          )}
         </SignupBox>
       </SignupContainer>
     </div>
@@ -511,13 +687,25 @@ const signupbutton = {
   color: "white",
   borderRadius: "10px",
   marginTop: "3rem",
+  cursor: "pointer",
 };
+
+const DisabledButton = styled.button`
+  width: 100%;
+  height: 3rem;
+  border: none;
+  color: balck;
+  border-radius: 10px;
+  margin-top: 3rem;
+`;
 // 에러 텍스트
 const ErrorText = styled.span`
+  margin: 0;
   width: 100%;
   color: #ff0000;
   font-size: 1rem;
   margin-bottom: 0.5rem;
+  text-align: center;
 `;
 
 // 성공 텍스트
@@ -526,4 +714,5 @@ const SuccessText = styled.span`
   color: #009c87;
   font-size: 1rem;
   margin-bottom: 1rem;
+  text-align: center;
 `;
