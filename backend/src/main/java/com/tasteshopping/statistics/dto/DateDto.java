@@ -1,0 +1,15 @@
+package com.tasteshopping.statistics.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class DateDto {
+    private String start_date;
+    private String end_date;
+}

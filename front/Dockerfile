@@ -1,13 +1,21 @@
-# build stage
-FROM node:lts-alpine as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
- 
-# production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:alpine as build-stage
+
+RUN mkdir -p /usr/src/app
+ENV PORT 3000
+
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app
+COPY yarn.lock /usr/src/app
+
+# Production use node instead of root
+# USER node
+
+RUN yarn install --production
+
+COPY . /usr/src/app
+
+RUN yarn build
+
+EXPOSE 3000
+CMD [ "yarn", "start" ]
