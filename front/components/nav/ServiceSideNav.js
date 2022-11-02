@@ -1,14 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Container from "@mui/material/Container";
-export default function ServiceSideNav(setServiceTap) {
-  const [activeTap, SetActiveTap] = useState(0);
+import { serviceNum, pageNameState } from "../../states";
+import { useRecoilState } from "recoil";
+
+export default function ServiceSideNav(props) {
+  // 사이드바 번호(전역)
+  const [side, setSide] = useRecoilState(serviceNum);
+
+  // 전역으로 불러온 값을 여기에 넣어줌(사이드바 번호)
+  const [activeTap, SetActiveTap] = useState(serviceNum);
+
+  // 이전 페이지 주소(전역)
+  const [prevUrl, setPrevUrl] = useRecoilState(pageNameState);
+
+  // 새로고침과 다른 페이지 접근 구분
+  // 전의 주소와 비교
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (prevUrl !== path) {
+      SetActiveTap(0);
+    } else {
+    }
+  }, []);
+
+  // act 값이 바뀔 때마다 useEffect
+  // 전의 주소와 비교
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (prevUrl !== path) {
+      // SetActiveTap(0);
+    } else {
+      SetActiveTap(side);
+    }
+  }, [side]);
+
   const tap0Change = () => {
-    setServiceTap.setServiceTap(0);
+    props.setServiceTap(0);
+    setSide(0);
     SetActiveTap(0);
   };
   const tap1Change = () => {
-    setServiceTap.setServiceTap(1);
+    props.setServiceTap(1);
+    setSide(1);
     SetActiveTap(1);
   };
 
