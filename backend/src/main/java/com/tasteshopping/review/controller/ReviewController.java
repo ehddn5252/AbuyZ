@@ -42,6 +42,8 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.myReviewList(email, page-1), HttpStatus.OK);
     }
 
+
+
 //    @ExceptionHandler({MaxUploadSizeExceededException.class, SizeLimitExceededException.class})
 //    public BaseRes exception(Exception e){
 //        System.out.println("----------------exception호출-----------------");

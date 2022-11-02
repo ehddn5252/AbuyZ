@@ -41,6 +41,9 @@ public class OrderLists {
     @JoinColumn(name="users_uid")
     Users user;
 
+    @OneToMany(mappedBy = "orderList",fetch = FetchType.LAZY)
+    List<Orders> orders;
+
     String Status;
 
     @OneToMany(mappedBy = "orderList")

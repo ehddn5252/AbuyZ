@@ -165,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
         // 고객이 취소 요청한 것을 응함
 
         Orders order = orderRepository.findById(orderUid).get();
-        OrderLists orderLists = orderListRepository.findByOrders(order).get();
+        OrderLists orderLists = orderListRepository.findById(order.getOrderList().getUid()).get();
 
         if (order.getStatus().equals(OrderStatus.CANCEL_REQUEST.toString())) {
             order.setStatus(OrderStatus.CANCEL.toString());
