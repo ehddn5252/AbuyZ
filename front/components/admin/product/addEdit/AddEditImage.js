@@ -14,7 +14,10 @@ export default function SaleProductImage() {
   const [profile, setProfile] = useState(null);
 
   // 추가 이미지
-  const [imageFile, setImageFile] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
+
+  // 추가 이미지 미리보기
+  const [subImageFile, setSubImageFile] = useState([]);
 
   // 대표 이미지 등록
   const handleClickProfile = () => {
@@ -29,7 +32,7 @@ export default function SaleProductImage() {
   // 대표 이미지 등록 함수
   const uploadProfile = (e) => {
     const profileList = e.target.files;
-    if (profileList && fileList[0]) {
+    if (profileList && profileList[0]) {
       const url = URL.createObjectURL(profileList[0]);
       setProfile({
         file: profileList[0],
@@ -42,30 +45,20 @@ export default function SaleProductImage() {
   // 추가 이미지 등록 함수
   const uploadExtraImage = (e) => {
     const extraList = e.target.files;
-    console.log(extraList);
-    if (extraList && extraList[0]) {
-      const subFile = [];
-      // for (i = 0; i < extraList.length; i++) {
-      //   const url = URL.createObjectURL(extraList[i]);
-      //   subFile.push({
-      //     file: extraList[i],
-      //     thumbnail: url,
-      //     type: extraList[i].type.slice(0, 5),
-      //   });
-      for (const idx in extraList) {
-        // if (typeof idx === Number) {
-        console.log(typeof idx);
-        // }
+    const target = Object.values(extraList);
+    if (target !== []) {
+      const a = [];
+      for (let i = 0; i < target.length; i++) {
+        const subUrl = URL.createObjectURL(target[i]);
+        a.push({
+          file: target[i],
+          thumbnail: subUrl,
+          type: target[i].type.slice(0, 5),
+        });
       }
+      setSubImageFile(a);
+      setImageFile(target);
     }
-    // setImageFile(subFile);
-    // const url = URL.createObjectURL(extraList[0]);
-    // console.log(url);
-    // setImageFile({
-    //   file: extraList[0],
-    //   thumbnail: url,
-    //   type: extraList[0].type.slice(0, 5),
-    // });
   };
 
   // 대표 이미지 미리보기
@@ -84,21 +77,21 @@ export default function SaleProductImage() {
     );
   }, [profile]);
 
-  // 추가 이미지 미리보기
-  const showExtra = useMemo(() => {
-    if (!imageFile && imageFile == null) {
-      return;
-    }
-    return (
-      <img
-        src={imageFile.thumbnail}
-        alt={imageFile.type}
-        onClick={handleClickExtraImage}
-        width="250px"
-        height="300px"
-      />
-    );
-  }, [imageFile]);
+  // // 추가 이미지 미리보기
+  // const showExtra = useMemo(() => {
+  //   if (!subImageFile && subImageFile == null) {
+  //     return;
+  //   }
+  //   return (
+  //     <img
+  //       src={subImageFile.thumbnail}
+  //       alt={subImageFile.type}
+  //       onClick={handleClickExtraImage}
+  //       width="250px"
+  //       height="300px"
+  //     />
+  //   );
+  // }, [subImageFile]);
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -132,43 +125,69 @@ export default function SaleProductImage() {
         {/* 대표 이미지 */}
         <ImageBox>
           <Title>대표이미지</Title>
-          <Box
-            component="span"
-            sx={{ p: "5rem", border: "1px dashed grey", padding: "0" }}
-          >
-            {showProfile}
-            <input
-              type="file"
-              accept="image/jpg, image/jpeg, image/png"
-              ref={profileRef}
-              onChange={uploadProfile}
-              style={{ display: "none" }}
-            />
-            <Button sx={{ fontSize: "1.5rem" }} onClick={handleClickProfile}>
-              Save
-            </Button>
-          </Box>
+          {profile ? (
+            <div>{showProfile}</div>
+          ) : (
+            <Box
+              component="span"
+              sx={{ p: "5rem", border: "1px dashed grey", padding: "0" }}
+            >
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={profileRef}
+                onChange={uploadProfile}
+                style={{ display: "none" }}
+              />
+              <Button sx={{ fontSize: "1.5rem" }} onClick={handleClickProfile}>
+                Save
+              </Button>
+            </Box>
+          )}
         </ImageBox>
         {/* 추가 이미지 */}
         <ImageBox>
           <Title>추가이미지</Title>
-          <Box
-            component="span"
-            sx={{ p: "5rem", border: "1px dashed grey", padding: "0" }}
-          >
-            {showExtra}
-            <input
-              type="file"
-              accept="image/jpg, image/jpeg, image/png"
-              ref={extraRef}
-              onChange={uploadExtraImage}
-              style={{ display: "none" }}
-              multiple
-            />
-            <Button sx={{ fontSize: "1.5rem" }} onClick={handleClickExtraImage}>
-              Save
-            </Button>
-          </Box>
+          {subImageFile === [] ? (
+            subImageFile.map((e, idx) => (
+              <div key={idx} style={{ marginRight: "1rem" }}>
+                <img
+                  src={e.thumbnail}
+                  alt={e.type}
+                  onClick={handleClickExtraImage}
+                  width="250px"
+                  height="300px"
+                />
+                헬로
+              </div>
+            ))
+          ) : (
+            <Box
+              component="span"
+              sx={{
+                p: "5rem",
+                border: "1px dashed grey",
+                padding: "0",
+                display: "flex",
+              }}
+            >
+              하이
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={extraRef}
+                onChange={uploadExtraImage}
+                style={{ display: "none" }}
+                multiple
+              />
+              <Button
+                sx={{ fontSize: "1.5rem" }}
+                onClick={handleClickExtraImage}
+              >
+                Save
+              </Button>
+            </Box>
+          )}
         </ImageBox>
         <ImageBox>
           <Title>상세설명</Title>
