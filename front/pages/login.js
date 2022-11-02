@@ -1,7 +1,9 @@
 // React
 import React, { useState } from "react";
+
+// Next.js
 import { useRouter } from "next/router";
-import https from "./api/https.js";
+
 // MUI
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
@@ -13,6 +15,8 @@ import Typography from "@mui/material/Typography";
 
 // API
 import { login } from "./api/user.js";
+import https from "./api/https.js";
+
 // StyledComponent
 import styled from "styled-components";
 
@@ -22,15 +26,18 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const LoginDto = {
       email: email,
       password: password,
     };
     console.log(LoginDto);
-    const res = login(LoginDto);
-
+    const res = await login(LoginDto);
+    console.log(res.PromiseResult);
+    if (res.status === 200) {
+      router.push("/");
+    }
     console.log(res);
   };
 

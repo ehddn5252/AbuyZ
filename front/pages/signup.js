@@ -1,6 +1,9 @@
 // React
 import React, { useEffect, useState } from "react";
+
+// Next.js
 import { useRouter } from "next/router";
+
 // MUI
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -15,7 +18,9 @@ import Box from "@mui/material/Box";
 // StyledComponent
 import styled from "styled-components";
 
+// ??
 import DaumPostcode from "react-daum-postcode";
+
 // API
 import {
   signup,

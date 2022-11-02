@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import Link from "@mui/material/Link";
@@ -12,7 +12,21 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
+
+// API
+import { getMyInfo } from "../../pages/api/user";
+
 export default function Nav() {
+  const [username, setUsername] = useState("");
+
+  // useEffect(() => {
+  //   const token = sessionStorage.getItem("access-token");
+  //   console.log(token);
+  //   if (token) {
+  //     const res = getMyInfo();
+  //     console.log(res);
+  //   }
+  // }, []);
   return (
     <Container>
       <NavContainer>
