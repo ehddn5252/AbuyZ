@@ -4,8 +4,7 @@ import https from "./https.js";
 // 쿠폰 생성
 export async function createcoupon(couponDto) {
   const accessToken = sessionStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/coupon/create", {
@@ -32,8 +31,7 @@ export async function createcoupon(couponDto) {
 // 사용자 쿠폰 조회
 export async function couponlist() {
   const accessToken = sessionStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get("/coupon").then((response) => {
       if (response === 200) {

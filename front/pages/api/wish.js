@@ -3,7 +3,7 @@ import https from "./https.js";
 // 찜하기
 export async function regiswish(product_uid) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
     https.get(`/wish/${product_uid}`).then((response) => {
@@ -23,7 +23,7 @@ export async function regiswish(product_uid) {
 // 찜 목록 조회
 export async function listwish() {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
     https.get("/wish/list").then((response) => {
@@ -43,7 +43,7 @@ export async function listwish() {
 // 찜 삭제
 export async function delwish(wishDto) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
     https

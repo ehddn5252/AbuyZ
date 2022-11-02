@@ -4,9 +4,18 @@ import React, { useState, useEffect } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 // StyeldComponet
 import styled from "styled-components";
+import DeliveryListModal from "./DeliveryListModal";
 
 export default function BasketPayment() {
   const [basketList, setBasketList] = useState([]);
+  const [postcode, setPostcode] = useState("16892");
+  const [address, setAddress] = useState(
+    "녹산 송정동 1627-5 그린코어 오피스텔"
+  );
+  const [detailAddress, setDetailAddress] = useState("691호");
+  const [name, setName] = useState("최지은");
+  const [phone, setPhone] = useState("01096674657");
+  const [addressModalOpen, settAddressModalOpen] = useState(false);
 
   useEffect(() => {
     setBasketList([1]);
@@ -29,10 +38,12 @@ export default function BasketPayment() {
                 배송지
               </p>
             </div>
-            <p style={{ margin: 0, fontWeight: "bold", fontSize: "1.2rem" }}>
-              부산 남구 우암로 196, 삼성 청년 SW 아카데미 202호
+            <p style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}>
+              {address} {detailAddress}
             </p>
-            <AddressButton>배송지 변경하기</AddressButton>
+            <AddressButton onClick={() => settAddressModalOpen(true)}>
+              배송지 변경하기
+            </AddressButton>
           </TopBox>
           <BottomBox>
             <PriceBox>
@@ -52,10 +63,20 @@ export default function BasketPayment() {
             <hr />
             <TotalPriceBox>
               <p>결제예정금액</p>
-              <p style={{ color: "red" }}>59,050원</p>
+              <p style={{ color: "#56a9f1", fontSize: "1.3rem" }}>59,050원</p>
             </TotalPriceBox>
             <OrderButton>주문하기</OrderButton>
           </BottomBox>
+          {addressModalOpen ? (
+            <DeliveryListModal
+              settAddressModalOpen={settAddressModalOpen}
+              setPostcode={setPostcode}
+              setAddress={setAddress}
+              setDetailAddress={setDetailAddress}
+              setName={setName}
+              setPhone={setPhone}
+            ></DeliveryListModal>
+          ) : null}
         </ContainerDiv>
       ) : null}
     </Container>
@@ -63,8 +84,7 @@ export default function BasketPayment() {
 }
 
 const Container = styled.div`
-  width: 30%;
-  height: 36rem;
+  width: 25%;
   border: 1px solid #aaaaaa;
   border-radius: 1rem;
   overflow: hidden;
@@ -77,7 +97,6 @@ const TopBox = styled.div`
 `;
 const BottomBox = styled.div`
   width: 100%;
-  height: 24rem;
   padding: 1.5rem;
   border-radius: 0 0 1rem 1rem;
   background-color: #ededed;
@@ -99,31 +118,32 @@ const PriceDiv = styled.div`
 const SaleDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bolder;
 `;
 
 const TotalPriceBox = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bolder;
+  vertical-align: center;
 `;
 const AddressButton = styled.button`
   width: 100%;
-  height: 3rem;
+  height: 2.5rem;
   background-color: #fff;
   color: #56a9f1;
   font-weight: bolder;
   border: 1px solid #56a9f1;
   border-radius: 0.5rem;
   margin-top: 1rem;
-  font-size: 1.3rem;
+  font-size: 1rem;
 `;
 
 const OrderButton = styled.button`
   width: 100%;
-  height: 3rem;
+  height: 2.5rem;
   background-color: #56a9f1;
   color: white;
   font-weight: bolder;

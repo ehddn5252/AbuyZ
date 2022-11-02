@@ -4,8 +4,7 @@ import https from "./https.js";
 export async function payBasket(cartDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.post("/order/cart", cartDto).then((response) => {
       if (response.status === 200) {
@@ -23,8 +22,7 @@ export async function payBasket(cartDto) {
 export async function payProduct(productDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/order/basic", productDto)
@@ -47,8 +45,7 @@ export async function payProduct(productDto) {
 export async function getOrderList() {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get("/order").then((response) => {
       if (response.status === 200) {

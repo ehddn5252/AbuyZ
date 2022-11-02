@@ -123,8 +123,7 @@ export async function productDetail(product) {
 // 상품 등록
 export async function regisProduct(productCreateReqDto) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post(
@@ -166,8 +165,7 @@ export async function regisProduct(productCreateReqDto) {
 // 상품 변경
 export async function modifyProduct(productCreateReqDto) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .put("/product/modify", productCreateReqDto, {

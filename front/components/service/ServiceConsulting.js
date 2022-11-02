@@ -183,7 +183,16 @@ export default function ServiceConsulting() {
           <span>(선택사항)</span>
         </div>
         <div style={{ flex: 10 }}>
-          <input type="file" multiple={true} id="fileUpload" />
+          <input
+            type="file"
+            multiple={true}
+            style={{
+              height: "100%",
+              border: "1px solid black",
+              display: "none",
+            }}
+            id="fileUpload"
+          ></input>
         </div>
       </AllDiv>
 

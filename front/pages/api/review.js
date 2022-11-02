@@ -8,7 +8,7 @@ import https from "./https.js";
 // 리뷰 작성
 export async function regisreview(reviewDto) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   https.defaults.headers.common["Content-type"] = "multipart/form-data";
 
   return new Promise((resolve) => {
@@ -35,8 +35,7 @@ export async function regisreview(reviewDto) {
 // 리뷰 삭제
 export async function delreview(review) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .delete("/review", {
@@ -59,8 +58,7 @@ export async function delreview(review) {
 // 리뷰 좋아요
 export async function likereview(reviewlike) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/review/like", {
@@ -83,8 +81,7 @@ export async function likereview(reviewlike) {
 // 리뷰 좋아요 삭제
 export async function dellikereview(reviewlikedel) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .delete("/review/like", {
@@ -107,8 +104,7 @@ export async function dellikereview(reviewlikedel) {
 // 리뷰 답글 작성
 export async function replyreview(replyDto) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/review/reply", {
@@ -132,8 +128,7 @@ export async function replyreview(replyDto) {
 // 리뷰 답글 삭제
 export async function delreplyreview(replydel) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .delete("/review/reply", {
@@ -157,8 +152,7 @@ export async function delreplyreview(replydel) {
 // 해당 상품은 왜 주소가 review/1/1??
 export async function review(product_uid) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get(`/review/${product_uid}`).then((response) => {
       if (response.status === 200) {
@@ -177,8 +171,7 @@ export async function review(product_uid) {
 // 리뷰 신고
 export async function reportreview(review) {
   const accessToken = localStorage.getItem("access-Token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/review/report", {
@@ -186,10 +179,10 @@ export async function reportreview(review) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("리뷰 신고 완료");
+          console.log("리뷰 신고 완료", response);
           resolve(response.data);
         } else {
-          console.log("리뷰 신고 실패");
+          console.log("리뷰 신고 실패", response);
           resolve(response);
         }
       });
@@ -201,7 +194,75 @@ export async function reportreview(review) {
 // 이미지 업로드 테스트
 
 // 포토 리뷰 모아보기 - 일부
+export async function photoreviewSome(photoId) {
+  return new Promise((resolve) => {
+    https.get(`/review/photo/${photoId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("포토 리뷰 모아보기 일부 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("포토 리뷰 모아보기 일부 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
 
 // 포토 리뷰 모아보기 - 전체
 
+export async function photoreviewAll(photoId) {
+  return new Promise((resolve) => {
+    https.get(`/review/photos/${photoId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("포토 리뷰 모아보기 전체 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("포토 리뷰 모아보기 전체 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
 // 포토 리뷰 상세보기
+
+export async function photoreviewDetail(photoId) {
+  const accessToken = localStorage.getItem("access-Token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.get(`/review/detail/${photoId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("포토 리뷰 상세보기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("포토 리뷰 상세보기 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 리뷰를 안 쓴 주문들 가져오기
+export async function reviewYet() {
+  const accessToken = localStorage.getItem("access-Token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.get("/order/no-review").then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 안쓴 리스트 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 안쓴 리스트 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}

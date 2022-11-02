@@ -4,7 +4,7 @@ import https from "./https.js";
 export async function getTotalsales(DateDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/statistics/sales", {
@@ -29,7 +29,7 @@ export async function getTotalsales(DateDto) {
 export async function getCartStatistics(DateDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .get("/statistics/cart", {
@@ -54,7 +54,7 @@ export async function getCartStatistics(DateDto) {
 export async function getDailyStatistics(DateDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/statistics/daily", {
@@ -78,7 +78,7 @@ export async function getDailyStatistics(DateDto) {
 export async function getCategoryStatistics(DateDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/statistics/category-percentage", {
@@ -102,7 +102,7 @@ export async function getCategoryStatistics(DateDto) {
 export async function getProductStatistics(DateDto) {
   // Header에 토큰 집어넣기
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/statistics/product", {
