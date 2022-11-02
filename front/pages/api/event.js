@@ -3,8 +3,7 @@ import https from "./https.js";
 // 이벤트등록
 export async function createEvent(eventDto) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/event/create", {
@@ -31,8 +30,7 @@ export async function createEvent(eventDto) {
 // 이벤트 수정
 export async function modifyEvent(eventDto, eventnumber) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.put(`/event/${eventnumber}`, eventDto).then((response) => {
       if (response.status === 200) {
@@ -51,8 +49,7 @@ export async function modifyEvent(eventDto, eventnumber) {
 // 이벤트 조회
 export async function inquireEvent() {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get("/event").then((response) => {
       if (response.status === 200) {
@@ -71,8 +68,7 @@ export async function inquireEvent() {
 // 이벤트 삭제
 export async function delEvent(eventnumber) {
   const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.delete(`/event/${eventnumber}`).then((response) => {
       if (response.status === 200) {
