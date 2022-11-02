@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import Image from "next/image";
 import Coupon from "../../public/images/coupon.png";
+import { couponlist } from "../../pages/api/coupon";
 // MUI
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
@@ -14,6 +15,11 @@ import styled from "styled-components";
 import MyCouponItem from "./MyCouponItem";
 
 export default function MyCouponList() {
+  //쿠폰 지훈 담당 {result: null, count: 0} 이렇게불러와짐
+  const ccoupon = async () => {
+    const res = await couponlist();
+    console.log("쿠폰 내역", res.data);
+  };
   const [couponList, setCouponList] = useState([
     {
       id: 0,
@@ -104,6 +110,7 @@ export default function MyCouponList() {
         category: "반려/",
       },
     ]);
+    ccoupon();
   }, []);
   return (
     <MyCouponContainer>

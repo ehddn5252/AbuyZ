@@ -6,45 +6,18 @@ import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 
 // StyledComponents
 import styled from "styled-components";
-
+import { mycenter } from "../../pages/api/customercenter";
 // 하위 Components
 import MyComplainItem from "./MyComplainItem";
 
 export default function MyComplainList() {
-  const [complainList, setComplainList] = useState([
-    {
-      title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어다니깐요",
-      content: "내용",
-      state: false,
-      category: "환불 문의",
-      date: "2022.10.26",
-    },
-    {
-      title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
-      content: "내용",
-      state: true,
-      category: "상품 문의",
-      date: "2022.10.23",
-    },
-  ]); // eslint-disable-line no-unused-vars
-  // const [complainList, setComplainList] = useState([]);
+  const [complainList, setComplainList] = useState([]);
+  const ccomplain = async () => {
+    const res = await mycenter();
+    setComplainList(res.data);
+  };
   useEffect(() => {
-    setComplainList([
-      {
-        title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어다니깐요",
-        content: "내용",
-        state: false,
-        category: "환불 문의",
-        date: "2022.10.26",
-      },
-      {
-        title: "제주 햇 감귤을 샀는데 경기도 하우스 귤이 왔어요",
-        content: "내용",
-        state: true,
-        category: "상품 문의",
-        date: "2022.10.23",
-      },
-    ]);
+    ccomplain();
   }, []);
 
   return (

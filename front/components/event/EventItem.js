@@ -3,13 +3,13 @@ import Link from "next/link";
 
 import styled from "styled-components";
 
-export default function EventItem(image) {
+export default function EventItem(event) {
   return (
     <CardDiv>
       {/* <image src={}></image> */}
       <Link href="/event/detail">
         <img
-          src={`/images/${image.image}.png`}
+          src={event.thumbnail}
           style={{ height: "100%", width: "100%", objectFit: "cover" }}
         />
       </Link>

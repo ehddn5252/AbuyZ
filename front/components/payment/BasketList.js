@@ -10,53 +10,16 @@ import styled from "styled-components";
 // 하위 Components
 import BasketItem from "./BasketItem";
 export default function BasketList() {
-  // const cartllist = async () => {
-  //   const res = await cartlist();
-  //   console.log(res);
-  // };
-
-  // useEffect(() => {
-  //   cartllist();
-  // });
-  const [basketList, setBasketList] = useState([
-    {
-      name: "제주 햇 감귤 4.5kg",
-      option: "0.5kg 추가",
-      count: 3,
-      price: 12340,
-      salePrice: 5340,
-      img: "/images/cloth.png",
-    },
-    {
-      name: "냠냠 맛있는 샌드위치",
-      option: "치킨마요",
-      count: 5,
-      price: 12340,
-      salePrice: 6340,
-      img: "/images/sandwich.png",
-    },
-  ]);
+  const [basketList, setBasketList] = useState([]);
+  const cartllist = async () => {
+    const res = await cartlist();
+    setBasketList(res.data);
+  };
 
   useEffect(() => {
-    setBasketList([
-      {
-        name: "제주 햇 감귤 4.5kg",
-        option: "0.5kg 추가",
-        count: 3,
-        price: 12340,
-        salePrice: 5340,
-        img: "/images/cloth.png",
-      },
-      {
-        name: "냠냠 맛있는 샌드위치",
-        option: "치킨마요",
-        count: 5,
-        price: 12340,
-        salePrice: 6340,
-        img: "/images/sandwich.png",
-      },
-    ]);
+    cartllist();
   }, []);
+
   return (
     <Container>
       {basketList.length ? (

@@ -1,20 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EventItem from "./EventItem";
+import styled from "styled-components";
+import { inquireEvent } from "../../pages/api/event";
+import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
 export default function EventList() {
-  const eventList = [
-    {
-      id: 0,
-      image: "halloween",
-    },
-    { id: 1, image: "cafe" },
-  ];
+  const [eventList, setEventList] = useState([]);
+  const eevent = async () => {
+    const res = await inquireEvent();
+    setEventList(res.data);
+  };
+  useEffect(() => {
+    eevent();
+  }, []);
   return (
     <div>
-      {eventList.map((e) => (
-        <EventItem key={e.id} image={e.image} />
-      ))}
-      {/* for문으로 만들기 */}
+      {eventList.length ? (
+        <div>
+          {eventList.map((e) => {
+            <EventItem key={e.id} event={e} />;
+          })}
+        </div>
+      ) : (
+        <BlankBox>
+          <p>😢</p>
+          <p>현재 진행중인 이벤트가 없습니다.</p>
+        </BlankBox>
+      )}
     </div>
   );
 }
+
+const BlankBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30rem;
+  font-size: 2rem;
+  font-weight: bolder;
+  color: #aaaaaa;
+`;

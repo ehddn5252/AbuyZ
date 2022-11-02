@@ -6,11 +6,21 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Button from "@mui/material/Button";
 // StyledComponents
 import styled from "styled-components";
+import { getOrderList } from "../../pages/api/order";
 
 // 하위 Components
 import MyOrderItem from "./MyOrderItem";
 
 export default function MyOrderList() {
+  // const [productList, setProductList] = useState([]);
+  // 서버 500에러
+  // const pproductlist = async () => {
+  //   const res = await getOrderList();
+  //   console.log(res.data);
+  // };
+  // useEffect(() => {
+  //   pproductlist();
+  // }, []);
   const [productList, setProductList] = useState([
     {
       productName: "제주 햇 감귤 4.5kg",
@@ -26,8 +36,7 @@ export default function MyOrderList() {
       dateOfPurchase: "2022.10.19",
       options: "치킨마요",
     },
-  ]); // eslint-disable-line no-unused-vars
-  // const [productList, setProductList] = useState([]);
+  ]);
   useEffect(() => {
     setProductList([
       {

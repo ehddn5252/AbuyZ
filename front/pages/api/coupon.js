@@ -34,7 +34,7 @@ export async function couponlist() {
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get("/coupon").then((response) => {
-      if (response === 200) {
+      if (response.status === 200) {
         console.log("쿠폰 조회 성공", response);
         resolve(response.data);
       } else {

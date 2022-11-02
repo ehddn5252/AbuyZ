@@ -11,28 +11,20 @@ import styled from "styled-components";
 // 하위 Components
 import MyWishItem from "./MyWishItem";
 
+// api
+import { listwish } from "../../pages/api/wish";
+
 export default function MyWishList() {
-  const [productList, setProductList] = useState([
-    {
-      productName: "제주 햇 감귤 4.5kg",
-      price: 12000,
-      reviewCheck: false,
-      dateOfPurchase: "2022.10.19",
-      discount: 30,
-    },
-  ]); // eslint-disable-line no-unused-vars
-  // const [productList, setProductList] = useState([]);const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState([]);
+  const llistwish = async () => {
+    const res = await listwish();
+    setProductList(res.data);
+    console.log(typeof productList);
+  };
   useEffect(() => {
-    setProductList([
-      {
-        productName: "제주 햇 감귤 4.5kg",
-        price: 12000,
-        reviewCheck: false,
-        dateOfPurchase: "2022.10.19",
-        discount: 30,
-      },
-    ]);
+    llistwish();
   }, []);
+
   return (
     <MyOrderContainer>
       <MajorTitle>찜한 상품</MajorTitle>
@@ -43,12 +35,12 @@ export default function MyWishList() {
           borderRadius: "1rem",
         }}
       />
-      {productList.length ? (
+      {/* productList.length 를 인식하지 못함 */}
+      {productList ? (
         <ProductListBox>
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
-          <MyWishItem product={productList[0]} />
+          {productList.map((e) => {
+            <MyWishItem product={e} />;
+          })}
         </ProductListBox>
       ) : (
         <BlankBox>
@@ -56,7 +48,7 @@ export default function MyWishList() {
           <p>찜한 상품이 없습니다</p>
         </BlankBox>
       )}
-      {productList.length < 4 ? null : (
+      {/* {productList.length < 4 ? null : (
         <ButtonDiv>
           <Button
             variant="contained"
@@ -67,7 +59,7 @@ export default function MyWishList() {
             더보기
           </Button>
         </ButtonDiv>
-      )}
+      )} */}
     </MyOrderContainer>
   );
 }
