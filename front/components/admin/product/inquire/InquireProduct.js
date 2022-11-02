@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 // 컴포넌트
 import InquireList from "./InquireList";
-import { ContainerBox } from "../addEdit/AddEditCategory";
 import SearchWord from "./SearchWord";
 import SaleStatus from "./SaleStatus";
 import Category from "./Category";
@@ -38,8 +37,8 @@ export default function SaleProductSearch() {
                 // margin: "2rem",
                 marginRight: "1rem",
                 fontSize: "3.5rem",
-                color: "#3B7CBE",
-                // background: "#3B7CBE",
+                color: "#ffffff",
+                background: "#3B7CBE",
                 borderRadius: "50%",
                 padding: "0.5rem",
               }}
@@ -55,8 +54,8 @@ export default function SaleProductSearch() {
                 // margin: "2rem",
                 marginRight: "1rem",
                 fontSize: "3.5rem",
-                color: "#3B7CBE",
-                // background: "#3B7CBE",
+                color: "#ffffff",
+                background: "#3B7CBE",
                 borderRadius: "50%",
                 padding: "0.5rem",
               }}
@@ -72,8 +71,8 @@ export default function SaleProductSearch() {
                 // margin: "2rem",
                 marginRight: "1rem",
                 fontSize: "3.5rem",
-                color: "#3B7CBE",
-                // background: "#3B7CBE",
+                color: "#ffffff",
+                background: "#3B7CBE",
                 borderRadius: "50%",
                 padding: "0.5rem",
               }}
