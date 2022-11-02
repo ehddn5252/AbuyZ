@@ -3,6 +3,7 @@ package com.tasteshopping.order.entity;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.review.entity.Reviews;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -46,6 +47,10 @@ public class Orders {
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="coupones_uid")
     Coupons coupon;
+
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    @JoinColumn(name="orders_uid")
+    private Reviews review;
 
     public OrderDto toDto() {
         OrderDto orderDto = new OrderDto();

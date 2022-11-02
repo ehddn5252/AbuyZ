@@ -3,7 +3,6 @@ package com.tasteshopping.order.service;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
-import com.tasteshopping.order.dto.OrderListUidReqDto;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderListRepository;
@@ -11,10 +10,8 @@ import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,5 +62,31 @@ public class OrderListServiceImpl implements OrderListService {
             }
         }
         return new BaseRes(204, "orderLists not found",null);
+    }
+
+    @Override
+    public BaseRes getNoReviewOrder(String email) {
+        List<OrderLists> orderListsList = orderListRepository.findAll();
+        Optional<Users> loginUser = userRepository.findByEmail(email);
+        List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
+        for(int i = 0; i< orderListsList.size(); ++i) {
+            if (loginUser.isPresent()) {
+                if (loginUser.get() != orderListsList.get(i).getUser()) {
+                    continue;
+                }
+            }
+            List<Orders> ordersList = orderRepository.findByOrderList(orderListsList.get(i));
+            for (int j = 0; j < ordersList.size(); ++j) {
+                if (ordersList.get(j).getReview() == null) {
+                    orderDtoList.add(ordersList.get(j).toDto());
+                }
+            }
+
+        }
+        if (orderDtoList != null) {
+            return new BaseRes(200, "get product list success", orderDtoList);
+        } else {
+            return new BaseRes(204, "product not found", orderDtoList);
+        }
     }
 }
