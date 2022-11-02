@@ -1,53 +1,65 @@
 import https from "./https.js";
 
 // 찜하기
-export function regiswish(product_uid) {
-  const accessToken = localStorage.getItem("access-Token");
+export async function regiswish(product_uid) {
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-  https.get(`/wish/${product_uid}`).then((response) => {
-    if (response === 200) {
-      console.log("찜하기 성공", response);
-      return response;
-    } else {
-      console.log("찜하기 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.get(`/wish/${product_uid}`).then((response) => {
+      if (response.status === 200) {
+        console.log("찜하기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("찜하기 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
 // 찜 목록 조회
-export function listwish() {
-  const accessToken = localStorage.getItem("access-Token");
+export async function listwish() {
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-  https.get("/wish/list").then((response) => {
-    if (response === 200) {
-      console.log("찜 목록 조회 완료", response);
-      return response;
-    } else {
-      console.log("찜 목록 조회 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.get("/wish/list").then((response) => {
+      if (response.status === 200) {
+        console.log("찜 목록 조회 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("찜 목록 조회 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
 // 찜 삭제
-export function delwish(wishDto) {
-  const accessToken = localStorage.getItem("access-Token");
+export async function delwish(wishDto) {
+  const accessToken = localStorage.getItem("access-token");
   https.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-  https
-    .delete("/wish", {
-      wish_uid: wishDto.wish_uid,
-    })
-    .then((response) => {
-      if (response === 200) {
-        console.log("찜 삭제 성공", response);
-        return response;
-      } else {
-        console.log("찜 삭제 실패", response);
-        return response;
-      }
-    });
+  return new Promise((resolve) => {
+    https
+      .delete("/wish", {
+        wish_uid: wishDto.wish_uid,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("찜 삭제 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("찜 삭제 실패", response);
+          resolve(response);
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
 }
