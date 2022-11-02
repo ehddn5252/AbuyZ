@@ -36,7 +36,8 @@ public class OrderController {
     }
 
     @GetMapping("/{order_lists_uid}")
-    public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email, @PathVariable Integer order_lists_uid) {
+    public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email,
+                                                          @PathVariable Integer order_lists_uid) {
         return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
     }
 
@@ -46,21 +47,30 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
+    @GetMapping("/date")
+    public ResponseEntity<BaseRes> getOrdersFromOrderListGroupByDate(@AuthenticationPrincipal String email) {
+        BaseRes baseRes = orderListService.getOrdersGroupByDate(email);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
+
 
     @PutMapping("/status")
-    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,@RequestBody OrderUidReqDto orderUidReqDto){
+    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,
+                                                @RequestBody OrderUidReqDto orderUidReqDto){
         return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(orderUidReqDto.getOrder_uid(),orderUidReqDto.getStatus()));
     }
 
     @PostMapping("/cancel")
-    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email, @RequestBody OrderUidReqDto orderCancelReqDto){
+    public ResponseEntity<BaseRes> cancelPay(@AuthenticationPrincipal String email,
+                                             @RequestBody OrderUidReqDto orderCancelReqDto){
         // ORDER의 상태에는 PROCESS,
         // 관리자가 취소 누르는 것
         return ResponseEntity.status(HttpStatus.OK).body(orderService.orderCancel(orderCancelReqDto.getOrder_uid()));
     }
 
     @PostMapping("/cancel-register")
-    public ResponseEntity<BaseRes> cancelRegister(@AuthenticationPrincipal String email, @RequestBody AdminOrderCancelReqDto adminOrderCancelReqDto){
+    public ResponseEntity<BaseRes> cancelRegister(@AuthenticationPrincipal String email,
+                                                  @RequestBody AdminOrderCancelReqDto adminOrderCancelReqDto){
         // 사용자가 취소 누르는 것 ( order 의 status를 취소 요청으로(CANCEL_REQUEST)
         return ResponseEntity.status(HttpStatus.OK).body(orderService.orderRegisterCancel(adminOrderCancelReqDto.getOrder_uids()));
     }
@@ -77,8 +87,17 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }
 
+//    @PostMapping("/basic")
+//    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,
+//                                            @RequestBody CartReqDto cartReqDto){
+//        CartDto cartDto = cartReqDto.toDto();
+//        orderService.basicPay(email,cartDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
+//    }
+
     @PostMapping("/basic")
-    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,@RequestBody CartReqDto cartReqDto){
+    public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,
+                                            @RequestBody CartReqDto cartReqDto){
         CartDto cartDto = cartReqDto.toDto();
         orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));

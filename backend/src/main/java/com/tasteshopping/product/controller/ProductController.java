@@ -40,7 +40,8 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @PostMapping("/bo-search")
-    public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email, @RequestBody BoSearchReqDto boSearchReqDto) {
+    public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email,
+                                            @RequestBody BoSearchReqDto boSearchReqDto) {
         System.out.println("=============================");
         System.out.println(boSearchReqDto.getName());
         System.out.println(boSearchReqDto.getName());
@@ -98,7 +99,8 @@ public class ProductController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,@RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,
+                                                @RequestBody ProductUidReqDto productUidReqDto) {
 
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.modifyStatus(email,productUidReqDto.getProducts_uid(), productUidReqDto.getStatus()));
@@ -156,7 +158,8 @@ public class ProductController {
 
 
     @DeleteMapping()
-    public ResponseEntity<BaseRes> delete(@AuthenticationPrincipal String email, @RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> delete(@AuthenticationPrincipal String email,
+                                          @RequestBody ProductUidReqDto productUidReqDto) {
         Integer uid = productUidReqDto.getProducts_uid();
         try {
             productService.deleteProduct(uid);
@@ -167,7 +170,8 @@ public class ProductController {
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email, @RequestPart ProductCreateReqDto productCreateReqDto,
+    public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email,
+                                          @RequestPart ProductCreateReqDto productCreateReqDto,
                                           @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
         ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto, multipartFiles);
