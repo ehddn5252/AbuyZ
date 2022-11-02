@@ -40,6 +40,13 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
     }
 
+    @GetMapping("/no-review")
+    public ResponseEntity<BaseRes> getNoReviewOrdersFromOrderList(@AuthenticationPrincipal String email) {
+        BaseRes baseRes = orderListService.getNoReviewOrder(email);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
+
+
     @PutMapping("/status")
     public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,@RequestBody OrderUidReqDto orderUidReqDto){
         return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(orderUidReqDto.getOrder_uid(),orderUidReqDto.getStatus()));
