@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import Link from "@mui/material/Link";
@@ -12,12 +12,34 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
+
+// API
+import { getMyInfo } from "../../pages/api/user";
+
 export default function Nav() {
+  const [username, setUsername] = useState("");
+
+  // 임시비밀번호 전송
+  const getName = async () => {
+    const res = await getMyInfo();
+    setUsername(res.data.name);
+  };
+  useEffect(() => {
+    const token = sessionStorage.getItem("access-token");
+    if (token) {
+      getName();
+    }
+  }, []);
+
   return (
     <Container>
       <NavContainer>
         <UserBox>
-          <UserLink href="/login">로그인</UserLink>
+          {username ? (
+            <UserLink href="/mypage">{username}님 환영합니다.</UserLink>
+          ) : (
+            <UserLink href="/login">로그인</UserLink>
+          )}
           <UserLink href="/service" sx={{ marginLeft: "1rem" }}>
             고객센터
           </UserLink>
