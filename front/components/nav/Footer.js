@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import Grid from "@mui/material/Grid";
@@ -7,7 +7,19 @@ import Grid from "@mui/material/Grid";
 // StyledComponents
 import styled from "@emotion/styled";
 
+// recoil
+import { useRecoilState } from "recoil";
+import { pageNameState } from "../../states";
+
 export default function Footer() {
+  // 윈도우 주소
+  const [locationUrl, setLocationUrl] = useRecoilState(pageNameState);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    setLocationUrl(path);
+  }, []);
+
   return (
     <MainContainer>
       <FooterContent container>
