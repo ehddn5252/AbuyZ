@@ -2,13 +2,11 @@ package com.tasteshopping.order.entity;
 
 import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.user.entity.Users;
-import com.tasteshopping.wish.entity.WishLists;
 import lombok.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,8 +44,6 @@ public class OrderLists {
 
     String Status;
 
-    @OneToMany(mappedBy = "orderList")
-    private List<Orders> orders = new ArrayList<>();
 
     public OrderListDto toDto(){
         OrderListDto orderListDto = new OrderListDto();
