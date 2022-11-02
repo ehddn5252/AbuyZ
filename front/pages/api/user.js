@@ -56,19 +56,23 @@ export async function getMyInfo() {
 }
 
 // 회원 탈퇴
-export function withdrawal() {
+export async function withdrawal() {
   // Header에 토큰 집어넣기
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
-  https.put("/user/withdrawal").then((response) => {
-    if (response === 200) {
-      console.log("회원 탈퇴 성공", response);
-      return response;
-    } else {
-      console.log("회원 탈퇴 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.put("/user/withdrawal").then((response) => {
+      if (response.status === 200) {
+        console.log("회원 탈퇴 여부", response.data.message);
+        resolve(response.data);
+      } else {
+        console.log("회원 탈퇴 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 

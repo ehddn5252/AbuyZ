@@ -14,7 +14,7 @@ import styled from "styled-components";
 
 // 하위 Components
 import PasswordChangeModal from "./PasswordChangeModal";
-
+import { withdrawal } from "../../pages/api/user";
 export default function MyinfoChange() {
   const [userId, setUserId] = useState("kjmk1007");
   const [userName, setUserName] = useState("권도건");
@@ -26,12 +26,8 @@ export default function MyinfoChange() {
   const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // const changePhoneNumber = () => {
-  //   if (checkPhoneNumber === false) {
-  //     setCheckPhoneNumber(true);
-  //   } else {
-  //     setCheckPhoneNumber(false);
-  //   }
+  // const userwithdrawal = async () => {
+  //   const res = await withdrawal();
   // };
 
   const showModal = () => {
