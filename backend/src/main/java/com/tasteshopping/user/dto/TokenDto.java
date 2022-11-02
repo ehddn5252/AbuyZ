@@ -9,4 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 public class TokenDto {
     String access_token;
+    String type;
 }

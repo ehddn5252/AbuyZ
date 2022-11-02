@@ -32,13 +32,16 @@ public class TokenProvider implements InitializingBean {
     private final String secret;
     private final long tokenValidityInMilliseconds;
 
+    private final long refreshTokenValidityInMilliseconds;
     private Key key;
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
     }
 
     // 생성자에서 빈이 생성되고 주입을 받은 후에, secret 값을 Base64 Decode해서 key 변수에 할당한다
@@ -67,7 +70,21 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(validity)
                 .compact();
     }
+    public String createRefreshToken(Authentication authentication){
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
 
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
     // 토큰을 파라미터로 받아서, 토큰에 담긴 정보를 이용해 Authentication 객체를 리턴하는 메서드
     public Authentication getAuthentication(String token) {
 
@@ -102,6 +119,7 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
+            throw e;
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
