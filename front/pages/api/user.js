@@ -1,5 +1,37 @@
 import https from "./https.js";
 
+const setCookie = (key, value, expiredDays) => {
+  // 자동 삭제 날짜를 지정하는 코드
+  let today = new Date();
+  today.setDate(today.getDate() + expiredDays);
+  // 쿠키에 값을 저장
+  document.cookie =
+    key +
+    "=" +
+    JSON.stringify(value) +
+    "; path=/; expires=" +
+    today.toGMTString() +
+    ";";
+};
+
+const getCookie = (key) => {
+  //쿠키는 한번에 모두 불러와지기 때문에 사용할때 ';'나눠서 선택적으로 가져와야한다.
+  const cookies = document.cookie.split(`; `).map((el) => el.split("="));
+  let getItem = [];
+
+  for (let i = 0; i < cookies.length; i++) {
+    // 해당하는 key를 갖는 쿠키데이터를 찾기위해 반복문을 사용했는데 다른방법도 연구해봐야겠다.
+    if (cookies[i][0] === key) {
+      getItem.push(cookies[i][1]);
+      break;
+    }
+  }
+
+  if (getItem.length > 0) {
+    return JSON.parse(getItem[0]);
+  }
+};
+
 // 회원가입
 export async function signup(signDto) {
   return new Promise((resolve) => {
@@ -20,13 +52,13 @@ export async function login(loginDto) {
   return new Promise((resolve) => {
     https.post("/user/login", loginDto).then((response) => {
       if (response.status === 200) {
-        console.log("로그인 완료", response.data.data.access_token);
+        console.log("로그인 완료", response.data);
         // 토큰 저장
         window.sessionStorage.setItem(
           "access-token",
           response.data.data.access_token
         );
-
+        setCookie("refresh_token", response.data.data.refresh_token, 30);
         resolve(response);
       } else {
         console.log("로그인 실패", response);
@@ -117,7 +149,7 @@ export async function emailCheck(emailDto) {
 // 비밀번호 변경
 export function chnagePw(pwDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-Token");
+  const accessToken = sessionStorage.getItem("access-Token");
   https.defaults.headers.common["access_token"] = accessToken;
 
   https
@@ -171,80 +203,101 @@ export async function checkEmail(email) {
 }
 
 // 주소 추가
-export function addAddress(addressDto) {
+export async function addAddress(addressDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
-
-  https
-    .post("/user/addresses", {
-      nickname: addressDto.nickname,
-      address: addressDto.address,
-      detailAddress: addressDto.detailAddress,
-      postalCode: addressDto.postalCode,
-      recipient: addressDto.recipient,
-      contact1: addressDto.contact1,
-      contact2: addressDto.contact2,
-      note: addressDto.note,
-    })
-    .then((response) => {
-      if (response === 200) {
+  return new Promise((resolve) => {
+    https.post("/user/addresses", addressDto).then((response) => {
+      if (response.status === 200) {
         console.log("주소 추가 성공", response);
-        return response;
+        resolve(response);
       } else {
         console.log("주소 추가 실패", response);
-        return response;
+        resolve(response);
       }
     });
+  }).catch((e) => {
+    console.log(e);
+  });
 }
 
 // 주소 조회
-export function getAddress() {
+export async function getAddress() {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
-
-  https.get("/user/addresses").then((response) => {
-    if (response === 200) {
-      console.log("주소 조회 성공", response);
-      return response;
-    } else {
-      console.log("주소 조회 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.get("/user/addresses").then((response) => {
+      if (response.status === 200) {
+        console.log("주소 조회 성공", response);
+        resolve(response);
+      } else {
+        console.log("주소 조회 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
 // 주소 삭제
-export function delAddress(number) {
+export async function delAddress(number) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
-
-  https.delete(`/user/addresses/${number}`).then((response) => {
-    if (response === 200) {
-      console.log("주소 삭제 성공", response);
-      return response;
-    } else {
-      console.log("주소 삭제 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.delete(`/user/addresses/${number}`).then((response) => {
+      if (response.status === 200) {
+        console.log("주소 삭제 성공", response);
+        resolve(response);
+      } else {
+        console.log("주소 삭제 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+// 회원정보 수정
+export async function changeInfo(userDto) {
+  // Header에 토큰 집어넣기
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.put("/user/change-info", userDto).then((response) => {
+      if (response.status === 200) {
+        console.log("회원 수정 성공", response);
+        resolve(response);
+      } else {
+        console.log("회원 수정 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
 // 주소 수정
-export function changeAddress(addressDto) {
+export async function changeAddress(addressDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
-  https.put("/user/addresses", addressDto).then((response) => {
-    if (response === 200) {
-      console.log("주소 수정 성공", response);
-      return response;
-    } else {
-      console.log("주소 수정 실패", response);
-      return response;
-    }
+  return new Promise((resolve) => {
+    https.put("/user/addresses", addressDto).then((response) => {
+      if (response.status === 200) {
+        console.log("주소 수정 성공", response);
+        resolve(response);
+      } else {
+        console.log("주소 수정 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }
 
@@ -261,4 +314,52 @@ export async function findPW(pwDto) {
       }
     });
   });
+}
+
+// Logout
+export async function logout() {
+  // Header에 토큰 집어넣기
+  const refreshToken = getCookie("refresh_token");
+  https.defaults.headers.common["refresh_token"] = refreshToken;
+  return new Promise((resolve) => {
+    https.get("user/log-out").then((response) => {
+      if (response.status === 200) {
+        sessionStorage.removeItem("access_token");
+        console.log("로그아웃 통신 완료", response);
+        resolve(response);
+      } else {
+        resolve(response);
+      }
+    });
+  });
+}
+
+// token 재요청
+export async function refresh() {
+  // Header에 토큰 집어넣기
+  const accessToken = sessionStorage.getItem("access-token");
+  if (accessToken) {
+    const refreshToken = getCookie("refresh_token");
+    https.defaults.headers.common["refresh_token"] = refreshToken;
+    return new Promise((resolve) => {
+      https.get("/user/refresh").then((response) => {
+        if (response.status === 200) {
+          console.log("재발급 완료", response.data);
+          // 토큰 저장
+          window.sessionStorage.setItem(
+            "access-token",
+            response.data.data.access_token
+          );
+          setCookie("refresh_token", response.data.data.refresh_token, 30);
+          resolve(response.data);
+        } else {
+          console.log("재발급 실패", response);
+          resolve(response);
+        }
+      });
+    });
+  } else {
+    console.log("토큰없음");
+    return null;
+  }
 }

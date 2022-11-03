@@ -14,7 +14,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login } from "./api/user.js";
+import { login, refresh } from "./api/user.js";
 import https from "./api/https.js";
 
 // StyledComponent
@@ -34,9 +34,14 @@ export default function Login() {
     };
     console.log(LoginDto);
     const res = await login(LoginDto);
-    console.log(res.PromiseResult);
+    console.log(res);
     if (res.status === 200) {
-      router.push("/");
+      // 일정시간마다 토큰 재발급
+      if (res.data.data.type == "[ADMIN]") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     }
     console.log(res);
   };
