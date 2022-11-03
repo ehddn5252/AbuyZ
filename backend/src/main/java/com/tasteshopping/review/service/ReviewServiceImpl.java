@@ -43,7 +43,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
     private final OrderRepository orderRepository;
-    private final InventoryRepository inventoryRepository;
     private final ProductOptionRepository productOptionRepository;
 
 
@@ -52,10 +51,6 @@ public class ReviewServiceImpl implements ReviewService {
         Optional<Users> findUser = userRepository.findByEmail(email);
         Optional<Products> product = productRepository.findById(dto.getProduct_uid());
         Optional<Orders> order = orderRepository.findById(dto.getOrder_uid());
-        // 이미 작성된 리뷰가 있는지 확인
-        if(reviewRepository.existsByProductAndUser(product.get(),findUser.get())){
-            return new BaseRes(204, "리뷰 작성 실패 - 이미 작성된 리뷰가 있음", null);
-        }
         Reviews review = dto.toEntity(dto, findUser.get(), product.get(), imagePath, order.get());
         reviewRepository.save(review);
         return new BaseRes(200, "리뷰 작성 성공", null);
