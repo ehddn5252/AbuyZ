@@ -13,13 +13,13 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     ProductOptionRepository productOptionRepository;
 
     @Override
-    public void createProductOptionList(Products p,
+    public ProductOptions createProductOptionList(Products p,
                                         String name,
                                         String value) {
         ProductOptions productOptionList = new ProductOptions();
         productOptionList.setName(name);
         productOptionList.setValue(value);
         productOptionList.setProduct(p);
-        productOptionRepository.save(productOptionList);
+        return productOptionRepository.save(productOptionList);
     }
 }

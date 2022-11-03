@@ -40,9 +40,25 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public ResponseDto signUp(UserDto userDto, LoginType loginType) {
+
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Users user = userDto.toEntity(loginType);
-        userRepository.save(user);
+        Users users = userRepository.save(user);
+
+        log.warn(users.getEmail());
+
+        if(userDto.getAddress()!=null){
+            UserAddresses userAddresses = UserAddresses.builder()
+                    .address(userDto.getAddress())
+                    .detailAddress(userDto.getDetailAddress())
+                    .recipient(userDto.getName())
+                    .postalCode("")
+                    .contact(userDto.getPhoneNumber())
+                    .user(users)
+                    .build();
+            userAddressRepository.save(userAddresses);
+        }
+
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료");
         return responseDto;
     }
@@ -256,14 +272,11 @@ public class UserServiceImpl implements UserService{
         }
 
         UserAddresses userAddresses = UserAddresses.builder()
-                .nickname(userAddress.getNickname())
                 .address(userAddress.getAddress())
                 .detailAddress(userAddress.getDetailAddress())
                 .postalCode(userAddress.getPostalCode())
                 .recipient(userAddress.getRecipient())
-                .contact1(userAddress.getContact1())
-                .contact2(userAddress.getContact2())
-                .note(userAddress.getNote())
+                .contact(userAddress.getContact())
                 .user(user.get())
                 .build();
         userAddressRepository.save(userAddresses);
@@ -312,7 +325,7 @@ public class UserServiceImpl implements UserService{
     public ResponseDto modifyAddress(String email, int address_uid, UserAddressDto userAddressReqDto) {
         ResponseDto responseDto = new ResponseDto();
 
-        Optional<UserAddresses> userAddresses = userAddressRepository.findByUidAndUser(address_uid,email);
+        Optional<UserAddresses> userAddresses = userAddressRepository.findByUidAndUserEmail(address_uid,email);
 
         if(!userAddresses.isPresent()){
             responseDto.setData(new ResultDto(false));
@@ -356,9 +369,7 @@ public class UserServiceImpl implements UserService{
         String accessToken = request.getHeader("access_token");
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         String email = authentication.getPrincipal().toString();
-        String refreshToken = redisService.getData(email);
         redisService.deleteData(email);
-        redisService.addElement("blacklist",refreshToken);
         redisService.addElement("blacklist",accessToken);
     }
 }

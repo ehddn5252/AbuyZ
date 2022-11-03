@@ -21,9 +21,6 @@ public class UserAddresses {
     @JoinColumn(name="users_uid")
     Users user;
 
-    @Column
-    private String nickname;
-
     @Column(nullable = false)
     private String address;
 
@@ -37,21 +34,12 @@ public class UserAddresses {
     private String recipient;
 
     @Column
-    private String contact1;
-
-    @Column
-    private String contact2;
-
-    @Column
-    private String note;
+    private String contact;
 
     public void update(UserAddressDto userAddress){
         this.address = userAddress.getAddress();
         this.detailAddress = userAddress.getDetailAddress();
-        this.contact1 = userAddress.getContact1();
-        this.contact2 = userAddress.getContact2();
-        this.nickname = userAddress.getNickname();
-        this.note = userAddress.getNote();
+        this.contact = userAddress.getContact();
         this.postalCode = userAddress.getPostalCode();
         this.recipient = userAddress.getRecipient();
     }
@@ -61,10 +49,7 @@ public class UserAddresses {
                 .uid(this.uid)
                 .address(this.address)
                 .detailAddress(this.detailAddress)
-                .contact1(this.contact1)
-                .contact2(this.contact2)
-                .note(this.note)
-                .nickname(this.nickname)
+                .contact(this.contact)
                 .postalCode(this.postalCode)
                 .recipient(this.recipient)
                 .build();

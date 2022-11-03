@@ -1,10 +1,13 @@
 package com.tasteshopping.review.dto;
 
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.review.entity.Reviews;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -20,7 +23,7 @@ public class ReviewResDto {
     private Date date;
     private String imgUrl;
 //    private boolean report;  // 신고여부
-    private String[] options; // 옵션
+    private List<HashMap<String,String>> options; // 옵션
     private int likeCount; //좋아요개수
     private boolean like; //로그인한 당사자가 좋아요했는지
 
@@ -30,7 +33,7 @@ public class ReviewResDto {
     private Date replyDate; //답글시간
 
 
-    public static ReviewResDto from(Reviews reviews, boolean like, int likeCount, boolean reply, Reviews replyReview){
+    public static ReviewResDto from(Reviews reviews, boolean like, int likeCount, boolean reply, Reviews replyReview, List<HashMap<String,String>> options){
         if(reply){
             return ReviewResDto.builder()
                     .id(reviews.getUid())
@@ -39,7 +42,7 @@ public class ReviewResDto {
                     .rating(reviews.getRating())
                     .date(reviews.getDate())
                     .imgUrl(reviews.getImgUrl())
-                    .options(new String[]{"블랙", "M사이즈"}) ////////////////////////////////// 이거수정하기
+                    .options(options)
                     .likeCount(likeCount)
                     .like(like)
                     .reply(reply)
@@ -54,12 +57,10 @@ public class ReviewResDto {
                     .rating(reviews.getRating())
                     .date(reviews.getDate())
                     .imgUrl(reviews.getImgUrl())
-                    .options(new String[]{"블랙", "M사이즈"}) ////////////////////////////////// 이거수정하기
+                    .options(options)
                     .likeCount(likeCount)
                     .like(like)
                     .reply(reply)
-//                    .replyContent(replyReview.getContent())
-//                    .replyDate(replyReview.getDate())
                     .build();
         }
 
