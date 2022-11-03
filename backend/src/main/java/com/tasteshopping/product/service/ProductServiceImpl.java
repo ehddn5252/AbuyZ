@@ -265,35 +265,72 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
-        ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
-
+        //
+        // 개별 옵션, 재고를 만들어 줘야 함
+        
         LinkedHashMap<String, String> options = productCreateDto.getOptions();
-        // 상품 옵션 리스트 생성 완료
-        int maxUid = 1;
-        Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
-        if (maxOptionOptional.isPresent()) {
-            maxUid = maxOptionOptional.get();
+        // null 이면 개별 옵션에 name, value에 옵션 없음, 옵션 없음 넣어주고 inventory 에도 옵션가 0, 가격은 따로
+        if (options==null){
+            ProductOptions productOptions = productOptionService.createProductOptionList(pp,"x","x");
+            Inventories inventory = new Inventories();
+            inventory.setCount(productCreateDto.getCount());
+            inventory.setPrice(0);
+            inventory.setProduct(pp);
+            inventory.setProductOptionList(Integer.toString(productOptions.getUid()));
+            inventoryRepository.save(inventory);
         }
-        // uid는 판매자가 여러명일 때는 uid를 통한 값 추가를 하면 안된다.(컬럼하나 더만들기)
-        int start = 0;
-        for (String key : options.keySet()) {
-            String[] sList = options.get(key).split(",");
-            optionKeyValueNum.add(sList.length);
-            optionValueUidOuterList.add(new LinkedList<String>());
-            LinkedList<String> l = optionValueUidOuterList.get(start);
-            for (int i = 0; i < sList.length; ++i) {
-                maxUid += 1; // 다음 uid 를 저장해야한다.
-                l.add(Integer.toString(maxUid));
-                productOptionService.createProductOptionList(pp, key, sList[i].trim());
+        else {
+            ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
+            // 상품 옵션 리스트 생성 완료
+            int maxUid = 1;
+            Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
+            if (maxOptionOptional.isPresent()) {
+                maxUid = maxOptionOptional.get();
             }
-            optionValueUidOuterList.set(start, l);
-            start += 1;
+
+            int start = 0;
+            ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
+            for (String key : options.keySet()) {
+                String[] sList = options.get(key).split(",");
+                optionKeyValueNum.add(sList.length);
+                optionValueUidOuterList.add(new LinkedList<String>());
+                LinkedList<String> l = optionValueUidOuterList.get(start);
+                for (int i = 0; i < sList.length; ++i) {
+                    maxUid += 1; // 다음 uid 를 저장해야한다.
+                    l.add(Integer.toString(maxUid));
+                    productOptionService.createProductOptionList(pp, key, sList[i].trim());
+                }
+                optionValueUidOuterList.set(start, l);
+                start += 1;
+            }
+
+            LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList, optionValueUidOuterList.get(0), 1);
+            // 재고 생성
+            int cartesianProductNum = 1;
+            for (int i = 0; i < optionKeyValueNum.size(); ++i) {
+                cartesianProductNum *= optionKeyValueNum.get(i);
+            }
+
+            for (int i = 0; i < cartesianProductNum; ++i) {
+                // 칼테시안 곱의 수만큼 할당
+                Inventories inventory = new Inventories();
+                inventory.setCount(0);
+                inventory.setPrice(0);
+                inventory.setProduct(pp);
+                inventory.setProductOptionList(optionListResult.get(i));
+                inventoryRepository.save(inventory);
+            }
         }
 
-        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList, optionValueUidOuterList.get(0), 1);
+        // save keyword lists
+        String[] keywordList = productCreateDto.getKeywords().split(",");
+        for (int i = 0; i < keywordList.length; ++i) {
+            productKeywordService.createProductKeyword(keywordList[i].trim(), pp.getUid());
+        }
+        return new BaseRes(200, "상품 등록 완료", pp.getUid());
+    }
 
-        // 재고 생성
+    public ArrayList<Integer> createInventoryList(ArrayList<Integer> optionKeyValueNum,Products products, LinkedList<String> optionListResult){
         int cartesianProductNum = 1;
         for (int i = 0; i < optionKeyValueNum.size(); ++i) {
             cartesianProductNum *= optionKeyValueNum.get(i);
@@ -304,18 +341,118 @@ public class ProductServiceImpl implements ProductService {
             Inventories inventory = new Inventories();
             inventory.setCount(0);
             inventory.setPrice(0);
-            inventory.setProduct(pp);
+            inventory.setProduct(products);
             inventory.setProductOptionList(optionListResult.get(i));
             inventoryRepository.save(inventory);
         }
-
-        // save keyword lists
-        String[] keywordList = productCreateDto.getKeywords().split(",");
-        for (int i = 0; i < keywordList.length; ++i) {
-            productKeywordService.createProductKeyword(keywordList[i].trim(), pp.getUid());
-        }
-        return new BaseRes(200, "상품 등록 완료", pp.getUid());
+        return null;
     }
+
+
+
+//    @Override
+//    @Transactional
+//    public BaseRes createProductRelated(ProductCreateDto productCreateDto,
+//                                        MultipartFile[] multipartFiles,
+//                                        MultipartFile descriptionImg) {
+//        /*
+//            param 이 넘겨오면 해야할 것
+//            1. Products product 를 생성한다. ok
+//            2. product_uid 에 맞는 상품 option list를 생성한다. ok
+//            3. 상품 옵션 리스트에 따른 상품 옵션을 생성
+//            4. 상품 옵션에 따른 상품 재고 생성
+//            5. product_uid 에 맞는 product_keywords 를 생성한다.
+//         */
+//
+//        Products pp = registerProduct(productCreateDto);
+//
+//        // save imgs
+//        int count = 0;
+//        String imagePath = null; //파일서버에업로드후 img_url 데려오기
+//        BaseRes res = null;
+//        if (descriptionImg != null) {
+//            try {
+//                imagePath = awsS3Service.uploadImgFile(descriptionImg);
+//                pp.setDescriptionImg(imagePath);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                res = new BaseRes(202, "파일 업로드 에러", null);
+//                return res;
+//            }
+//        }
+//        if (multipartFiles == null) {
+//            productRepository.save(pp);
+//        } else {
+//            for (int i = 0; i < multipartFiles.length; ++i) {
+//                try {
+//                    imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+//                    if (count == 0) {
+//                        //save product
+//                        count += 1;
+//                        pp.setRepImg(imagePath);
+//                        productRepository.save(pp);
+//                    } else {
+//                        productPictureService.createProductPicture(pp.getUid(), imagePath);
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    res = new BaseRes(202, "파일 업로드 에러", null);
+//                    return res;
+//                }
+//            }
+//        }
+//
+//        ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
+//        ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
+//
+//        LinkedHashMap<String, String> options = productCreateDto.getOptions();
+//        // 상품 옵션 리스트 생성 완료
+//        int maxUid = 1;
+//        Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
+//        if (maxOptionOptional.isPresent()) {
+//            maxUid = maxOptionOptional.get();
+//        }
+//        // uid는 판매자가 여러명일 때는 uid를 통한 값 추가를 하면 안된다.(컬럼하나 더만들기)
+//        int start = 0;
+//        for (String key : options.keySet()) {
+//            String[] sList = options.get(key).split(",");
+//            optionKeyValueNum.add(sList.length);
+//            optionValueUidOuterList.add(new LinkedList<String>());
+//            LinkedList<String> l = optionValueUidOuterList.get(start);
+//            for (int i = 0; i < sList.length; ++i) {
+//                maxUid += 1; // 다음 uid 를 저장해야한다.
+//                l.add(Integer.toString(maxUid));
+//                productOptionService.createProductOptionList(pp, key, sList[i].trim());
+//            }
+//            optionValueUidOuterList.set(start, l);
+//            start += 1;
+//        }
+//
+//        LinkedList<String> optionListResult = getInventoryList(optionValueUidOuterList, optionValueUidOuterList.get(0), 1);
+//
+//        // 재고 생성
+//        int cartesianProductNum = 1;
+//        for (int i = 0; i < optionKeyValueNum.size(); ++i) {
+//            cartesianProductNum *= optionKeyValueNum.get(i);
+//        }
+//
+//        for (int i = 0; i < cartesianProductNum; ++i) {
+//            // 칼테시안 곱의 수만큼 할당
+//            Inventories inventory = new Inventories();
+//            inventory.setCount(0);
+//            inventory.setPrice(0);
+//            inventory.setProduct(pp);
+//            inventory.setProductOptionList(optionListResult.get(i));
+//            inventoryRepository.save(inventory);
+//        }
+//
+//        // save keyword lists
+//        String[] keywordList = productCreateDto.getKeywords().split(",");
+//        for (int i = 0; i < keywordList.length; ++i) {
+//            productKeywordService.createProductKeyword(keywordList[i].trim(), pp.getUid());
+//        }
+//        return new BaseRes(200, "상품 등록 완료", pp.getUid());
+//    }
 
 
     public LinkedList<String> getInventoryList(ArrayList<LinkedList<String>> ll, LinkedList<String> resultList, int current) {
