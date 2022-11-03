@@ -22,12 +22,13 @@ import { getMyInfo, logout, refresh } from "../../pages/api/user";
 export default function Nav() {
   const router = useRouter();
   const [username, setUsername] = useState("");
+  const [atoken, setAToken] = useState("");
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
-  let refreshtoken = setInterval(() => {
+  let changtoken = setInterval(() => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
@@ -36,31 +37,65 @@ export default function Nav() {
         console.log("토큰없음");
       }
     }
-  }, 1000 * 60 * 10);
+  }, 1000 * 60 * 20);
   useEffect(() => {
     // 창 닫기시 블랙리스트 추가
     window.addEventListener("unload", async () => {
       await logout();
-
       // 토큰 재발급 함수 삭제
-      clearInterval(refreshtoken);
+      clearInterval(changtoken);
     });
-  }, [username]);
+  }, []);
 
   const Logout = async () => {
-    const res = await logout();
+    await logout();
     // 토큰 재발급 함수 삭제
-    clearInterval(refreshtoken);
+    clearInterval(changtoken);
     router.reload();
   };
 
   useEffect(() => {
-    const token = sessionStorage.getItem("access-token");
-    if (token) {
-      getName();
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) setAToken(accessToken);
     }
   }, [router.pathname]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        getName();
+      }
+    }
+  }, [atoken]);
 
+  const goEvent = () => {
+    router.push("/event");
+  };
+
+  const goMypage = () => {
+    router.push("/mypage");
+  };
+
+  const goHome = () => {
+    router.push("/");
+  };
+
+  const goSearch = () => {
+    router.push("/search");
+  };
+
+  const goLogin = () => {
+    router.push("/login");
+  };
+
+  const goService = () => {
+    router.push("/service");
+  };
+
+  const goBasket = () => {
+    router.push("/basket");
+  };
   return (
     <Container>
       <NavContainer>
@@ -74,16 +109,16 @@ export default function Nav() {
               </TopBox>
             </div>
           ) : (
-            <UserLink href="/login">로그인</UserLink>
+            <UserLink onClick={goLogin}>로그인</UserLink>
           )}
-          <UserLink href="/service" sx={{ marginLeft: "1rem" }}>
+          <UserLink onClick={goService} sx={{ marginLeft: "1rem" }}>
             고객센터
           </UserLink>
         </UserBox>
         <SearchBox>
-          <Link href="/">
+          <div onClick={goHome}>
             <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
-          </Link>
+          </div>
           <SearchPaper component="form">
             <InputBase
               sx={{ ml: 1, flex: 1 }}
@@ -101,28 +136,28 @@ export default function Nav() {
           </SearchPaper>
           <div style={{ display: "flex" }}>
             <IconBox>
-              <Link href="/mypage">
+              <div onClick={goMypage}>
                 <FavoriteBorderOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black" }}
                 />
-              </Link>
+              </div>
             </IconBox>
             <IconBox>
-              <Link href="/mypage">
+              <div onClick={goMypage}>
                 <PersonOutlineOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black" }}
                 />
-              </Link>
+              </div>
             </IconBox>
             <IconBox>
-              <Link href="/basket">
+              <div onClick={goBasket}>
                 <ShoppingBasketOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black", fontWeight: 100 }}
                 />
-              </Link>
+              </div>
             </IconBox>
           </div>
         </SearchBox>
@@ -186,16 +221,16 @@ export default function Nav() {
             </Menu>
           </CategoryTagBox>
           <TagBox>
-            <CategoryTitle href="/search">신상품</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">베스트</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">알뜰 쇼핑</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/event">특가/혜택</CategoryTitle>
+            <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
           </TagBox>
         </CategoryContainer>
       </CategoryBox>
@@ -228,10 +263,13 @@ const UserBox = styled.div`
   margin-top: 1rem;
 `;
 
-const UserLink = styled(Link)`
+const UserLink = styled.p`
+  margin: 0;
   text-decoration: none;
+  margin-left: 0.5rem;
   font-size: 0.8rem;
   color: #aaaaaa;
+  cursor: pointer;
 `;
 
 const TopBox = styled.p`
@@ -311,7 +349,7 @@ const TagBox = styled.li`
   }
 `;
 
-const CategoryTitle = styled(Link)`
+const CategoryTitle = styled.p`
   text-decoration: none;
   padding: 0;
   margin: 0;
