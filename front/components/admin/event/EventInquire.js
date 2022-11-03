@@ -51,8 +51,6 @@ export default function CouponInquire() {
     setAdd(false);
   };
 
-  console.log(add);
-
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
       {/* 쿠폰명 */}
