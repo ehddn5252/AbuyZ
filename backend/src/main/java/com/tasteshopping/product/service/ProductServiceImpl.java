@@ -1,5 +1,6 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -226,13 +227,7 @@ public class ProductServiceImpl implements ProductService {
             5. product_uid 에 맞는 product_keywords 를 생성한다.
          */
 
-        registerProduct(productCreateDto);
-        int productsUid = 1;
-        Optional<Integer> maxUidOptional = getMaxUid();
-        if (maxUidOptional.isPresent()) {
-            productsUid = maxUidOptional.get();
-        }
-        Products pp = productRepository.findById(productsUid).get();
+        Products pp = registerProduct(productCreateDto);
 
         // save imgs
         int count = 0;
@@ -260,7 +255,7 @@ public class ProductServiceImpl implements ProductService {
                         pp.setRepImg(imagePath);
                         productRepository.save(pp);
                     } else {
-                        productPictureService.createProductPicture(productsUid, imagePath);
+                        productPictureService.createProductPicture(pp.getUid(), imagePath);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -317,9 +312,9 @@ public class ProductServiceImpl implements ProductService {
         // save keyword lists
         String[] keywordList = productCreateDto.getKeywords().split(",");
         for (int i = 0; i < keywordList.length; ++i) {
-            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
+            productKeywordService.createProductKeyword(keywordList[i].trim(), pp.getUid());
         }
-        return new BaseRes(200, "상품 등록 완료", null);
+        return new BaseRes(200, "상품 등록 완료", pp.getUid());
     }
 
 
@@ -661,7 +656,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void registerProduct(ProductCreateDto productCreateDto) {
+    public Products registerProduct(ProductCreateDto productCreateDto) {
         String brandName = productCreateDto.getBrandName();
         Optional<Brands> brandsOptional = brandRepository.findByName(brandName);
         Brands brands = null;
@@ -675,7 +670,8 @@ public class ProductServiceImpl implements ProductService {
             smallCategories = smallCategoriesOptional.get();
         }
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
-        productRepository.save(product1);
+        product1.setCreatedDate(UtilService.getDate());
+        return productRepository.save(product1);
     }
 
 
