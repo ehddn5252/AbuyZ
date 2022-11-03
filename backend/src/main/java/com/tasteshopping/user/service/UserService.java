@@ -2,6 +2,8 @@ package com.tasteshopping.user.service;
 
 import com.tasteshopping.user.dto.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface UserService {
     ResponseDto signUp(UserDto userDto,LoginType loginType);
     ResponseDto login(LoginDto loginDto);
@@ -18,5 +20,6 @@ public interface UserService {
     ResponseDto getAddresses(String email);
     ResponseDto deleteAddress(String email,int address_uid);
     ResponseDto modifyAddress(String email, int address_uid, UserAddressDto userAddressReqDto);
-
+    ResponseDto getRefreshToken(HttpServletRequest request);
+    void addBlackList(HttpServletRequest request);
 }

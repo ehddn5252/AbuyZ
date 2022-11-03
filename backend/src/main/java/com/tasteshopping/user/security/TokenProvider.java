@@ -1,9 +1,12 @@
 package com.tasteshopping.user.security;
 
+import com.tasteshopping.common.service.RedisService;
+import com.tasteshopping.user.Exception.BlackListException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,10 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,14 +34,16 @@ public class TokenProvider implements InitializingBean {
 
     private final long refreshTokenValidityInMilliseconds;
     private Key key;
-
+    private final RedisService redisService;
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
-            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds) {
+            @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInMilliseconds,
+            RedisService redisService) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
+        this.redisService = redisService;
     }
 
     // 생성자에서 빈이 생성되고 주입을 받은 후에, secret 값을 Base64 Decode해서 key 변수에 할당한다
@@ -103,6 +105,10 @@ public class TokenProvider implements InitializingBean {
     // 토큰을 파라미터로 받아서 토큰의 유효성 검증
     public boolean validateToken(String token) {
         try {
+            List<String> blackList = redisService.getList("blacklist");
+            if(blackList.contains(token)){
+                throw new BlackListException();
+            }
             // 토큰을 파싱해보고 나오는 예외를 catch하고, 예외가 없으면 true 반환
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -114,7 +120,10 @@ public class TokenProvider implements InitializingBean {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             logger.info("JWT 토큰이 잘못되었습니다.");
+        }catch (BlackListException e){
+            logger.info("사용 불가능한 토큰입니다");
         }
+
         return false;
     }
 
