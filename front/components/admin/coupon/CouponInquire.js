@@ -124,18 +124,21 @@ export default function CouponInquire() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
+                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value="대분류">
+              {/* <MenuItem value="대분류">
                 <em>대분류</em>
-              </MenuItem>
-              <MenuItem value={"식품"}>식품</MenuItem>
-              <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
-              <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
-              <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
-              <MenuItem value={"뷰티"}>뷰티</MenuItem>
+              </MenuItem> */}
+              <MenuItem value={"1"}>식품</MenuItem>
+              <MenuItem value={"2"}>생활/건강</MenuItem>
+              <MenuItem value={"3"}>가구/인테리어</MenuItem>
+              <MenuItem value={"4"}>반려/도서/취미</MenuItem>
+              <MenuItem value={"5"}>뷰티</MenuItem>
+              <MenuItem value={"6"}>유아동</MenuItem>
+              <MenuItem value={"7"}>가전</MenuItem>
+              <MenuItem value={"8"}>스포츠/레저/자동차</MenuItem>
             </Select>
           </FormControl>
         </CategoryBox>

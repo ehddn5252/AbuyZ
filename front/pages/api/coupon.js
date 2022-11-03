@@ -22,9 +22,10 @@ export async function createcoupon(couponDto) {
           console.log("쿠폰 생성 실패", response);
           resolve(response);
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
-  }).catch((e) => {
-    console.log(e);
   });
 }
 
