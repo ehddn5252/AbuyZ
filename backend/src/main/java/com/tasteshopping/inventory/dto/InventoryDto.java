@@ -1,5 +1,6 @@
 package com.tasteshopping.inventory.dto;
 
+import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 
 @Getter
@@ -13,6 +14,7 @@ public class InventoryDto {
     Integer uid;
     Integer price;
     Integer productsUid;
+    ProductDto productDto;
     Integer count;
     String productOptionUidString;
     String[] productOptions;
