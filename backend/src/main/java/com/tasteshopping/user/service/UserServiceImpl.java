@@ -324,6 +324,7 @@ public class UserServiceImpl implements UserService{
         responseDto.setMessage("수정 성공");
         return responseDto;
     }
+    @Override
     public ResponseDto getRefreshToken(HttpServletRequest request){
 
         String refreshToken = request.getHeader("refresh_token");
@@ -347,5 +348,15 @@ public class UserServiceImpl implements UserService{
         ResponseDto responseDto = new ResponseDto(tokenDto,"재발급 성공");
 
         return responseDto;
+    }
+    @Override
+    public void addBlackList(HttpServletRequest request){
+        String accessToken = request.getHeader("access_token");
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String email = authentication.getPrincipal().toString();
+        String refreshToken = redisService.getData(email);
+        redisService.deleteData(email);
+        redisService.addElement("blacklist",refreshToken);
+        redisService.addElement("blacklist",accessToken);
     }
 }

@@ -101,4 +101,9 @@ public class UserController {
             return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
         }
     }
+    @GetMapping("/log-out")
+    public void addBlackList(HttpServletRequest request){
+        userService.addBlackList(request);
+        return;
+    }
 }
