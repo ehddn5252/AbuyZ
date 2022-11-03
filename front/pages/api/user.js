@@ -150,21 +150,21 @@ export async function emailCheck(emailDto) {
 export async function chnagePw(pwDto) {
   // Header에 토큰 집어넣기
   return new Promise((resolve) => {
-    const accessToken = sessionStorage.getItem("access-Token");
+    const accessToken = sessionStorage.getItem("access-token");
     https.defaults.headers.common["access_token"] = accessToken;
-
+    console.log(accessToken);
     https
       .put("/user/change-pw", {
         password: pwDto.password,
         new_password: pwDto.new_password,
       })
       .then((response) => {
-        if (response === 200) {
+        if (response.status === 200) {
           console.log("비밀번호 변경 성공", response);
-          return response;
+          resolve(response.data);
         } else {
           console.log("비밀번호 변경 실패", response);
-          return response;
+          resolve(response);
         }
       });
   }).catch((e) => {

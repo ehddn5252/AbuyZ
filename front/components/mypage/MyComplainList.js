@@ -37,8 +37,12 @@ export default function MyComplainList() {
         </ComplainListBox>
       ) : (
         <BlankBox>
-          <QuizOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>문의하신 내역이 없습니다</p>
+          <QuizOutlinedIcon
+            sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
+          />
+          <p style={{ fontSize: "2rem", color: "rgb(86, 169, 241,0.7)" }}>
+            문의하신 내역이 없습니다
+          </p>
         </BlankBox>
       )}
     </MyComplainContainer>

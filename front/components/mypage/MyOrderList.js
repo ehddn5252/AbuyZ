@@ -4,73 +4,67 @@ import React, { useEffect, useState } from "react";
 // MUI
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Button from "@mui/material/Button";
+
 // StyledComponents
 import styled from "styled-components";
+
+// api
 import { getOrderList } from "../../pages/api/order";
 
 // 하위 Components
 import MyOrderItem from "./MyOrderItem";
 
 export default function MyOrderList() {
-  // const [productList, setProductList] = useState([]);
-  // 서버 500에러
-  const pproductlist = async () => {
+  // 장바구니 별 리스트
+  const [orderBundle, setOrderBundle] = useState([]);
+
+  // 결제 목록 불러오기
+  const bundle = async () => {
     const res = await getOrderList();
-    console.log(res.data);
+    setOrderBundle(res.data);
   };
   useEffect(() => {
-    pproductlist();
+    bundle();
   }, []);
-  const [productList, setProductList] = useState([
-    {
-      productName: "제주 햇 감귤 4.5kg",
-      price: 12000,
-      reviewCheck: false,
-      dateOfPurchase: "2022.10.19",
-      options: "1등급/ 2kg 소분",
-    },
-    {
-      productName: "맛있는 샌드위치",
-      price: 13000,
-      reviewCheck: true,
-      dateOfPurchase: "2022.10.19",
-      options: "치킨마요",
-    },
-  ]);
-  useEffect(() => {
-    setProductList([
-      {
-        productName: "제주 햇 감귤 4.5kg",
-        price: 12000,
-        reviewCheck: false,
-        dateOfPurchase: "2022.10.19",
-        options: "1등급/ 2kg 소분",
-      },
-      {
-        productName: "맛있는 샌드위치",
-        price: 13000,
-        reviewCheck: true,
-        dateOfPurchase: "2022.10.19",
-        options: "치킨마요",
-      },
-    ]);
-  }, []);
+
   return (
     <MyOrderContainer>
       <MajorTitle>주문 내역</MajorTitle>
       <Hr />
       <div style={{ display: "flex", justifyContent: "end" }}>
-        <span>총 주문 상품 건수: {productList.length}건</span>
+        {/* <span>총 주문 상품 건수: {productList.length}건</span> */}
       </div>
-      {productList.length === 0 ? (
+      {orderBundle.map((e, idx) => (
+        <div style={{ marginTop: "2rem" }}>
+          <span style={{ color: "#aaaaaa", fontWeight: "bold" }}>
+            주문 일시: {e.date.slice(0, 10)} {e.date.slice(11, 16)}
+          </span>
+          <div
+            style={{
+              borderTop: "2px solid rgb(127, 127, 127, 0.5)",
+              padding: "2rem",
+              marginTop: "0.5rem",
+            }}
+            key={idx}
+          >
+            <MyOrderItem uid={e.uid} />
+          </div>
+        </div>
+      ))}
+      {/* {orderBundle.length === 0 ? (
         <BlankBox>
-          <ShoppingCartOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>구매하신 상품이 없습니다</p>
+          <ShoppingCartOutlinedIcon
+            sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
+          />
+          <p style={{ fontSize: "2rem", color: "rgb(86, 169, 241,0.7)" }}>
+            구매하신 상품이 없습니다
+          </p>
         </BlankBox>
       ) : (
         <ProductListBox>
-          <MyOrderItem product={productList[0]} />
-          <MyOrderItem product={productList[1]} />
+          {OrderBundle.map((e) => {
+            <MyOrderItem product={e} />;
+          })}
         </ProductListBox>
       )}
       {productList.length < 4 ? null : (
@@ -83,13 +77,13 @@ export default function MyOrderList() {
             더보기
           </Button>
         </ButtonDiv>
-      )}
+      )} */}
     </MyOrderContainer>
   );
 }
 
 const MyOrderContainer = styled.div`
-  margin-top: 4.5rem;
+  margin-top: 4rem;
   margin-bottom: 4rem;
   width: 100%;
   width: 56rem;

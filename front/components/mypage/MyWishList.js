@@ -44,8 +44,12 @@ export default function MyWishList() {
         </ProductListBox>
       ) : (
         <BlankBox>
-          <FavoriteBorderOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>찜한 상품이 없습니다</p>
+          <FavoriteBorderOutlinedIcon
+            sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
+          />
+          <p style={{ fontSize: "2rem", color: "rgb(86, 169, 241,0.7)" }}>
+            찜한 상품이 없습니다
+          </p>
         </BlankBox>
       )}
       {/* {productList.length < 4 ? null : (
