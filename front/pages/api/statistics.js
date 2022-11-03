@@ -3,7 +3,7 @@ import https from "./https.js";
 // 총 매출 조회
 export async function getTotalsales(DateDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
@@ -28,7 +28,7 @@ export async function getTotalsales(DateDto) {
 // 장바구니 통계 조회
 export async function getCartStatistics(DateDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
@@ -53,7 +53,7 @@ export async function getCartStatistics(DateDto) {
 // 요일별 조회
 export async function getDailyStatistics(DateDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
@@ -77,7 +77,7 @@ export async function getDailyStatistics(DateDto) {
 // 카테고리별 백분율 조회
 export async function getCategoryStatistics(DateDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
@@ -101,7 +101,7 @@ export async function getCategoryStatistics(DateDto) {
 // 제품별 통계 조회
 export async function getProductStatistics(DateDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
