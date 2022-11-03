@@ -1,5 +1,6 @@
 package com.tasteshopping.config;
 
+import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.user.security.JwtAccessDeniedHandler;
 import com.tasteshopping.user.security.JwtAuthenticationEntryPoint;
@@ -49,18 +50,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/coupon/list/**",
+                        "/coupon/create","/event//{\\\\d+}","/event/create").hasAuthority("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
-        // 인증없이 접근을 허용하는 path 추가
-//                .and()
-//                .authorizeRequests()
-//                // 나머지 요청은 모두 인증을 받는다
-//                .anyRequest().authenticated()
 
-        // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig 클래스도 적용
-//                .and()
-//                .apply(new JwtSecurityConfig(tokenProvider));
     }
 }
