@@ -40,7 +40,8 @@ export default function SaleProductImage() {
 
   // 대표 이미지 등록 함수
   const uploadProfile = (e) => {
-    const profileList = e.target.files;
+    const profileList = e.target.files[0];
+    console.log(profileList);
     if (profileList && profileList[0]) {
       const url = URL.createObjectURL(profileList[0]);
       setProfile({
@@ -54,6 +55,7 @@ export default function SaleProductImage() {
   // 추가 이미지 등록 함수
   const uploadExtraImage = (e) => {
     const extraList = e.target.files;
+    console.log(extraList);
     const target = Object.values(extraList);
     if (target !== []) {
       const a = [];

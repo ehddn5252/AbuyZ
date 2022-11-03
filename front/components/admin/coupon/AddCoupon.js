@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "../coupon/CouponPeriod";
+import { createcoupon } from "../../../pages/api/coupon";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -29,6 +30,8 @@ export default function AddCoupon() {
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
+  // const [couponDto, setCouponDto] = useState({});
+
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -37,6 +40,7 @@ export default function AddCoupon() {
   // 쿠폰이름 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
+    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -54,6 +58,18 @@ export default function AddCoupon() {
   };
   const saleBlur = () => {
     setSalePlaceholder("숫자만 입력해주세요.");
+  };
+
+  const regisCoupon = () => {
+    const couponDto = {
+      name: name,
+      discount_price: sale,
+      start_date: startDate.toISOString().slice(0, 10),
+      end_date: endDate.toISOString().slice(0, 10),
+      big_categories_uid: category,
+    };
+    createcoupon(couponDto);
+    window.location.reload();
   };
 
   return (
@@ -136,18 +152,21 @@ export default function AddCoupon() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
+                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value="대분류">
+              {/* <MenuItem value="대분류">
                 <em>대분류</em>
-              </MenuItem>
-              <MenuItem value={"식품"}>식품</MenuItem>
-              <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
-              <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
-              <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
-              <MenuItem value={"뷰티"}>뷰티</MenuItem>
+              </MenuItem> */}
+              <MenuItem value={"1"}>식품</MenuItem>
+              <MenuItem value={"2"}>생활/건강</MenuItem>
+              <MenuItem value={"3"}>가구/인테리어</MenuItem>
+              <MenuItem value={"4"}>반려/도서/취미</MenuItem>
+              <MenuItem value={"5"}>뷰티</MenuItem>
+              <MenuItem value={"6"}>유아동</MenuItem>
+              <MenuItem value={"7"}>가전</MenuItem>
+              <MenuItem value={"8"}>스포츠/레저/자동차</MenuItem>
             </Select>
           </FormControl>
         </CategoryBox>
@@ -329,7 +348,7 @@ export default function AddCoupon() {
         }}
       >
         <ButtonBox>
-          <AddButton>등록</AddButton>
+          <AddButton onClick={() => regisCoupon()}>등록</AddButton>
         </ButtonBox>
       </Grid2>
     </Grid2>
