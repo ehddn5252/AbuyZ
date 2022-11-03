@@ -15,10 +15,11 @@ import CanReview from "../components/mypage/CanReview";
 
 export default function Mypage() {
   const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
+  const [activeTap, SetActiveTap] = useState(0);
   return (
     <div style={{ minHeight: "80vh" }}>
       <div style={{ margin: "0" }}>
-        <MyInfo setTap={setTap} />
+        <MyInfo setTap={setTap} SetActiveTap={SetActiveTap} />
       </div>
       <Container
         maxWidth="lg"
@@ -36,7 +37,11 @@ export default function Mypage() {
           }}
         >
           <div style={{ flex: 1 }}>
-            <MypageSideNav setTap={setTap} />
+            <MypageSideNav
+              setTap={setTap}
+              activeTap={activeTap}
+              SetActiveTap={SetActiveTap}
+            />
           </div>
           <div style={{ flex: 4 }}>
             {tap === 0 ? <MyOrderList /> : null}

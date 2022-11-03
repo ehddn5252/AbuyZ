@@ -7,31 +7,29 @@ import Container from "@mui/material/Container";
 // StyledComponents
 import styled from "styled-components";
 
-export default function MypageSideNav(setTap) {
-  const [activeTap, SetActiveTap] = useState(0);
-
+export default function MypageSideNav({ setTap, SetActiveTap, activeTap }) {
   const tap0Change = () => {
-    setTap.setTap(0);
+    setTap(0);
     SetActiveTap(0);
   };
   const tap1Change = () => {
-    setTap.setTap(1);
+    setTap(1);
     SetActiveTap(1);
   };
   const tap2Change = () => {
-    setTap.setTap(2);
+    setTap(2);
     SetActiveTap(2);
   };
   const tap3Change = () => {
-    setTap.setTap(3);
+    setTap(3);
     SetActiveTap(3);
   };
   const tap4Change = () => {
-    setTap.setTap(4);
+    setTap(4);
     SetActiveTap(4);
   };
   const tap5Change = () => {
-    setTap.setTap(5);
+    setTap(5);
     SetActiveTap(5);
   };
   return (
