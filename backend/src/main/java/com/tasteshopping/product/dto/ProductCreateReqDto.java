@@ -25,7 +25,7 @@ public class ProductCreateReqDto {
     String keywords;
     String meta_tag;
     Integer products_uid;
-
+    Integer count;
     public static ProductCreateDto reqToDto(ProductCreateReqDto p){
         return ProductCreateDto
                 .builder()

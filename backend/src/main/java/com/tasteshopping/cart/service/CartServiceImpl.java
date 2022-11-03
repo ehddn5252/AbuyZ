@@ -54,6 +54,7 @@ public class CartServiceImpl implements CartService {
         String optionListString = "";
         Carts carts = new Carts();
         for (String key : optionValues.keySet()) {
+            // 여기에서 옵션이 없음
             ProductOptions optionsOptional = productOptionRepository.findByKeyAndValueAndProductsUid(key, optionValues.get(key), productsUid).get();
             optionListString += optionsOptional.getUid() + " ";
             // 장바구니에 저장할 것들 가져옴

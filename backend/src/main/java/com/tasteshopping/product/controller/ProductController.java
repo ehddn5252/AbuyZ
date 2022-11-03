@@ -147,12 +147,11 @@ public class ProductController {
 
     @PostMapping("/register")
     public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email,
-                                            @RequestPart ProductCreateReqDto productCreateReqDto,
+                                            @RequestPart ProductCreateDto productCreateDto,
                                             @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles,
                                             @RequestPart(name = "descFile", required = false) MultipartFile descriptionImg
                                             ) {
-        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
-
+//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles,descriptionImg));
     }
 
@@ -171,9 +170,9 @@ public class ProductController {
 
     @PutMapping("/modify")
     public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email,
-                                          @RequestPart ProductCreateReqDto productCreateReqDto,
+                                          @RequestPart ProductCreateDto productCreateDto,
                                           @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
-        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
+//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
     }
