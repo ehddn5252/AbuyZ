@@ -23,7 +23,8 @@ public class ProductKeywordServiceImpl implements ProductKeywordService{
     ProductKeywordRepository productKeywordRepository;
 
     @Override
-    public void createProductKeyword(String name, Integer products_uid) {
+    public void createProductKeyword(String name,
+                                     Integer products_uid) {
         ProductKeywords productKeywords = new ProductKeywords();
         productKeywords.setProduct(productRepository.findById(products_uid).get());
         productKeywords.setName(name);

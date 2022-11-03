@@ -49,6 +49,7 @@ public class Inventories {
         inventoryDto.setPrice(price);
         inventoryDto.setProductOptionUidString(productOptionList);
         inventoryDto.setRepImg(product.getRepImg());
+        inventoryDto.setProductDto(product.toDto());
         return inventoryDto;
     }
 

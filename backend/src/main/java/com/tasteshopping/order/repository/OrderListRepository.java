@@ -3,6 +3,7 @@ package com.tasteshopping.order.repository;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.user.entity.Users;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,11 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
     List<OrderLists> findAllByDateBetween(Date start_date, Date end_date);
 
     List<OrderLists> findByDate(Date date);
+
+    Optional<OrderLists> findByOrders(Orders order);
+
+    @EntityGraph(attributePaths = {"orders"})
+    List<OrderLists>findByDateBetween(Date start_date,Date end_date);
 
 }
 

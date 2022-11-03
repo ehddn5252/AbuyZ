@@ -1,5 +1,6 @@
 package com.tasteshopping.product.service;
 
+import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -169,7 +170,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 옵션 리스트 추가
-        LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
+        LinkedHashMap<String, String> options = productCreateDto.getOptions();
 
         for (String key : options.keySet()) {
             String[] sList = options.get(key).split(",");
@@ -187,8 +188,6 @@ public class ProductServiceImpl implements ProductService {
 
         // product 변경
         productPictureRepository.deleteByProductsUid(productUid);
-
-        // save imgs
         Products pp = productRepository.findById(productUid).get();
         // save imgs
         int count = 0;
@@ -228,13 +227,7 @@ public class ProductServiceImpl implements ProductService {
             5. product_uid 에 맞는 product_keywords 를 생성한다.
          */
 
-        registerProduct(productCreateDto);
-        int productsUid = 1;
-        Optional<Integer> maxUidOptional = getMaxUid();
-        if (maxUidOptional.isPresent()) {
-            productsUid = maxUidOptional.get();
-        }
-        Products pp = productRepository.findById(productsUid).get();
+        Products pp = registerProduct(productCreateDto);
 
         // save imgs
         int count = 0;
@@ -262,7 +255,7 @@ public class ProductServiceImpl implements ProductService {
                         pp.setRepImg(imagePath);
                         productRepository.save(pp);
                     } else {
-                        productPictureService.createProductPicture(productsUid, imagePath);
+                        productPictureService.createProductPicture(pp.getUid(), imagePath);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -275,7 +268,7 @@ public class ProductServiceImpl implements ProductService {
         ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
         ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
 
-        LinkedHashMap<String, String> options = productCreateDto.getOptions(); //(LinkedHashMap<String, String>) param.get("options");
+        LinkedHashMap<String, String> options = productCreateDto.getOptions();
         // 상품 옵션 리스트 생성 완료
         int maxUid = 1;
         Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
@@ -317,11 +310,11 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // save keyword lists
-        String[] keywordList = productCreateDto.getKeywords().split(","); //((String) param.get("keywords")).split(",");
+        String[] keywordList = productCreateDto.getKeywords().split(",");
         for (int i = 0; i < keywordList.length; ++i) {
-            productKeywordService.createProductKeyword(keywordList[i].trim(), productsUid);
+            productKeywordService.createProductKeyword(keywordList[i].trim(), pp.getUid());
         }
-        return new BaseRes(200, "상품 등록 완료", null);
+        return new BaseRes(200, "상품 등록 완료", pp.getUid());
     }
 
 
@@ -342,14 +335,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Integer uid) {
-
         Products product = productRepository.findById(uid).get();
         productRepository.delete(product);
     }
 
     @Override
     @Transactional
-    public void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles) {
+    public void modifyProductRelated(ProductCreateDto productCreateDto,
+                                     MultipartFile[] multipartFiles) {
         // 상품 변경
         modifyProduct(productCreateDto);
 
@@ -367,7 +360,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findByKeyword(String keyword) {
-
         List<Optional<Products>> l = productRepository.findByNameContains(keyword);
         List<ProductDto> newL = new ArrayList<>();
         // 여기에 옵션 리스트, 사진, 키워드,
@@ -442,7 +434,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid, Integer deliveryFeeUid) {
+    public List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid,
+                                                                    Integer deliveryFeeUid) {
 
         int start = 0;
         int end = 0;
@@ -463,7 +456,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid) {
+    public List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid,
+                                                              Integer priceUid) {
 
         int start = 0;
         int end = 30000;
@@ -524,7 +518,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice) {
+    public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid,
+                                                                     Integer startPrice,
+                                                                     Integer endPrice) {
         int start = startPrice;
         int end = endPrice;
         Optional<List<Products>> l = productRepository.findByPriceBetweenAndSmallCategory(smallCategoriesUid, start, end);
@@ -538,7 +534,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto) {
+    public List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL,
+                                                   SearchDto searchDto) {
 
         // 반환할 리스트
         List<ProductDto> l = new ArrayList<>();
@@ -646,7 +643,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // small category 설정
-        Integer smallCategoryUid = productCreateDto.getSmallCategoriesUid();//int)param.get("small_categories_uid");
+        Integer smallCategoryUid = productCreateDto.getSmallCategoriesUid();
         Optional<SmallCategories> smallCategoriesOptional = smallCategoryRepository.findById(smallCategoryUid);
         SmallCategories smallCategory = null;
         if (smallCategoriesOptional.isPresent()) {
@@ -659,7 +656,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void registerProduct(ProductCreateDto productCreateDto) {
+    public Products registerProduct(ProductCreateDto productCreateDto) {
         String brandName = productCreateDto.getBrandName();
         Optional<Brands> brandsOptional = brandRepository.findByName(brandName);
         Brands brands = null;
@@ -673,7 +670,8 @@ public class ProductServiceImpl implements ProductService {
             smallCategories = smallCategoriesOptional.get();
         }
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
-        productRepository.save(product1);
+        product1.setCreatedDate(UtilService.getDate());
+        return productRepository.save(product1);
     }
 
 

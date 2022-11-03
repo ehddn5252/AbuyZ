@@ -4,10 +4,8 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
-import com.tasteshopping.order.entity.Revenues;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
-import com.tasteshopping.order.repository.RevenueRepository;
 import com.tasteshopping.statistics.dto.*;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.user.dto.ResultDto;
@@ -27,7 +25,6 @@ import java.util.*;
 @AllArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
     private final UserRepository userRepository;
-    private final RevenueRepository revenueRepository;
     private final CartRepository cartRepository;
     private final OrderListRepository orderListRepository;
     private final OrderRepository orderRepository;
@@ -59,6 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     public ResponseDto getStatistics(String email, DateDto dateDto, int menu){
         Optional<Users> users = userRepository.findByEmail(email);
         ResponseDto responseDto = new ResponseDto();
+        List<OrderLists> orderLists;
         if(!(users.isPresent() && users.get().getUserRoles() == Role.ADMIN)){
             responseDto.setMessage("권한 없음");
             responseDto.setData(new ResultDto(false));
@@ -83,13 +81,15 @@ public class StatisticsServiceImpl implements StatisticsService {
         switch (menu){
             case 0:
                 int total_count=0,total_sales=0;
-                List<Revenues> revenues = revenueRepository.findAllByDateBetween(start_date,end_date);
-                List<DailySalesDto>result = new ArrayList<>();
-                for(Revenues revenue:revenues){
-                    Orders order = revenue.getOrder();
-                    total_count+=order.getCount();
-                    total_sales+=revenue.getDailyRevenue();
-                    result.add(new DailySalesDto(revenue.getDate(),revenue.getDailyRevenue()));
+                orderLists = orderListRepository.findByDateBetween(start_date,end_date);
+                HashMap<String,Integer> result = new HashMap<>();
+                for(OrderLists orderList:orderLists){
+                    total_sales+=orderList.getTotalPrice();
+                    for(Orders order:orderList.getOrders()){
+                        total_count+=order.getCount();
+                    }
+                    result.put(orderList.getDate().toString(),
+                            result.getOrDefault(orderList.getDate().toString(),0)+orderList.getTotalPrice());
                 }
 
                 Map<String,Object>map = new HashMap<>();
@@ -183,7 +183,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 //요일별 통계 -> 정렬 X
             default:
                 Map<String,Integer>dayStatistics = new HashMap<>();
-                List<OrderLists> orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);
+                orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);
                 for(OrderLists orderList:orderLists){
                     dayStatistics.put(orderList.getDay(), dayStatistics.getOrDefault(orderList.getDay(), 0) + orderList.getTotalPrice());
                 }

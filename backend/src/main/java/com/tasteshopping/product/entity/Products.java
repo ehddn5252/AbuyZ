@@ -64,7 +64,7 @@ public class Products {
     private Brands brand;
 
     @CreatedDate
-    @Column(name="created_date",nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name="created_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createdDate;
 
 

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -53,7 +54,13 @@ public class UserServiceImpl implements UserService{
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        TokenDto tokenDto = new TokenDto(tokenProvider.createToken(authentication));
+
+        String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
+
+        redisService.setData(loginDto.getEmail(),refreshToken);
+
+        TokenDto tokenDto = new TokenDto(accessToken,refreshToken,authentication.getAuthorities().toString());
         ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공");
 
         return responseDto;
@@ -165,10 +172,11 @@ public class UserServiceImpl implements UserService{
         if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("불일치");
-        }else{
-            responseDto.setData(new ResultDto(true));
-            responseDto.setMessage("일치");
+            return responseDto;
         }
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("일치");
+
         return responseDto;
     }
 
@@ -317,5 +325,40 @@ public class UserServiceImpl implements UserService{
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("수정 성공");
         return responseDto;
+    }
+    @Override
+    public ResponseDto getRefreshToken(HttpServletRequest request){
+
+        String refreshToken = request.getHeader("refresh_token");
+
+        if(!tokenProvider.validateToken(refreshToken)){
+            throw new RuntimeException();
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+        String email = authentication.getPrincipal().toString();
+        String redisRefreshToken = redisService.getData(email);
+
+        if(redisRefreshToken==null || !refreshToken.equals(redisRefreshToken)){
+            throw new RuntimeException();
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String newAccessToken = tokenProvider.createAccessToken(authentication);
+        String newRefreshToken = tokenProvider.createRefreshToken(authentication);
+        TokenDto tokenDto = new TokenDto(newAccessToken,newRefreshToken,authentication.getAuthorities().toString());
+        redisService.setData(email,newRefreshToken);
+        ResponseDto responseDto = new ResponseDto(tokenDto,"재발급 성공");
+
+        return responseDto;
+    }
+    @Override
+    public void addBlackList(HttpServletRequest request){
+        String accessToken = request.getHeader("access_token");
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+        String email = authentication.getPrincipal().toString();
+        String refreshToken = redisService.getData(email);
+        redisService.deleteData(email);
+        redisService.addElement("blacklist",refreshToken);
+        redisService.addElement("blacklist",accessToken);
     }
 }

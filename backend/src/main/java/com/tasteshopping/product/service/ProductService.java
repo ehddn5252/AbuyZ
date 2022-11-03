@@ -2,6 +2,7 @@ package com.tasteshopping.product.service;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
+import com.tasteshopping.product.entity.Products;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    void registerProduct(ProductCreateDto productCreateDto);
+    Products registerProduct(ProductCreateDto productCreateDto);
 
     List<ProductDto> getAllProduct();
 
