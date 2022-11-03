@@ -26,6 +26,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setCookie = (key, value, expiredDays) => {
+    // 자동 삭제 날짜를 지정하는 코드
+    let today = new Date();
+    today.setDate(today.getDate() + expiredDays);
+    // 쿠키에 값을 저장
+    document.cookie =
+      key +
+      "=" +
+      JSON.stringify(value) +
+      "; path=/; expires=" +
+      today.toGMTString() +
+      ";";
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const LoginDto = {
@@ -55,8 +68,13 @@ export default function Login() {
             access_token: authObj.access_token,
           })
           .then((res) => {
+            console.log(res.data.data.access_token);
             if (res.status == 200) {
-              sessionStorage.setItem("access-token", authObj.access_token);
+              sessionStorage.setItem(
+                "access-token",
+                res.data.data.access_token
+              );
+              setCookie("refresh_token", res.data.data.refresh_token, 30);
               router.push("/");
             }
           })
