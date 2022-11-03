@@ -261,6 +261,7 @@ export async function delAddress(number) {
     console.log(e);
   });
 }
+
 // 회원정보 수정
 export async function changeInfo(userDto) {
   // Header에 토큰 집어넣기
@@ -319,12 +320,12 @@ export async function findPW(pwDto) {
 // Logout
 export async function logout() {
   // Header에 토큰 집어넣기
-  const refreshToken = getCookie("refresh_token");
-  https.defaults.headers.common["refresh_token"] = refreshToken;
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.get("user/log-out").then((response) => {
       if (response.status === 200) {
-        sessionStorage.removeItem("access_token");
+        sessionStorage.removeItem("access-token");
         console.log("로그아웃 통신 완료", response);
         resolve(response);
       } else {

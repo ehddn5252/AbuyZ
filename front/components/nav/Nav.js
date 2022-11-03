@@ -1,6 +1,9 @@
 // React
 import React, { useEffect, useState } from "react";
 
+// Next.js
+import { useRouter } from "next/router";
+
 // MUI
 import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
@@ -17,22 +20,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { getMyInfo, logout, refresh } from "../../pages/api/user";
 
 export default function Nav() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
-
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
-
+  let refreshtoken = setInterval(() => refresh(), 1000 * 60 * 10);
   useEffect(() => {
     // 창 닫기시 블랙리스트 추가
     window.addEventListener("unload", async () => {
       await logout();
       // 토큰 재발급 함수 삭제
       clearInterval(refreshtoken);
+      router.push("/");
     });
-    let refreshtoken = setInterval(() => refresh(), 1000 * 60 * 10);
   }, [username]);
 
   const Logout = async () => {
