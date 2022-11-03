@@ -44,8 +44,8 @@ public class OrderListServiceImpl implements OrderListService {
         if (ordersOptional.isPresent()) {
             Users user = ordersOptional.get().getUser();
             Optional<Users> loginUser = userRepository.findByEmail(email);
-            if(loginUser.isPresent()){
-                if(loginUser.get()!=user){
+            if (loginUser.isPresent()) {
+                if (loginUser.get() != user) {
                     return new BaseRes(401, "no authorization", null);
                 }
             }
@@ -56,12 +56,11 @@ public class OrderListServiceImpl implements OrderListService {
             }
             if (ordersList != null) {
                 return new BaseRes(200, "get product list success", orderDtoList);
-            }
-            else{
+            } else {
                 return new BaseRes(204, "product not found", orderDtoList);
             }
         }
-        return new BaseRes(204, "orderLists not found",null);
+        return new BaseRes(204, "orderLists not found", null);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class OrderListServiceImpl implements OrderListService {
         List<OrderLists> orderListsList = orderListRepository.findAll();
         Optional<Users> loginUser = userRepository.findByEmail(email);
         List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
-        for(int i = 0; i< orderListsList.size(); ++i) {
+        for (int i = 0; i < orderListsList.size(); ++i) {
             if (loginUser.isPresent()) {
                 if (loginUser.get() != orderListsList.get(i).getUser()) {
                     continue;
@@ -81,7 +80,31 @@ public class OrderListServiceImpl implements OrderListService {
                     orderDtoList.add(ordersList.get(j).toDto());
                 }
             }
+        }
+        if (orderDtoList != null) {
+            return new BaseRes(200, "get product list success", orderDtoList);
+        } else {
+            return new BaseRes(204, "product not found", orderDtoList);
+        }
+    }
 
+    @Override
+    public BaseRes getOrdersGroupByDate(String email) {
+        List<OrderLists> orderListsList = orderListRepository.findAll();
+        Optional<Users> loginUser = userRepository.findByEmail(email);
+        List<OrderDto> orderDtoList = new ArrayList<>();
+        for (int i = 0; i < orderListsList.size(); ++i) {
+            if (loginUser.isPresent()) {
+                if (loginUser.get() != orderListsList.get(i).getUser()) {
+                    continue;
+                }
+            }
+            List<Orders> ordersList = orderRepository.findByOrderList(orderListsList.get(i));
+            for (int j = 0; j < ordersList.size(); ++j) {
+                if (ordersList.get(j).getReview() == null) {
+                    orderDtoList.add(ordersList.get(j).toDto());
+                }
+            }
         }
         if (orderDtoList != null) {
             return new BaseRes(200, "get product list success", orderDtoList);

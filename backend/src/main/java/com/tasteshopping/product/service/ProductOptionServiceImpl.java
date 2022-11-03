@@ -13,22 +13,13 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     ProductOptionRepository productOptionRepository;
 
     @Override
-    public void createProductOptionList(Products p,String name, String value) {
+    public void createProductOptionList(Products p,
+                                        String name,
+                                        String value) {
         ProductOptions productOptionList = new ProductOptions();
         productOptionList.setName(name);
         productOptionList.setValue(value);
         productOptionList.setProduct(p);
         productOptionRepository.save(productOptionList);
     }
-
-//    @Override
-//    public List<ProductOptionListDto> getOptionListByUid(int productsUid) {
-//        List<ProductOptionListDto> productOptionList = new ArrayList<>();
-//        List<Optional<ProductOptions>> productOptionLists = productOptionRepository.findByProductsUid(productsUid);
-//
-//        for(int i=0;i<productOptionLists.size();++i){
-//            productOptionList.add(productOptionLists.get(i).get().toDto());
-//        }
-//        return productOptionList;
-//    }
 }

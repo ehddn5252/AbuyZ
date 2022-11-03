@@ -18,12 +18,6 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptions,In
     @Query(value="select * from product_options where products_uid=:productsUid",nativeQuery = true)
     public List<ProductOptions> findByProductsUid(Integer productsUid);
 
-//    @Transactional
-//    @Modifying
-//    @Query(value=" delete from product_options where product_options_uid=:productsOptionsUid",nativeQuery = true)
-//    void deleteByProductOptionsUid(int productsOptionsUid);
-
-
     @Query(value="select p from ProductOptions p where p.product.uid = :productsUid")
     List<Optional<ProductOptions>> findByProductsUid(int productsUid);
     @Transactional
