@@ -14,16 +14,33 @@ import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlin
 import MenuIcon from "@mui/icons-material/Menu";
 
 // API
-import { getMyInfo } from "../../pages/api/user";
+import { getMyInfo, logout, refresh } from "../../pages/api/user";
 
 export default function Nav() {
   const [username, setUsername] = useState("");
 
-  // 임시비밀번호 전송
+  // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
+
+  useEffect(() => {
+    // 창 닫기시 블랙리스트 추가
+    window.addEventListener("unload", async () => {
+      await logout();
+      // 토큰 재발급 함수 삭제
+      clearInterval(refreshtoken);
+    });
+    let refreshtoken = setInterval(() => refresh(), 1000 * 60 * 10);
+  }, [username]);
+
+  const Logout = async () => {
+    const res = await logout();
+    // 토큰 재발급 함수 삭제
+    clearInterval(refreshtoken);
+  };
+
   useEffect(() => {
     const token = sessionStorage.getItem("access-token");
     if (token) {
@@ -36,7 +53,13 @@ export default function Nav() {
       <NavContainer>
         <UserBox>
           {username ? (
-            <UserLink href="/mypage">{username}님 환영합니다.</UserLink>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <TopBox>{username}님</TopBox>
+              <TopBox>환영합니다</TopBox>
+              <TopBox onClick={Logout} style={{ cursor: "pointer" }}>
+                로그아웃
+              </TopBox>
+            </div>
           ) : (
             <UserLink href="/login">로그인</UserLink>
           )}
@@ -65,7 +88,7 @@ export default function Nav() {
           </SearchPaper>
           <div style={{ display: "flex" }}>
             <IconBox>
-              <Link href="/event">
+              <Link href="/mypage">
                 <FavoriteBorderOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black" }}
@@ -187,6 +210,7 @@ const NavContainer = styled.div`
 const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   width: 100%;
   margin-top: 1rem;
 `;
@@ -195,6 +219,13 @@ const UserLink = styled(Link)`
   text-decoration: none;
   font-size: 0.8rem;
   color: #aaaaaa;
+`;
+
+const TopBox = styled.p`
+  font-size: 0.8rem;
+  color: #aaaaaa;
+  margin: 0;
+  margin-left: 0.5rem;
 `;
 const SearchBox = styled.div`
   display: flex;
