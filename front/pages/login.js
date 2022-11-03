@@ -14,7 +14,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login } from "./api/user.js";
+import { login, refresh } from "./api/user.js";
 import https from "./api/https.js";
 
 // StyledComponent
@@ -26,6 +26,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setCookie = (key, value, expiredDays) => {
+    // 자동 삭제 날짜를 지정하는 코드
+    let today = new Date();
+    today.setDate(today.getDate() + expiredDays);
+    // 쿠키에 값을 저장
+    document.cookie =
+      key +
+      "=" +
+      JSON.stringify(value) +
+      "; path=/; expires=" +
+      today.toGMTString() +
+      ";";
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const LoginDto = {
@@ -34,9 +47,14 @@ export default function Login() {
     };
     console.log(LoginDto);
     const res = await login(LoginDto);
-    console.log(res.PromiseResult);
+    console.log(res);
     if (res.status === 200) {
-      router.push("/");
+      // 일정시간마다 토큰 재발급
+      if (res.data.data.type == "[ADMIN]") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     }
     console.log(res);
   };
@@ -50,8 +68,13 @@ export default function Login() {
             access_token: authObj.access_token,
           })
           .then((res) => {
+            console.log(res.data.data.access_token);
             if (res.status == 200) {
-              sessionStorage.setItem("access-token", authObj.access_token);
+              sessionStorage.setItem(
+                "access-token",
+                res.data.data.access_token
+              );
+              setCookie("refresh_token", res.data.data.refresh_token, 30);
               router.push("/");
             }
           })

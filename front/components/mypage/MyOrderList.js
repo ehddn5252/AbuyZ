@@ -14,13 +14,13 @@ import MyOrderItem from "./MyOrderItem";
 export default function MyOrderList() {
   // const [productList, setProductList] = useState([]);
   // 서버 500에러
-  // const pproductlist = async () => {
-  //   const res = await getOrderList();
-  //   console.log(res.data);
-  // };
-  // useEffect(() => {
-  //   pproductlist();
-  // }, []);
+  const pproductlist = async () => {
+    const res = await getOrderList();
+    console.log(res.data);
+  };
+  useEffect(() => {
+    pproductlist();
+  }, []);
   const [productList, setProductList] = useState([
     {
       productName: "제주 햇 감귤 4.5kg",
@@ -57,7 +57,7 @@ export default function MyOrderList() {
   }, []);
   return (
     <MyOrderContainer>
-      <MajorTitle>주문/리뷰</MajorTitle>
+      <MajorTitle>주문 내역</MajorTitle>
       <Hr />
       <div style={{ display: "flex", justifyContent: "end" }}>
         <span>총 주문 상품 건수: {productList.length}건</span>

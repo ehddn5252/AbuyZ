@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 // 컴포넌트
@@ -11,6 +11,8 @@ import AddEditMarketing from "./AddEditMarketing";
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
+import { regisProduct } from "../../../../pages/api/product";
+
 export default function AddProduct() {
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -18,22 +20,22 @@ export default function AddProduct() {
         {/* 카테고리 */}
         <AddEditCategory />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-        {/* 검색어 */}
-        <AddEditInfo />
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-        {/* 옵션 */}
-        <AddEditOption />
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 마케팅 정보 */}
         <AddEditMarketing />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 이미지 */}
         <AddEditImage />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-        <ButtonBox>
+        {/* 상품정보 */}
+        <AddEditInfo />
+        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
+        {/* 옵션 */}
+        <AddEditOption />
+        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
+        {/* <ButtonBox>
           <CancelButton>취소</CancelButton>
           <AddButton>등록</AddButton>
-        </ButtonBox>
+        </ButtonBox> */}
       </Grid2>
     </Grid2>
   );
@@ -41,26 +43,32 @@ export default function AddProduct() {
 
 const ButtonBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  padding: 1rem;
 `;
 
 const CancelButton = styled.button`
-  background-color: #ffffff;
-  color: gray;
+  background-color: #fff;
+  color: black;
   border: 1px solid;
-  border-radius: 0.8rem;
+  margin: 1rem;
   height: 3rem;
-  width: 5rem;
-  font-size: 1.3rem;
+  width: 10rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const AddButton = styled.button`
-  background-color: #ff7171;
+  background-color: #57a9fb;
   color: white;
   border: 1px solid;
-  border-radius: 0.8rem;
-  margin-left: 1rem;
+  margin: 1rem;
   height: 3rem;
-  width: 7rem;
-  font-size: 1.5rem;
+  width: 15rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;

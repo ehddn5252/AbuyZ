@@ -3,7 +3,7 @@ import https from "./https.js";
 // 장바구니 결제
 export async function payBasket(cartDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https.post("/order/cart", cartDto).then((response) => {
@@ -21,7 +21,7 @@ export async function payBasket(cartDto) {
 // 상품 하나 결제하기
 export async function payProduct(productDto) {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
+  const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
@@ -44,9 +44,9 @@ export async function payProduct(productDto) {
 // 결제 목록 가져오기
 export async function getOrderList() {
   // Header에 토큰 집어넣기
-  const accessToken = localStorage.getItem("access-token");
-  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
+    const accessToken = sessionStorage.getItem("access-token");
+    https.defaults.headers.common["access_token"] = accessToken;
     https.get("/order").then((response) => {
       if (response.status === 200) {
         console.log("결제목록 조회 성공", response);

@@ -16,12 +16,12 @@ export default function SaleProductInfo() {
   // 판매가
   const [price, setPrice] = useState("");
   const [pricePlaceholder, setPricePlaceholder] = useState(
-    "숫자만 입력해주세요. ex) 3000"
+    "숫자만 입력해주세요. ex) 19000"
   );
   // 할인
   const [fee, setFee] = useState("");
   const [feePlaceholder, setFeePlaceholder] = useState(
-    "숫자만 입력해주세요. ex) 19000"
+    "숫자만 입력해주세요. ex) 3000"
   );
 
   // 상품명
@@ -52,7 +52,7 @@ export default function SaleProductInfo() {
     setPricePlaceholder("");
   };
   const priceBlur = () => {
-    setPricePlaceholder("숫자만 입력해주세요. ex) 3000");
+    setPricePlaceholder("숫자만 입력해주세요. ex) 19000");
   };
   // 배송비
   const feeChange = (event) => {
@@ -62,7 +62,7 @@ export default function SaleProductInfo() {
     setFeePlaceholder("");
   };
   const feeBlur = () => {
-    setFeePlaceholder("숫자만 입력해주세요. ex) 19000");
+    setFeePlaceholder("숫자만 입력해주세요. ex) 3000");
   };
 
   return (
@@ -141,7 +141,7 @@ export default function SaleProductInfo() {
         >
           <InfoBox>
             <TitleBox>
-              <Title>판매가</Title>
+              <Title>대표가격</Title>
               <p style={{ margin: 0 }}>(원)</p>
             </TitleBox>
             <Input

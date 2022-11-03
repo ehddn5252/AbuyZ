@@ -1,6 +1,9 @@
 // React
 import React, { useEffect, useState } from "react";
 
+// Next.js
+import { useRouter } from "next/router";
+
 // MUI
 import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
@@ -14,40 +17,108 @@ import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlin
 import MenuIcon from "@mui/icons-material/Menu";
 
 // API
-import { getMyInfo } from "../../pages/api/user";
+import { getMyInfo, logout, refresh } from "../../pages/api/user";
 
 export default function Nav() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
-
-  // 임시비밀번호 전송
+  const [atoken, setAToken] = useState("");
+  // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
-  useEffect(() => {
-    const token = sessionStorage.getItem("access-token");
-    if (token) {
-      getName();
+  let changtoken = setInterval(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        refresh();
+      } else {
+        console.log("토큰없음");
+      }
     }
+  }, 1000 * 60 * 20);
+  useEffect(() => {
+    // 창 닫기시 블랙리스트 추가
+    window.addEventListener("unload", async () => {
+      await logout();
+      // 토큰 재발급 함수 삭제
+      clearInterval(changtoken);
+    });
   }, []);
 
+  const Logout = async () => {
+    await logout();
+    // 토큰 재발급 함수 삭제
+    clearInterval(changtoken);
+    router.reload();
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) setAToken(accessToken);
+    }
+  }, [router.pathname]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        getName();
+      }
+    }
+  }, [atoken]);
+
+  const goEvent = () => {
+    router.push("/event");
+  };
+
+  const goMypage = () => {
+    router.push("/mypage");
+  };
+
+  const goHome = () => {
+    router.push("/");
+  };
+
+  const goSearch = () => {
+    router.push("/search");
+  };
+
+  const goLogin = () => {
+    router.push("/login");
+  };
+
+  const goService = () => {
+    router.push("/service");
+  };
+
+  const goBasket = () => {
+    router.push("/basket");
+  };
   return (
     <Container>
       <NavContainer>
         <UserBox>
           {username ? (
-            <UserLink href="/mypage">{username}님 환영합니다.</UserLink>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <TopBox>{username}님</TopBox>
+              <TopBox>환영합니다</TopBox>
+              <TopBox onClick={Logout} style={{ cursor: "pointer" }}>
+                로그아웃
+              </TopBox>
+            </div>
           ) : (
-            <UserLink href="/login">로그인</UserLink>
+            <UserLink onClick={goLogin}>로그인</UserLink>
           )}
-          <UserLink href="/service" sx={{ marginLeft: "1rem" }}>
+          <UserLink onClick={goService} sx={{ marginLeft: "1rem" }}>
             고객센터
           </UserLink>
         </UserBox>
         <SearchBox>
-          <Link href="/">
+          <div onClick={goHome}>
             <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
-          </Link>
+          </div>
           <SearchPaper component="form">
             <InputBase
               sx={{ ml: 1, flex: 1 }}
@@ -65,28 +136,28 @@ export default function Nav() {
           </SearchPaper>
           <div style={{ display: "flex" }}>
             <IconBox>
-              <Link href="/event">
+              <div onClick={goMypage}>
                 <FavoriteBorderOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black" }}
                 />
-              </Link>
+              </div>
             </IconBox>
             <IconBox>
-              <Link href="/mypage">
+              <div onClick={goMypage}>
                 <PersonOutlineOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black" }}
                 />
-              </Link>
+              </div>
             </IconBox>
             <IconBox>
-              <Link href="/basket">
+              <div onClick={goBasket}>
                 <ShoppingBasketOutlinedIcon
                   fontSize="medium"
                   sx={{ color: "black", fontWeight: 100 }}
                 />
-              </Link>
+              </div>
             </IconBox>
           </div>
         </SearchBox>
@@ -150,16 +221,16 @@ export default function Nav() {
             </Menu>
           </CategoryTagBox>
           <TagBox>
-            <CategoryTitle href="/search">신상품</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">베스트</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">알뜰 쇼핑</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/event">특가/혜택</CategoryTitle>
+            <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
           </TagBox>
         </CategoryContainer>
       </CategoryBox>
@@ -187,14 +258,25 @@ const NavContainer = styled.div`
 const UserBox = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   width: 100%;
   margin-top: 1rem;
 `;
 
-const UserLink = styled(Link)`
+const UserLink = styled.p`
+  margin: 0;
   text-decoration: none;
+  margin-left: 0.5rem;
   font-size: 0.8rem;
   color: #aaaaaa;
+  cursor: pointer;
+`;
+
+const TopBox = styled.p`
+  font-size: 0.8rem;
+  color: #aaaaaa;
+  margin: 0;
+  margin-left: 0.5rem;
 `;
 const SearchBox = styled.div`
   display: flex;
@@ -267,7 +349,7 @@ const TagBox = styled.li`
   }
 `;
 
-const CategoryTitle = styled(Link)`
+const CategoryTitle = styled.p`
   text-decoration: none;
   padding: 0;
   margin: 0;

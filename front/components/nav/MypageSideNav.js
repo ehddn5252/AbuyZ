@@ -48,7 +48,7 @@ export default function MypageSideNav(setTap) {
                     : { color: "rgb(197, 197, 197)" }
                 }
               >
-                <p style={{ margin: "0", fontSize: "1rem" }}> 주문/리뷰</p>
+                <p style={{ margin: "0", fontSize: "1rem" }}> 주문 내역</p>
               </TagButton>
             </SidebarListItem>
             <SidebarListItem>
