@@ -10,8 +10,6 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class UserModificationDto {
-    private String address;
-    private String detailAddress;
     private String phoneNumber;
     private String name;
     private String gender;
