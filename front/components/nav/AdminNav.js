@@ -4,12 +4,20 @@ import React, { useState, useEffect } from "react";
 // MUI
 import Link from "@mui/material/Link";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 // StyledComponents
 import styled from "styled-components";
 
-export default function AdminNav() {
-  const [location, setLocation] = useState("");
+// Next.js
+import { useRouter } from "next/router";
 
+// API
+import { logout } from "../../pages/api/user";
+
+export default function AdminNav() {
+  const router = useRouter();
+
+  const [location, setLocation] = useState("");
   useEffect(() => {
     const pathname = window.location.pathname;
     if (pathname === "/admin/account") setLocation("정보수정");
@@ -27,20 +35,34 @@ export default function AdminNav() {
     else if (pathname === "/admin/user/report") setLocation("고객관리 - 신고");
     else if (pathname === "/admin/user/review") setLocation("고객관리 - 리뷰");
   }, [window.location.pathname]);
-  const logout = () => {
-    console.log("로그아웃");
+
+  const Logout = async () => {
+    await logout();
+    router.push("/");
+  };
+
+  const goHome = () => {
+    router.push("/admin/dashboard");
+  };
+
+  const goInfoChnage = () => {
+    router.push("/admin/account");
+  };
+
+  const goSite = () => {
+    router.push("/");
   };
   return (
     <AdminNavContainer>
       <Location>{location}</Location>
       <UserDiv>
         <AccountCircleIcon fontSize="large" />
-        <NavLink>AbuyZ</NavLink>
-        <NavLink href="/admin/account">정보수정</NavLink>
-        <NavLink onClick={logout} sx={{ cursor: "pointer" }}>
+        <NavLink onClick={goHome}>AbuyZ</NavLink>
+        <NavLink onClick={goInfoChnage}>정보수정</NavLink>
+        <NavLink onClick={Logout} sx={{ cursor: "pointer" }}>
           로그아웃
         </NavLink>
-        <ButtonBox href="/">사이트 바로가기</ButtonBox>
+        <ButtonBox onClick={goSite}>사이트 바로가기</ButtonBox>
       </UserDiv>
     </AdminNavContainer>
   );
@@ -72,14 +94,16 @@ const UserDiv = styled.div`
   font-size: 1.3rem;
 `;
 
-const NavLink = styled(Link)`
+const NavLink = styled.p`
+  margin: 0;
   text-decoration: none;
   margin-left: 1rem;
   color: #000;
   font-weight: bold;
+  cursor: pointer;
 `;
 
-const ButtonBox = styled(Link)`
+const ButtonBox = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,4 +117,5 @@ const ButtonBox = styled(Link)`
   font-size: 1.3rem;
   font-weight: bold;
   color: white;
+  cursor: pointer;
 `;
