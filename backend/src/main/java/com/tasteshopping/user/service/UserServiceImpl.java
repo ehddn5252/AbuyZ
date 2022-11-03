@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -54,12 +55,12 @@ public class UserServiceImpl implements UserService{
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String accessToken = tokenProvider.createToken(authentication);
+        String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
         redisService.setData(loginDto.getEmail(),refreshToken);
 
-        TokenDto tokenDto = new TokenDto(accessToken,authentication.getAuthorities().toString());
+        TokenDto tokenDto = new TokenDto(accessToken,refreshToken,authentication.getAuthorities().toString());
         ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공");
 
         return responseDto;
@@ -321,6 +322,30 @@ public class UserServiceImpl implements UserService{
 
         responseDto.setData(new ResultDto(true));
         responseDto.setMessage("수정 성공");
+        return responseDto;
+    }
+    public ResponseDto getRefreshToken(HttpServletRequest request){
+
+        String refreshToken = request.getHeader("refresh_token");
+
+        if(!tokenProvider.validateToken(refreshToken)){
+            throw new RuntimeException();
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+        String email = authentication.getPrincipal().toString();
+        String redisRefreshToken = redisService.getData(email);
+
+        if(redisRefreshToken==null || !refreshToken.equals(redisRefreshToken)){
+            throw new RuntimeException();
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String newAccessToken = tokenProvider.createAccessToken(authentication);
+        String newRefreshToken = tokenProvider.createRefreshToken(authentication);
+        TokenDto tokenDto = new TokenDto(newAccessToken,newRefreshToken,authentication.getAuthorities().toString());
+        redisService.setData(email,newRefreshToken);
+        ResponseDto responseDto = new ResponseDto(tokenDto,"재발급 성공");
+
         return responseDto;
     }
 }

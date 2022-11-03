@@ -52,7 +52,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // Authentication 객체의 권한정보를 이용해 토큰을 생성하는 메서드
-    public String createToken(Authentication authentication) {
+    public String createToken(Authentication authentication, long time) {
         // 권한들
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -60,7 +60,7 @@ public class TokenProvider implements InitializingBean {
 
         long now = (new Date()).getTime();
         // 토큰 만료시간 설정
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + time);
 
         // JWT 토큰 생성 후 리턴
         return Jwts.builder()
@@ -70,20 +70,11 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(validity)
                 .compact();
     }
+    public String createAccessToken(Authentication authentication){
+        return createToken(authentication,this.tokenValidityInMilliseconds);
+    }
     public String createRefreshToken(Authentication authentication){
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
-
-        return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
-                .compact();
+        return createToken(authentication,this.refreshTokenValidityInMilliseconds);
     }
     // 토큰을 파라미터로 받아서, 토큰에 담긴 정보를 이용해 Authentication 객체를 리턴하는 메서드
     public Authentication getAuthentication(String token) {
@@ -119,7 +110,6 @@ public class TokenProvider implements InitializingBean {
             logger.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             logger.info("만료된 JWT 토큰입니다.");
-            throw e;
         } catch (UnsupportedJwtException e) {
             logger.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
