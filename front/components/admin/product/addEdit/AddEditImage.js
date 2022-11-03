@@ -169,8 +169,8 @@ export default function SaleProductImage() {
                 src={profile.thumbnail}
                 alt={profile.type}
                 onClick={handleClickProfile}
-                width="200px"
-                height="220px"
+                width="210px"
+                height="240px"
               />
               <input
                 type="file"
@@ -205,8 +205,8 @@ export default function SaleProductImage() {
                   src={e.thumbnail}
                   alt={e.type}
                   onClick={handleClickExtraImage}
-                  width="200px"
-                  height="220px"
+                  width="210px"
+                  height="240px"
                 />
               </Grid2>
             ))}
@@ -244,8 +244,8 @@ export default function SaleProductImage() {
                 src={detail.thumbnail}
                 alt={detail.type}
                 onClick={handleClickDetailImage}
-                width="200px"
-                height="220px"
+                width="210px"
+                height="240px"
               />
               <input
                 type="file"
