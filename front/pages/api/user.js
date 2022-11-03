@@ -147,25 +147,29 @@ export async function emailCheck(emailDto) {
 }
 
 // 비밀번호 변경
-export function chnagePw(pwDto) {
+export async function chnagePw(pwDto) {
   // Header에 토큰 집어넣기
-  const accessToken = sessionStorage.getItem("access-Token");
-  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    const accessToken = sessionStorage.getItem("access-Token");
+    https.defaults.headers.common["access_token"] = accessToken;
 
-  https
-    .put("/user/change-pw", {
-      password: pwDto.password,
-      new_password: pwDto.new_password,
-    })
-    .then((response) => {
-      if (response === 200) {
-        console.log("비밀번호 변경 성공", response);
-        return response;
-      } else {
-        console.log("비밀번호 변경 실패", response);
-        return response;
-      }
-    });
+    https
+      .put("/user/change-pw", {
+        password: pwDto.password,
+        new_password: pwDto.new_password,
+      })
+      .then((response) => {
+        if (response === 200) {
+          console.log("비밀번호 변경 성공", response);
+          return response;
+        } else {
+          console.log("비밀번호 변경 실패", response);
+          return response;
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
 }
 
 // 닉네임 중복 확인
@@ -337,30 +341,23 @@ export async function logout() {
 
 // token 재요청
 export async function refresh() {
-  // Header에 토큰 집어넣기
-  const accessToken = sessionStorage.getItem("access-token");
-  if (accessToken) {
-    const refreshToken = getCookie("refresh_token");
-    https.defaults.headers.common["refresh_token"] = refreshToken;
-    return new Promise((resolve) => {
-      https.get("/user/refresh").then((response) => {
-        if (response.status === 200) {
-          console.log("재발급 완료", response.data);
-          // 토큰 저장
-          window.sessionStorage.setItem(
-            "access-token",
-            response.data.data.access_token
-          );
-          setCookie("refresh_token", response.data.data.refresh_token, 30);
-          resolve(response.data);
-        } else {
-          console.log("재발급 실패", response);
-          resolve(response);
-        }
-      });
+  const refreshToken = getCookie("refresh_token");
+  https.defaults.headers.common["refresh_token"] = refreshToken;
+  return new Promise((resolve) => {
+    https.get("/user/refresh").then((response) => {
+      if (response.status === 200) {
+        console.log("재발급 완료", response.data);
+        // 토큰 저장
+        window.sessionStorage.setItem(
+          "access-token",
+          response.data.data.access_token
+        );
+        setCookie("refresh_token", response.data.data.refresh_token, 30);
+        resolve(response.data);
+      } else {
+        console.log("재발급 실패", response);
+        resolve(response);
+      }
     });
-  } else {
-    console.log("토큰없음");
-    return null;
-  }
+  });
 }
