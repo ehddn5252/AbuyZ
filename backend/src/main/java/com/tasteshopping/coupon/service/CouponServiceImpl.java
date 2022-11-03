@@ -3,8 +3,8 @@ package com.tasteshopping.coupon.service;
 import com.tasteshopping.categories.entity.BigCategories;
 import com.tasteshopping.categories.repository.BigCategoryRepository;
 import com.tasteshopping.coupon.dto.CouponDto;
+import com.tasteshopping.coupon.dto.CouponResDto;
 import com.tasteshopping.coupon.dto.CouponResListDto;
-import com.tasteshopping.coupon.dto.CouponUidDto;
 import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.coupon.repository.CouponListsRepository;
@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -63,14 +64,14 @@ public class CouponServiceImpl implements CouponService {
     }
     @Override
     @Transactional
-    public ResponseDto delete(String email, CouponUidDto couponUidDto) {
+    public ResponseDto delete(String email, int coupon_uid) {
         ResponseDto responseDto = check(email);
         if(responseDto!=null){
             return responseDto;
         }
         responseDto = new ResponseDto();
 
-        Optional<Coupons> coupons = couponRepository.findById(couponUidDto.getCoupon_uid());
+        Optional<Coupons> coupons = couponRepository.findById(coupon_uid);
         if(!coupons.isPresent()){
             responseDto.setMessage("추가 실패 : 존재하지 않는 쿠폰");
             responseDto.setData(new ResultDto(false));
@@ -127,6 +128,21 @@ public class CouponServiceImpl implements CouponService {
             couponResListDto.getResult().add(couponLists.toCouponsResDto());
         }
         responseDto.setData(couponResListDto);
+        return responseDto;
+    }
+    public ResponseDto getAllCoupons(String email){
+        ResponseDto responseDto = new ResponseDto();
+        List<Coupons>findCoupons = couponRepository.findAll();
+        List<CouponResDto>result = findCoupons.stream().map(c -> c.toDto()).collect(Collectors.toList());
+        responseDto.setData(result);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
+    }
+    @Transactional
+    public ResponseDto deleteCoupon(String email,int uid){
+        ResponseDto responseDto = new ResponseDto();
+        couponRepository.deleteById(uid);
+        responseDto.setMessage("삭제 완료");
         return responseDto;
     }
 }
