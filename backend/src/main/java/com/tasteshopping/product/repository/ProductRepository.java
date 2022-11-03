@@ -1,8 +1,7 @@
 package com.tasteshopping.product.repository;
 
-import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -34,8 +33,10 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
-    @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
-    Optional<Products> findProductDetailByProductsUid(int productsUid);
+//    @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
+//    Optional<Products> findProductDetailByProductsUid(int productsUid);
+
+//    @EntityGraph(attributePaths ={"productPictures"})
 
     @Query("select distinct(p) from Products p " +
             "join fetch Inventories i on p=i.product " +

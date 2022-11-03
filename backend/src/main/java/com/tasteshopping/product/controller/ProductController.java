@@ -5,6 +5,7 @@ import com.tasteshopping.order.dto.OrderUidReqDto;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.exception.NoAuthorizationException;
+import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
@@ -84,11 +85,10 @@ public class ProductController {
                                                 @RequestBody ProductUidReqDto productUidReqDto) {
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(productService.modifyStatus(email,productUidReqDto.getProducts_uid(), productUidReqDto.getStatus()));
-        }
-        catch (NoAuthorizationException e){
+            return ResponseEntity.status(HttpStatus.OK).body(productService.modifyStatus(email, productUidReqDto.getProducts_uid(), productUidReqDto.getStatus()));
+        } catch (NoAuthorizationException e) {
             e.printStackTrace();
-            return ResponseEntity.status(403).body(new BaseRes(403,"권한이 없습니다.",null));
+            return ResponseEntity.status(403).body(new BaseRes(403, "권한이 없습니다.", null));
         }
     }
 
@@ -108,16 +108,16 @@ public class ProductController {
 
     @PostMapping("/detail")
     public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
-        ProductDetailDto l = productService.getDetailProduct(productUidReqDto.getProducts_uid());
-        if (l == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 uid의 product가 없습니다."));
+        try {
+            ProductDetailDto l = productService.getDetailProduct(productUidReqDto.getProducts_uid());
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseRes.of(404, "해당 uid의 product가 없습니다.", null));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
     }
 
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {
-        System.out.println("in getAllProduct");
         List<ProductDto> productDtoList = productService.getAllProduct();
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
@@ -127,8 +127,8 @@ public class ProductController {
                                             @RequestPart ProductCreateDto productCreateDto,
                                             @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles,
                                             @RequestPart(name = "descFile", required = false) MultipartFile descriptionImg
-                                            ) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles,descriptionImg));
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles, descriptionImg));
     }
 
 
