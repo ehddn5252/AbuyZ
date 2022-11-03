@@ -63,7 +63,7 @@ public class CouponServiceImpl implements CouponService {
     public ResponseDto delete(String email, int coupon_uid) {
         ResponseDto responseDto = new ResponseDto();
 
-        Optional<CouponLists> coupons = couponListsRepository.findByUidAndUserUid(coupon_uid,email);
+        Optional<CouponLists> coupons = couponListsRepository.findByCouponsUidAndUserEmail(coupon_uid,email);
         if(!coupons.isPresent()){
             responseDto.setMessage("삭제 실패 : 존재하지 않는 쿠폰");
             responseDto.setData(new ResultDto(false));

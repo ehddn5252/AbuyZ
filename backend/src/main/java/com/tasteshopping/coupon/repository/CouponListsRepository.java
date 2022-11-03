@@ -27,6 +27,6 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     List<CouponLists> findCouponListsByUserEmailAndCategory(@Param("email")String email,@Param("category")int category);
     @EntityGraph(attributePaths = {"user","coupons"})
     Optional<CouponLists>findByUserEmailAndCouponsUid(String email, int uid);
-    @EntityGraph(attributePaths = {"user"})
-    Optional<CouponLists> findByUidAndUserUid(Integer id,String email);
+    @EntityGraph(attributePaths = {"user","coupons"})
+    Optional<CouponLists> findByCouponsUidAndUserEmail(int id,String email);
 }
