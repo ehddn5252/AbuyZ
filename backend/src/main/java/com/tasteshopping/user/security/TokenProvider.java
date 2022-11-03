@@ -73,10 +73,10 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
     public String createAccessToken(Authentication authentication){
-        return createToken(authentication,this.tokenValidityInMilliseconds);
+        return createToken(authentication,this.tokenValidityInMilliseconds*1000);
     }
     public String createRefreshToken(Authentication authentication){
-        return createToken(authentication,this.refreshTokenValidityInMilliseconds);
+        return createToken(authentication,this.refreshTokenValidityInMilliseconds*1000*14);
     }
     // 토큰을 파라미터로 받아서, 토큰에 담긴 정보를 이용해 Authentication 객체를 리턴하는 메서드
     public Authentication getAuthentication(String token) {
