@@ -1,6 +1,8 @@
 package com.tasteshopping.inquiry.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inquiry.Exception.NoAuutorizationException;
+import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
@@ -25,48 +27,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerCenterController {
 
-
     @Autowired
     CustomerCenterService customerCenterService;
-
     @Autowired
     AwsS3Service awsS3Service;
 
     @GetMapping("/my")
     public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
         System.out.println(email);
-        if (email.equals("anonymousUser")){
-            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+        if (email.equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        List<CustomerCenterDto> l = customerCenterService.getMyCustomerCenter(email);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "내 문의 내역 조회 성공",l));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+        } catch (NoInquiryException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseRes(404, "존재하지 않는 리소스에 대한 요청", null));
+        }
     }
 
     @GetMapping()
     public ResponseEntity<BaseRes> getInquiry() {
         List<CustomerCenterDto> l = customerCenterService.getCustomerCenter();
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 문의 내역 성공",l));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 문의 내역 성공", l));
     }
 
     @GetMapping("/detail/{uid}")
-    public ResponseEntity<BaseRes> getDetailInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid) {
-        if (email.equals("anonymousUser")){
+    public ResponseEntity<BaseRes> getDetailInquiry(@AuthenticationPrincipal String email, @PathVariable Integer uid) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
         CustomerCenterDto customerCenterDto = customerCenterService.getCustomerCenterByUid(uid);
-        if(customerCenterDto==null){
+        if (customerCenterDto == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "문의 내용 없음"));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 상세 성공",customerCenterDto));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 상세 성공", customerCenterDto));
     }
-
 
 
     @PostMapping()
     public ResponseEntity<BaseRes> writeInquiry(@AuthenticationPrincipal String email,
                                                 @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
-                                                @RequestPart(name = "file",required = false) MultipartFile multipartFile) {
-        if (email.equals("anonymousUser")){
+                                                @RequestPart(name = "file", required = false) MultipartFile multipartFile) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
@@ -74,11 +76,11 @@ public class CustomerCenterController {
         try {
             imagePath = awsS3Service.uploadImgFile(multipartFile);
             customerCenterWriteReqDto.setImg_url(imagePath);
-            res = customerCenterService.createCustomerCenterByUid(email,customerCenterWriteReqDto);
+            res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto);
         } catch (IOException e) {
             e.printStackTrace();
 
-            res = new BaseRes(202,"파일 업로드 에러", null);
+            res = new BaseRes(202, "파일 업로드 에러", null);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -86,14 +88,14 @@ public class CustomerCenterController {
 
     @PostMapping("/list")
     public ResponseEntity<BaseRes> writeInquiryList(@AuthenticationPrincipal String email,
-                                                @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
-                                                @RequestPart(name = "file",required = false) MultipartFile[] multipartFiles) {
-        if (email.equals("anonymousUser")){
+                                                    @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
+                                                    @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
-        if(multipartFiles!=null) {
+        if (multipartFiles != null) {
             try {
                 for (int i = 0; i < multipartFiles.length; ++i) {
                     imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
@@ -111,45 +113,44 @@ public class CustomerCenterController {
 
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<BaseRes> deleteInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid) {
-        if (email.equals("anonymousUser")){
+    public ResponseEntity<BaseRes> deleteInquiry(@AuthenticationPrincipal String email, @PathVariable Integer uid) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
-        }try {
+        }
+        try {
             BaseRes baseRes = customerCenterService.deleteCustomerCenterByUidSameEmail(uid, email);
             return ResponseEntity.status(HttpStatus.OK).body(baseRes);
-        }catch (NotCorrectUserException e){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new BaseRes(403,"해당 유저가 아닙니다.",null));
+        } catch (NotCorrectUserException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new BaseRes(403, "해당 유저가 아닙니다.", null));
         }
     }
 
     @PutMapping("/{uid}")
     public ResponseEntity<BaseRes> modifyInquiry(@AuthenticationPrincipal String email, @PathVariable Integer uid, @RequestBody CustomerCenterWriteReqDto customerCenterWriteReqDto) {
-        if (email.equals("anonymousUser")){
-            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+        if (email.equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "권한 없음. 로그인을 해주세요"));
         }
-        customerCenterService.modifyCustomerCenterByUid(uid,customerCenterWriteReqDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "문의 변경 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.modifyCustomerCenterByUid(uid, customerCenterWriteReqDto));
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email, @RequestBody ReplyReqDto replyReqDto){
-        if (email.equals("anonymousUser")){
+    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email, @RequestBody ReplyReqDto replyReqDto) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-
-        int parentUid = replyReqDto.getParent_uid();
-        String content = replyReqDto.getContent();
-        BaseRes baseRes = customerCenterService.writeReplyCustomerCenter(email,parentUid,content);
-        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.writeReplyCustomerCenter(email, replyReqDto.getParent_uid(), replyReqDto.getContent()));
     }
 
     @DeleteMapping("/reply/{uid}")
-    public ResponseEntity<BaseRes> deleteReplyInquiry(@AuthenticationPrincipal String email,@PathVariable Integer uid){
-        if (email.equals("anonymousUser")){
+    public ResponseEntity<BaseRes> deleteReplyInquiry(@AuthenticationPrincipal String email, @PathVariable Integer uid) {
+        if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        BaseRes baseRes = customerCenterService.deleteCustomerCenterReplyByUid(uid,email);
-        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.deleteCustomerCenterReplyByUid(uid, email));
+        }
+        catch (NoAuutorizationException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BaseRes(403, "관리자 계정이 아닙니다.", null));
+        }
     }
-
 }

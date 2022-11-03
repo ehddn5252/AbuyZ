@@ -85,8 +85,9 @@ public class InventoryServiceImpl implements InventoryService {
                 inventoryRepository.save(inventory);
             }
         }
-        catch(InventoryNotFoundException e){
-            return new BaseRes(204,"해당 product 옵션이 없습니다. 서버에서 확인",null);
+        catch(Exception e){
+            throw new ProductNotFoundException();
+//            return new BaseRes(204,"해당 product 옵션이 없습니다. 서버에서 확인",null);
         }
         return new BaseRes(200,"상품 재고 변경 성공",null);
 
