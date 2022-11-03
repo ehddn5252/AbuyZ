@@ -28,11 +28,13 @@ export default function Nav() {
     setUsername(res.data.name);
   };
   let refreshtoken = setInterval(() => {
-    const accessToken = sessionStorage.getItem("access-token");
-    if (accessToken) {
-      refresh();
-    } else {
-      console.log("토큰없음");
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        refresh();
+      } else {
+        console.log("토큰없음");
+      }
     }
   }, 1000 * 60 * 10);
   useEffect(() => {
