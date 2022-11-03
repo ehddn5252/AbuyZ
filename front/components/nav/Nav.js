@@ -27,7 +27,14 @@ export default function Nav() {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
-  let refreshtoken = setInterval(() => refresh(), 1000 * 60 * 10);
+  let refreshtoken = setInterval(() => {
+    const accessToken = sessionStorage.getItem("access-token");
+    if (accessToken) {
+      refresh();
+    } else {
+      console.log("토큰없음");
+    }
+  }, 1000 * 60 * 10);
   useEffect(() => {
     // 창 닫기시 블랙리스트 추가
     window.addEventListener("unload", async () => {
