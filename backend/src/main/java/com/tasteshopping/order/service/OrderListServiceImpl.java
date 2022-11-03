@@ -63,10 +63,6 @@ public class OrderListServiceImpl implements OrderListService {
                 Inventories inventories = ordersList.get(i).getInventory();
                 InventoryDto inventoryDto = inventories.toDto();
                 inventoryDto.setProductDto(inventories.getProduct().toDto());
-                inventoryDto.setUid((inventories.getUid()));
-                inventoryDto.setCount(inventories.getCount());
-                inventoryDto.setPrice(inventories.getPrice());
-                inventoryDto.setProductOptionUidString(inventories.getProductOptionList());
                 String[] optionUidList = inventories.getProductOptionList().split(" ");
                 List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
                 for(int j=0;j<optionUidList.length;++j){
@@ -76,7 +72,6 @@ public class OrderListServiceImpl implements OrderListService {
                     retProductOptions.add(hashMap);
                 }
                 inventoryDto.setProductOptions(retProductOptions);
-                // 여기 바꿔야함
                 tmpOrdersList.setInventoryDto(inventoryDto);
                 orderDtoList.add(tmpOrdersList);
             }
