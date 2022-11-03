@@ -29,7 +29,6 @@ public class ProductController {
 
     private final ProductKeywordService productKeywordService;
 
-
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email,
                                             @RequestBody BoSearchReqDto boSearchReqDto) {
@@ -39,20 +38,18 @@ public class ProductController {
     @PostMapping("/fo-search/detail")
     public ResponseEntity<BaseRes> foSearch(@RequestBody SearchReqDto searchReqDto) {
         SearchDto searchDto = searchReqDto.toDto();
-        // 4개의 분기로 쪼개기 big category, small category, price, deliveryFee
+        // 4개의 분기로 쪼개서 검색합니다. big category, small category, price, deliveryFee
         List<ProductDto> l = new ArrayList<>();
 
         // price 로 찾기
         if (searchDto.getStartPrice() != null && searchDto.getEndPrice() != null) {
             l = productService.getProductBySmallCategoryAndPriceBetween(searchDto.getSmallCategoriesUid(), searchDto.getStartPrice(), searchDto.getEndPrice());
         } else if (searchDto.getPriceUid() != null) {
-//            l = productService.getProductByPrice(searchDto.getPriceUid());
             l = productService.getProductBySmallCategoryAndPrice(searchDto.getSmallCategoriesUid(), searchDto.getPriceUid());
         }
 
         // deliveryFee 로 찾기
         else if (searchDto.getDeliveryFeeUid() != null) {
-            // l = productService.getProductByDeliveryFee(searchDto.getDeliveryFeeUid());
             l = productService.getProductBySmallCategoryAndDeliveryFee(searchDto.getSmallCategoriesUid(), searchDto.getDeliveryFeeUid());
         }
 
@@ -68,8 +65,6 @@ public class ProductController {
         if (l.size() == 0) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 조건을 만족하는 상품이 없습니다!"));
         }
-
-        System.out.println(l.toString());
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 상세 검색 성공!", l));
     }
 
@@ -106,9 +101,6 @@ public class ProductController {
         if (newL.size() == 0) {
             newL = productKeywordService.findByParamInKeyword(searchDto.getKeyword());
         }
-        for (int i = 0; i < newL.size(); ++i) {
-            System.out.println(newL.get(i).getBigCategoryUid());
-        }
         newL = productService.findByKeywordAndFilter(newL, searchDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
@@ -129,7 +121,6 @@ public class ProductController {
         List<ProductDto> productDtoList = productService.getAllProduct();
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
-
 
     @PostMapping("/register")
     public ResponseEntity<BaseRes> register(@AuthenticationPrincipal String email,
@@ -157,7 +148,6 @@ public class ProductController {
     public ResponseEntity<BaseRes> modify(@AuthenticationPrincipal String email,
                                           @RequestPart ProductCreateDto productCreateDto,
                                           @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
-//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         productService.modifyProductRelated(productCreateDto, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
     }
