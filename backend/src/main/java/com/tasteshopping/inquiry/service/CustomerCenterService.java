@@ -13,12 +13,12 @@ public interface CustomerCenterService {
     CustomerCenterDto getCustomerCenterByUid(Integer uid);
     public void modifyCustomerCenterByUid(Integer uid, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
-    void deleteCustomerCenterByUidSameEmail(Integer uid, String email);
+    BaseRes deleteCustomerCenterByUidSameEmail(Integer uid, String email);
 
     BaseRes deleteCustomerCenterReplyByUid(Integer uid, String email);
 
     public void deleteCustomerCenterByUid(Integer uid);
-    public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
+    BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
     BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
 }

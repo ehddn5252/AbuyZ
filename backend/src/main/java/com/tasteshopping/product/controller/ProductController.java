@@ -25,28 +25,14 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductController {
 
-    @Autowired
-    ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    ProductPictureService productPictureService;
-    @Autowired
-    ProductKeywordService productKeywordService;
-    // for test
+    private final ProductKeywordService productKeywordService;
 
-    @Autowired
-    ProductOptionService productOptionListService;
-
-    private final ProductRepository productRepository;
 
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email,
                                             @RequestBody BoSearchReqDto boSearchReqDto) {
-        System.out.println("=============================");
-        System.out.println(boSearchReqDto.getName());
-        System.out.println(boSearchReqDto.getName());
-        System.out.println(boSearchReqDto.getName());
-
         return ResponseEntity.status(HttpStatus.OK).body(productService.boSearch(email, boSearchReqDto));
     }
 
@@ -151,7 +137,6 @@ public class ProductController {
                                             @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles,
                                             @RequestPart(name = "descFile", required = false) MultipartFile descriptionImg
                                             ) {
-//        ProductCreateDto productCreateDto = ProductCreateDto.reqToDto(productCreateReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles,descriptionImg));
     }
 

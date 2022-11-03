@@ -6,6 +6,7 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inventory.dto.InventoryDto;
 import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
@@ -102,11 +103,12 @@ public class CartServiceImpl implements CartService {
             cartResDto.setProductCount(cartsList.get(i).getProductCount());
             cartResDto.setUid(cartsList.get(i).getUid());
 
-            InventoryResDto inventoryResDto = new InventoryResDto();
-            inventoryResDto.setUid((inventories.getUid()));
-            inventoryResDto.setCount(inventories.getCount());
-            inventoryResDto.setPrice(inventories.getPrice());
-            inventoryResDto.setProductOptionUidString(inventories.getProductOptionList());
+            InventoryDto inventoryDto = new InventoryDto();
+            inventoryDto.setUid(inventories.getUid());
+            inventoryDto.setCount(inventories.getCount());
+            inventoryDto.setPrice(inventories.getPrice());
+            inventoryDto.setProductOptionUidString(inventories.getProductOptionList());
+
             String[] optionUidList = inventories.getProductOptionList().split(" ");
             List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
             for(int j=0;j<optionUidList.length;++j){
@@ -115,8 +117,8 @@ public class CartServiceImpl implements CartService {
                 hashMap.put(productOptions.getName(),productOptions.getValue());
                 retProductOptions.add(hashMap);
             }
-            inventoryResDto.setProductOptions(retProductOptions);
-            cartResDto.setInventoryResDto(inventoryResDto);
+            inventoryDto.setProductOptions(retProductOptions);
+            cartResDto.setInventoryDto(inventoryDto);
             cartResDtoList.add(cartResDto);
         }
 

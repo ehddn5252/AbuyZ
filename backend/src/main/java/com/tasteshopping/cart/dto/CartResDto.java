@@ -18,6 +18,5 @@ public class CartResDto {
     private Integer uid;
     private ProductDto productDto;
     private Integer productCount;
-    private List<ProductOptionListDto> productOptionListDto;
-    private InventoryResDto inventoryResDto;
+    private InventoryDto inventoryDto;
 }

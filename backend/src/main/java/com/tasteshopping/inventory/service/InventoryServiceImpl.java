@@ -1,17 +1,14 @@
 package com.tasteshopping.inventory.service;
 
-import com.tasteshopping.cart.controller.CartController;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.inventory.dto.InventoryReqDto2;
+import com.tasteshopping.inventory.dto.InventoryReqDto;
 import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
-import com.tasteshopping.order.dto.Status;
-import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.inventory.exception.InventoryNotFoundException;
@@ -79,7 +76,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public BaseRes putInventoryList(InventoryReqDto2 inventoryReqDto) {
+    public BaseRes putInventoryList(InventoryReqDto inventoryReqDto) {
         try {
             for (String productOptionString : inventoryReqDto.getInventory_option_list().keySet()) {
                 Inventories inventory = inventoryRepository.findByOptionListString(productOptionString).get();

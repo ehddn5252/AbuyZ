@@ -1,6 +1,7 @@
 package com.tasteshopping.inquiry.service;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.Status;
@@ -80,7 +81,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Override
     public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto) {
-        BaseRes baseRes = new BaseRes();
         try {
             Optional<Users> usersOptional = userRepository.findByEmail(email);
             CustomerCenters customerCenter = new CustomerCenters();
@@ -101,15 +101,11 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
             customerCenter.setUser(usersOptional.get());
             customerCenterRepository.save(customerCenter);
-            baseRes.setStatusCode(200);
-            baseRes.setMessage("문의 작성 성공");
+            return new BaseRes(200,"문의 작성 성공",null);
         }
         catch (Exception e){
-            baseRes.setMessage("문의 저장 서버 에러");
-            baseRes.setStatusCode(500);
-            return baseRes;
+            return new BaseRes(500,"문의 저장 서버 에러",null);
         }
-        return baseRes;
     }
 
     @Override
@@ -154,13 +150,16 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         }
     }
 
-
     @Override
-    public void deleteCustomerCenterByUidSameEmail(Integer uid, String email){
+    public BaseRes deleteCustomerCenterByUidSameEmail(Integer uid, String email){
         CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
         Optional<Users> user = userRepository.findByEmail(email);
         if(user.get().getUid()==customerCenter.getUser().getUid()){
             deleteCustomerCenterByUid(uid);
+            return new BaseRes(200,"문의 삭제 성공",null);
+        }
+        else{
+            throw new NotCorrectUserException();
         }
     }
 

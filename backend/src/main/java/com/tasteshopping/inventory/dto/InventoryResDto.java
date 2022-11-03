@@ -1,5 +1,6 @@
 package com.tasteshopping.inventory.dto;
 
+import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ public class InventoryResDto {
     Integer price;
     Integer count;
     String productOptionUidString;
+    ProductDto productDto;
     List<HashMap<String,String>> productOptions;
 
 }
