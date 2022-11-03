@@ -32,9 +32,9 @@ export default function Nav() {
     // 창 닫기시 블랙리스트 추가
     window.addEventListener("unload", async () => {
       await logout();
+
       // 토큰 재발급 함수 삭제
       clearInterval(refreshtoken);
-      router.push("/");
     });
   }, [username]);
 
@@ -42,6 +42,7 @@ export default function Nav() {
     const res = await logout();
     // 토큰 재발급 함수 삭제
     clearInterval(refreshtoken);
+    router.reload();
   };
 
   useEffect(() => {
@@ -49,7 +50,7 @@ export default function Nav() {
     if (token) {
       getName();
     }
-  }, []);
+  }, [router.pathname]);
 
   return (
     <Container>

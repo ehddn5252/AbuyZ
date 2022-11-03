@@ -10,8 +10,10 @@ import ScrollNav from "../components/nav/ScrollNav";
 
 // recoil
 import { RecoilRoot } from "recoil";
+import { useRouter } from "next/router";
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   // 관리자 체크
   const [adminCheck, setAdminCheck] = useState(false);
   // 네브바 유무
@@ -39,7 +41,7 @@ function MyApp({ Component, pageProps }) {
     } else {
       setAdminCheck(false);
     }
-  }, []);
+  }, [router.pathname]);
   useEffect(() => {
     if (!Kakao.isInitialized()) {
       Kakao.init("204f7abed9a6558eb3411fabf8202302");
