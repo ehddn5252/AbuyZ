@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AddCoupon from "./AddCoupon";
 import CouponList from "./CouponList";
 import CouponPeriod from "./CouponPeriod";
+import { inquirecoupon } from "../../../pages/api/coupon";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -37,6 +38,14 @@ export default function CouponInquire() {
   // 오른쪽 할인 금액
   const [rightSale, setRightSale] = useState("");
   const [rightSalePlaceholder, setRightSalePlaceholder] = useState("0");
+
+  // 기준 기간
+  const [standDate, setStandDate] = useState(0);
+
+  // 시작 날짜
+  const [startDate, setStartDate] = useState(new Date());
+  // 마감 날짜
+  const [endDate, setEndDate] = useState(new Date());
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -75,6 +84,13 @@ export default function CouponInquire() {
   const rightSaleBlur = () => {
     setRightSalePlaceholder("0");
   };
+
+  const getCoupong = async () => {
+    const couponList = await inquirecoupon();
+    console.log(couponList);
+  };
+
+  console.log(startDate, "@@@@@@@@@@");
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -260,7 +276,11 @@ export default function CouponInquire() {
           width: "100%",
         }}
       >
-        <CouponPeriod></CouponPeriod>
+        <CouponPeriod
+          setStandDate={setStandDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
       </Grid2>
       <Grid2
         xs={12}
@@ -285,7 +305,7 @@ export default function CouponInquire() {
       >
         <ButtonBox>
           <ResetButton>초기화</ResetButton>
-          <SearchButton>검색</SearchButton>
+          <SearchButton onClick={getCoupong}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       <Grid2
@@ -401,7 +421,5 @@ const SearchButton = styled.button`
   height: 3rem;
   width: 7rem;
   font-size: 1.5rem;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;

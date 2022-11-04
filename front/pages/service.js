@@ -7,10 +7,10 @@ import { serviceNum, pageNameState } from "../states";
 import { useRecoilState } from "recoil";
 
 export default function Service() {
-  // serviec 페이지 번호(전역)
+  // service 페이지 번호(전역)
   const [serv, setServ] = useRecoilState(serviceNum);
   // 전역으로 불러온 값을 여기에 넣어줌(서비스 페이지 컴포넌트 번호)
-  const [serviceTap, setServiceTap] = useState(serviceNum);
+  const [serviceTap, setServiceTap] = useState(0);
   // 이전 페이지 주소(전역)
   const [prevUrl, setPrevUrl] = useRecoilState(pageNameState);
 
@@ -18,7 +18,9 @@ export default function Service() {
   // 전의 주소와 비교
   useEffect(() => {
     const path = window.location.pathname;
-    if (prevUrl !== path) {
+    console.log(serviceNum);
+    if (prevUrl === path) {
+      console.log(path);
       setServiceTap(0);
     } else {
     }
