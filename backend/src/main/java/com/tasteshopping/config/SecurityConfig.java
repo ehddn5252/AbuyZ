@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/coupon/create","/event//{\\\\d+}","/event/create").hasAuthority("ADMIN")
 
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/", "/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
