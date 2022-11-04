@@ -38,10 +38,19 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 
 //    @EntityGraph(attributePaths ={"productPictures"})
 
+
+//    @Query("select distinct(p) from Products p " +
+//            "join fetch Inventories i on p=i.product " +
+//            "join fetch BigCategories bc on p.smallCategory.bigCategory=bc " +
+//            "join fetch Brands b on p.brand = b")
+//    List<Products> boFiltering();
+
+
     @Query("select distinct(p) from Products p " +
             "join fetch Inventories i on p=i.product " +
             "join fetch BigCategories bc on p.smallCategory.bigCategory=bc " +
             "join fetch Brands b on p.brand = b " +
             "where p.name like :name and p.createdDate between :startDate and :endDate and p.smallCategory.uid = coalesce(:smallCategoryUid,p.smallCategory.uid) and p.smallCategory.bigCategory.uid = coalesce(:bigCategoryUid,p.smallCategory.bigCategory.uid) and p.brand.name like :brandName and p.status like :status")
     List<Products> boFiltering(String name, Date startDate, Date endDate, Integer bigCategoryUid, Integer smallCategoryUid, String brandName, String status);
+
 }

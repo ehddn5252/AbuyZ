@@ -23,7 +23,7 @@ public interface ProductOptionRepository extends JpaRepository<ProductOptions,In
     @Transactional
     @Modifying
     @Query(value="delete from ProductOptions po where po.product.uid = :productUid")
-    void deletByProduct(int productUid);
+    void deletByProductUid(int productUid);
 
 
     @Query(value = "select o from ProductOptions o where o.name = :key and o.value = :value and o.product.uid=:productsUid")

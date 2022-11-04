@@ -27,10 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerCenterController {
 
-    @Autowired
-    CustomerCenterService customerCenterService;
-    @Autowired
-    AwsS3Service awsS3Service;
+    final private CustomerCenterService customerCenterService;
+    final private AwsS3Service awsS3Service;
 
     @GetMapping("/my")
     public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
