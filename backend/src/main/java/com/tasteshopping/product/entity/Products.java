@@ -85,6 +85,7 @@ public class Products {
     public ProductDto toDto() {
 
         return ProductDto.builder()
+                .uid(uid)
                 .name(name)
                 .discountRate(discountRate)
                 .deliveryFee(deliveryFee)

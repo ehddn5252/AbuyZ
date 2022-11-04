@@ -9,7 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class ProductUidReqDto {
     private int products_uid;
-
     private String status;
 
 }

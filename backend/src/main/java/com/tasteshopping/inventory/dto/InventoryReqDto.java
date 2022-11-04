@@ -1,27 +1,15 @@
 package com.tasteshopping.inventory.dto;
 
-import com.tasteshopping.inventory.entity.Inventories;
 import lombok.*;
+
+import java.util.LinkedHashMap;
 
 @Getter
 @Builder
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class InventoryReqDto {
-
-    Integer uid;
-    Integer products_uid;
-    Integer count;
-    Integer price;
-    String option_list;
-
-    public Inventories toEntity(){
-        Inventories inventories = new Inventories();
-        inventories.setUid(uid);
-        inventories.setCount(count);
-        inventories.setPrice(price);
-        inventories.setProductOptionList(option_list);
-        return inventories;
-    }
+    LinkedHashMap<String,LinkedHashMap<String,String>> inventory_option_list;
 }

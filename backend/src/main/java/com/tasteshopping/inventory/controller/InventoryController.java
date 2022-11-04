@@ -4,7 +4,7 @@ import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.inventory.dto.InventoryReqDto2;
+import com.tasteshopping.inventory.dto.InventoryReqDto;
 import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.inventory.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +56,7 @@ public class InventoryController {
     }
 
     @PutMapping()
-    public ResponseEntity<BaseRes> putInventoryList(@AuthenticationPrincipal String email, @RequestBody InventoryReqDto2 inventoryReqDto){
+    public ResponseEntity<BaseRes> putInventoryList(@AuthenticationPrincipal String email, @RequestBody InventoryReqDto inventoryReqDto){
         try{
             return ResponseEntity.status(HttpStatus.OK).body(inventoryService.putInventoryList(inventoryReqDto));
         }

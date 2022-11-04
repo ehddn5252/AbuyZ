@@ -49,7 +49,7 @@ public class JwtFilter extends GenericFilterBean {
             String email = (String) authentication.getPrincipal();
 
             Optional<Users> user = userRepository.findByEmail(email);
-            if (!user.isPresent()) throw new UserNotFoundException();
+            if (!user.isPresent()||user.get().getStatus()==1) throw new UserNotFoundException();
 
             logger.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {

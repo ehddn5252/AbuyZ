@@ -1,18 +1,24 @@
 package com.tasteshopping.order.service;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inventory.dto.InventoryDto;
+import com.tasteshopping.inventory.dto.InventoryResDto;
+import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
+import com.tasteshopping.product.entity.ProductOptions;
+import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +30,7 @@ public class OrderListServiceImpl implements OrderListService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final OrderListRepository orderListRepository;
-
+    private final ProductOptionRepository productOptionRepository;
     @Override
     public List<OrderListDto> getOrderLists(String email) {
         Users user = userRepository.findByEmail(email).get();
@@ -52,7 +58,22 @@ public class OrderListServiceImpl implements OrderListService {
             List<Orders> ordersList = orderRepository.findByOrderList(ordersOptional.get());
             List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
             for (int i = 0; i < ordersList.size(); ++i) {
-                orderDtoList.add(ordersList.get(i).toDto());
+                OrderDto tmpOrdersList = ordersList.get(i).toDto();
+
+                Inventories inventories = ordersList.get(i).getInventory();
+                InventoryDto inventoryDto = inventories.toDto();
+                inventoryDto.setProductDto(inventories.getProduct().toDto());
+                String[] optionUidList = inventories.getProductOptionList().split(" ");
+                List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
+                for(int j=0;j<optionUidList.length;++j){
+                    ProductOptions productOptions = productOptionRepository.findById(Integer.parseInt(optionUidList[j].trim())).get();
+                    HashMap<String,String> hashMap = new HashMap<>();
+                    hashMap.put(productOptions.getName(),productOptions.getValue());
+                    retProductOptions.add(hashMap);
+                }
+                inventoryDto.setProductOptions(retProductOptions);
+                tmpOrdersList.setInventoryDto(inventoryDto);
+                orderDtoList.add(tmpOrdersList);
             }
             if (ordersList != null) {
                 return new BaseRes(200, "get product list success", orderDtoList);
