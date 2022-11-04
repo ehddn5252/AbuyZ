@@ -16,6 +16,8 @@ import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -409,9 +411,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Integer uid) {
-        Products product = productRepository.findById(uid).get();
-        productRepository.delete(product);
+    public BaseRes deleteProduct(Integer uid) {
+        Optional<Products> productsOptional = productRepository.findById(uid);
+        if(productsOptional.isPresent()) {
+            productRepository.delete(productsOptional.get());
+            return new BaseRes(200, "삭제 성공", null);
+        }
+        else{
+            throw new ProductNotFoundException();
+        }
     }
 
     @Override

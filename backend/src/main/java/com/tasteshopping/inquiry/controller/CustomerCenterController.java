@@ -1,13 +1,13 @@
 package com.tasteshopping.inquiry.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.inquiry.Exception.NoAuutorizationException;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.ReplyReqDto;
 import com.tasteshopping.inquiry.service.CustomerCenterService;
+import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.review.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class CustomerCenterController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
         } catch (NoInquiryException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BaseRes(404, "존재하지 않는 리소스에 대한 요청", null));
+            return e.baseResResponseEntity;
         }
     }
 
@@ -79,7 +79,6 @@ public class CustomerCenterController {
             res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto);
         } catch (IOException e) {
             e.printStackTrace();
-
             res = new BaseRes(202, "파일 업로드 에러", null);
         }
 
@@ -121,7 +120,8 @@ public class CustomerCenterController {
             BaseRes baseRes = customerCenterService.deleteCustomerCenterByUidSameEmail(uid, email);
             return ResponseEntity.status(HttpStatus.OK).body(baseRes);
         } catch (NotCorrectUserException e) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new BaseRes(403, "해당 유저가 아닙니다.", null));
+            return e.baseResResponseEntity;
+//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new BaseRes(403, "해당 유저가 아닙니다.", null));
         }
     }
 
@@ -149,8 +149,9 @@ public class CustomerCenterController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.deleteCustomerCenterReplyByUid(uid, email));
         }
-        catch (NoAuutorizationException e){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BaseRes(403, "관리자 계정이 아닙니다.", null));
+        catch (NoAuthorizationException e){
+              return e.baseResResponseEntity;
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BaseRes(403, "관리자 계정이 아닙니다.", null));
         }
     }
 }

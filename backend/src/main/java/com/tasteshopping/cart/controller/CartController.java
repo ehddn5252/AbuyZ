@@ -32,6 +32,7 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.OK).body(cartService.putCart(email, cartDto));
         }
         catch (OutOfStockException e){
+
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "재고가 없습니다."));
         }
     }

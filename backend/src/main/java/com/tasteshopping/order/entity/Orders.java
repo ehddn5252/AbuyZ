@@ -55,7 +55,7 @@ public class Orders {
     public OrderDto toDto() {
         OrderDto orderDto = new OrderDto();
         orderDto.setPrice(price);
-        orderDto.setUid(uid);
+        orderDto.setOrderUid(uid);
         orderDto.setStatus(status);
 //        orderDto.setCouponResDto(coupon.toDto());
         orderDto.setInventoryDto(inventory.toDto());

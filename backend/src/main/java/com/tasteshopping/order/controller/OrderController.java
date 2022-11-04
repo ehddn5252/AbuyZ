@@ -82,7 +82,7 @@ public class OrderController {
         }
         catch (OutOfStockException e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "남은 재고가 없습니다."));
+            return e.baseResResponseEntity;
         }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));
     }

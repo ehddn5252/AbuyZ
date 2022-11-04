@@ -18,7 +18,7 @@ public interface ProductService {
                                  MultipartFile[] multipartFiles,
                                  MultipartFile descriptionImg);
 
-    void deleteProduct(Integer uid);
+    BaseRes deleteProduct(Integer uid);
 
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
