@@ -1,15 +1,20 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+
 // StyledComponents
 import styled from "styled-components";
 import { TableRow } from "@mui/material";
+
 // 하위 Components
 import DeliveryAddModal from "./DeliveryAddModal";
 import DeliveryModifyModal from "./DeliveryModifyModal";
+
+// api
+import { getAddress } from "../../pages/api/user";
 
 export default function DeliveryList() {
   const [valuenumber, setValueNumber] = useState(0);
@@ -36,7 +41,13 @@ export default function DeliveryList() {
     setModifyOpen(true);
     setValueNumber(e.id);
   };
-
+  const aaddress = async () => {
+    const res = await getAddress();
+    console.log(res);
+  };
+  useEffect(() => {
+    aaddress();
+  });
   const dataList = datas.map((e) => (
     <TableRow key={e.id} style={{ padding: "1rem" }}>
       <td style={{ textAlign: "center", padding: "1rem" }}>
@@ -46,12 +57,16 @@ export default function DeliveryList() {
             name="address"
             checked
             onClick={() => setBasicDeliveryNumber(e.id)}
+            readOnly
+            value={0 || ""}
           />
         ) : (
           <input
             type="radio"
             name="address"
             onClick={() => setBasicDeliveryNumber(e.id)}
+            readOnly
+            value={1 || ""}
           />
         )}
       </td>

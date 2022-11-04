@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // MUI
-import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -74,7 +73,12 @@ export default function Nav() {
   };
 
   const goMypage = () => {
-    router.push("/mypage");
+    if (username) {
+      router.push("/mypage");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
   };
 
   const goHome = () => {
@@ -94,7 +98,12 @@ export default function Nav() {
   };
 
   const goBasket = () => {
-    router.push("/basket");
+    if (username) {
+      router.push("/basket");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
   };
   return (
     <Container>

@@ -5,12 +5,25 @@ import Button from "@mui/material/Button";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function ReviewAddModel({ productName, productOptions }) {
+export default function ReviewAddModel({
+  productName,
+  productOptions,
+  setOpen,
+}) {
   const [value, setValue] = React.useState(0);
+  const closeModal = () => {
+    setOpen(false);
+  };
   return (
     <Container>
-      <span style={{ fontWeight: "bold", fontSize: "2rem" }}>리뷰 작성</span>
+      <IconDiv>
+        <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
+      </IconDiv>
+      <ModalTitle style={{ fontWeight: "bold", fontSize: "2rem" }}>
+        리뷰 작성
+      </ModalTitle>
       <Box sx={{ display: "flex", marginTop: "3rem" }}>
         <ProductImg src={"images/sandwich.png"}></ProductImg>
         <ProductInfo>
@@ -89,3 +102,11 @@ const RateContainer = styled.div`
   flex-direction: row;
   margin-top: 2rem;
 `;
+
+const IconDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+const ModalTitle = styled.h1``;

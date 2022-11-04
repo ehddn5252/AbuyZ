@@ -1,13 +1,16 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import { getMyInfo } from "../../pages/api/user";
+
 // MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import { useRouter } from "next/router";
 
 // StyledComponents
 import styled from "styled-components";
@@ -15,21 +18,48 @@ import styled from "styled-components";
 // 하위 Components
 import PasswordChangeModal from "./PasswordChangeModal";
 import { withdrawal } from "../../pages/api/user";
+import { changeInfo } from "../../pages/api/user";
 export default function MyinfoChange() {
-  const [userId, setUserId] = useState("kjmk1007");
-  const [userName, setUserName] = useState("권도건");
-  const [userEmail, setUserEmail] = useState("kjmk1007@naver.com");
-  const [userPhone, setUserPhone] = useState("01012345678");
-  const [userSex, setUserSex] = useState("male");
-  const [userBirthDay, setUserBirthDay] = useState("1996-10-07");
-  const [userPw, setUserPw] = useState("qwer");
+  const router = useRouter();
+  const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhone, setUserPhone] = useState("");
+  const [userSex, setUserSex] = useState("");
+  const [userBirthDay, setUserBirthDay] = useState("");
+  const [userPw, setUserPw] = useState("");
   const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  console.log(userBirthDay);
+  const uuser = async () => {
+    const res = await getMyInfo();
+    setUserId(res.data.nickname);
+    setUserName(res.data.name);
+    setUserEmail(res.data.email);
+    setUserPhone(res.data.phoneNumber);
+    setUserSex(res.data.gender);
+    const bbirth = res.data.birth;
+    setUserBirthDay(bbirth);
+    console.log(typeof userBirthDay);
+  };
 
-  // const userwithdrawal = async () => {
-  //   const res = await withdrawal();
-  // };
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const userDto = {
+      birth: userBirthDay,
+      gender: userSex,
+      name: userName,
+      nickname: userId,
+      phoneNumber: userPhone,
+    };
+    console.log(userDto);
+    const res = await changeInfo(userDto);
+    alert("회원님의 정보가 수정되었습니다.");
+    router.push("/mypage");
+  };
+  useEffect(() => {
+    uuser();
+  }, []);
   const showModal = () => {
     setModalOpen(true);
   };
@@ -51,7 +81,7 @@ export default function MyinfoChange() {
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
-              <span style={{ fontWeight: "bold" }}>아이디</span>
+              <span style={{ fontWeight: "bold" }}>닉네임</span>
             </Grid>
             <Grid item xs={6}>
               <TextField
@@ -70,19 +100,8 @@ export default function MyinfoChange() {
             <Grid item xs={4}></Grid>
             <Grid item xs={6}>
               <span style={{ color: "#56a9f1" }}>
-                * 아이디는 변경 불가능합니다.
+                * 닉네임은 변경 불가능합니다.
               </span>
-            </Grid>
-          </Grid>
-          <Grid container spacing={1}>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={2} style={{ marginTop: "2rem" }}>
-              <span style={{ fontWeight: "bold" }}>비밀번호 변경</span>
-            </Grid>
-            <Grid item xs={6}>
-              <SubButton variant="outlined" onClick={showModal}>
-                수정
-              </SubButton>
             </Grid>
           </Grid>
           <Grid container spacing={1}>
@@ -122,6 +141,18 @@ export default function MyinfoChange() {
               ></TextField>
             </Grid>
           </Grid>
+          <Grid container spacing={1}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={2} style={{ marginTop: "2rem" }}>
+              <span style={{ fontWeight: "bold" }}>비밀번호 변경</span>
+            </Grid>
+            <Grid item xs={6}>
+              <SubButton variant="outlined" onClick={showModal}>
+                수정
+              </SubButton>
+            </Grid>
+          </Grid>
+
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -190,22 +221,25 @@ export default function MyinfoChange() {
                 >
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <FormControlLabel
-                      value="female"
+                      value="FEMALE"
                       control={<Radio />}
-                      label="여성"
-                      onClick={() => setUserSex("female")}
+                      label="여자"
+                      checked={userSex == "FEMALE"}
+                      onClick={() => setUserSex("FEMALE")}
                     />
                     <FormControlLabel
-                      value="male"
+                      value="MALE"
                       control={<Radio />}
-                      label="남성"
-                      onClick={() => setUserSex("male")}
+                      label="남자"
+                      checked={userSex == "MALE"}
+                      onClick={() => setUserSex("MALE")}
                     />
                     <FormControlLabel
-                      value="other"
+                      value="OTHER"
                       control={<Radio />}
                       label="선택안함"
-                      onClick={() => setUserSex("other")}
+                      checked={userSex == "OTHER"}
+                      onClick={() => setUserSex("OTHER")}
                     />
                   </div>
                 </RadioGroup>
@@ -221,7 +255,7 @@ export default function MyinfoChange() {
               <TextField
                 id="date"
                 type="date"
-                defaultValue={userBirthDay}
+                value={userBirthDay}
                 sx={{ width: 220 }}
                 InputLabelProps={{
                   shrink: true,
@@ -238,7 +272,9 @@ export default function MyinfoChange() {
             }}
           >
             <QuitButton>탈퇴하기</QuitButton>
-            <ModifyButton>수정하기</ModifyButton>
+            <ModifyButton type="submit" onClick={handleSubmit}>
+              수정하기
+            </ModifyButton>
           </div>
           {modalOpen && (
             <PasswordChangeModal

@@ -4,7 +4,7 @@ import { getMyInfo } from "../../pages/api/user";
 // StyledComponent
 import styled from "styled-components";
 
-export default function Myinfo({ setTap }) {
+export default function Myinfo({ setTap, SetActiveTap }) {
   const [userName, setUserName] = useState("");
   const uuser = async () => {
     const res = await getMyInfo();
@@ -14,14 +14,17 @@ export default function Myinfo({ setTap }) {
     uuser();
   }, []);
   const tap6Change = () => {
+    SetActiveTap(7);
     setTap(6);
   };
 
   const tap3Change = () => {
+    SetActiveTap(3);
     setTap(3);
   };
 
   const tap2Change = () => {
+    SetActiveTap(2);
     setTap(2);
   };
   return (
@@ -38,14 +41,14 @@ export default function Myinfo({ setTap }) {
           </HistoryCount>
         </HistoryDiv>
         <HistoryDiv onClick={tap3Change}>
-          <HistoryTitle>나의 쿠폰</HistoryTitle>
+          <HistoryTitle>사용 가능 쿠폰</HistoryTitle>
           <HistoryCount>
             {" "}
             <span style={{ color: "#56a9f1" }}>1</span>개
           </HistoryCount>
         </HistoryDiv>
         <HhistoryDiv onClick={tap6Change}>
-          <HistoryTitle>작성 가능한 리뷰</HistoryTitle>
+          <HistoryTitle>작성 가능 리뷰</HistoryTitle>
           <HistoryCount>
             <span style={{ color: "#56a9f1" }}>1</span>건
           </HistoryCount>

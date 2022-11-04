@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
+// State
+import { searchName } from "../states";
 export default function Search() {
+  const [searchValue, setSearchValue] = useState(searchName);
+  console.log(searchValue);
   return (
     <Container>
       <h1>과자/디저트/아이스크림</h1>
