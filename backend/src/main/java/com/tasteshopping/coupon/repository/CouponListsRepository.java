@@ -13,7 +13,7 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     @EntityGraph(attributePaths = {"coupons.bigCategories","user","coupons"})
     List<CouponLists> findByUserEmail(String email);
     @EntityGraph(attributePaths = {"coupons.bigCategories","user","coupons"})
-    List<CouponLists> findByUserEmailAndCoupons_BigCategoriesUid(String email,int category);
+    List<CouponLists> findByUserEmailAndCoupons_BigCategoriesUidAndStatus(String email,int uid,int status);
     @EntityGraph(attributePaths = {"user","coupons"})
     Optional<CouponLists>findByUserEmailAndCouponsUid(String email, int uid);
     @EntityGraph(attributePaths = {"user","coupons"})

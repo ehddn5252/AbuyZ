@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService{
             userAddressRepository.save(userAddresses);
         }
 
-        ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료");
+        ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료",200);
         return responseDto;
     }
 
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService{
         redisService.setData(loginDto.getEmail(),refreshToken);
 
         TokenDto tokenDto = new TokenDto(accessToken,refreshToken,authentication.getAuthorities().toString());
-        ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공");
+        ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공",200);
 
         return responseDto;
     }
@@ -108,12 +108,12 @@ public class UserServiceImpl implements UserService{
                 new UsernamePasswordAuthenticationToken(email, passwordChangeDto.getPassword());
         authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         if(authenticationToken==null){
-            responseDto = new ResponseDto(new ResultDto(false),"기존 비밀번호가 틀림");
+            responseDto = new ResponseDto(new ResultDto(false),"기존 비밀번호가 틀림",200);
         }else{
             Optional<Users> findUser = userRepository.findByEmail(email);
             findUser.get().updatePassword(passwordEncoder.encode(passwordChangeDto.getNew_password()));
             userRepository.save(findUser.get());
-            responseDto = new ResponseDto(new ResultDto(true),"비밀 번호 변경 완료");
+            responseDto = new ResponseDto(new ResultDto(true),"비밀 번호 변경 완료",200);
         }
         return responseDto;
     }
@@ -122,9 +122,9 @@ public class UserServiceImpl implements UserService{
     public ResponseDto checkEmail(String email) {
         ResponseDto responseDto;
         if (userRepository.findByEmail(email).orElse(null) != null) {
-            responseDto = new ResponseDto(new ResultDto(false),"이미 존재하는 이메일입니다.");
+            responseDto = new ResponseDto(new ResultDto(false),"이미 존재하는 이메일입니다.",200);
         }else{
-            responseDto = new ResponseDto(new ResultDto(true),"사용가능한 이메일입니다.");
+            responseDto = new ResponseDto(new ResultDto(true),"사용가능한 이메일입니다.",200);
         }
         return responseDto;
     }
@@ -133,9 +133,9 @@ public class UserServiceImpl implements UserService{
     public ResponseDto checkNickname(String nickname) {
         ResponseDto responseDto;
         if (userRepository.findByNickname(nickname).orElse(null) != null) {
-            responseDto = new ResponseDto(new ResultDto(false),"이미 존재하는 닉네임입니다.");
+            responseDto = new ResponseDto(new ResultDto(false),"이미 존재하는 닉네임입니다.",200);
         }else{
-            responseDto = new ResponseDto(new ResultDto(true),"사용가능한 닉네임입니다.");
+            responseDto = new ResponseDto(new ResultDto(true),"사용가능한 닉네임입니다.",200);
         }
         return responseDto;
     }
@@ -243,7 +243,7 @@ public class UserServiceImpl implements UserService{
     public ResponseDto getInfo(String email) {
         Users user = userRepository.findByEmail(email).get();
         UserDto userDto = user.toDto();
-        ResponseDto responseDto = new ResponseDto(userDto,"회원 정보 조회 성공");
+        ResponseDto responseDto = new ResponseDto(userDto,"회원 정보 조회 성공",200);
         return responseDto;
     }
     
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService{
         Users user = userRepository.findByEmail(email).get();
         user.modifyInfo(userModificationDto);
         userRepository.save(user);
-        ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공");
+        ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원 정보 수정 성공",200);
         return responseDto;
     }
 
@@ -358,7 +358,7 @@ public class UserServiceImpl implements UserService{
         String newRefreshToken = tokenProvider.createRefreshToken(authentication);
         TokenDto tokenDto = new TokenDto(newAccessToken,newRefreshToken,authentication.getAuthorities().toString());
         redisService.setData(email,newRefreshToken);
-        ResponseDto responseDto = new ResponseDto(tokenDto,"재발급 성공");
+        ResponseDto responseDto = new ResponseDto(tokenDto,"재발급 성공",200);
 
         return responseDto;
     }
