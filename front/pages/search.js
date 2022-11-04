@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
+// API
+import { keywordSearch } from "./api/product";
+
+import { useRecoilState } from "recoil";
 // State
 import { searchName } from "../states";
 export default function Search() {
-  const [searchValue, setSearchValue] = useState(searchName);
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+  const [productList, setProductList] = useState([]);
+  const getProductList = async () => {
+    const res = await keywordSearch(searchValue);
+    setProductList(res.data);
+  };
+
+  useEffect(() => {
+    getProductList();
+  }, [searchValue]);
   console.log(searchValue);
   return (
     <Container>
@@ -16,7 +29,7 @@ export default function Search() {
           <SearchSideNav />
         </SideDiv>
         <MainDiv>
-          <ProductLIst />
+          <ProductLIst productList={productList} />
         </MainDiv>
       </div>
     </Container>

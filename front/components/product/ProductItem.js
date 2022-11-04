@@ -7,22 +7,27 @@ export default function ProductItem({ product }) {
   return (
     <Container>
       <ImgBox>
-        <Image src={MilkImage} width={350} height={350} />
+        <img
+          src={product.repImg}
+          style={{ width: "250px", height: "auto", objectFit: "cover" }}
+        />
       </ImgBox>
       <ContentBox>
         <div style={{ display: "flex", alignItems: "center" }}>
           <StarIcon sx={{ color: "#ffc107" }} />
-          <p>{product.review_score}</p>
-          <p>({product.review_count})</p>
+          <p>{product.reviewRate}</p>
+          {product.reviewNum ? <p>({product.reviewNum})</p> : <p>(0)</p>}
         </div>
 
-        <p style={{ height: "2rem" }}>{product.product_name}</p>
+        <p style={{ height: "2rem" }}>{product.name}</p>
         <div style={{ display: "flex", alignItems: "center" }}>
-          {product.sale_radio ? <p>{product.sale_radio}</p> : <p></p>}
-          <p>{product.price - product.sale_radio * 0.01 * product.price}</p>
+          {product.discountRate ? <p>{product.discountRate}%</p> : <p></p>}
+          <p>
+            {product.price - product.discountRate * 0.01 * product.price} 원
+          </p>
         </div>
 
-        {product.sale_radio ? <p>{product.price}</p> : null}
+        {product.discountRate ? <p>{product.price} 원</p> : null}
       </ContentBox>
       <PriceBox></PriceBox>
     </Container>
@@ -41,7 +46,7 @@ const ImgBox = styled.div`
 
 const ContentBox = styled.div`
   display: flex;
-  width: 100%;
+  width: 90%;
   flex-direction: column;
 `;
 
