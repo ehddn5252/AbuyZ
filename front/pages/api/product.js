@@ -58,20 +58,15 @@ export async function keywordSearch(keyword) {
 // FO 조건 상품 조건 탐색
 export async function conditionSearch(detailDto) {
   return new Promise((resolve) => {
-    https
-      .post("/product/fo-search/detail", {
-        small_categories_uid: detailDto.small_categories_uid,
-        price_uid: detailDto.price_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("fo 조건 상품 조건 검색 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("fo 조건 상품 조건 검색 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/product/fo-search/detail", detailDto).then((response) => {
+      if (response.status === 200) {
+        console.log("fo 조건 상품 조건 검색 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("fo 조건 상품 조건 검색 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });

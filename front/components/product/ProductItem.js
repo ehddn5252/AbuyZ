@@ -13,23 +13,37 @@ export default function ProductItem({ product }) {
         />
       </ImgBox>
       <ContentBox>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <StarIcon sx={{ color: "#ffc107" }} />
-          <p>{product.reviewRate}</p>
-          {product.reviewNum ? <p>({product.reviewNum})</p> : <p>(0)</p>}
+          <p style={{ margin: 0 }}>{product.reviewRate}</p>
+          {product.reviewNum ? (
+            <p style={{ margin: 0 }}>({product.reviewNum})</p>
+          ) : (
+            <p style={{ margin: 0 }}>(0)</p>
+          )}
         </div>
 
         <p style={{ height: "2rem" }}>{product.name}</p>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {product.discountRate ? <p>{product.discountRate}%</p> : <p></p>}
-          <p>
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "0.5rem" }}
+        >
+          {product.discountRate ? (
+            <DiscountP>{product.discountRate}%</DiscountP>
+          ) : (
+            <DiscountP></DiscountP>
+          )}
+          <PriceP>
             {product.price - product.discountRate * 0.01 * product.price} 원
-          </p>
+          </PriceP>
         </div>
 
-        {product.discountRate ? <p>{product.price} 원</p> : null}
+        {product.discountRate ? <CancelP>{product.price} 원</CancelP> : null}
       </ContentBox>
-      <PriceBox></PriceBox>
     </Container>
   );
 }
@@ -50,4 +64,19 @@ const ContentBox = styled.div`
   flex-direction: column;
 `;
 
-const PriceBox = styled.div``;
+const CancelP = styled.p`
+  text-decoration: line-through;
+  color: #746d5d;
+  margin: 0;
+`;
+
+const PriceP = styled.p`
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const DiscountP = styled.p`
+  margin: 0;
+  color: #56a9f1;
+`;

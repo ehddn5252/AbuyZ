@@ -7,6 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 export default function ProductLIst({ productList }) {
   const inquiryList = () => [
+    { label: "최근 등록 순" },
     { label: "가격 낮은 순" },
     { label: "가격 높은 순" },
     { label: "평점 높은 순" },
@@ -15,7 +16,7 @@ export default function ProductLIst({ productList }) {
 
   return (
     <div>
-      <Right>
+      {/* <Right>
         <Autocomplete
           size="small"
           options={inquiryList()}
@@ -26,9 +27,9 @@ export default function ProductLIst({ productList }) {
             color: "#737373",
           }}
           renderInput={(params) => <TextField {...params} />}
-          defaultValue="가격 낮은 순"
+          defaultValue="최근 등록 순"
         />
-      </Right>
+      </Right> */}
       <Center>
         <Grid container>
           {productList.map((product, idx) => (
