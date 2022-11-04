@@ -183,6 +183,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public ResponseDto authenticationNumber(AuthenticationDto authenticationDto) {
         ResponseDto responseDto = new ResponseDto();
+        System.out.println("기존 인증 번호"+redisService.getData(authenticationDto.getEmail()));
+        System.out.println("확인 인증 번호"+authenticationDto.getCertification_number());
         if (!redisService.getData(authenticationDto.getEmail()).equals(authenticationDto.getCertification_number())) {
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("불일치");
