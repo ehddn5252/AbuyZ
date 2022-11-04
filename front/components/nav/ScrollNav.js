@@ -22,25 +22,25 @@ import { getMyInfo } from "../../pages/api/user";
 // State
 import { searchName } from "../../states";
 import { useRecoilState } from "recoil";
+
 export default function ScrollNav() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [atoken, setAToken] = useState("");
-  const [searchValue, setSearchValue] = useState(searchName);
-  const [value, setValue] = useRecoilState(searchName);
+  // 검색어
+  const [keyword, setKeyword] = useState("");
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+
+  const keywordSearch = () => {
+    setSearchValue(keyword);
+    router.push("/search");
+  };
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
 
-  useEffect(() => {
-    setSearchValue("");
-  }, []);
-
-  useEffect(() => {
-    setValue(searchValue);
-  }, [searchValue]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -111,11 +111,11 @@ export default function ScrollNav() {
             placeholder="찾으시는 상품을 검색해주세요"
             inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
             onChange={(e) => {
-              setSearchValue(e.target.value);
+              setKeyword(e.target.value);
             }}
           />
           <IconButton
-            onClick={goSearch}
+            onClick={keywordSearch}
             type="button"
             sx={{ color: "#56a9f1" }}
             aria-label="search"
