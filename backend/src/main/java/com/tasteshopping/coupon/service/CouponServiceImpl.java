@@ -76,13 +76,13 @@ public class CouponServiceImpl implements CouponService {
     }
     @Override
     public ResponseDto getMyCoupons(String email) {
-        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmail(email);
+        List<CouponLists> search_result = couponListsRepository.findByUserEmail(email);
         return toDto(search_result);
     }
 
     @Override
     public ResponseDto getAvailableCoupons(String email, int big_category_id) {
-        List<CouponLists> search_result = couponListsRepository.findCouponListsByUserEmailAndCategory(email,big_category_id);
+        List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUid(email,big_category_id);
         return toDto(search_result);
     }
 
@@ -109,6 +109,7 @@ public class CouponServiceImpl implements CouponService {
             }
             couponResListDto.getResult().add(couponLists.toCouponsResDto());
         }
+        couponResListDto.setCount(search_result.size());
         responseDto.setData(couponResListDto);
         responseDto.setMessage("조회성공");
         return responseDto;
