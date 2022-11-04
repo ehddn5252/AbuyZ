@@ -112,7 +112,7 @@ public class ProductController {
             ProductDetailDto l = productService.getDetailProduct(productUidReqDto.getProducts_uid());
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
         } catch (ProductNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseRes.of(404, "해당 uid의 product가 없습니다.", null));
+            return e.baseResResponseEntity;
         }
     }
 
@@ -137,11 +137,11 @@ public class ProductController {
                                           @RequestBody ProductUidReqDto productUidReqDto) {
         Integer uid = productUidReqDto.getProducts_uid();
         try {
-            productService.deleteProduct(uid);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(BaseRes.of(204, "해당 상품이 없습니다."));
+            return ResponseEntity.status(HttpStatus.OK).body(productService.deleteProduct(uid));
+        } catch (ProductNotFoundException e) {
+            e.printStackTrace();
+            return e.baseResResponseEntity;
         }
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 삭제 성공!"));
     }
 
     @PutMapping("/modify")
