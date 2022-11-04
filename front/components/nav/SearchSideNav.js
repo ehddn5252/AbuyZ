@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState } from "react";
 
 // MUI
 import Container from "@mui/material/Container";
@@ -12,14 +12,40 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 // StyledComponents
 import styled from "styled-components";
 
-export default function SearchSideNav() {
+export default function SearchSideNav({
+  setFeeOption,
+  setPriceOption,
+  setCategoryOption,
+  setStartPrice,
+  setEndPrice,
+}) {
+  const [start, setStart] = useState(0);
+  const [end, setEnd] = useState(0);
+
+  // reset 초기화
+  const resetButton = () => {
+    setFeeOption(null);
+    setPriceOption(null);
+    setCategoryOption(null);
+    setStartPrice(null);
+    setEndPrice(null);
+  };
+
+  // 시작 끝값 변경 적용
+  const startendButton = () => {
+    setStartPrice(start);
+    setEndPrice(end);
+  };
   return (
     <NavContainer>
       <Title>
         <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
           필터
         </p>
-        <div style={{ display: "flex", alignItems: "flex-end" }}>
+        <div
+          onClick={resetButton}
+          style={{ display: "flex", alignItems: "flex-end", cursor: "pointer" }}
+        >
           <RestartAltIcon />
           <p style={{ margin: 0 }}>초기화</p>
         </div>
@@ -32,20 +58,14 @@ export default function SearchSideNav() {
         </FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="free"
           name="radio-buttons-group"
+          onChange={(e) => {
+            setFeeOption(e.target.value);
+          }}
         >
-          <FormControlLabel value="free" control={<Radio />} label="무료" />
-          <FormControlLabel
-            value="donw"
-            control={<Radio />}
-            label="3000원 미만"
-          />
-          <FormControlLabel
-            value="up"
-            control={<Radio />}
-            label="3000원 이상"
-          />
+          <FormControlLabel value="0" control={<Radio />} label="무료" />
+          <FormControlLabel value="1" control={<Radio />} label="3000원 미만" />
+          <FormControlLabel value="2" control={<Radio />} label="3000원 이상" />
         </RadioGroup>
       </FormControl>
       <FormControl sx={{ marginTop: "1rem" }}>
@@ -54,29 +74,41 @@ export default function SearchSideNav() {
         </FormLabel>
         <RadioGroup
           aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue="free"
           name="radio-buttons-group"
+          onChange={(e) => {
+            setPriceOption(e.target.value);
+          }}
         >
-          <FormControlLabel value="1" control={<Radio />} label="1만원 이하" />
+          <FormControlLabel value="0" control={<Radio />} label="3만원 이하" />
           <FormControlLabel
-            value="2"
-            control={<Radio />}
-            label="1만원 ~ 3만원"
-          />
-          <FormControlLabel
-            value="3"
+            value="1"
             control={<Radio />}
             label="3만원 ~ 10만원"
           />
-          <FormControlLabel value="4" control={<Radio />} label="10만원이상" />
+          <FormControlLabel
+            value="2"
+            control={<Radio />}
+            label="10만원 ~ 30만원"
+          />
+          <FormControlLabel value="3" control={<Radio />} label="30만원이상" />
         </RadioGroup>
       </FormControl>
       <InputBox>
-        <Input></Input>
+        <Input
+          name="start"
+          onClick={(e) => {
+            setStart(e.target.value);
+          }}
+        ></Input>
         <p style={{ margin: 0 }}>~</p>
-        <Input></Input>
+        <Input
+          name="end"
+          onClick={(e) => {
+            setEnd(e.target.value);
+          }}
+        ></Input>
       </InputBox>
-      <Button>필터 적용하기</Button>
+      <Button onClick={startendButton}>필터 적용하기</Button>
     </NavContainer>
   );
 }
