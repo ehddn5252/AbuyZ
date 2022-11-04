@@ -3,15 +3,14 @@ package com.tasteshopping.coupon.service;
 import com.tasteshopping.categories.entity.BigCategories;
 import com.tasteshopping.categories.repository.BigCategoryRepository;
 import com.tasteshopping.coupon.dto.CouponDto;
+import com.tasteshopping.coupon.dto.CouponResDto;
 import com.tasteshopping.coupon.dto.CouponResListDto;
-import com.tasteshopping.coupon.dto.CouponUidDto;
 import com.tasteshopping.coupon.entity.CouponLists;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.coupon.repository.CouponListsRepository;
 import com.tasteshopping.coupon.repository.CouponRepository;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.user.dto.ResultDto;
-import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,16 +35,12 @@ public class CouponServiceImpl implements CouponService {
 
     private final BigCategoryRepository bigCategoryRepository;
     private final CouponRepository couponRepository;
-    private final UserRepository userRepository;
     private final CouponListsRepository couponListsRepository;
+    private final UserRepository userRepository;
     @Override
     @Transactional
-    public ResponseDto create(String email,CouponDto couponDto) {
-        ResponseDto responseDto = check(email);
-        if(responseDto!=null){
-            return responseDto;
-        }
-        responseDto = new ResponseDto();
+    public ResponseDto create(CouponDto couponDto) {
+        ResponseDto responseDto =new ResponseDto();
         Optional<BigCategories> bigCategories =bigCategoryRepository.findById(couponDto.getBig_categories_uid());
         if(!bigCategories.isPresent()){
             responseDto.setMessage("추가 실패 : 잘못된 카테고리");
@@ -63,20 +60,16 @@ public class CouponServiceImpl implements CouponService {
     }
     @Override
     @Transactional
-    public ResponseDto delete(String email, CouponUidDto couponUidDto) {
-        ResponseDto responseDto = check(email);
-        if(responseDto!=null){
-            return responseDto;
-        }
-        responseDto = new ResponseDto();
+    public ResponseDto delete(String email, int coupon_uid) {
+        ResponseDto responseDto = new ResponseDto();
 
-        Optional<Coupons> coupons = couponRepository.findById(couponUidDto.getCoupon_uid());
+        Optional<CouponLists> coupons = couponListsRepository.findByCouponsUidAndUserEmail(coupon_uid,email);
         if(!coupons.isPresent()){
-            responseDto.setMessage("추가 실패 : 존재하지 않는 쿠폰");
+            responseDto.setMessage("삭제 실패 : 존재하지 않는 쿠폰");
             responseDto.setData(new ResultDto(false));
             return responseDto;
         }
-        couponRepository.delete(coupons.get());
+        couponListsRepository.delete(coupons.get());
         responseDto.setMessage("삭제 완료");
         responseDto.setData(new ResultDto(true));
         return responseDto;
@@ -93,20 +86,10 @@ public class CouponServiceImpl implements CouponService {
         return toDto(search_result);
     }
 
-    private ResponseDto check(String email){
-        ResponseDto responseDto = new ResponseDto();
-        Users users = userRepository.findByEmail(email).get();
-        if(users.getUserRoles()!= Role.ADMIN){
-            responseDto.setMessage("추가 실패 : 궏한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
-        return null;
-    }
     @Transactional
     public ResponseDto toDto(List<CouponLists> search_result){
         ResponseDto responseDto = new ResponseDto();
-        CouponResListDto couponResListDto = new CouponResListDto();
+        CouponResListDto couponResListDto = new CouponResListDto(new ArrayList<>(),0);
         Date now_date;
         try {
             String now = LocalDateTime.now().toString();
@@ -127,6 +110,45 @@ public class CouponServiceImpl implements CouponService {
             couponResListDto.getResult().add(couponLists.toCouponsResDto());
         }
         responseDto.setData(couponResListDto);
+        responseDto.setMessage("조회성공");
+        return responseDto;
+    }
+    @Override
+    public ResponseDto getAllCoupons(){
+        ResponseDto responseDto = new ResponseDto();
+        List<Coupons>findCoupons = couponRepository.findAll();
+        List<CouponResDto>result = findCoupons.stream().map(Coupons::toDto).collect(Collectors.toList());
+        responseDto.setData(result);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
+    }
+    @Transactional
+    @Override
+    public ResponseDto deleteCoupon(int uid){
+        ResponseDto responseDto = new ResponseDto();
+        couponRepository.deleteById(uid);
+        responseDto.setMessage("삭제 완료");
+        return responseDto;
+    }
+    @Transactional
+    @Override
+    public ResponseDto issueCoupon(String email,int uid){
+        ResponseDto responseDto = new ResponseDto();
+        Optional<CouponLists>findCoupon = couponListsRepository.findByUserEmailAndCouponsUid(email,uid);
+        if(findCoupon.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("발급 실패: 이미 발급받은 쿠폰입니다.");
+            return responseDto;
+        }
+        Users users = userRepository.findByEmail(email).get();
+        Coupons coupons = couponRepository.findById(uid).get();
+        CouponLists couponLists = CouponLists.builder()
+                .coupons(coupons)
+                .user(users)
+                .build();
+        couponListsRepository.save(couponLists);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("발급 성공");
         return responseDto;
     }
 }
