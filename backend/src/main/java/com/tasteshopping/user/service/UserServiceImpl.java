@@ -45,8 +45,6 @@ public class UserServiceImpl implements UserService{
         Users user = userDto.toEntity(loginType);
         Users users = userRepository.save(user);
 
-        log.warn(users.getEmail());
-
         if(userDto.getAddress()!=null){
             UserAddresses userAddresses = UserAddresses.builder()
                     .address(userDto.getAddress())
