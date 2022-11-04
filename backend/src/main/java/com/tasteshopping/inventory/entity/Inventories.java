@@ -52,15 +52,4 @@ public class Inventories {
         inventoryDto.setProductDto(product.toDto());
         return inventoryDto;
     }
-
-    public InventoryDto toResDto(){
-        InventoryDto inventoryDto = new InventoryDto();
-        inventoryDto.setUid(uid);
-        inventoryDto.setCount(count);
-        inventoryDto.setPrice(price);
-        inventoryDto.setProductOptionUidString(productOptionList);
-
-
-        return inventoryDto;
-    }
 }

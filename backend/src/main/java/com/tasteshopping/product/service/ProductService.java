@@ -14,16 +14,12 @@ public interface ProductService {
 
     List<ProductDto> getAllProduct();
 
-    Optional<Integer> getMaxUid();
-
-    // 2022.10.29 재고 방식 -> 수정 요함
     BaseRes createProductRelated(ProductCreateDto productCreateDto,
                                  MultipartFile[] multipartFiles,
                                  MultipartFile descriptionImg);
 
     void deleteProduct(Integer uid);
 
-    // 2022.10.29 재고 방식 -> 수정 요함
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
 
@@ -31,7 +27,6 @@ public interface ProductService {
     void modifyProductOption(ProductCreateDto productCreateDto);
 
     void modifyProductPicture(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
-
 
     List<ProductDto> findByKeyword(String keyword);
 
@@ -51,7 +46,9 @@ public interface ProductService {
 
     ProductDetailDto getDetailProduct(int productsUid);
 
-    List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid, Integer startPrice, Integer endPrice);
+    List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid,
+                                                              Integer startPrice,
+                                                              Integer endPrice);
 
     List<ProductDto> findByKeywordAndFilter(List<ProductDto> newL, SearchDto searchDto);
 

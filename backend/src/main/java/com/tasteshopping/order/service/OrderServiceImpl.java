@@ -15,12 +15,11 @@ import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
+import com.tasteshopping.common.service.UtilService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -46,24 +45,10 @@ public class OrderServiceImpl implements OrderService {
         List<Carts> cartList = cartRepository.findByUser(user);
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(Status.PROCESS.toString());
-        int totalPrice = 0;
         for (int i = 0; i < cartList.size(); ++i) {
             orderLists = pay(cartList.get(i),orderLists,user,orderLists.getTotalPrice());
         }
         orderListRepository.save(orderLists);
-    }
-
-    public Date getDate(){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = new Date(System.currentTimeMillis());
-        String s = formatter.format(date).toString();
-        try {
-            date = formatter.parse(s);
-        } catch (ParseException pErr) {
-            System.out.println(pErr);
-        }
-        return date;
     }
 
     public OrderLists createOrderLists(Users user){
@@ -71,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
         orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-        Date date = getDate();
+        Date date = UtilService.getDate();
         orderLists.setDate(date);
         return orderListRepository.save(orderLists);
     }
