@@ -12,16 +12,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-const coupon = [
-  {
-    title: "빼빼로 데이 1000원 쿠폰",
-    startDate: "2022.10.18 16:00",
-    endDate: "2022.11.11 12:00",
-    category: "식품",
-    discount: "1000",
-  },
-];
-
 export default function CouponInquire() {
   // 대분류
   const [bigCategory, setBigCategory] = useState("");
@@ -46,6 +36,9 @@ export default function CouponInquire() {
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
+
+  // 쿠폰 리스트
+  const [couponArray, setCouponArray] = useState([]);
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -86,11 +79,49 @@ export default function CouponInquire() {
   };
 
   const getCoupong = async () => {
-    const couponList = await inquirecoupon();
-    console.log(couponList);
+    const c = await inquirecoupon();
+    const c_lst = Object.entries(c.data);
+    const tmp = [];
+    // 조건 검사
+    for (let i = 0; i < c_lst.length; i++) {
+      // 카테고리 번호가 맞는지
+      if (
+        c_lst[i][1].available_categories_uid == bigCategory ||
+        bigCategory == 0
+      ) {
+        // 쿠폰명을 포함하고 있는지
+        if (c_lst[i][1].name.includes(name) == true || name == "") {
+          // 할인금액을 포함하고 있는지
+          if (
+            (leftSale <= c_lst[i][1].discount_price &&
+              c_lst[i][1].discount_price <= rightSale) ||
+            (leftSale == 0 && rightSale == 0)
+          ) {
+            // 기준 기간에 따른 날짜를 측정
+            // 기준기간 선택 안했을 때
+            if (standDate === 0) {
+              if (startDate <= endDate) {
+                tmp.push(c_lst[i][1]);
+              }
+            }
+            // 쿠폰사용일시
+            else if (standDate === 1) {
+              if (startDate <= c_lst[i][1].start_date) {
+                tmp.push(c_lst[i][1]);
+              }
+            }
+            // 쿠폰마감일시
+            else if (standDate === 2) {
+              if (c_lst[i][1].end_date <= endDate) {
+                tmp.push(c_lst[i][1]);
+              }
+            }
+          }
+        }
+      }
+    }
+    setCouponArray(tmp);
   };
-
-  console.log(startDate, "@@@@@@@@@@");
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -267,7 +298,7 @@ export default function CouponInquire() {
       >
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
       </Grid2>
-      {/* 기간 */}
+      {/* 조회 기간 */}
       <Grid2
         xs={12}
         sx={{
@@ -300,7 +331,6 @@ export default function CouponInquire() {
           padding: "0",
           width: "100%",
           background: "white",
-          // height: "5rem",
         }}
       >
         <ButtonBox>
@@ -323,7 +353,7 @@ export default function CouponInquire() {
           }}
         >
           {/* 조회한 쿠폰 리스트 */}
-          <CouponList />
+          <CouponList couponArray={couponArray} />
         </Grid2>
         <Grid2
           item

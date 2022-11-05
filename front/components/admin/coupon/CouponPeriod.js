@@ -17,15 +17,14 @@ export default function CouponPeriod(props) {
   const [standard, setStandard] = useState("");
 
   const standardChange = (e) => {
+    props.setStandDate(e.target.value);
     setStandard(e.target.value);
   };
 
-  console.log(standard);
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
-
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
       <Grid2
@@ -133,7 +132,6 @@ const ButtonGroup = styled.div`
   height: 100%;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0; */
 `;
 
 const Button = styled.button`
@@ -154,8 +152,6 @@ const WaveTag = styled.div`
 `;
 
 export const MyDatePicker = styled(DatePicker)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
   height: 3rem;
   font-size: 1rem;
   font-weight: bold;
