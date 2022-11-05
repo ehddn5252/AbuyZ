@@ -228,8 +228,12 @@ export default function MyCouponList() {
         </Grid>
       ) : (
         <BlankBox>
-          <LocalOfferOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>보유하신 쿠폰이 없습니다</p>
+          <LocalOfferOutlinedIcon
+            sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
+          />
+          <p style={{ fontSize: "2rem", color: "rgb(86, 169, 241,0.7)" }}>
+            보유하신 쿠폰이 없습니다
+          </p>
         </BlankBox>
       )}
     </MyCouponContainer>

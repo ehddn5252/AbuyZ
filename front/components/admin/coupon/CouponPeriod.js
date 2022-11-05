@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function CouponPeriod() {
+export default function CouponPeriod(props) {
   // 기준기간
   const [standard, setStandard] = useState("");
 
@@ -20,6 +20,7 @@ export default function CouponPeriod() {
     setStandard(e.target.value);
   };
 
+  console.log(standard);
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
@@ -76,12 +77,12 @@ export default function CouponPeriod() {
                 vertical: "top",
                 horizontal: "left",
               },
-              getContentAnchorEl: null,
+              // getContentAnchorEl: null,
             }}
             sx={{ border: 1, height: 50, borderRadius: 0 }}
           >
-            <MenuItem value={"쿠폰사용일시"}>쿠폰사용일시</MenuItem>
-            <MenuItem value={"쿠폰마감일시"}>쿠폰마감일시</MenuItem>
+            <MenuItem value={1}>쿠폰사용일시</MenuItem>
+            <MenuItem value={2}>쿠폰마감일시</MenuItem>
           </Select>
         </FormControl>
         <ButtonGroup>
@@ -100,7 +101,9 @@ export default function CouponPeriod() {
         >
           <MyDatePicker
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date) => {
+              props.setStartDate(date), setStartDate(date);
+            }}
             selectsStart
             startDate={startDate}
             // endDate={endDate}
@@ -109,7 +112,9 @@ export default function CouponPeriod() {
           <WaveTag>~</WaveTag>
           <MyDatePicker
             selected={endDate}
-            onChange={(date) => setEndDate(date)}
+            onChange={(date) => {
+              props.setEndDate(date), setEndDate(date);
+            }}
             selectsEnd
             startDate={startDate}
             endDate={endDate}

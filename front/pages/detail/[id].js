@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -8,16 +8,10 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import styled from "styled-components";
 
 // 하위 컴포넌트
-import ProductDetailInfo from "../components/product/ProductDetailInfo";
-import ProductReview from "../components/product/ProductReview";
-import ProductInfo from "../components/product/ProductInfo";
-import ExchangeReturn from "../components/product/ExchangeReturn";
-
-export async function getStaticProps() {
-  return {
-    props: { time: new Date().toISOString() },
-  };
-}
+import ProductDetailInfo from "../../components/product/ProductDetailInfo";
+import ProductReview from "../../components/product/ProductReview";
+import ProductInfo from "../../components/product/ProductInfo";
+import ExchangeReturn from "../../components/product/ExchangeReturn";
 
 export default function Detail() {
   return (

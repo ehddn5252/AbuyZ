@@ -22,9 +22,34 @@ export async function createcoupon(couponDto) {
           console.log("쿠폰 생성 실패", response);
           resolve(response);
         }
+      })
+      .catch((e) => {
+        console.log(e);
       });
-  }).catch((e) => {
-    console.log(e);
+  });
+}
+
+// 관리자 쿠폰 조회
+export async function inquirecoupon() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    console.log("########");
+    https
+      .get("/coupon/list")
+      .then((response) => {
+        console.log("!!@!@");
+        if (response.status === 200) {
+          console.log("쿠폰 조회 완료", response);
+          resolve(response.data);
+        } else {
+          console.log("쿠폰 조회 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e, "@@@@");
+      });
   });
 }
 

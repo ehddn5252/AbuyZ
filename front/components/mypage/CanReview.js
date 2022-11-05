@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 // 하위 Components
 import MyReviewItem from "./MyReviewItem";
-
+import { reviewYet } from "../../pages/api/review";
 export default function CanReview() {
   const [productList, setProductList] = useState([
     {
@@ -20,7 +20,11 @@ export default function CanReview() {
       options: "1등급 감귤 / 2kg",
     },
   ]); // eslint-disable-line no-unused-vars
-  // const [productList, setProductList] = useState([]);const [productList, setProductList] = useState([]);
+  // 아직 데이터
+  const rreviewYet = async () => {
+    const res = await reviewYet();
+    console.log(res.data);
+  };
   useEffect(() => {
     setProductList([
       {
@@ -31,6 +35,7 @@ export default function CanReview() {
         options: "1등급 감귤 / 2kg",
       },
     ]);
+    rreviewYet();
   }, []);
   return (
     <MyOrderContainer>

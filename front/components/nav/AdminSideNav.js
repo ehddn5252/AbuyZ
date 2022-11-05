@@ -15,7 +15,11 @@ import ShowChartOutlinedIcon from "@mui/icons-material/ShowChartOutlined";
 // StyledComponents
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
+
 export default function AdminSideNav() {
+  const router = useRouter();
   const [location, setLocation] = useState("대시보드");
 
   useEffect(() => {
@@ -36,6 +40,13 @@ export default function AdminSideNav() {
     else if (pathname === "/admin/user/review") setLocation("고객관리 - 리뷰");
   }, [window.location.pathname]);
 
+  const goHome = () => {
+    router.push("/admin/dashboard");
+  };
+
+  const goSite = () => {
+    router.push("/");
+  };
   return (
     <SideNavContainer>
       <LogoDiv>

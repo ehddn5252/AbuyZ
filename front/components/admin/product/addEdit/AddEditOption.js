@@ -232,7 +232,7 @@ export default function SaleProductOption() {
               }}
             >
               <TitleBox>
-                <Title>상품명</Title>
+                <Title>재고수량</Title>
               </TitleBox>
               <Input
                 placeholder="숫자만 입력해주세요. ex) 50"
@@ -573,7 +573,7 @@ const InfoBox = styled.div`
 
 const TitleBox = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   margin-left: 5.5rem;
   width: 7rem;
 `;

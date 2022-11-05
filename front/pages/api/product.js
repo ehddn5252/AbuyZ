@@ -58,20 +58,15 @@ export async function keywordSearch(keyword) {
 // FO 조건 상품 조건 탐색
 export async function conditionSearch(detailDto) {
   return new Promise((resolve) => {
-    https
-      .post("/product/fo-search/detail", {
-        small_categories_uid: detailDto.small_categories_uid,
-        price_uid: detailDto.price_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("fo 조건 상품 조건 검색 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("fo 조건 상품 조건 검색 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/product/fo-search/detail", detailDto).then((response) => {
+      if (response.status === 200) {
+        console.log("fo 조건 상품 조건 검색 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("fo 조건 상품 조건 검색 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
@@ -81,7 +76,7 @@ export async function conditionSearch(detailDto) {
 export async function kwcdSearch(detailDto) {
   return new Promise((resolve) => {
     https
-      .post("/product/fo-search/detail", {
+      .post("/product/fo-search/keyword/detail", {
         small_categories_uid: detailDto.small_categories_uid,
         price_uid: detailDto.price_uid,
       })
@@ -100,11 +95,11 @@ export async function kwcdSearch(detailDto) {
 }
 
 // 상품 상세 페이지
-export async function productDetail(product) {
+export async function productDetail(product_id) {
   return new Promise((resolve) => {
     https
       .post("/product/detail", {
-        products_uid: product.products_uid,
+        products_uid: product_id,
       })
       .then((response) => {
         if (response.status === 200) {

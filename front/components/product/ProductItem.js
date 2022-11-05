@@ -1,30 +1,61 @@
+// React
 import React from "react";
-import Image from "next/image";
-import MilkImage from "../../public/images/milk.png";
+
+// MUI
 import StarIcon from "@mui/icons-material/Star";
+
+// StyledComponent
 import styled from "styled-components";
+
+// Next.js
+import { useRouter } from "next/router";
+
 export default function ProductItem({ product }) {
+  const router = useRouter();
+  const goDetail = () => {
+    router.push(`/detail/${product.uid}`);
+  };
   return (
     <Container>
       <ImgBox>
-        <Image src={MilkImage} width={350} height={350} />
+        <img
+          onClick={goDetail}
+          src={product.repImg}
+          style={{ width: "250px", height: "300px", objectFit: "cover" }}
+        />
       </ImgBox>
       <ContentBox>
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <StarIcon sx={{ color: "#ffc107" }} />
-          <p>{product.review_score}</p>
-          <p>({product.review_count})</p>
+          <p style={{ margin: 0 }}>{product.reviewRate}</p>
+          {product.reviewNum ? (
+            <p style={{ margin: 0 }}>({product.reviewNum})</p>
+          ) : (
+            <p style={{ margin: 0 }}>(0)</p>
+          )}
         </div>
 
-        <p style={{ height: "2rem" }}>{product.product_name}</p>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {product.sale_radio ? <p>{product.sale_radio}</p> : <p></p>}
-          <p>{product.price - product.sale_radio * 0.01 * product.price}</p>
+        <p style={{ height: "2rem" }}>{product.name}</p>
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "0.5rem" }}
+        >
+          {product.discountRate ? (
+            <DiscountP>{product.discountRate}%</DiscountP>
+          ) : (
+            <DiscountP></DiscountP>
+          )}
+          <PriceP>
+            {product.price - product.discountRate * 0.01 * product.price} 원
+          </PriceP>
         </div>
 
-        {product.sale_radio ? <p>{product.price}</p> : null}
+        {product.discountRate ? <CancelP>{product.price} 원</CancelP> : null}
       </ContentBox>
-      <PriceBox></PriceBox>
     </Container>
   );
 }
@@ -41,8 +72,23 @@ const ImgBox = styled.div`
 
 const ContentBox = styled.div`
   display: flex;
-  width: 100%;
+  width: 90%;
   flex-direction: column;
 `;
 
-const PriceBox = styled.div``;
+const CancelP = styled.p`
+  text-decoration: line-through;
+  color: #746d5d;
+  margin: 0;
+`;
+
+const PriceP = styled.p`
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const DiscountP = styled.p`
+  margin: 0;
+  color: #56a9f1;
+`;

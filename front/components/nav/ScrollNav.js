@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import styled from "styled-components";
@@ -12,7 +12,78 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
+
+// Next.js
+import { useRouter } from "next/router";
+
+// API
+import { getMyInfo } from "../../pages/api/user";
+
+// State
+import { searchName } from "../../states";
+import { useRecoilState } from "recoil";
+
 export default function ScrollNav() {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [atoken, setAToken] = useState("");
+  // 검색어
+  const [keyword, setKeyword] = useState("");
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+
+  const keywordSearch = () => {
+    setSearchValue(keyword);
+    router.push("/search");
+  };
+  // 개인정보 조회
+  const getName = async () => {
+    const res = await getMyInfo();
+    setUsername(res.data.name);
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) setAToken(accessToken);
+    }
+  }, [router.pathname]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        getName();
+      }
+    }
+  }, [atoken]);
+  const goSearch = () => {
+    router.push("/search", "아아");
+  };
+
+  const goEvent = () => {
+    router.push("/event");
+  };
+
+  const goService = () => {
+    router.push("/service");
+  };
+  const goMypage = () => {
+    if (username) {
+      router.push("/mypage");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  };
+  const goBasket = () => {
+    if (username) {
+      router.push("/basket");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  };
+
   return (
     <Container>
       <CategoryBox>
@@ -22,16 +93,16 @@ export default function ScrollNav() {
             <CategoryTitle>카테고리</CategoryTitle>
           </CategoryTagBox>
           <TagBox>
-            <CategoryTitle href="/search">신상품</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">베스트</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/search">알뜰 쇼핑</CategoryTitle>
+            <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
           </TagBox>
           <TagBox>
-            <CategoryTitle href="/event">특가/혜택</CategoryTitle>
+            <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
           </TagBox>
         </CategoryContainer>
         <SearchPaper component="form">
@@ -39,9 +110,12 @@ export default function ScrollNav() {
             sx={{ ml: 1, flex: 1, fontSize: "0.8rem" }}
             placeholder="찾으시는 상품을 검색해주세요"
             inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
           />
           <IconButton
-            href="/search"
+            onClick={keywordSearch}
             type="button"
             sx={{ color: "#56a9f1" }}
             aria-label="search"
@@ -51,31 +125,28 @@ export default function ScrollNav() {
         </SearchPaper>
         <IconDiv>
           <IconBox>
-            <Link href="/event">
+            <Link onClick={goMypage}>
               <FavoriteBorderOutlinedIcon
                 fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>
-            <Link href="/event" sx={{ textDecoration: "none" }}></Link>
           </IconBox>
           <IconBox>
-            <Link href="/mypage">
+            <Link onClick={goMypage}>
               <PersonOutlineOutlinedIcon
                 fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>
-            <Link href="/mypage" sx={{ textDecoration: "none" }}></Link>
           </IconBox>
           <IconBox>
-            <Link href="/basket">
+            <Link onClick={goBasket}>
               <ShoppingBasketOutlinedIcon
                 fontSize="medium"
                 sx={{ color: "black" }}
               />
             </Link>
-            <Link href="/basket" sx={{ textDecoration: "none" }}></Link>
           </IconBox>
         </IconDiv>
       </CategoryBox>

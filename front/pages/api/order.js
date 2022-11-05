@@ -43,16 +43,36 @@ export async function payProduct(productDto) {
 
 // 결제 목록 가져오기
 export async function getOrderList() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
   // Header에 토큰 집어넣기
   return new Promise((resolve) => {
-    const accessToken = sessionStorage.getItem("access-token");
-    https.defaults.headers.common["access_token"] = accessToken;
     https.get("/order").then((response) => {
       if (response.status === 200) {
         console.log("결제목록 조회 성공", response);
         resolve(response.data);
       } else {
         console.log("결제 목록 조회 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 특정 결제 목록의 주문들 가져오기
+export async function eachGetOrderList(basketnumber) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+
+  return new Promise((resolve) => {
+    https.get(`/order/${basketnumber}`).then((response) => {
+      if (response.status === 200) {
+        console.log("특정 결제 목록의 주문들 가져오기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("특정 결제 목록의 주문들 가져오기 실패", response);
         resolve(response);
       }
     });

@@ -14,3 +14,9 @@ export const serviceNum = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const searchName = atom({
+  key: "searchName",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

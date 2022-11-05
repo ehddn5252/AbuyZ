@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // MUI
-import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -19,10 +18,22 @@ import MenuIcon from "@mui/icons-material/Menu";
 // API
 import { getMyInfo, logout, refresh } from "../../pages/api/user";
 
+// State
+import { searchName } from "../../states";
+import { useRecoilState } from "recoil";
+
 export default function Nav() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [atoken, setAToken] = useState("");
+  // 검색어
+  const [keyword, setKeyword] = useState("");
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+
+  const keywordSearch = () => {
+    setSearchValue(keyword);
+    router.push("/search");
+  };
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
@@ -74,7 +85,12 @@ export default function Nav() {
   };
 
   const goMypage = () => {
-    router.push("/mypage");
+    if (username) {
+      router.push("/mypage");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
   };
 
   const goHome = () => {
@@ -94,7 +110,12 @@ export default function Nav() {
   };
 
   const goBasket = () => {
-    router.push("/basket");
+    if (username) {
+      router.push("/basket");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
   };
   return (
     <Container>
@@ -124,12 +145,15 @@ export default function Nav() {
               sx={{ ml: 1, flex: 1 }}
               placeholder="찾으시는 상품을 검색해주세요"
               inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
+              onChange={(e) => {
+                setKeyword(e.target.value);
+              }}
             />
             <IconButton
-              href="/search"
               type="button"
               sx={{ color: "#56a9f1" }}
               aria-label="search"
+              onClick={keywordSearch}
             >
               <SearchIcon sx={{ fontSize: "1.8rem" }} />
             </IconButton>
