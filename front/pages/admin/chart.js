@@ -84,6 +84,7 @@ export default function Chart() {
     setStarttime(getTime(startDate));
     setEndtime(getTime(endDate));
     loadData();
+    console.log(starttime, endtime);
   }, [startDate, endDate]);
   return (
     <Container>
