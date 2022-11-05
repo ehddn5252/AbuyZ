@@ -8,10 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 // StyledComponent
 import styled from "styled-components";
 
-export default function Calendar() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
+export default function Calendar({
+  setStartDate,
+  setEndDate,
+  startDate,
+  endDate,
+}) {
   return (
     <Container>
       <StartDateDiv>
