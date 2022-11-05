@@ -11,14 +11,19 @@ import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
 import { pageNameState } from "../../states";
 
+// Next.js
+import { useRouter } from "next/router";
+
 export default function Footer() {
   // 윈도우 주소
   const [locationUrl, setLocationUrl] = useRecoilState(pageNameState);
+  // next router
+  const router = useRouter();
 
   useEffect(() => {
     const path = window.location.pathname;
     setLocationUrl(path);
-  }, []);
+  }, [router.pathname]);
 
   return (
     <MainContainer>
