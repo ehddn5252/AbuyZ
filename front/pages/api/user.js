@@ -97,6 +97,7 @@ export async function withdrawal() {
     https.put("/user/withdrawal").then((response) => {
       if (response.status === 200) {
         console.log("회원 탈퇴 여부", response.data.message);
+        sessionStorage.removeItem("access-token");
         resolve(response.data);
       } else {
         console.log("회원 탈퇴 실패", response);
@@ -287,12 +288,12 @@ export async function changeInfo(userDto) {
 }
 
 // 주소 수정
-export async function changeAddress(addressDto) {
+export async function changeAddress(addressDto, addressuid) {
   // Header에 토큰 집어넣기
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.put("/user/addresses", addressDto).then((response) => {
+    https.put(`/user/addresses/${addressuid}`, addressDto).then((response) => {
       if (response.status === 200) {
         console.log("주소 수정 성공", response);
         resolve(response);
