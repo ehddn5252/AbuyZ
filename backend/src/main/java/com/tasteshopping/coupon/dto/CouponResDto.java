@@ -15,5 +15,6 @@ public class CouponResDto {
     private String end_date;
     private int available_categories_uid;
     private String available_categories_name;
+    private String status;
 
 }

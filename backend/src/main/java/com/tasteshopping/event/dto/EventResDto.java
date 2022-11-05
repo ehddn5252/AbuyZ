@@ -15,7 +15,7 @@ public class EventResDto {
     private String end_date;
     private String thumbnail;
     private String contentImg;
-    private int status;
+    private String status;
     private String content;
     private List<CouponResDto> coupon_lists;
 }

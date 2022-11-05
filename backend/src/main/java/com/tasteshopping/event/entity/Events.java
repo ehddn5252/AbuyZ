@@ -1,6 +1,7 @@
 package com.tasteshopping.event.entity;
 
 import com.tasteshopping.coupon.dto.CouponResDto;
+import com.tasteshopping.event.dto.EventStatus;
 import com.tasteshopping.event.dto.EventReqDto;
 import com.tasteshopping.event.dto.EventResDto;
 import lombok.AllArgsConstructor;
@@ -71,16 +72,30 @@ public class Events {
         for(EventCouponLists eventCoupon: this.getEventCouponLists()){
             coupon_lists.add(eventCoupon.getCoupons().toDto());
         }
-
+        String status = "";
+        switch (this.status){
+            case 0:
+                status = EventStatus.진행예정.toString();
+                break;
+            case 1:
+                status = EventStatus.진행중.toString();
+                break;
+            case 2:
+                status = EventStatus.종료.toString();
+                break;
+        }
         return EventResDto.builder()
                 .name(this.name)
                 .start_date(this.startDate.toString())
                 .end_date(this.endDate.toString())
                 .thumbnail(this.thumbnail)
                 .contentImg(this.contentImgUrl)
-                .status(this.status)
+                .status(status)
                 .content(this.content)
                 .coupon_lists(coupon_lists)
                 .build();
+    }
+    public void updateStatus(){
+        this.status = 2;
     }
 }
