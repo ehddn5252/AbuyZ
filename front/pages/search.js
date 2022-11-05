@@ -4,7 +4,7 @@ import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
 // API
-import { keywordSearch, conditionSearch } from "./api/product";
+import { keywordSearch, kwcdSearch } from "./api/product";
 
 import { useRecoilState } from "recoil";
 // State
@@ -43,9 +43,8 @@ export default function Search() {
       detailDto["end_price"] = endPrice;
     }
 
-    console.log(detailDto);
-    const res = await conditionSearch(detailDto);
-    console.log(res);
+    const res = await kwcdSearch(detailDto);
+    setProductList(res.data);
   };
   // 검색 값 변동시 동작
   useEffect(() => {
