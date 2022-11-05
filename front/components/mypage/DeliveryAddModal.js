@@ -1,14 +1,16 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import CloseIcon from "@mui/icons-material/Close";
 // StyledComponents
 import styled from "styled-components";
 import { TextField } from "@mui/material";
-
+import { useRouter } from "next/router";
 import DaumPostModal from "./DaumPostModal";
+import { addAddress } from "../../pages/api/user";
 export default function DeliveryAddModal({ setAddOpen }) {
+  const router = useRouter();
   const [address, setAddress] = useState("");
   const [detailaddress, setDetailAddress] = useState("");
   const [receiver, setReceiver] = useState("");
@@ -18,6 +20,22 @@ export default function DeliveryAddModal({ setAddOpen }) {
     setAddOpen(false);
   };
   const [addressOpen, setAddressOpen] = useState(false);
+
+  const aadressAdd = async () => {
+    const addressDto = {
+      address: address,
+      detailAddress: detailaddress,
+      postalCode: postcode,
+      recipient: receiver,
+      contact: number,
+    };
+    const res = await addAddress(addressDto);
+    console.log(res.data);
+    closeModal();
+    alert("배송지 추가가 완료되었습니다");
+    router.reload();
+  };
+
   return (
     <AddressModalContainer>
       <CloseIconDiv>
@@ -31,7 +49,7 @@ export default function DeliveryAddModal({ setAddOpen }) {
           required
           fullWidth
           id="name"
-          autofocus
+          autoFocus
           name="name"
           onChange={(event) => setReceiver(event.currentTarget.value)}
         ></TextField>
@@ -43,7 +61,7 @@ export default function DeliveryAddModal({ setAddOpen }) {
           required
           fullWidth
           id="number"
-          autofocus
+          autoFocus
           name="number"
           onChange={(event) => setNumber(event.currentTarget.value)}
         ></TextField>
@@ -83,7 +101,7 @@ export default function DeliveryAddModal({ setAddOpen }) {
         </div>
       </div>
       <div style={{ marginTop: "4rem", marginBottom: "2rem" }}>
-        <AddButton>배송지 추가</AddButton>
+        <AddButton onClick={aadressAdd}>배송지 추가</AddButton>
       </div>
       {addressOpen && (
         <DaumPostModal

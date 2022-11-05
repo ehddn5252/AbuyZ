@@ -1,15 +1,16 @@
 // React
 import React, { useEffect, useState } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import { getMyInfo } from "../../pages/api/user";
 
 // MUI
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+
+// router
 import { useRouter } from "next/router";
 
 // StyledComponents
@@ -17,8 +18,13 @@ import styled from "styled-components";
 
 // 하위 Components
 import PasswordChangeModal from "./PasswordChangeModal";
+
+// api
 import { withdrawal } from "../../pages/api/user";
 import { changeInfo } from "../../pages/api/user";
+import { getMyInfo } from "../../pages/api/user";
+import WithDrawalModal from "./WithDrawalModal";
+
 export default function MyinfoChange() {
   const router = useRouter();
   const [userId, setUserId] = useState("");
@@ -30,7 +36,9 @@ export default function MyinfoChange() {
   const [userPw, setUserPw] = useState("");
   const [checkPhoneNumber, setCheckPhoneNumber] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  console.log(userBirthDay);
+  const [withdrawalOpen, setWithdrawalOpen] = useState(false);
+
+  // 내 정보 가져오기
   const uuser = async () => {
     const res = await getMyInfo();
     setUserId(res.data.nickname);
@@ -40,9 +48,9 @@ export default function MyinfoChange() {
     setUserSex(res.data.gender);
     const bbirth = res.data.birth;
     setUserBirthDay(bbirth);
-    console.log(typeof userBirthDay);
   };
 
+  // 회원 정보 수정
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userDto = {
@@ -52,17 +60,20 @@ export default function MyinfoChange() {
       nickname: userId,
       phoneNumber: userPhone,
     };
-    console.log(userDto);
     const res = await changeInfo(userDto);
     alert("회원님의 정보가 수정되었습니다.");
     router.push("/mypage");
   };
+
   useEffect(() => {
     uuser();
   }, []);
+
+  // 비밀번호 수정 모달 띄우기
   const showModal = () => {
     setModalOpen(true);
   };
+
   return (
     <div>
       <InfoContainer>
@@ -78,6 +89,7 @@ export default function MyinfoChange() {
       </InfoContainer>
       <InfoChangeContainer component="main">
         <ContentDiv>
+          {/* 닉네임 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -104,6 +116,7 @@ export default function MyinfoChange() {
               </span>
             </Grid>
           </Grid>
+          {/* 이름 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -122,6 +135,7 @@ export default function MyinfoChange() {
               ></TextField>
             </Grid>
           </Grid>
+          {/* 이메일 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -141,6 +155,7 @@ export default function MyinfoChange() {
               ></TextField>
             </Grid>
           </Grid>
+          {/* 비밀번호 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -152,7 +167,7 @@ export default function MyinfoChange() {
               </SubButton>
             </Grid>
           </Grid>
-
+          {/* 휴대폰 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -207,6 +222,7 @@ export default function MyinfoChange() {
               )}
             </Grid> */}
           </Grid>
+          {/* 성별 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2rem" }}>
@@ -246,6 +262,7 @@ export default function MyinfoChange() {
               </FormControl>
             </Grid>
           </Grid>
+          {/* 생년월일 */}
           <Grid container spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2} style={{ marginTop: "2.5rem" }}>
@@ -264,6 +281,7 @@ export default function MyinfoChange() {
               />
             </Grid>
           </Grid>
+          {/* 버튼 */}
           <div
             style={{
               display: "flex",
@@ -271,16 +289,24 @@ export default function MyinfoChange() {
               marginTop: "5rem",
             }}
           >
-            <QuitButton>탈퇴하기</QuitButton>
+            <QuitButton onClick={() => setWithdrawalOpen(true)}>
+              탈퇴하기
+            </QuitButton>
             <ModifyButton type="submit" onClick={handleSubmit}>
               수정하기
             </ModifyButton>
           </div>
+
           {modalOpen && (
             <PasswordChangeModal
               setModalOpen={setModalOpen}
               Pw={userPw}
             ></PasswordChangeModal>
+          )}
+          {withdrawalOpen && (
+            <WithDrawalModal
+              setWithdrawalOpen={setWithdrawalOpen}
+            ></WithDrawalModal>
           )}
         </ContentDiv>
       </InfoChangeContainer>
@@ -326,6 +352,10 @@ const QuitButton = styled.button`
   width: 7rem;
   color: rgba(128, 128, 128, 0.5);
   border-radius: 5px;
+  cursor: pointer;
+  /* &:hover {
+    cursor: pointer;
+  } */
 `;
 
 const ModifyButton = styled.button`
@@ -335,4 +365,7 @@ const ModifyButton = styled.button`
   width: 7rem;
   color: white;
   border-radius: 5px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
