@@ -18,11 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,13 +73,13 @@ public class CouponServiceImpl implements CouponService {
     }
     @Override
     public ResponseDto getMyCoupons(String email) {
-        List<CouponLists> search_result = couponListsRepository.findByUserEmail(email);
+        List<CouponLists> search_result = couponListsRepository.findByUserEmailOrderByStatusAscCoupons_StartDate(email);
         return toDto(search_result);
     }
 
     @Override
     public ResponseDto getAvailableCoupons(String email, int big_category_id) {
-        List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUidAndStatus(email,big_category_id,0);
+        List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUidAndStatusOrderByStatusAscCoupons_StartDate(email,big_category_id,0);
         return toDto(search_result);
     }
 
@@ -90,23 +87,8 @@ public class CouponServiceImpl implements CouponService {
     public ResponseDto toDto(List<CouponLists> search_result){
         ResponseDto responseDto = new ResponseDto();
         CouponResListDto couponResListDto = new CouponResListDto(new ArrayList<>(),0);
-        Date now_date;
-        try {
-            String now = LocalDateTime.now().toString();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            now_date = format.parse(now);
-        }
-        catch (ParseException e){
-            e.printStackTrace();
-            responseDto.setData(null);
-            responseDto.setMessage("Parsing Error");
-            return responseDto;
-        }
+
         for(CouponLists couponLists:search_result){
-            if(couponLists.getStatus()==0&&couponLists.getCoupons().getEndDate().after(now_date)){
-                couponLists.updateStatus(2);
-                couponListsRepository.save(couponLists);
-            }
             couponResListDto.getResult().add(couponLists.toCouponsResDto());
         }
         couponResListDto.setCount(search_result.size());
@@ -139,6 +121,7 @@ public class CouponServiceImpl implements CouponService {
         if(findCoupon.isPresent()){
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("발급 실패: 이미 발급받은 쿠폰입니다.");
+            responseDto.setStatus(204);
             return responseDto;
         }
         Users users = userRepository.findByEmail(email).get();
