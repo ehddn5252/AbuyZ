@@ -34,24 +34,8 @@ export default function MyOrderList() {
       <div style={{ display: "flex", justifyContent: "end" }}>
         {/* <span>총 주문 상품 건수: {productList.length}건</span> */}
       </div>
-      {orderBundle.map((e, idx) => (
-        <div style={{ marginTop: "2rem" }}>
-          <span style={{ color: "#aaaaaa", fontWeight: "bold" }}>
-            주문 일시: {e.date.slice(0, 10)} {e.date.slice(11, 16)}
-          </span>
-          <div
-            style={{
-              borderTop: "2px solid rgb(127, 127, 127, 0.5)",
-              padding: "2rem",
-              marginTop: "0.5rem",
-            }}
-            key={idx}
-          >
-            <MyOrderItem uid={e.uid} />
-          </div>
-        </div>
-      ))}
-      {/* {orderBundle.length === 0 ? (
+
+      {orderBundle.length === 0 ? (
         <BlankBox>
           <ShoppingCartOutlinedIcon
             sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
@@ -61,13 +45,27 @@ export default function MyOrderList() {
           </p>
         </BlankBox>
       ) : (
-        <ProductListBox>
-          {OrderBundle.map((e) => {
-            <MyOrderItem product={e} />;
-          })}
-        </ProductListBox>
+        <div>
+          {orderBundle.map((e, idx) => (
+            <div style={{ marginTop: "2rem" }}>
+              <span style={{ color: "#aaaaaa", fontWeight: "bold" }}>
+                주문 일시: {e.date.slice(0, 10)} {e.date.slice(11, 16)}
+              </span>
+              <div
+                style={{
+                  borderTop: "2px solid rgb(127, 127, 127, 0.5)",
+                  padding: "2rem",
+                  marginTop: "0.5rem",
+                }}
+                key={idx}
+              >
+                <MyOrderItem uid={e.uid} />
+              </div>
+            </div>
+          ))}
+        </div>
       )}
-      {productList.length < 4 ? null : (
+      {/* {productList.length < 4 ? null : (
         <ButtonDiv>
           <Button
             variant="contained"

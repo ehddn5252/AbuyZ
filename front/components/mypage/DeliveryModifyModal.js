@@ -1,27 +1,46 @@
 import React, { useState } from "react";
-
+import { useRouter } from "next/router";
 // MUI
 import CloseIcon from "@mui/icons-material/Close";
 // StyledComponents
 import styled from "styled-components";
 import { TextField } from "@mui/material";
-
+import { changeAddress } from "../../pages/api/user";
 export default function DeliveryModifyModal({
   setModifyOpen,
-  valuenumber,
-  datas,
+  address,
+  detailAddress,
+  recipient,
+  contact,
+  postalcode,
+  uid,
 }) {
   const closeModal = () => {
     setModifyOpen(false);
   };
+  const router = useRouter();
 
-  const add = datas[valuenumber].address;
-  const detail = datas[valuenumber].detailaddress;
-  const receiver = datas[valuenumber].receiver;
-  const number = datas[valuenumber].number;
-  const [rc, setrc] = useState({ receiver });
-  const [nb, setnb] = useState({ number });
-  const [dt, setdt] = useState({ detail });
+  const add = address;
+  const detail = detailAddress;
+  const receiver = recipient;
+  const number = contact;
+  const pc = postalcode;
+  const [rc, setrc] = useState(receiver);
+  const [nb, setnb] = useState(number);
+  const [dt, setdt] = useState(detail);
+
+  const chgAddress = async () => {
+    const addressDto = {
+      address: add,
+      detailAddress: dt,
+      postalCode: pc,
+      recipient: rc,
+      contact: nb,
+    };
+    const res = await changeAddress(addressDto, uid);
+    alert("배송지 정보 수정이 완료되었습니다");
+    router.reload();
+  };
   return (
     <ModifyAddressContainer>
       <CloseIconDiv>
@@ -35,7 +54,7 @@ export default function DeliveryModifyModal({
           required
           fullWidth
           id="name"
-          autofocus
+          autoFocus
           name="name"
           onChange={(event) => setrc(event.currentTarget.value)}
         ></TextField>
@@ -47,7 +66,7 @@ export default function DeliveryModifyModal({
           required
           fullWidth
           id="number"
-          autofocus
+          autoFocus
           name="number"
           onChange={(event) => setnb(event.currentTarget.value)}
         ></TextField>
@@ -74,7 +93,7 @@ export default function DeliveryModifyModal({
         </div>
       </div>
       <div style={{ marginTop: "4rem", marginBottom: "2rem" }}>
-        <ModifyButton>배송지 수정</ModifyButton>
+        <ModifyButton onClick={chgAddress}>배송지 수정</ModifyButton>
       </div>
     </ModifyAddressContainer>
   );

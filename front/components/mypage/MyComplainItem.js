@@ -6,17 +6,33 @@ import styled from "styled-components";
 
 export default function MyComplainItem({ complain }) {
   const [answerOpen, setAnswerOpen] = useState(false);
-  const ansOpen = () => setAnswerOpen(!answerOpen);
+  const ansOpen = () => {
+    setContentOpen(!contentOpen);
+    setAnswerOpen(!answerOpen);
+  };
+  const [contentOpen, setContentOpen] = useState(false);
 
   return (
     <Container>
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <div style={{ flex: "10" }}>
+        <div
+          style={{ flex: "10" }}
+          onClick={() => setContentOpen(!contentOpen)}
+        >
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span>
-              [{complain.category}] {complain.title}
-            </span>
-            <span style={{ color: "#aaaaaa" }}>{complain.date}</span>
+            <ComplainTitle>
+              [{complain.customerCenterCategory}] {complain.title}
+              <br></br>
+              <span style={{ color: "#aaaaaa" }}>
+                {complain.date.slice(0, 10)} {complain.date.slice(11, 16)}
+              </span>
+            </ComplainTitle>
+
+            {contentOpen ? (
+              <ComplainContent>
+                <span>{complain.content}</span>
+              </ComplainContent>
+            ) : null}
           </div>
         </div>
         <div style={{ flex: "2" }}>
@@ -82,7 +98,21 @@ const InCompleteDiv = styled.div`
 
 const ContentDiv = styled.div`
   width: 100%;
-  background-color: rgba(128, 128, 128, 0.17);
+  background-color: rgba(86, 169, 241, 0.07);
   margin-top: 1rem;
   border-radius: 5px;
+`;
+
+const ComplainContent = styled.div`
+  width: 100%;
+  background-color: rgba(128, 128, 128, 0.1);
+  margin-top: 1rem;
+  border-radius: 5px;
+  padding: 2rem;
+`;
+
+const ComplainTitle = styled.span`
+  &:hover {
+    cursor: pointer;
+  }
 `;
