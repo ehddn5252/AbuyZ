@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     Optional<CouponLists>findByUserEmailAndCouponsUid(String email, int uid);
     @EntityGraph(attributePaths = {"user","coupons"})
     Optional<CouponLists> findByCouponsUidAndUserEmail(int id,String email);
+    @EntityGraph(attributePaths = {"user","coupons"})
+    List<CouponLists> findByCoupons_EndDateAndStatus(Date yesterday,int status);
 }
