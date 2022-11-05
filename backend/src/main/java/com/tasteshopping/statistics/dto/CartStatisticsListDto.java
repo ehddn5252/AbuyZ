@@ -1,9 +1,6 @@
 package com.tasteshopping.statistics.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.TreeMap;
 
@@ -12,7 +9,9 @@ import java.util.TreeMap;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartStatisticsListDto{
-    private TreeMap<String,CartBigCategoryDto>big_category;
+    private TreeMap<String,CartBigCategoryDto>big_categories;
     private int total_count;
-
+    public void update(String bigCategoryName,CartBigCategoryDto cartBigCategoryDto){
+        this.big_categories.put(bigCategoryName,cartBigCategoryDto);
+    }
 }
