@@ -76,7 +76,7 @@ export async function conditionSearch(detailDto) {
 export async function kwcdSearch(detailDto) {
   return new Promise((resolve) => {
     https
-      .post("/product/fo-search/detail", {
+      .post("/product/fo-search/keyword/detail", {
         small_categories_uid: detailDto.small_categories_uid,
         price_uid: detailDto.price_uid,
       })

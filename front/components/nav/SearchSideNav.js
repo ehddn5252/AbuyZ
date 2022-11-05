@@ -33,8 +33,10 @@ export default function SearchSideNav({
 
   // 시작 끝값 변경 적용
   const startendButton = () => {
+    console.log(start, end);
     setStartPrice(start);
     setEndPrice(end);
+    console.log("동작");
   };
   return (
     <NavContainer>
@@ -96,6 +98,7 @@ export default function SearchSideNav({
       <InputBox>
         <Input
           name="start"
+          id="start"
           onClick={(e) => {
             setStart(e.target.value);
           }}
@@ -103,6 +106,7 @@ export default function SearchSideNav({
         <p style={{ margin: 0 }}>~</p>
         <Input
           name="end"
+          id="end"
           onClick={(e) => {
             setEnd(e.target.value);
           }}
