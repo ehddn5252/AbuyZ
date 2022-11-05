@@ -177,7 +177,7 @@ public class EventServiceImpl implements EventService{
         }
         catch (Exception e){
             e.printStackTrace();
-            responseDto.setMessage("추가 실패");
+            responseDto.setMessage("수정 실패");
             responseDto.setData(new ResultDto(false));
         }
     }
