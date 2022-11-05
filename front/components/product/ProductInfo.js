@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -8,11 +8,28 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+
 // StyleComponent
 import styled from "styled-components";
 
-export default function ProductInfo() {
+// API
+import { productDetail } from "../../pages/api/product";
+
+export default function ProductInfo({}) {
   const [wish, setWish] = useState(false);
+  const [product, setProduct] = useState([]);
+
+  const getProduct = async (id) => {
+    const res = await productDetail(id);
+    setProduct(res.data);
+    console.log(product);
+  };
+
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    const arr = pathname.split("/");
+    getProduct(arr[2]);
+  }, []);
   const colorList = () => [
     { label: "화이트" },
     { label: "블랙" },
@@ -28,31 +45,33 @@ export default function ProductInfo() {
     if (wish) setWish(false);
     else setWish(true);
   };
+
   return (
     <Container>
       <ImgBox>
         <MajorImgBox>
-          <MajorImg src="/images/cloth.png" />
+          {/* <MajorImg src={product.products.repImg} /> */}
         </MajorImgBox>
         <SubImgBox>
-          <SubImg src="/images/cloth1.png" />
-          <SubImg src="/images/cloth2.png" />
+          {/* {product.productPictureDto.map((productImg) => (
+            <SubImg src="/images/cloth1.png" />
+          ))} */}
         </SubImgBox>
       </ImgBox>
       <InfoBox>
         <TitleBox>
-          <TitleDiv>
+          <div>
             <p style={{ margin: 0, marginBottom: "0.5rem", fontSize: "2rem" }}>
               지프 키즈 맨투맨
             </p>
-          </TitleDiv>
-          <IconBox onClick={changeWish}>
+          </div>
+          <div onClick={changeWish}>
             {wish ? (
               <FavoriteIcon color="error" fontSize="large" />
             ) : (
               <FavoriteBorderIcon color="error" fontSize="large" />
             )}
-          </IconBox>
+          </div>
         </TitleBox>
         <PriceBox>
           <PriceTop>
@@ -81,7 +100,7 @@ export default function ProductInfo() {
           </PriceBottom>
         </PriceBox>
         <OptionBox>
-          <Option>
+          {/* <Option>
             <p style={{ width: "20%" }}>사이즈</p>
             <Autocomplete
               disablePortal
@@ -104,7 +123,7 @@ export default function ProductInfo() {
               renderInput={(params) => <TextField {...params} />}
               defaultValue="-"
             />
-          </Option>
+          </Option> */}
           <Option>
             <p style={{ width: "20%" }}>수량</p>
             <MinusIcon></MinusIcon>

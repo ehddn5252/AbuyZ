@@ -1,15 +1,27 @@
+// React
 import React from "react";
-import Image from "next/image";
-import MilkImage from "../../public/images/milk.png";
+
+// MUI
 import StarIcon from "@mui/icons-material/Star";
+
+// StyledComponent
 import styled from "styled-components";
+
+// Next.js
+import { useRouter } from "next/router";
+
 export default function ProductItem({ product }) {
+  const router = useRouter();
+  const goDetail = () => {
+    router.push(`/detail/${product.uid}`);
+  };
   return (
     <Container>
       <ImgBox>
         <img
+          onClick={goDetail}
           src={product.repImg}
-          style={{ width: "250px", height: "auto", objectFit: "cover" }}
+          style={{ width: "250px", height: "300px", objectFit: "cover" }}
         />
       </ImgBox>
       <ContentBox>

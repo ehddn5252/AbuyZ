@@ -46,16 +46,16 @@ export default function Search() {
     const res = await kwcdSearch(detailDto);
     setProductList(res.data);
   };
+
+  // 필터링 사용시 동작
+  useEffect(() => {
+    filterProductList();
+  }, [feeOption, priceOption, categotyOption, startPrice, endPrice]);
+
   // 검색 값 변동시 동작
   useEffect(() => {
     getProductList();
   }, [searchValue]);
-
-  // 필터링 사용시 동작
-  useEffect(() => {
-    console.log(feeOption, priceOption, categotyOption, startPrice, endPrice);
-    filterProductList();
-  }, [feeOption, priceOption, categotyOption, startPrice, endPrice]);
   return (
     <Container>
       <h1>검색 결과</h1>

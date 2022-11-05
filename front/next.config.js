@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   // publicRuntimeConfig: {
   //   apiBaseUrl: "https://k7e201.p.ssafy.io:8081/api",

@@ -20,8 +20,8 @@ export default function ProductReview() {
       <TotalReivew>
         <LeftBox>
           <Rating
-            name="text-feedback"
-            value="3.8"
+            name="customized-color"
+            value="3.5"
             readOnly
             precision={0.5}
             sx={{ fontSize: "3.5rem" }}
