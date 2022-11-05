@@ -95,4 +95,7 @@ public class Events {
                 .coupon_lists(coupon_lists)
                 .build();
     }
+    public void updateStatus(){
+        this.status = 2;
+    }
 }
