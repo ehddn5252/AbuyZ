@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
+
+import https from "../../../pages/api/https";
+import axios from "axios";
 
 // 달력
 import DatePicker from "react-datepicker";
@@ -12,14 +15,11 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import { createEvent } from "../../../pages/api/event";
 
-export default function AddModal(props) {
+export default function AddEventModal(props) {
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
@@ -31,6 +31,107 @@ export default function AddModal(props) {
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
     setBigCategory(event.target.value);
+  };
+
+  // 대표 이미지 정보
+  const [profile, setProfile] = useState(null);
+
+  // 대표 이미지
+  const profileRef = useRef(null);
+
+  // 대표 이미지 등록
+  const handleClickProfile = () => {
+    profileRef.current?.click();
+  };
+
+  // 대표 이미지 등록 함수
+  const uploadProfile = (e) => {
+    const profileList = e.target.files[0];
+    // console.log(profileList[0]);
+    // console.log(profileList);
+    if (profileList) {
+      // console.log("####");
+      const url = URL.createObjectURL(profileList);
+      setProfile({
+        file: profileList,
+        thumbnail: url,
+        type: profileList.type.slice(0, 5),
+      });
+    }
+  };
+
+  // 1번 방법
+  const handleAddEve = () => {
+    const formData = new FormData();
+    // formData.append("image", profile);
+    const data = {
+      name: "도건 이벤트",
+      content: "안녕하세요",
+      start_date: startDate.toISOString().slice(0, 10),
+      end_date: endDate.toISOString().slice(0, 10),
+      coupon_lists: [11, 12],
+    };
+    formData.append("eventDto", JSON.stringify(data));
+    console.log(formData);
+    createEvent(formData);
+  };
+
+  // 2번 방법
+  const handleAddEven = () => {
+    let formData = new FormData();
+
+    let data = {
+      name: "테스트 이벤트",
+      start_date: "2022-10-21",
+      end_date: "2022-11-21",
+      coupon_lists: [9, 10],
+      content: "testsetsets",
+    };
+
+    formData.append(
+      "eventDto",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+
+    axios
+      .post("https://k7e201.p.ssafy.io:8081/api/event/create", formData, {
+        headers: {
+          "Contest-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err, "등록을 실패하였습니다.");
+      });
+  };
+
+  // 3번 방법
+  const handleAddEvent = async () => {
+    let formData = new FormData();
+
+    let data = {
+      name: "테스트 이벤트",
+      start_date: "2022-10-21",
+      end_date: "2022-11-21",
+      coupon_lists: [9, 10],
+      content: "testsetsets",
+    };
+
+    formData.append("eventDto", JSON.stringify(data));
+
+    const postSurvey = await axios({
+      method: "POST",
+      url: "https://k7e201.p.ssafy.io:8081/api/event/create",
+      mode: "cors",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: formData,
+    });
+
+    console.log(postSurvey, "@@@");
   };
 
   return (
@@ -136,23 +237,27 @@ export default function AddModal(props) {
               paddingLeft: "1.5rem",
             }}
           >
-            <MyDatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              selectsStart
-              startDate={startDate}
-              dateFormat="yyyy/MM/dd"
-            />
+            <div>
+              <MyDatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                dateFormat="yyyy/MM/dd"
+              />
+            </div>
             <WaveTag>~</WaveTag>
-            <MyDatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              selectsEnd
-              startDate={startDate}
-              endDate={endDate}
-              minDate={startDate}
-              dateFormat="yyyy/MM/dd"
-            />
+            <div>
+              <MyDatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                dateFormat="yyyy/MM/dd"
+              />
+            </div>
           </Grid2>
           {/* 적용 쿠폰 */}
           <Grid2
@@ -192,19 +297,19 @@ export default function AddModal(props) {
                     vertical: "top",
                     horizontal: "left",
                   },
-                  getContentAnchorEl: null,
+                  // getContentAnchorEl: null,
                 }}
                 sx={{ border: 1, height: 50, borderRadius: 0 }}
               >
-                <MenuItem value="쿠폰명">
-                  <em>쿠폰명</em>
-                </MenuItem>
                 {/* 쿠폰 이름 map으로 불러오기 */}
-                <MenuItem value={"식품"}>식품</MenuItem>
-                <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
-                <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
-                <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
-                <MenuItem value={"뷰티"}>뷰티</MenuItem>
+                <MenuItem value={"1"}>식품</MenuItem>
+                <MenuItem value={"2"}>생활/건강</MenuItem>
+                <MenuItem value={"3"}>가구/인테리어</MenuItem>
+                <MenuItem value={"4"}>반려/도서/취미</MenuItem>
+                <MenuItem value={"5"}>뷰티</MenuItem>
+                <MenuItem value={"6"}>유아동</MenuItem>
+                <MenuItem value={"7"}>가전</MenuItem>
+                <MenuItem value={"8"}>스포츠/레저/자동차</MenuItem>
               </Select>
             </FormControl>
           </Grid2>
@@ -228,7 +333,14 @@ export default function AddModal(props) {
               paddingLeft: "1.5rem",
             }}
           >
-            <LeadButton>대표 이미지</LeadButton>
+            <input
+              type="file"
+              accept="image/jpg, image/jpeg, image/png"
+              ref={profileRef}
+              onChange={uploadProfile}
+              style={{ display: "none" }}
+            />
+            <LeadButton onClick={handleClickProfile}>대표 이미지</LeadButton>
           </Grid2>
           <Grid2
             xs={4}
@@ -279,7 +391,7 @@ export default function AddModal(props) {
               // paddingLeft: "1.5rem",
             }}
           >
-            <AddButton onClick={() => props.setAdd(false)}>등록</AddButton>
+            <AddButton onClick={() => handleAddEvent()}>등록</AddButton>
           </Grid2>
         </Grid2>
       </Dialog>
@@ -305,7 +417,7 @@ const ContentInput = styled.textarea`
 
 const WaveTag = styled.div`
   font-size: 2rem;
-  padding-right: 2rem;
+  padding-right: 1rem;
 `;
 
 export const MyDatePicker = styled(DatePicker)`
@@ -316,7 +428,7 @@ export const MyDatePicker = styled(DatePicker)`
   font-weight: bold;
   color: black;
   border: 1px solid;
-  width: 70%;
+  width: 80%;
 
   .react-datepicker-wrapper {
     width: 10rem;

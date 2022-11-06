@@ -40,7 +40,6 @@ export default function AddCoupon() {
   // 쿠폰이름 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
-    console.log(name);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -66,11 +65,12 @@ export default function AddCoupon() {
       discount_price: sale,
       start_date: startDate.toISOString().slice(0, 10),
       end_date: endDate.toISOString().slice(0, 10),
-      big_categories_uid: category,
+      big_categories_uid: Number(category),
     };
     createcoupon(couponDto);
-    window.location.reload();
+    // window.location.reload();
   };
+  // console.log('DSD')
 
   return (
     <Grid2
@@ -306,15 +306,17 @@ export default function AddCoupon() {
           alignItems: "center",
         }}
       >
-        <MyDatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          // endDate={endDate}
-          style={{ width: "40%" }}
-          dateFormat="yyyy/MM/dd"
-        />
+        <div style={{ marginRight: "1rem" }}>
+          <MyDatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            selectsStart
+            startDate={startDate}
+            // endDate={endDate}
+            style={{ width: "40%" }}
+            dateFormat="yyyy/MM/dd"
+          />
+        </div>
         <WaveTag>~</WaveTag>
         <MyDatePicker
           selected={endDate}

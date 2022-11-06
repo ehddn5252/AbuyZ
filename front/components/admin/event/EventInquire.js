@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 // 컴포넌트
-import AddEvent from "./AddEvent";
 import EventList from "./EventList";
 import EventPeriod from "./EventPeriod";
+import AddEventModal from "./AddEventModal";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import AddModal from "./AddModal";
+import { inquireEvent } from "../../../pages/api/event";
 
 export default function CouponInquire() {
   // 쿠폰명
@@ -49,6 +49,10 @@ export default function CouponInquire() {
 
   const handleClose = () => {
     setAdd(false);
+  };
+
+  const handleInquireEvent = () => {
+    inquireEvent();
   };
 
   return (
@@ -207,11 +211,11 @@ export default function CouponInquire() {
           <WhiteButton>숨겨진 버튼</WhiteButton>
           <div>
             <ResetButton>초기화</ResetButton>
-            <SearchButton>검색</SearchButton>
+            <SearchButton onClick={handleInquireEvent}>검색</SearchButton>
           </div>
           <AddButton onClick={handleClickOpen}>이벤트 등록</AddButton>
         </ButtonBox>
-        <AddModal add={add} setAdd={setAdd}></AddModal>
+        <AddEventModal add={add} setAdd={setAdd} />
       </Grid2>
       <Grid2
         container

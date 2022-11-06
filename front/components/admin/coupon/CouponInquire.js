@@ -123,6 +123,8 @@ export default function CouponInquire() {
     setCouponArray(tmp);
   };
 
+  // console.log(couponArray);
+
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
       {/* 카테고리 */}

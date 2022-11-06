@@ -6,6 +6,8 @@ export async function createcoupon(couponDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
+    console.log(couponDto, "@@@");
+    console.log("뭐야");
     https
       .post("/coupon/create", {
         name: couponDto.name,
@@ -78,16 +80,19 @@ export async function couponlist() {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.get("/coupon").then((response) => {
-      if (response.status === 200) {
-        console.log("쿠폰 조회 성공", response);
-        resolve(response.data);
-      } else {
-        console.log("쿠폰 조회 실패", response);
-        resolve(response);
-      }
-    });
-  }).catch((e) => {
-    console.log(e);
+    https
+      .get("/coupon")
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("쿠폰 조회 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("쿠폰 조회 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   });
 }
