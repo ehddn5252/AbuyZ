@@ -57,7 +57,7 @@ export async function delcoupon(couponNum) {
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
-      .del(`/coupon/list/${eventnumber}`)
+      .delete(`/coupon/list/${couponNum}`)
       .then((response) => {
         if (response.status === 200) {
           console.log("쿠폰 삭제 완료", response);

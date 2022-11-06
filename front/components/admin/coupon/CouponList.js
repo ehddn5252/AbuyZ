@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+// 컴포넌트
 import { MyDatePicker } from "../coupon/CouponPeriod";
-import { createcoupon } from "../../../pages/api/coupon";
 import CouponModal from "./CouponModal";
+
+// API
+import { createcoupon, delcoupon } from "../../../pages/api/coupon";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function CouponList(props) {
@@ -30,7 +28,8 @@ export default function CouponList(props) {
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
-  // const [couponDto, setCouponDto] = useState({});
+  // 체크된 아이템을 담을 배열
+  const [checkItems, setCheckItems] = useState([]);
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -46,15 +45,6 @@ export default function CouponList(props) {
   const saleChange = (event) => {
     setSale(event.target.value);
   };
-
-  // 체크박스 전체 선택
-  // const allCheck = (selectAll) => {
-  //   const checkboxes = document.getElementsByName("couponCheck");
-
-  //   checkboxes.forEach((checkbox) => {
-  //     checkbox.checked = selectAll.checked;
-  //   });
-  // };
 
   const header = [
     "수정",
@@ -77,17 +67,36 @@ export default function CouponList(props) {
     "스포츠/레저/자동차",
   ];
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "#ffffff",
-    // bgcolor: "white",
-    border: "1px solid #000",
-    p: 4,
-    // backdrop: "white",
-    opacity: "10000%",
+  // 체크박스 단일 선택
+  const handleSingleCheck = (checked, uid) => {
+    if (checked) {
+      // 단일 선택 시 체크된 아이템을 배열에 추가
+      setCheckItems((prev) => [...prev, uid]);
+    } else {
+      // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
+      setCheckItems(checkItems.filter((el) => el !== uid));
+    }
+  };
+
+  // 체크박스 전체 선택
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
+      const idArray = [];
+      props.couponArray.forEach((el) => idArray.push(el.uid));
+      setCheckItems(idArray);
+    } else {
+      // 전체 선택 해제 시 checkItems 를 빈 배열로 상태 업데이트
+      setCheckItems([]);
+    }
+  };
+
+  const handleDel = () => {
+    checkItems.forEach((e) => delcoupon(e));
+  };
+
+  const handleSave = () => {
+    window.location.reload();
   };
 
   return (
@@ -121,8 +130,15 @@ export default function CouponList(props) {
             <TableRow>
               <Th>
                 <input
-                  // onClick={allCheck(this)}
+                  // name="select-all"
                   type="checkbox"
+                  onChange={(e) => handleAllCheck(e.target.checked)}
+                  checked={
+                    checkItems.length !== props.couponArray.length ||
+                    checkItems.length === 0
+                      ? false
+                      : true
+                  }
                   style={{ width: "1.5rem", height: "1.5rem" }}
                 />
               </Th>
@@ -136,8 +152,10 @@ export default function CouponList(props) {
               <TableRow key={e.uid}>
                 <Td>
                   <input
+                    // name={`select-${e.uid}`}
                     type="checkbox"
-                    name="couponCheck"
+                    onChange={(v) => handleSingleCheck(v.target.checked, e.uid)}
+                    checked={checkItems.includes(e.uid) ? true : false}
                     style={{ width: "1.5rem", height: "1.5rem" }}
                   />
                 </Td>
@@ -155,8 +173,8 @@ export default function CouponList(props) {
         </TableContainer>
       </div>
       <ButtonBox>
-        <DeleteButton>선택 삭제</DeleteButton>
-        <EditButton>수정 항목 저장</EditButton>
+        <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
+        <EditButton onClick={handleSave}>수정 항목 저장</EditButton>
       </ButtonBox>
     </Grid2>
   );
