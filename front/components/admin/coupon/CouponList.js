@@ -12,39 +12,11 @@ import { createcoupon, delcoupon } from "../../../pages/api/coupon";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import "react-datepicker/dist/react-datepicker.css";
+import Pagination from "./Pagination";
 
 export default function CouponList(props) {
-  // 대분류 카테고리
-  const [category, setCategory] = useState("");
-
-  // 쿠폰이름
-  const [name, setName] = useState("");
-
-  // 할인금액
-  const [sale, setSale] = useState("");
-
-  // 시작 날짜
-  const [startDate, setStartDate] = useState(new Date());
-  // 마감 날짜
-  const [endDate, setEndDate] = useState(new Date());
-
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
-
-  // 대분류 셀렉트 했을 때
-  const handleChange = (event) => {
-    setCategory(event.target.value);
-  };
-
-  // 쿠폰이름 입력하면
-  const nameChange = (event) => {
-    setName(event.target.value);
-  };
-
-  // 할인 금액 입력하면
-  const saleChange = (event) => {
-    setSale(event.target.value);
-  };
 
   const header = [
     "수정",
@@ -99,6 +71,10 @@ export default function CouponList(props) {
     window.location.reload();
   };
 
+  const [limit, setLimit] = useState(9);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
+
   return (
     <Grid2
       xs={12}
@@ -148,7 +124,7 @@ export default function CouponList(props) {
             </TableRow>
           </thead>
           <tbody style={{ height: "50%" }}>
-            {props.couponArray.map((e) => (
+            {props.couponArray.slice(offset, offset + limit).map((e) => (
               <TableRow key={e.uid}>
                 <Td>
                   <input
@@ -173,6 +149,14 @@ export default function CouponList(props) {
         </TableContainer>
       </div>
       <ButtonBox>
+        {props.couponArray.length === 0 ? null : (
+          <Pagination
+            total={props.couponArray.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        )}
         <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
         <EditButton onClick={handleSave}>수정 항목 저장</EditButton>
       </ButtonBox>
@@ -239,13 +223,6 @@ const Edit = styled.button`
     cursor: pointer;
   }
 `;
-
-// const ButtonBox = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   padding-bottom: 2rem;
-//   background-color: white;
-// `;
 
 const DeleteButton = styled.button`
   background-color: #ffffff;
