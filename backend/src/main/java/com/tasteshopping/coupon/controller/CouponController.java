@@ -47,4 +47,10 @@ public class CouponController {
                                                    @PathVariable int coupon_uid){
         return new ResponseEntity<>(couponService.issueCoupon(email,coupon_uid),HttpStatus.OK);
     }
+    @PutMapping("/modify/{coupon_uid}")
+    private ResponseEntity<ResponseDto>modifyCoupon(@AuthenticationPrincipal String email,
+                                                    @PathVariable int coupon_uid,
+                                                    @RequestBody CouponDto couponDto){
+        return new ResponseEntity<>(couponService.modifyCoupon(email,coupon_uid,couponDto),HttpStatus.OK);
+    }
 }

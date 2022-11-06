@@ -135,4 +135,29 @@ public class CouponServiceImpl implements CouponService {
         responseDto.setMessage("발급 성공");
         return responseDto;
     }
+    @Transactional
+    @Override
+    public ResponseDto modifyCoupon(String email, int uid,CouponDto couponDto){
+        ResponseDto responseDto = new ResponseDto();
+        Optional<Coupons>findCoupon = couponRepository.findById(uid);
+        if(!findCoupon.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("수정 실패: 잘못된 쿠폰번호입니다.");
+            responseDto.setStatus(204);
+            return responseDto;
+        }
+        Optional<BigCategories> findBigCategories =bigCategoryRepository.findById(couponDto.getBig_categories_uid());
+        if(!findBigCategories.isPresent()){
+            responseDto.setData(new ResultDto(false));
+            responseDto.setMessage("수정 실패: 잘못된 카테고리입니다.");
+            responseDto.setStatus(204);
+            return responseDto;
+        }
+        BigCategories bigCategories = findBigCategories.get();
+        Coupons coupon = findCoupon.get();
+        coupon.update(couponDto,bigCategories);
+        responseDto.setData(new ResultDto(true));
+        responseDto.setMessage("수정 성공");
+        return responseDto;
+    }
 }
