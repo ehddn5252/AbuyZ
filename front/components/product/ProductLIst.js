@@ -1,12 +1,25 @@
+// React
 import React, { useState, useEffect } from "react";
-import styled from "@emotion/styled";
+
+// StyledComponent
+import styled from "styled-components";
+
+// 하위 Component
 import ProductItem from "./ProductItem";
-import Grid from "@mui/material/Grid";
-import "react-dropdown/style.css";
+
+// dropdown 어디쓴지는 모르겠다??
+// import "react-dropdown/style.css";
+
+// MUI
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+
+// Next.js
+import { useRouter } from "next/router";
 
 export default function ProductLIst({ productList }) {
+  const router = useRouter();
   const options = [
     "최근 등록 순",
     "가격 낮은 순",
@@ -15,7 +28,7 @@ export default function ProductLIst({ productList }) {
     "리뷰 많은 순",
   ];
   const [value, setValue] = useState("최근 등록 순");
-  const [inputValue, setInputValue] = React.useState([]);
+  const [inputValue, setInputValue] = useState(productList);
 
   // 가격 낮은순
   function getLowPrcie(arr) {
@@ -59,9 +72,13 @@ export default function ProductLIst({ productList }) {
     sortable.reverse();
     return sortable;
   }
+
+  // 랜더링시 초기값
   useEffect(() => {
     setInputValue(productList);
-  }, []);
+    console.log(inputValue);
+  }, [productList]);
+
   useEffect(() => {
     if (productList.length >= 2) {
       if (value === "최근 등록 순") setInputValue(productList);
@@ -74,7 +91,7 @@ export default function ProductLIst({ productList }) {
       } else setInputValue(getRatingList(productList));
     }
     console.log(inputValue);
-  }, [value]);
+  }, [value, router.pathname, productList]);
   return (
     <div>
       <Right>

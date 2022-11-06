@@ -101,29 +101,21 @@ export async function replycenter(replyDto) {
 }
 
 // 문의 작성
-export async function customercenter(customerCenterWriteReqDto) {
+export async function customercenter(formData) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   https.defaults.headers.common["Content-type"] = "multipart/form-data";
 
   return new Promise((resolve) => {
-    https
-      .post("/customer-center/list", {
-        title: customerCenterWriteReqDto.title,
-        content: customerCenterWriteReqDto.content,
-        customer_center_category:
-          customerCenterWriteReqDto.customer_center_category,
-        img_url: customerCenterWriteReqDto.img_url,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("문의 작성 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("문의 작성 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/customer-center/list", formData).then((response) => {
+      if (response.status === 200) {
+        console.log("문의 작성 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("문의 작성 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });

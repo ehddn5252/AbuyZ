@@ -95,11 +95,11 @@ export async function kwcdSearch(detailDto) {
 }
 
 // 상품 상세 페이지
-export async function productDetail(product) {
+export async function productDetail(product_id) {
   return new Promise((resolve) => {
     https
       .post("/product/detail", {
-        products_uid: product.products_uid,
+        products_uid: product_id,
       })
       .then((response) => {
         if (response.status === 200) {

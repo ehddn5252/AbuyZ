@@ -215,3 +215,22 @@ const EditButton = styled.button`
     cursor: pointer;
   }
 `;
+
+// const CancelButton = styled.button`
+//   width: 10%;
+//   height: 2.5rem;
+//   border: 1px solid border;
+//   /* border-radius: 1rem; */
+//   font-size: 1rem;
+//   border: 0;
+// `;
+
+// const SaveButton = styled.button`
+//   width: 10%;
+//   height: 2.5rem;
+//   /* border-radius: 1rem; */
+//   font-size: 1rem;
+//   background-color: #57a9fb;
+//   color: #fff;
+//   border: 0;
+// `;

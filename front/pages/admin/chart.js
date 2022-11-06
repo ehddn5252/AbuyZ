@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // StyledComponent
 import styled from "styled-components";
@@ -16,8 +16,30 @@ import BarData from "../../components/admin/chart/BarData";
 import DoughnutData from "../../components/admin/chart/DoughnutData";
 import StackData from "../../components/admin/chart/StackData";
 
+// API
+import {
+  getTotalsales,
+  getCartStatistics,
+  getDailyStatistics,
+  getCategoryStatistics,
+  getProductStatistics,
+} from "../api/statistics";
+
 export default function Chart() {
+  // 차트 타입
   const [chartType, setChartType] = useState(0);
+  // 날짜
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [starttime, setStarttime] = useState("2022-10-05");
+  const [endtime, setEndtime] = useState("2022-11-05");
+
+  // 각 차트 데이터
+  const [lineChartData, setLineChartData] = useState("");
+  const [barChartData, setBarChartData] = useState("");
+  const [doughnutChartData, setDoughnutChartData] = useState("");
+  const [dataChartData, setDataChartData] = useState("");
+  const [stackChartData, setStackhartData] = useState("");
 
   const LineChartClick = () => {
     setChartType(0);
@@ -34,6 +56,36 @@ export default function Chart() {
   const StackChartClick = () => {
     setChartType(4);
   };
+  function getTime(date) {
+    const data = date.toLocaleDateString();
+    const data1 = data.replace(".", "-");
+    const data2 = data1.replace(".", "-");
+    const data3 = data2.replace(".", "");
+    const data4 = data3.replaceAll(" ", "");
+    return data4;
+  }
+  const loadData = async () => {
+    const DateDto = {
+      start_date: starttime,
+      end_date: endtime,
+    };
+    const res1 = await getTotalsales(DateDto);
+    // const res2 = await getCartStatistics();
+    const res3 = await getDailyStatistics(DateDto);
+    const res4 = await getCategoryStatistics(DateDto);
+    const res5 = await getProductStatistics(DateDto);
+    setLineChartData(res1);
+    setBarChartData(res3);
+    setDoughnutChartData(res4);
+    // setDataChartData(res2);
+    setStackhartData(res5);
+  };
+  useEffect(() => {
+    setStarttime(getTime(startDate));
+    setEndtime(getTime(endDate));
+    loadData();
+    console.log(starttime, endtime);
+  }, [startDate, endDate]);
   return (
     <Container>
       <CategoryBox>
@@ -51,7 +103,12 @@ export default function Chart() {
         </SmallChart>
         <SmallChart>
           <ChartTitle>조회 기간 설정</ChartTitle>
-          <Calendar />
+          <Calendar
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </SmallChart>
       </CategoryBox>
       <CategoryBox2>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,28 +7,43 @@ import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 
+// api
+import { regisreview } from "../../pages/api/review";
 export default function ReviewAddModel({
   productName,
   productOptions,
   setOpen,
+  image,
+  uid,
 }) {
   const [value, setValue] = React.useState(0);
+  const regisrv = async () => {
+    const reviewDto = {
+      product_uid: uid,
+      rating: value,
+      content: content,
+      // order_uid,
+    };
+    const res = await regisreview(reviewDto);
+    console.log(res.data);
+  };
+  const [content, setContent] = useState("");
   const closeModal = () => {
     setOpen(false);
   };
   return (
     <Container>
       <IconDiv>
-        <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
+        <CloseIcon onClick={() => closeModal} sx={{ cursor: "pointer" }} />
       </IconDiv>
       <ModalTitle style={{ fontWeight: "bold", fontSize: "2rem" }}>
         리뷰 작성
       </ModalTitle>
       <Box sx={{ display: "flex", marginTop: "3rem" }}>
-        <ProductImg src={"images/sandwich.png"}></ProductImg>
+        <ProductImg src={image}></ProductImg>
         <ProductInfo>
           <span style={{ fontWeight: "bold" }}>{productName}</span>
-          <span>{productOptions}</span>
+          {/* <span>{productOptions}</span> */}
         </ProductInfo>
         {/* <p>{product.productName}</p> */}
       </Box>
@@ -53,11 +68,11 @@ export default function ReviewAddModel({
       <div style={{ marginTop: "4rem" }}>
         <span>리뷰 내용</span>
       </div>
-      <AnswerDiv></AnswerDiv>
+      <AnswerDiv onChange={(event) => setContent(event)}></AnswerDiv>
       <Box
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <Button variant="contained" sx={{ margin: "1rem" }}>
+        <Button variant="contained" sx={{ margin: "1rem" }} onClick={regisrv}>
           등록
         </Button>
       </Box>

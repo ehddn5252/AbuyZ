@@ -8,6 +8,8 @@ import "react-dropdown/style.css";
 import ProductSelectModal from "./ProductSelectModal";
 import { TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { post } from "axios";
+import { customercenter } from "../../pages/api/customercenter";
 export default function ServiceConsulting() {
   const [selected, setSelected] = useState(0);
   const [age, setAge] = useState("");
@@ -17,9 +19,35 @@ export default function ServiceConsulting() {
   const [options, setOptions] = useState("");
   const [price, setPrice] = useState(0);
   const [count, setCount] = useState(0);
+  const [file, setFile] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
+    setCategory(event.target.value);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+    const customerCenterWriteReqDto = {
+      title: title,
+      content: content,
+      customer_center_category: category,
+    };
+    formData.append(
+      "customerCenterWriteReqDto",
+      new Blob([JSON.stringify(customerCenterWriteReqDto)], {
+        type: "application/json",
+      })
+    );
+    const res = await customercenter(formData);
+    console.log(res.data);
+  };
+
   const [currentValue, setCurrentValue] = useState("상품");
   const [ShowOptions, setShowOptions] = useState(false);
   const [isExchange, setIsExchange] = useState(false);
@@ -45,6 +73,8 @@ export default function ServiceConsulting() {
     setName("");
     setSelected(0);
   };
+
+  // const
   return (
     <Container>
       <MajorTitle>1 : 1 문의하기</MajorTitle>
@@ -65,30 +95,33 @@ export default function ServiceConsulting() {
               문의 유형 선택
             </InputLabel>
             <Select value={age} onChange={handleChange} displayEmpty fullWidth>
-              <MenuItem value={1} onClick={(e) => handleOnChangeSelectValue(e)}>
+              <MenuItem
+                value={"상품"}
+                onClick={(e) => handleOnChangeSelectValue(e)}
+              >
                 상품
               </MenuItem>
 
               <MenuItem
-                value={20}
+                value={"교환_환불"}
                 onClick={(e) => handleOnChangeSelectValueex(e)}
               >
                 교환/환불
               </MenuItem>
               <MenuItem
-                value={10}
+                value={"이벤트_프로모션"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
                 이벤트 프로모션
               </MenuItem>
               <MenuItem
-                value={30}
+                value={"사이트_개선"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
                 사이트 개선
               </MenuItem>
               <MenuItem
-                value={40}
+                value={"주문_결제"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
                 주문 / 결제
@@ -162,6 +195,7 @@ export default function ServiceConsulting() {
           <TextField
             placeholder="문의 제목을 입력해주세요."
             fullWidth
+            onChange={(event) => setTitle(event.currentTarget.value)}
           ></TextField>
         </div>
       </AllDiv>
@@ -173,6 +207,7 @@ export default function ServiceConsulting() {
           <TextField
             placeholder="문의 내용을 입력해주세요."
             fullWidth
+            onChange={(event) => setContent(event.currentTarget.value)}
           ></TextField>
         </div>
       </AllDiv>
@@ -185,26 +220,21 @@ export default function ServiceConsulting() {
         <div style={{ flex: 10 }}>
           <input
             type="file"
-            multiple={true}
-            style={{
-              height: "100%",
-              border: "1px solid black",
-              display: "none",
-            }}
-            id="fileUpload"
-          ></input>
+            id="file"
+            onChange={() => setFile(event.target.files[0])}
+            multiple="multiple"
+          />
         </div>
       </AllDiv>
 
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-evenly",
           marginTop: "3rem",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <NoButton>취소</NoButton>
-        <YesButton>등록하기</YesButton>
+        <YesButton onClick={handleSubmit}>등록하기</YesButton>
       </div>
     </Container>
   );

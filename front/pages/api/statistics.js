@@ -26,25 +26,20 @@ export async function getTotalsales(DateDto) {
 }
 
 // 장바구니 통계 조회
-export async function getCartStatistics(DateDto) {
+export async function getCartStatistics() {
   // Header에 토큰 집어넣기
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .get("/statistics/cart", {
-        start_date: DateDto.start_date,
-        end_date: DateDto.end_date,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("장바구니 통계 조회 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("장바구니 통계 조회 실패", response);
-          resolve(response);
-        }
-      });
+    https.get("/statistics/cart").then((response) => {
+      if (response.status === 200) {
+        console.log("장바구니 통계 조회 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("장바구니 통계 조회 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
