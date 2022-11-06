@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import Button from "@mui/material/Button";
 
 // StyledComponents
 import styled from "styled-components";
@@ -13,14 +12,14 @@ import MyWishItem from "./MyWishItem";
 
 // api
 import { listwish } from "../../pages/api/wish";
-
 export default function MyWishList() {
   const [productList, setProductList] = useState([]);
   const llistwish = async () => {
     const res = await listwish();
-    setProductList(res.data);
-    console.log(typeof productList);
+    setProductList(res.data.products);
+    // setProductList(res.data);
   };
+  console.log(productList);
   useEffect(() => {
     llistwish();
   }, []);
@@ -35,12 +34,11 @@ export default function MyWishList() {
           borderRadius: "1rem",
         }}
       />
-      {/* productList.length 를 인식하지 못함 */}
       {productList ? (
         <ProductListBox>
-          {productList.map((e) => {
-            <MyWishItem product={e} />;
-          })}
+          {productList.map((e) => (
+            <MyWishItem product={e}></MyWishItem>
+          ))}
         </ProductListBox>
       ) : (
         <BlankBox>
@@ -52,7 +50,7 @@ export default function MyWishList() {
           </p>
         </BlankBox>
       )}
-      {/* {productList.length < 4 ? null : (
+      {productList.length < 4 ? null : (
         <ButtonDiv>
           <Button
             variant="contained"
@@ -63,7 +61,7 @@ export default function MyWishList() {
             더보기
           </Button>
         </ButtonDiv>
-      )} */}
+      )}
     </MyOrderContainer>
   );
 }
@@ -73,7 +71,6 @@ const MyOrderContainer = styled.div`
   margin-bottom: 4rem;
   width: 100%;
   width: 56rem;
-  height: 80vh;
 `;
 
 const MajorTitle = styled.span`
@@ -83,6 +80,7 @@ const MajorTitle = styled.span`
 const ProductListBox = styled.div`
   display: flex;
   margin-top: 1rem;
+  height: 80vh;
 `;
 
 const BlankBox = styled.div`

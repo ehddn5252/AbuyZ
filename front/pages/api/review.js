@@ -12,21 +12,15 @@ export async function regisreview(reviewDto) {
   https.defaults.headers.common["Content-type"] = "multipart/form-data";
 
   return new Promise((resolve) => {
-    https
-      .post("/review", {
-        product_uid: reviewDto.product_uid,
-        rating: reviewDto.rating,
-        content: reviewDto.content,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 작성 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 작성 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/review", reviewDto).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 작성 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 작성 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
