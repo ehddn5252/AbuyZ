@@ -11,30 +11,13 @@ import styled from "styled-components";
 import MyReviewItem from "./MyReviewItem";
 import { reviewYet } from "../../pages/api/review";
 export default function CanReview() {
-  const [productList, setProductList] = useState([
-    {
-      productName: "제주 햇 감귤 4.5kg",
-      price: 12000,
-      dateOfPurchase: "2022.10.19",
-      discount: 30,
-      options: "1등급 감귤 / 2kg",
-    },
-  ]); // eslint-disable-line no-unused-vars
-  // 아직 데이터
+  const [productList, setProductList] = useState([]);
+
   const rreviewYet = async () => {
     const res = await reviewYet();
-    console.log(res.data);
+    setProductList(res.data);
   };
   useEffect(() => {
-    setProductList([
-      {
-        productName: "제주 햇 감귤 4.5kg",
-        price: 12000,
-        dateOfPurchase: "2022.10.19",
-        discount: 30,
-        options: "1등급 감귤 / 2kg",
-      },
-    ]);
     rreviewYet();
   }, []);
   return (
@@ -47,10 +30,11 @@ export default function CanReview() {
           borderRadius: "1rem",
         }}
       />
-      {productList.length ? (
+      {productList ? (
         <ProductListBox>
-          <MyReviewItem product={productList[0]} />
-          <MyReviewItem product={productList[0]} />
+          {productList.map((e) => (
+            <MyReviewItem product={e} />
+          ))}
         </ProductListBox>
       ) : (
         <BlankBox>
