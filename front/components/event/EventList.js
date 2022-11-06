@@ -8,7 +8,8 @@ export default function EventList() {
   const [eventList, setEventList] = useState([]);
   const eevent = async () => {
     const res = await inquireEvent();
-    setEventList(res.data);
+    console.log(res.data);
+    // setEventList(res.data);
   };
   useEffect(() => {
     eevent();

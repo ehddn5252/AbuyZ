@@ -53,7 +53,7 @@ export async function inquireEvent() {
   return new Promise((resolve) => {
     https.get("/event").then((response) => {
       if (response.status === 200) {
-        console.log("이벤트 조회 성공", response);
+        console.log("이벤트 조회 성공", response.data);
         resolve(response.data);
       } else {
         console.log("이벤트 조회 실패", response);
