@@ -1,6 +1,7 @@
 package com.tasteshopping.coupon.entity;
 
 import com.tasteshopping.categories.entity.BigCategories;
+import com.tasteshopping.coupon.dto.CouponDto;
 import com.tasteshopping.coupon.dto.CouponResDto;
 import com.tasteshopping.event.entity.EventCouponLists;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,5 +62,17 @@ public class Coupons {
                 .available_categories_name(this.getBigCategories().getCategoryName())
                 .available_categories_uid(this.getBigCategories().getUid())
                 .build();
+    }
+    public void update(CouponDto couponDto,BigCategories bigCategories){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.startDate = formatter.parse(couponDto.getEnd_date());
+            this.endDate = formatter.parse(couponDto.getEnd_date());
+            this.name = couponDto.getName();
+            this.bigCategories = bigCategories;
+            this.discountPrice = couponDto.getDiscount_price();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

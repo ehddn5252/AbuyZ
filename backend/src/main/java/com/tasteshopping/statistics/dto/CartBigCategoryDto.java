@@ -1,9 +1,6 @@
 package com.tasteshopping.statistics.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.TreeMap;
 
@@ -12,13 +9,19 @@ import java.util.TreeMap;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartBigCategoryDto implements Comparable<CartBigCategoryDto>{
-    private TreeMap<String,CartSmallCategoryDto> small_category;
-    private int total_count;
-    public void updateCount(int count){
-        this.total_count+= count;
+    private TreeMap<String,Integer> smallCategories;
+    private int totalCount;
+
+    public void update(String smallCategoryName, int count){
+        try{
+            this.smallCategories.put(smallCategoryName,this.smallCategories.get(smallCategoryName)+count);
+        }catch (NullPointerException e){
+            this.smallCategories.put(smallCategoryName,count);
+        }
+        this.totalCount += count;
     }
     @Override
     public int compareTo(CartBigCategoryDto cartBigCategoryDto) {
-        return cartBigCategoryDto.getTotal_count()-this.total_count;
+        return cartBigCategoryDto.getTotalCount()-this.totalCount;
     }
 }

@@ -101,7 +101,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 1:
-                CartStatisticsListDto cartStatisticsListDto = new CartStatisticsListDto();
+                CartStatisticsListDto cartStatisticsListDto = new CartStatisticsListDto(new TreeMap<>(),0);
                 List<Carts>carts = cartRepository.findAll();
                 for(Carts cart:carts){
                     String big_category_name = cart.getInventory().getProduct().
@@ -111,14 +111,12 @@ public class StatisticsServiceImpl implements StatisticsService {
                     String small_category_name = cart.getInventory().getProduct().
                                                     getSmallCategory().getSmallCategoryName();
 
-                    CartBigCategoryDto cartBigCategoryDto = cartStatisticsListDto.getBig_category()
+                    CartBigCategoryDto cartBigCategoryDto = cartStatisticsListDto.getBig_categories()
                             .getOrDefault(big_category_name,new CartBigCategoryDto(new TreeMap<>(),0));
 
-                    cartBigCategoryDto.updateCount(cart.getProductCount());
+                    cartBigCategoryDto.update(small_category_name,cart.getProductCount());
 
-                    CartSmallCategoryDto cartSmallCategoryDto = cartBigCategoryDto.getSmall_category()
-                            .getOrDefault(small_category_name,new CartSmallCategoryDto(small_category_name,0));
-                    cartSmallCategoryDto.updateCount(cart.getProductCount());
+                    cartStatisticsListDto.update(big_category_name,cartBigCategoryDto);
 
                     total+=cart.getProductCount();
                 }

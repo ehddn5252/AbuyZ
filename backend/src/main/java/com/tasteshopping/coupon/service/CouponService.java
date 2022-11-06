@@ -11,4 +11,5 @@ public interface CouponService {
     ResponseDto getAllCoupons();
     ResponseDto deleteCoupon(int uid);
     ResponseDto issueCoupon(String email,int uid);
+    ResponseDto modifyCoupon(String email, int uid,CouponDto couponDto);
 }
