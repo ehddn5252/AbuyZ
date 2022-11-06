@@ -108,13 +108,7 @@ export async function customercenter(customerCenterWriteReqDto) {
 
   return new Promise((resolve) => {
     https
-      .post("/customer-center/list", {
-        title: customerCenterWriteReqDto.title,
-        content: customerCenterWriteReqDto.content,
-        customer_center_category:
-          customerCenterWriteReqDto.customer_center_category,
-        img_url: customerCenterWriteReqDto.img_url,
-      })
+      .post("/customer-center/list", customerCenterWriteReqDto)
       .then((response) => {
         if (response.status === 200) {
           console.log("문의 작성 성공", response);
