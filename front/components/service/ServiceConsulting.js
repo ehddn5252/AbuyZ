@@ -45,6 +45,8 @@ export default function ServiceConsulting() {
     setName("");
     setSelected(0);
   };
+
+  // const
   return (
     <Container>
       <MajorTitle>1 : 1 문의하기</MajorTitle>
@@ -188,8 +190,6 @@ export default function ServiceConsulting() {
             multiple={true}
             style={{
               height: "100%",
-              border: "1px solid black",
-              display: "none",
             }}
             id="fileUpload"
           ></input>
