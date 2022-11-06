@@ -1,10 +1,16 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { getMyInfo } from "../../pages/api/user";
 
 export default function ProductCarousel() {
+  const [user, setUser] = useState("");
+  const uuser = async () => {
+    const res = await getMyInfo();
+    setUser(res.data.name);
+  };
   const settings = {
     // dots: true,
     infinite: true,
@@ -13,7 +19,6 @@ export default function ProductCarousel() {
     slidesToShow: 4,
     slidesToScroll: 4,
   };
-  const user = "권도건";
   const array = [
     { name: "당근", price: 690, grade: 4.0, reviews: 100, discount: 20 },
     { name: "우유", price: 3500, grade: 4.4, reviews: 30 },
@@ -26,7 +31,9 @@ export default function ProductCarousel() {
     { name: "신발", price: 12399, grade: 4.8, reviews: 87 },
     { name: "음료", price: 1000, grade: 4.9, reviews: 222 },
   ];
-
+  useEffect(() => {
+    uuser();
+  }, []);
   return (
     <div
       style={{
