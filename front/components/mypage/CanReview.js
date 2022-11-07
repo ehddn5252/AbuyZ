@@ -10,12 +10,13 @@ import styled from "styled-components";
 // 하위 Components
 import MyReviewItem from "./MyReviewItem";
 import { reviewYet } from "../../pages/api/review";
-export default function CanReview() {
+export default function CanReview({ setReviewCnt }) {
   const [productList, setProductList] = useState([]);
 
   const rreviewYet = async () => {
     const res = await reviewYet();
     setProductList(res.data);
+    setReviewCnt(productList.length);
   };
   useEffect(() => {
     rreviewYet();

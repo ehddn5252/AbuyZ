@@ -40,12 +40,12 @@ export async function listwish() {
 }
 
 // 찜 삭제
-export async function delwish(number) {
+export async function delwish(wishDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
-    https.delete("/wish", { wish_uid: number }).then((response) => {
+    https.delete("/wish", wishDto).then((response) => {
       if (response.status === 200) {
         console.log("찜 삭제 성공", response);
         resolve(response.data);

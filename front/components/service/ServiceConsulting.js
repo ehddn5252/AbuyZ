@@ -234,7 +234,9 @@ export default function ServiceConsulting() {
           justifyContent: "center",
         }}
       >
-        <YesButton onClick={handleSubmit}>등록하기</YesButton>
+        <YesButton type="submit" onClick={handleSubmit}>
+          등록하기
+        </YesButton>
       </div>
     </Container>
   );

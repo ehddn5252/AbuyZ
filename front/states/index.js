@@ -20,3 +20,9 @@ export const searchName = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const mypageNum = atom({
+  key: "mypageNum",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

@@ -33,20 +33,17 @@ export default function MyReviewItem(product) {
         <div style={{ flex: "1" }}>
           <ReviewButton onClick={handleOpen}>리뷰 작성</ReviewButton>
         </div>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
+
+        {open && (
           <ReviewAddModel
             productName={product.product.inventoryDto.productDto.name}
             setOpen={setOpen}
             image={product.product.inventoryDto.productDto.descriptionImg}
             uid={product.product.uid}
+            productuid={product.product.inventoryDto.productDto.uid}
             // productOptions={product.product.options}
           />
-        </Modal>
+        )}
       </div>
     </ItemContainer>
   );

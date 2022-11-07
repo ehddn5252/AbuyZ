@@ -4,7 +4,7 @@ import { getMyInfo } from "../../pages/api/user";
 // StyledComponent
 import styled from "styled-components";
 
-export default function Myinfo({ setTap, SetActiveTap }) {
+export default function Myinfo({ setTap, SetActiveTap, reviewCnt }) {
   const [userName, setUserName] = useState("");
   const uuser = async () => {
     const res = await getMyInfo();
@@ -50,7 +50,7 @@ export default function Myinfo({ setTap, SetActiveTap }) {
         <HhistoryDiv onClick={tap6Change}>
           <HistoryTitle>작성 가능 리뷰</HistoryTitle>
           <HistoryCount>
-            <span style={{ color: "#56a9f1" }}>1</span>건
+            <span style={{ color: "#56a9f1" }}>{reviewCnt}</span>건
           </HistoryCount>
         </HhistoryDiv>
       </MainBox>
