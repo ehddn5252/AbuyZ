@@ -7,10 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.review.dto.ReplyReqDto;
-import com.tasteshopping.review.dto.ReviewReqDto;
-import com.tasteshopping.review.dto.ReviewResDto;
-import com.tasteshopping.review.dto.ReviewUIdDto;
+import com.tasteshopping.review.dto.*;
 import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -90,9 +87,8 @@ public class ReviewController {
     }
 
     @PostMapping("/report")
-    public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto) {
-        int review_uid = dto.getReview_uid();
-        return new ResponseEntity<>(reviewService.reviewReport(email, review_uid), HttpStatus.OK);
+    public ResponseEntity<BaseRes> reviewReport(@AuthenticationPrincipal String email, @RequestBody ReportReqDto dto) {
+        return new ResponseEntity<>(reviewService.reviewReport(email, dto), HttpStatus.OK);
     }
 
     @GetMapping("/photo/{product_id}")

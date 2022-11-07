@@ -8,10 +8,7 @@ import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.product.repository.ProductRepository;
-import com.tasteshopping.review.dto.PhotoResDto;
-import com.tasteshopping.review.dto.ReplyReqDto;
-import com.tasteshopping.review.dto.ReviewReqDto;
-import com.tasteshopping.review.dto.ReviewResDto;
+import com.tasteshopping.review.dto.*;
 import com.tasteshopping.review.entity.Likes;
 import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.entity.Reviews;
@@ -212,19 +209,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public BaseRes reviewReport(String email, int review_uid) {
+    public BaseRes reviewReport(String email, ReportReqDto dto) {
         Optional<Users> findUser = userRepository.findByEmail(email);
-        Reviews target = reviewRepository.getReferenceById(review_uid);
+        Reviews target = reviewRepository.getReferenceById(dto.getReview_uid());
         //이미 신고했는지 확인
         if (reportRepository.existsByReviewAndUser(target, findUser.get())) {
             return new BaseRes(204, "리뷰 신고 실패 - 이미 신고함", null);
         }
-        Reports report = Reports.builder()
-                .review(target)
-                .user(findUser.get())
-                .status(0) ///////////////// 수정
-                .reason(0) ///////////////// 수정
-                .build();
+        Reports report = dto.toEntity(target, findUser.get(), dto);
         reportRepository.save(report);
         return new BaseRes(200, "리뷰 신고 성공", null);
     }
