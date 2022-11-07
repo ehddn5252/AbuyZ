@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+
+// API
+import { inquireEvent } from "../../../pages/api/event";
+import { inquirecoupon } from "../../../pages/api/coupon";
 
 // 컴포넌트
 import EventList from "./EventList";
@@ -12,23 +16,35 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import { inquireEvent } from "../../../pages/api/event";
 
 export default function CouponInquire() {
-  // 쿠폰명
+  // 이벤트명
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =
-    useState("쿠폰명을 입력해주세요.");
+    useState("이벤트명을 입력해주세요.");
 
-  // 대분류
-  const [bigCategory, setBigCategory] = useState("");
+  // 적용할 쿠폰 이름
+  const [couponName, setCouponName] = useState("");
+
+  // 적용 가능한 쿠폰 리스트
+  const [couponList, setCouponList] = useState([]);
+
+  useEffect(() => {
+    getCoupon();
+  }, []);
+
+  const getCoupon = async () => {
+    const c = await inquirecoupon();
+    const c_lst = Object.entries(c.data);
+    setCouponList(c_lst);
+  };
 
   // 이벤트 등록 모달
   const [add, setAdd] = useState(false);
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
-    setBigCategory(event.target.value);
+    setCouponName(event.target.value);
   };
 
   // 쿠폰명 입력하면
@@ -47,13 +63,12 @@ export default function CouponInquire() {
     setAdd(true);
   };
 
-  const handleClose = () => {
-    setAdd(false);
-  };
-
+  // 이벤트 조회
   const handleInquireEvent = () => {
     inquireEvent();
   };
+
+  console.log(couponName);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -72,7 +87,7 @@ export default function CouponInquire() {
           fontWeight: "600",
         }}
       >
-        쿠폰명
+        이벤트명
       </Grid2>
       <Grid2
         xs={10}
@@ -136,7 +151,7 @@ export default function CouponInquire() {
               쿠폰명
             </InputLabel>
             <Select
-              value={bigCategory}
+              value={couponName}
               onChange={handleChange}
               label="쿠폰명"
               MenuProps={{
@@ -148,19 +163,16 @@ export default function CouponInquire() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
+                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value="쿠폰명">
-                <em>쿠폰명</em>
-              </MenuItem>
               {/* 쿠폰 이름 map으로 불러오기 */}
-              <MenuItem value={"식품"}>식품</MenuItem>
-              <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
-              <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
-              <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
-              <MenuItem value={"뷰티"}>뷰티</MenuItem>
+              {couponList.map((e, idx) => (
+                <MenuItem key={idx} value={e[1].uid}>
+                  {e[1].name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </CategoryBox>
@@ -215,7 +227,7 @@ export default function CouponInquire() {
           </div>
           <AddButton onClick={handleClickOpen}>이벤트 등록</AddButton>
         </ButtonBox>
-        <AddEventModal add={add} setAdd={setAdd} />
+        <AddEventModal add={add} setAdd={setAdd} couponList={couponList} />
       </Grid2>
       <Grid2
         container

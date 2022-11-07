@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
+import EditEventModal from "./EditEventModal";
 
 const event = [
   {
@@ -23,6 +24,14 @@ const event = [
 ];
 
 export default function SaleEventList() {
+  // 이벤트 수정 모달
+  const [edit, setEdit] = useState(false);
+
+  // 이벤트 수정 모달
+  const handleClickOpen = () => {
+    setAdd(true);
+  };
+
   return (
     <div>
       <Grid2
@@ -71,8 +80,9 @@ export default function SaleEventList() {
                   </div>
                   <ButtonBox>
                     <DeleteButton>삭제</DeleteButton>
-                    <EditButton>수정</EditButton>
+                    <EditButton onClick={() => setEdit(true)}>수정</EditButton>
                   </ButtonBox>
+                  <EditEventModal edit={edit} setEdit={setEdit} />
                 </Grid2>
               </Grid2>
             </EventItemBox>
