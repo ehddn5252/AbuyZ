@@ -74,12 +74,17 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public ResponseDto getMyCoupons(String email) {
         List<CouponLists> search_result = couponListsRepository.findByUserEmailOrderByStatusAscCoupons_StartDate(email);
+
         return toDto(search_result);
     }
 
     @Override
     public ResponseDto getAvailableCoupons(String email, int big_category_id) {
+<<<<<<< HEAD
         List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUidAndStatusOrderByStatusAscCoupons_StartDate(email,big_category_id,0);
+=======
+        List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUid(email,big_category_id);
+>>>>>>> ad23656 (:recycle: Change query statement)
         return toDto(search_result);
     }
 
