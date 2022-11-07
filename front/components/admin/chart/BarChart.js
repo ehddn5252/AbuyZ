@@ -61,6 +61,7 @@ export const data = {
 import styled from "styled-components";
 
 export default function BarChart() {
+  console.log(1);
   return (
     <Container>
       <Bar options={options} data={data} />
