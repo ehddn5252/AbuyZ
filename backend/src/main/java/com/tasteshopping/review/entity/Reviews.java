@@ -2,6 +2,8 @@ package com.tasteshopping.review.entity;
 
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.review.dto.ReviewDto;
+import com.tasteshopping.review.dto.ReviewResDto;
 import com.tasteshopping.user.entity.Users;
 
 import javax.persistence.*;
@@ -56,4 +58,14 @@ public class Reviews {
 //    private Boolean report;              //신고여부
 
 
+    public ReviewDto toDto(){
+        return ReviewDto.builder()
+                .productsUid(product.getUid())
+                .reviewContent(content)
+                .writer(user.getName())
+                .rating(rating)
+                .title(content)
+                .repImg(product.getRepImg())
+                .build();
+    }
 }
