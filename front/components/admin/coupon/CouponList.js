@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 // 컴포넌트
-import { MyDatePicker } from "../coupon/CouponPeriod";
-import CouponModal from "./CouponModal";
+import EditCouponModal from "./EditCouponModal";
 
 // API
-import { createcoupon, delcoupon } from "../../../pages/api/coupon";
+import { delcoupon } from "../../../pages/api/coupon";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -91,7 +90,7 @@ export default function CouponList(props) {
       />
       <div
         style={{
-          height: 500,
+          height: 483,
           width: "90%",
           display: "flex",
           justifyContent: "center",
@@ -136,7 +135,7 @@ export default function CouponList(props) {
                   />
                 </Td>
                 <Td>
-                  <CouponModal couponInfo={e} />
+                  <EditCouponModal couponInfo={e} />
                 </Td>
                 <Td>{cate[e.available_categories_uid]}</Td>
                 <Td>{e.name}</Td>
@@ -149,6 +148,7 @@ export default function CouponList(props) {
         </TableContainer>
       </div>
       <ButtonBox>
+        <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
         {props.couponArray.length === 0 ? null : (
           <Pagination
             total={props.couponArray.length}
@@ -157,7 +157,6 @@ export default function CouponList(props) {
             setPage={setPage}
           />
         )}
-        <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
         <EditButton onClick={handleSave}>수정 항목 저장</EditButton>
       </ButtonBox>
     </Grid2>
@@ -184,7 +183,7 @@ const TableContainer = styled.table`
   background-color: white;
   margin: 0;
   width: 100%;
-  height: 10rem;
+  height: 7rem;
   border-collapse: collapse;
   border-spacing: 0;
   border: 1px solid black;
@@ -252,7 +251,7 @@ const EditButton = styled.button`
 // 모달
 const ButtonBox = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin-top: 2rem;
   padding-bottom: 2rem;
   background-color: white;

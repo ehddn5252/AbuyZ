@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { MyDatePicker } from "../coupon/CouponPeriod";
+import { MyDatePicker } from "./CouponPeriod";
 import { createcoupon } from "../../../pages/api/coupon";
 
 // mui
@@ -28,7 +28,7 @@ const style = {
   p: 4,
 };
 
-export default function CouponModal(props) {
+export default function EditCouponModal(props) {
   // 모달
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
