@@ -78,7 +78,7 @@ export default function CouponInquire() {
     setRightSalePlaceholder("0");
   };
 
-  const getCoupong = async () => {
+  const getCoupon = async () => {
     const c = await inquirecoupon();
     const c_lst = Object.entries(c.data);
     const tmp = [];
@@ -337,7 +337,7 @@ export default function CouponInquire() {
       >
         <ButtonBox>
           <ResetButton>초기화</ResetButton>
-          <SearchButton onClick={getCoupong}>검색</SearchButton>
+          <SearchButton onClick={getCoupon}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       <Grid2

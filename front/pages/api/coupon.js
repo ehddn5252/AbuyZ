@@ -6,8 +6,6 @@ export async function createcoupon(couponDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    console.log(couponDto, "@@@");
-    console.log("뭐야");
     https
       .post("/coupon/create", {
         name: couponDto.name,
