@@ -24,12 +24,22 @@ import { useRecoilState } from "recoil";
 
 export default function Nav() {
   const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [atoken, setAToken] = useState("");
   // 검색어
   const [keyword, setKeyword] = useState("");
   const [searchValue, setSearchValue] = useRecoilState(searchName);
 
+  // window 위치
+  const [scrollY, setScrollY] = useState(null);
+
+  // 마우스위치 감지
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      setScrollY(window.scrollY);
+    });
+  }, []);
   const keywordSearch = () => {
     setSearchValue(keyword);
     router.push("/search");

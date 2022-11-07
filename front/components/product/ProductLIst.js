@@ -80,20 +80,47 @@ export default function ProductLIst({ productList }) {
   }, [productList]);
   console.log("마지막", inputValue);
   // 필터링 클릭시
-  useEffect(() => {
+
+  // const change = () => {
+  //   if (inputValue.length >= 2) {
+  //     if (value === "최근 등록 순") {
+  //       setInputValue(productList);
+  //     } else if (value === "가격 낮은 순") {
+  //       setInputValue(getLowPrcie(productList));
+  //     } else if (value === "가격 높은 순") {
+  //       setInputValue(getHighPrice(productList));
+  //     } else if (value === "리뷰 많은 순") {
+  //       setInputValue(getReviewList(productList));
+  //     } else setInputValue(getRatingList(productList));
+  //   }
+  //   return
+  // }
+  const change = () => {
+    let data;
     if (inputValue.length >= 2) {
       if (value === "최근 등록 순") {
-        setInputValue(productList);
+        data = productList;
       } else if (value === "가격 낮은 순") {
-        setInputValue(getLowPrcie(productList));
+        data = getLowPrcie(productList);
       } else if (value === "가격 높은 순") {
-        setInputValue(getHighPrice(productList));
+        data = getHighPrice(productList);
       } else if (value === "리뷰 많은 순") {
-        setInputValue(getReviewList(productList));
-      } else setInputValue(getRatingList(productList));
+        data = getReviewList(productList);
+      } else data = getRatingList(productList);
     }
-    console.log(inputValue);
-  }, [value]);
+    return data.map((product, idx) => (
+      <Grid key={idx} item xs={4} marginBottom={3}>
+        <ProductItem product={product} />
+      </Grid>
+    ));
+    // return productList;
+  };
+
+  // useEffect(() => {
+  //   const tv = change();
+  //   console.log(tv, "바뀐값");
+  //   setInputValue(change());
+  // }, [inputValue, value]);
   return (
     <div>
       <Right>
@@ -116,11 +143,12 @@ export default function ProductLIst({ productList }) {
       </Right>
       <Center>
         <Grid container>
-          {inputValue.map((product, idx) => (
+          {/* {inputValue.map((product, idx) => (
             <Grid key={idx} item xs={4} marginBottom={3}>
               <ProductItem product={product} />
             </Grid>
-          ))}
+          ))} */}
+          {change()}
         </Grid>
       </Center>
     </div>
