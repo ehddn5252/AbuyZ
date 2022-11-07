@@ -81,6 +81,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public ResponseDto getAvailableCoupons(String email, int big_category_id) {
         List<CouponLists> search_result = couponListsRepository.findByUserEmailAndCoupons_BigCategoriesUidAndStatusOrderByStatusAscCoupons_StartDate(email,big_category_id,0);
+        return toDto(search_result);
     }
 
     @Transactional
