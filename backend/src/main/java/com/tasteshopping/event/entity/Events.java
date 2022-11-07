@@ -85,6 +85,7 @@ public class Events {
                 break;
         }
         return EventResDto.builder()
+                .uid(this.uid)
                 .name(this.name)
                 .start_date(this.startDate.toString())
                 .end_date(this.endDate.toString())
