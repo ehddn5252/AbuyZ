@@ -67,6 +67,7 @@ export default function Mypage() {
               setTap={setTap}
               activeTap={activeTap}
               SetActiveTap={SetActiveTap}
+              setMypageN={setMypageN}
             />
           </div>
           <div style={{ flex: 4 }}>
