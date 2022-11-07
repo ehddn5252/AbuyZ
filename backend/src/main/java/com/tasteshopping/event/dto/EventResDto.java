@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Builder
 public class EventResDto {
-
+    private int uid;
     private String name;
     private String start_date;
     private String end_date;
