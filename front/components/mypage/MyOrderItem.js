@@ -40,6 +40,7 @@ export default function MyOrderItem({ uid }) {
           </div>
           <InfoContainer>
             <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
+            <ProductIntro>{e.inventoryDto.productOptions.size}</ProductIntro>
             {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
           </InfoContainer>
           <ButtonContainer>

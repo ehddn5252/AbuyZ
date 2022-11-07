@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "@mui/system";
 
 // 하위컴포넌트
@@ -12,14 +12,40 @@ import MyOrderList from "../components/mypage/MyOrderList";
 import MyWishList from "../components/mypage/MyWishList";
 import DeliveryList from "../components/mypage/DeliveryList";
 import CanReview from "../components/mypage/CanReview";
-
+import { mypageNum, pageNameState } from "../states";
+import { useRecoilState } from "recoil";
 export default function Mypage() {
-  const [tap, setTap] = useState(0); // eslint-disable-line no-unused-vars
+  const [mypageN, setMypageN] = useRecoilState(mypageNum);
+  const [tap, setTap] = useState(mypageNum); // eslint-disable-line no-unused-vars
   const [activeTap, SetActiveTap] = useState(0);
+  const [prevUrl, setPrevUrl] = useRecoilState(pageNameState);
+  const [reviewCnt, setReviewCnt] = useState(0);
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (prevUrl !== path) {
+      setMypageN(0);
+    } else {
+      setTap(mypageN);
+      SetActiveTap(mypageN);
+    }
+  }, [mypageN]);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (prevUrl !== path) {
+      setTap(0);
+      SetActiveTap(0);
+    } else {
+    }
+  }, []);
   return (
     <div style={{ minHeight: "80vh" }}>
       <div style={{ margin: "0" }}>
-        <MyInfo setTap={setTap} SetActiveTap={SetActiveTap} />
+        <MyInfo
+          setTap={setTap}
+          SetActiveTap={SetActiveTap}
+          reviewCnt={reviewCnt}
+        />
       </div>
       <Container
         maxWidth="lg"
@@ -50,7 +76,7 @@ export default function Mypage() {
             {tap === 3 ? <MyCouponList /> : null}
             {tap === 4 ? <MyInfoChange /> : null}
             {tap === 5 ? <DeliveryList /> : null}
-            {tap === 6 ? <CanReview /> : null}
+            {tap === 6 ? <CanReview setReviewCnt={setReviewCnt} /> : null}
           </div>
         </div>
       </Container>
