@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Reports {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +35,11 @@ public class Reports {
     // 신고 해결 유무 ( 0:대기, 1:거절, 2:승인)
     @Column(nullable = false)
     @ColumnDefault("0")
-    private Float status;
+    private Integer status;
 
     // 신고 사유 ( 0:허위사실유포, 1:욕설)
     @Column(nullable = false)
-    private Float reason;
+    private Integer reason;
 
     // 신고 날짜
     @CreatedDate
@@ -44,7 +47,7 @@ public class Reports {
     private Date reportDate;
 
     // 처리 날짜
-    @CreatedDate
+    @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date processDate;
 }

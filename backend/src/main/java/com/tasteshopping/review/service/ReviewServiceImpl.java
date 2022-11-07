@@ -222,8 +222,10 @@ public class ReviewServiceImpl implements ReviewService {
         Reports report = Reports.builder()
                 .review(target)
                 .user(findUser.get())
+                .status(0) ///////////////// 수정
+                .reason(0) ///////////////// 수정
                 .build();
-        reportRepository.delete(report);
+        reportRepository.save(report);
         return new BaseRes(200, "리뷰 신고 성공", null);
     }
 
