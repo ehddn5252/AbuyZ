@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment";
 
 // API
 import { inquireEvent } from "../../../pages/api/event";
@@ -23,31 +24,45 @@ export default function CouponInquire() {
   const [namePlaceholder, setNamePlaceholder] =
     useState("이벤트명을 입력해주세요.");
 
-  // 적용할 쿠폰 이름
-  const [couponName, setCouponName] = useState("");
+  // 적용할 쿠폰 uid
+  const [couponUid, setCouponUid] = useState("");
 
   // 적용 가능한 쿠폰 리스트
   const [couponList, setCouponList] = useState([]);
 
-  useEffect(() => {
-    getCoupon();
-  }, []);
+  // 기준 기간
+  const [standDate, setStandDate] = useState(0);
 
+  // 시작 날짜
+  const [startDate, setStartDate] = useState(new Date());
+
+  // 마감 날짜
+  const [endDate, setEndDate] = useState(new Date());
+
+  // 리셋 감지기
+  const [reset, setReset] = useState(0);
+
+  // 이벤트 데이터
+  const [eventArray, setEventArray] = useState([]);
+
+  // 숫자가 올라갈 때 리셋시키기
+  const resetNumUp = () => {
+    setReset(reset + 1);
+  };
+
+  // 쿠폰 목록 가져오기
   const getCoupon = async () => {
     const c = await inquirecoupon();
     const c_lst = Object.entries(c.data);
     setCouponList(c_lst);
   };
 
-  // 이벤트 등록 모달
-  const [add, setAdd] = useState(false);
+  // 렌더링 시 쿠폰 리스트 들고옴
+  useEffect(() => {
+    getCoupon();
+  }, []);
 
-  // 대분류 셀렉트 했을 때
-  const handleChange = (event) => {
-    setCouponName(event.target.value);
-  };
-
-  // 쿠폰명 입력하면
+  // 이벤트명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
   };
@@ -58,17 +73,79 @@ export default function CouponInquire() {
     setNamePlaceholder("쿠폰명을 입력해주세요.");
   };
 
+  // 쿠폰 셀렉트 했을 때
+  const handleChange = (event) => {
+    setCouponUid(event.target.value);
+  };
+
   // 이벤트 등록 모달
+  const [add, setAdd] = useState(false);
+
+  // 이벤트 등록 껐다 켜기
   const handleClickOpen = () => {
     setAdd(true);
   };
 
-  // 이벤트 조회
-  const handleInquireEvent = () => {
-    inquireEvent();
+  // Object에 특정 value가 존재하는지 확인
+  const getKeyByValue = (obj, value) => {
+    if (obj === undefined) {
+      return true;
+    }
+    return Object.keys(obj).find((key) => obj[key] === value);
   };
 
-  console.log(couponName);
+  // 조건에 맞는 이벤트 조회
+  const getEvent = async () => {
+    const e = await inquireEvent();
+    const e_lst = Object.entries(e.data);
+    const tmp = [];
+    // 조건 검사
+    for (let i = 0; i < e_lst.length; i++) {
+      // 이벤트명을 포함하고 있는지
+      if (e_lst[i][1].name.includes(name) || name == "") {
+        // 적용 쿠폰을 포함하고 있는지
+        if (
+          getKeyByValue(e_lst[i][1].coupon_lists[0], couponUid) ||
+          couponUid == ""
+        ) {
+          // 기준 기간에 따른 날짜를 측정
+          // 기준기간 선택 안했을 때
+          if (standDate === 0) {
+            if (moment(startDate).format().slice(0, 10) <= endDate) {
+              tmp.push(e_lst[i][1]);
+            }
+          }
+          // 이벤트 시작 일시
+          else if (standDate === 1) {
+            if (
+              moment(startDate).format().slice(0, 10) <= e_lst[i][1].start_date
+            ) {
+              tmp.push(e_lst[i][1]);
+            }
+          }
+          // 이벤트 마감 일시
+          else if (standDate === 2) {
+            if (e_lst[i][1].end_date <= endDate.toISOString().slice(0, 10)) {
+              tmp.push(e_lst[i][1]);
+            }
+          }
+        }
+      }
+    }
+    setEventArray(tmp);
+  };
+
+  // 초기화
+  const handleReset = () => {
+    setName("");
+    setCouponUid("");
+    setStandDate(0);
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setEventArray([]);
+  };
+
+  console.log(eventArray);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -101,6 +178,7 @@ export default function CouponInquire() {
         }}
       >
         <Input
+          value={name}
           placeholder={namePlaceholder}
           onChange={nameChange}
           onFocus={nameFocus}
@@ -151,7 +229,7 @@ export default function CouponInquire() {
               쿠폰명
             </InputLabel>
             <Select
-              value={couponName}
+              value={couponUid}
               onChange={handleChange}
               label="쿠폰명"
               MenuProps={{
@@ -163,7 +241,7 @@ export default function CouponInquire() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                // getContentAnchorEl: null,
+                // getcontentanchorel: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
@@ -196,7 +274,12 @@ export default function CouponInquire() {
           width: "100%",
         }}
       >
-        <EventPeriod />
+        <EventPeriod
+          reset={reset}
+          setStandDate={setStandDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
       </Grid2>
       <Grid2
         xs={12}
@@ -222,8 +305,15 @@ export default function CouponInquire() {
         <ButtonBox>
           <WhiteButton>숨겨진 버튼</WhiteButton>
           <div>
-            <ResetButton>초기화</ResetButton>
-            <SearchButton onClick={handleInquireEvent}>검색</SearchButton>
+            <ResetButton
+              onClick={() => {
+                handleReset();
+                resetNumUp();
+              }}
+            >
+              초기화
+            </ResetButton>
+            <SearchButton onClick={getEvent}>검색</SearchButton>
           </div>
           <AddButton onClick={handleClickOpen}>이벤트 등록</AddButton>
         </ButtonBox>
@@ -244,7 +334,7 @@ export default function CouponInquire() {
           }}
         >
           {/* 조회한 쿠폰 리스트 */}
-          <EventList />
+          <EventList eventArray={eventArray} />
         </Grid2>
       </Grid2>
     </Grid2>

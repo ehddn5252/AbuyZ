@@ -33,32 +33,33 @@ const Nav = styled.nav`
   justify-content: center;
   align-items: center;
   gap: 4px;
-  margin: 16px;
 `;
 
 const Button = styled.button`
   border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: 8px;
   margin: 0;
-  background: black;
-  color: white;
+  background: white;
+  color: black;
+  font-weight: 600;
   font-size: 1rem;
 
   &:hover {
-    background: #6c747c;
+    /* background: #6c747c; */
     cursor: pointer;
     transform: translateY(-2px);
   }
 
   &[disabled] {
-    background: grey;
+    /* background: #a2a2a2; */
     cursor: revert;
     transform: revert;
   }
 
   &[aria-current] {
-    background: #3b7cbe;
+    background: #acb8ca;
+    border-radius: 1rem;
     font-weight: bold;
     cursor: revert;
     transform: revert;

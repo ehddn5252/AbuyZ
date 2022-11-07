@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // 달력
@@ -16,6 +16,7 @@ export default function CouponPeriod(props) {
   // 기준기간
   const [standard, setStandard] = useState("");
 
+  // 기준 기간 설정
   const standardChange = (e) => {
     props.setStandDate(e.target.value);
     setStandard(e.target.value);
@@ -25,6 +26,55 @@ export default function CouponPeriod(props) {
   const [startDate, setStartDate] = useState(new Date());
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
+
+  // 리셋 감지기
+  // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
+  useEffect(() => {
+    setStandard("");
+    setStartDate(new Date());
+    setEndDate(new Date());
+  }, [props.reset]);
+
+  // 1일 버튼
+  const oneDay = () => {
+    const today = new Date();
+    const day = new Date(today);
+
+    day.setDate(today.getDate() + 1);
+    setStartDate(new Date());
+    setEndDate(day);
+  };
+
+  // 1주 버튼
+  const oneWeek = () => {
+    const today = new Date();
+    const week = new Date(today);
+
+    week.setDate(today.getDate() + 7);
+    setStartDate(new Date());
+    setEndDate(week);
+  };
+
+  // 1달 버튼
+  const oneMonth = () => {
+    const today = new Date();
+    const month = new Date(today);
+
+    month.setDate(today.getDate() + 30);
+    setStartDate(new Date());
+    setEndDate(month);
+  };
+
+  // 1년 버튼
+  const oneYear = () => {
+    const today = new Date();
+    const year = new Date(today);
+
+    year.setDate(today.getDate() + 365);
+    setStartDate(new Date());
+    setEndDate(year);
+  };
+
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
       <Grid2
@@ -85,10 +135,10 @@ export default function CouponPeriod(props) {
           </Select>
         </FormControl>
         <ButtonGroup>
-          <Button>1일</Button>
-          <Button>1주일</Button>
-          <Button>1개월</Button>
-          <Button>1년</Button>
+          <Button onClick={oneDay}>1일</Button>
+          <Button onClick={oneWeek}>1주일</Button>
+          <Button onClick={oneMonth}>1개월</Button>
+          <Button onClick={oneYear}>1년</Button>
         </ButtonGroup>
         <div
           style={{
@@ -105,7 +155,6 @@ export default function CouponPeriod(props) {
             }}
             selectsStart
             startDate={startDate}
-            // endDate={endDate}
             dateFormat="yyyy/MM/dd"
           />
           <WaveTag>~</WaveTag>
@@ -135,13 +184,14 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  background: #0b7ee9;
+  background: #dadada;
   font-size: 1rem;
   padding: 0.5rem;
-  color: white;
-  border-color: #0b7ee9;
+  color: black;
+  border-color: #eeeeee;
   width: 4rem;
   height: 70%;
+  box-shadow: 0;
   &:hover {
     cursor: pointer;
   }

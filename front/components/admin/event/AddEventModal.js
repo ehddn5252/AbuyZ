@@ -55,14 +55,6 @@ export default function AddEventModal(props) {
   const uploadProfileImg = (e) => {
     const profileList = e.target.files[0];
     setProfileImg(profileList);
-    // if (profileList) {
-    //   const url = URL.createObjectURL(profileList);
-    //   setProfileImg({
-    //     file: profileList,
-    //     thumbnail: url,
-    //     type: profileList.type.slice(0, 5),
-    //   });
-    // }
   };
 
   // 상세 이미지 정보
@@ -79,14 +71,7 @@ export default function AddEventModal(props) {
   // 상세 이미지 등록 함수
   const uploadDetailImg = (e) => {
     const profileList = e.target.files[0];
-    if (profileList) {
-      const url = URL.createObjectURL(profileList);
-      setDetailImg({
-        file: profileList,
-        thumbnail: url,
-        type: profileList.type.slice(0, 5),
-      });
-    }
+    setDetailImg(profileList);
   };
 
   // 이벤트 등록 API
@@ -125,7 +110,7 @@ export default function AddEventModal(props) {
       });
   };
 
-  console.log(profileImg);
+  // console.log(profileImg);
 
   return (
     <div>
