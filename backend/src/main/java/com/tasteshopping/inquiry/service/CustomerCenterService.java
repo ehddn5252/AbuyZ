@@ -2,6 +2,7 @@ package com.tasteshopping.inquiry.service;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.dto.CCReportReqDto;
+import com.tasteshopping.inquiry.dto.CCReportSelectReqDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 
@@ -30,4 +31,5 @@ public interface CustomerCenterService {
      * 고객센터 - 신고
      */
     BaseRes updateReportStatus(CCReportReqDto dto);
+    BaseRes getReportList(CCReportSelectReqDto dto);
 }

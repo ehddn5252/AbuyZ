@@ -3,10 +3,7 @@ package com.tasteshopping.inquiry.controller;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
-import com.tasteshopping.inquiry.dto.CCReportReqDto;
-import com.tasteshopping.inquiry.dto.CustomerCenterDto;
-import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
-import com.tasteshopping.inquiry.dto.ReplyReqDto;
+import com.tasteshopping.inquiry.dto.*;
 import com.tasteshopping.inquiry.service.CustomerCenterService;
 import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.review.service.AwsS3Service;
@@ -161,11 +158,18 @@ public class CustomerCenterController {
      * 고객센터 - 신고
      */
     @PutMapping("/report")
-    public ResponseEntity<BaseRes> updateReportStatus(@AuthenticationPrincipal String email, @RequestBody CCReportReqDto dto ){
+    public ResponseEntity<BaseRes> updateReportStatus(@AuthenticationPrincipal String email, @RequestBody CCReportReqDto dto){
         if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "권한 없음. 로그인을 해주세요"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.updateReportStatus(dto));
+    }
 
+    @GetMapping("/report")
+    public ResponseEntity<BaseRes> getReportList(@AuthenticationPrincipal String email, @RequestBody CCReportSelectReqDto dto){
+        if (email.equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "권한 없음. 로그인을 해주세요"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getReportList(dto));
     }
 }

@@ -4,6 +4,7 @@ import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -16,4 +17,7 @@ public interface ReportRepository extends JpaRepository<Reports, Integer> {
 //    Likes findByReviewAndUser(Reviews review, Users user);
     Reports findByReviewAndUser(Reviews review, Users user);
     boolean existsByReviewAndUser(Reviews review, Users user);
+
+//    @Query("select a from reports a where a.creationDateTime <= :creationDateTime")
+//    List<Reports> findAllByDateAndReasonAndNameAndStatus();
 }

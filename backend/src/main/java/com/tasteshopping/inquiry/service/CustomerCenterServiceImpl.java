@@ -3,10 +3,7 @@ package com.tasteshopping.inquiry.service;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
-import com.tasteshopping.inquiry.dto.CCReportReqDto;
-import com.tasteshopping.inquiry.dto.CustomerCenterDto;
-import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
-import com.tasteshopping.inquiry.dto.Status;
+import com.tasteshopping.inquiry.dto.*;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.inquiry.repository.CustomerCenterRepository;
 import com.tasteshopping.product.exception.NoAuthorizationException;
@@ -224,5 +221,18 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         Reports reports = reportRepository.getReferenceById(dto.getReport_uid());
         reports.update(dto.getStatus());
         return new BaseRes(200, "고객센터 신고 - status 변경 성공", null);
+    }
+
+    @Override
+    public BaseRes getReportList(CCReportSelectReqDto dto) {
+        int reason = dto.getReason();
+        String productName = "%"+dto.getProduct_name()+"%";
+        int dateType = dto.getDate_type();
+        String startDate = dto.getStart_date();
+        String endDate = dto.getEnd_date();
+        int status = dto.getStatus();
+
+
+        return new BaseRes(200, "고객센터 신고 - 조회 하는중", null);
     }
 }
