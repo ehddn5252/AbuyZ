@@ -3,17 +3,22 @@ package com.tasteshopping.inquiry.service;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
+import com.tasteshopping.inquiry.dto.CCReportReqDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.Status;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.inquiry.repository.CustomerCenterRepository;
 import com.tasteshopping.product.exception.NoAuthorizationException;
+import com.tasteshopping.review.entity.Reports;
+import com.tasteshopping.review.repository.ReportRepository;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CustomerCenterServiceImpl implements CustomerCenterService {
 
@@ -30,6 +36,8 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Autowired
     CustomerCenterRepository customerCenterRepository;
+
+    private final ReportRepository reportRepository;
 
     @Override
     public Integer getNoReplyNum(String status) {
@@ -175,6 +183,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         }
     }
 
+
     @Override
     public BaseRes deleteCustomerCenterByUidSameEmail(Integer uid, String email) {
         CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
@@ -203,5 +212,17 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     public void deleteCustomerCenterByUid(Integer uid) {
         CustomerCenters customerCenter = customerCenterRepository.findById(uid).get();
         customerCenterRepository.delete(customerCenter);
+    }
+
+
+    /**
+     * 고객센터 - 신고
+     */
+    @Transactional
+    @Override
+    public BaseRes updateReportStatus(CCReportReqDto dto) {
+        Reports reports = reportRepository.getReferenceById(dto.getReport_uid());
+        reports.update(dto.getStatus());
+        return new BaseRes(200, "고객센터 신고 - status 변경 성공", null);
     }
 }

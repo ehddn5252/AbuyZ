@@ -3,6 +3,7 @@ package com.tasteshopping.inquiry.controller;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
+import com.tasteshopping.inquiry.dto.CCReportReqDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.ReplyReqDto;
@@ -155,5 +156,16 @@ public class CustomerCenterController {
               return e.baseResResponseEntity;
 //            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BaseRes(403, "관리자 계정이 아닙니다.", null));
         }
+    }
+    /**
+     * 고객센터 - 신고
+     */
+    @PutMapping("/report")
+    public ResponseEntity<BaseRes> updateReportStatus(@AuthenticationPrincipal String email, @RequestBody CCReportReqDto dto ){
+        if (email.equals("anonymousUser")) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "권한 없음. 로그인을 해주세요"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.updateReportStatus(dto));
+
     }
 }

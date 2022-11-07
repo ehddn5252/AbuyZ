@@ -50,4 +50,8 @@ public class Reports {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date processDate;
+
+    public void update(int status){
+        this.status = status;
+    }
 }
