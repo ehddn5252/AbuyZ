@@ -9,6 +9,7 @@ import { keywordSearch, kwcdSearch } from "./api/product";
 import { useRecoilState } from "recoil";
 // State
 import { searchName } from "../states";
+
 export default function Search() {
   const [searchValue, setSearchValue] = useRecoilState(searchName);
   const [productList, setProductList] = useState([]);
@@ -19,11 +20,12 @@ export default function Search() {
   const [categotyOption, setCategoryOption] = useState(null);
   const [startPrice, setStartPrice] = useState(null);
   const [endPrice, setEndPrice] = useState(null);
-
   const getProductList = async () => {
     const res = await keywordSearch(searchValue);
     setProductList(res.data);
+    console.log("아", productList);
   };
+  console.log("오", productList);
 
   const filterProductList = async () => {
     const detailDto = {
@@ -46,6 +48,11 @@ export default function Search() {
     const res = await kwcdSearch(detailDto);
     setProductList(res.data);
   };
+
+  // 초기 동작
+  useEffect(() => {
+    getProductList();
+  }, []);
 
   // 필터링 사용시 동작
   useEffect(() => {

@@ -76,13 +76,15 @@ export default function ProductLIst({ productList }) {
   // 랜더링시 초기값
   useEffect(() => {
     setInputValue(productList);
-    console.log(inputValue);
+    console.log("랜더링시", inputValue);
   }, [productList]);
-
+  console.log("마지막", inputValue);
+  // 필터링 클릭시
   useEffect(() => {
-    if (productList.length >= 2) {
-      if (value === "최근 등록 순") setInputValue(productList);
-      else if (value === "가격 낮은 순") {
+    if (inputValue.length >= 2) {
+      if (value === "최근 등록 순") {
+        setInputValue(productList);
+      } else if (value === "가격 낮은 순") {
         setInputValue(getLowPrcie(productList));
       } else if (value === "가격 높은 순") {
         setInputValue(getHighPrice(productList));
@@ -91,7 +93,7 @@ export default function ProductLIst({ productList }) {
       } else setInputValue(getRatingList(productList));
     }
     console.log(inputValue);
-  }, [value, router.pathname, productList]);
+  }, [value]);
   return (
     <div>
       <Right>
