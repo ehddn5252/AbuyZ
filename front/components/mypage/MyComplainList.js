@@ -14,8 +14,9 @@ export default function MyComplainList() {
   const [complainList, setComplainList] = useState([]);
   const ccomplain = async () => {
     const res = await mycenter();
-    res.data.sort((a, b) => b.uid - a.uid);
-    // console.log(res.data);
+    // res.data.sort((a, b) => b.uid - a.uid);
+
+    console.log("넌뭐야", res.data);
     setComplainList(res.data);
   };
   useEffect(() => {
