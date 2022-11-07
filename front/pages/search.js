@@ -23,9 +23,7 @@ export default function Search() {
   const getProductList = async () => {
     const res = await keywordSearch(searchValue);
     setProductList(res.data);
-    console.log("아", productList);
   };
-  console.log("오", productList);
 
   const filterProductList = async () => {
     const detailDto = {

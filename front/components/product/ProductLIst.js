@@ -7,9 +7,6 @@ import styled from "styled-components";
 // 하위 Component
 import ProductItem from "./ProductItem";
 
-// dropdown 어디쓴지는 모르겠다??
-// import "react-dropdown/style.css";
-
 // MUI
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
@@ -28,7 +25,7 @@ export default function ProductLIst({ productList }) {
     "리뷰 많은 순",
   ];
   const [value, setValue] = useState("최근 등록 순");
-  const [inputValue, setInputValue] = useState(productList);
+  const [inputValue, setInputValue] = useState([productList]);
 
   // 가격 낮은순
   function getLowPrcie(arr) {
@@ -76,24 +73,29 @@ export default function ProductLIst({ productList }) {
   // 랜더링시 초기값
   useEffect(() => {
     setInputValue(productList);
-    console.log("랜더링시", inputValue);
   }, [productList]);
-  console.log("마지막", inputValue);
   // 필터링 클릭시
-  useEffect(() => {
-    if (inputValue.length >= 2) {
+
+  const change = () => {
+    let data;
+    if (productList.length >= 2) {
       if (value === "최근 등록 순") {
-        setInputValue(productList);
+        data = productList;
       } else if (value === "가격 낮은 순") {
-        setInputValue(getLowPrcie(productList));
+        data = getLowPrcie(productList);
       } else if (value === "가격 높은 순") {
-        setInputValue(getHighPrice(productList));
+        data = getHighPrice(productList);
       } else if (value === "리뷰 많은 순") {
-        setInputValue(getReviewList(productList));
-      } else setInputValue(getRatingList(productList));
+        data = getReviewList(productList);
+      } else data = getRatingList(productList);
     }
-    console.log(inputValue);
-  }, [value]);
+    return data;
+  };
+
+  useEffect(() => {
+    const tv = change();
+    setInputValue(tv);
+  }, [inputValue, value]);
   return (
     <div>
       <Right>
@@ -116,11 +118,12 @@ export default function ProductLIst({ productList }) {
       </Right>
       <Center>
         <Grid container>
-          {inputValue.map((product, idx) => (
-            <Grid key={idx} item xs={4} marginBottom={3}>
-              <ProductItem product={product} />
-            </Grid>
-          ))}
+          {inputValue &&
+            inputValue.map((product, idx) => (
+              <Grid key={idx} item xs={4} marginBottom={3}>
+                <ProductItem product={product} />
+              </Grid>
+            ))}
         </Grid>
       </Center>
     </div>

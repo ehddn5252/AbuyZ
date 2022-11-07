@@ -6,7 +6,6 @@ import AdminNav from "../components/nav/AdminNav.js";
 import AdminSideNav from "../components/nav/AdminSideNav.js";
 import Footer from "../components/nav/Footer.js";
 import styled from "@emotion/styled";
-import ScrollNav from "../components/nav/ScrollNav";
 
 // recoil
 import { RecoilRoot } from "recoil";
@@ -18,15 +17,6 @@ function MyApp({ Component, pageProps }) {
   const [adminCheck, setAdminCheck] = useState(false);
   // 네브바 유무
   const [isNav, setIsNav] = useState(false);
-  // window 위치
-  const [scrollY, setScrollY] = useState(null);
-
-  // 마우스위치 감지
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      setScrollY(window.scrollY);
-    });
-  }, []);
 
   useEffect(() => {
     const path = window.location.pathname;
@@ -50,7 +40,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <MainContainer>
-        {adminCheck === false && scrollY > 125 ? <ScrollNav /> : null}
         {adminCheck === false ? <Nav /> : null}
         {adminCheck ? <AdminSideNav /> : null}
         {adminCheck ? <AdminNav /> : null}
