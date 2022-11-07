@@ -66,7 +66,7 @@ public class EventServiceImpl implements EventService{
         return responseDto;
     }
     @Override
-    public ResponseDto getEventList(String email) {
+    public ResponseDto getEventList() {
         ResponseDto responseDto = new ResponseDto();
 
         List<Events>events = eventRepository.findAll();
