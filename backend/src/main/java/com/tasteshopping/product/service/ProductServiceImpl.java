@@ -445,6 +445,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> findByStatus(String status) {
+        List<Optional<Products>> l = productRepository.findByStatus(status);
+        List<ProductDto> newL = new ArrayList<>();
+
+        for (int i = 0; i < l.size(); ++i) {
+            newL.add(l.get(i).get().toDto());
+        }
+        return newL;
+    }
+
+    @Override
     public List<ProductDto> getProductBySmallCategory(int smallCategoriesUid) {
         List<Optional<Products>> l = productRepository.findBySmallCategory(smallCategoriesUid);
         List<ProductDto> newL = new ArrayList<>();

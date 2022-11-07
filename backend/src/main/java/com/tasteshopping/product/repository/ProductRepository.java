@@ -13,15 +13,15 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Products, Integer> {
     @Query(value = "select max(uid) from Products")
-    public Optional<Integer> getMaxUid();
+    Optional<Integer> getMaxUid();
 
     @Query("select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories b on s.bigCategory=b where b.uid=:categoriesUid")
-    public List<Optional<Products>> findByBigCategory(int categoriesUid);
+    List<Optional<Products>> findByBigCategory(int categoriesUid);
 
     @Query("select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid")
-    public List<Optional<Products>> findBySmallCategory(int categoriesUid);
+    List<Optional<Products>> findBySmallCategory(int categoriesUid);
 
-    public List<Optional<Products>> findByNameContains(String keyword);
+    List<Optional<Products>> findByNameContains(String keyword);
 
     List<Optional<Products>> findByDeliveryFeeBetween(int start, int end);
 
@@ -32,6 +32,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
+
+
 
 //    @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
 //    Optional<Products> findProductDetailByProductsUid(int productsUid);
@@ -52,5 +54,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
             "join fetch Brands b on p.brand = b " +
             "where p.name like :name and p.createdDate between :startDate and :endDate and p.smallCategory.uid = coalesce(:smallCategoryUid,p.smallCategory.uid) and p.smallCategory.bigCategory.uid = coalesce(:bigCategoryUid,p.smallCategory.bigCategory.uid) and p.brand.name like :brandName and p.status like :status")
     List<Products> boFiltering(String name, Date startDate, Date endDate, Integer bigCategoryUid, Integer smallCategoryUid, String brandName, String status);
+
+
+    List<Optional<Products>> findByStatus(String Status);
 
 }

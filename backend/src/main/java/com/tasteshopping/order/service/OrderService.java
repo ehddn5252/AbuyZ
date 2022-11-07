@@ -16,4 +16,6 @@ public interface OrderService {
     BaseRes orderRegisterCancel(List<Integer> orderListUid);
 
     BaseRes changeStatus(Integer order_uid, String status);
+
+    Integer getNumByStatus(String status);
 }

@@ -11,7 +11,6 @@ import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.review.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,17 +29,22 @@ public class CustomerCenterController {
     final private CustomerCenterService customerCenterService;
     final private AwsS3Service awsS3Service;
 
-    @GetMapping("/my")
-    public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
-        System.out.println(email);
+    @GetMapping("/status/num/{status}")
+    public ResponseEntity<BaseRes> getNoReplyNum(@AuthenticationPrincipal String email,@PathVariable String status) {
         if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(BaseRes.of(403, "로그인을 해주세요"));
         }
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+            return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200,"특정 답변의 개수 가져오기 성공",customerCenterService.getNoReplyNum(status)));
         } catch (NoInquiryException e) {
             return e.baseResResponseEntity;
         }
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<BaseRes> getCurrent() {
+        List<CustomerCenterDto> l = customerCenterService.getCurrent();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "최근 문의 내역 가져오기", l));
     }
 
     @GetMapping()

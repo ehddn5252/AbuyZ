@@ -6,6 +6,7 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
@@ -47,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
         orderLists.setStatus(Status.PROCESS.toString());
         for (int i = 0; i < cartList.size(); ++i) {
             orderLists = pay(cartList.get(i),orderLists,user,orderLists.getTotalPrice());
+            // 여기에서
         }
         orderListRepository.save(orderLists);
     }
@@ -83,6 +85,8 @@ public class OrderServiceImpl implements OrderService {
         totalPrice += price * orders.getCount();
         orderRepository.save(orders);
         cartRepository.delete(cart);
+        // 배송료 추가
+
         orderLists.setTotalPrice(totalPrice);
         return orderLists;
     }
@@ -99,6 +103,10 @@ public class OrderServiceImpl implements OrderService {
         orderLists.setStatus(Status.PROCESS.toString());
         Carts cart = cartRepository.findByUserAndUid(user);
         orderLists = pay(cart,orderLists,user,0);
+
+        // 아래는 배송료 추가하는 로직
+        orderLists.setTotalPrice(orderLists.getOrders().get(0).getInventory().getProduct().getDeliveryFee()+orderLists.getTotalPrice());
+
         orderListRepository.save(orderLists);
     }
 
@@ -142,5 +150,14 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(status);
         orderRepository.save(order);
         return new BaseRes(200, "주문 상태 변경 성공", null);
+    }
+
+    @Override
+    public Integer getNumByStatus(String status) {
+        List<Orders> orders = orderRepository.findByStatus(status);
+        if(orders.size()!=0){
+            return orders.size();
+        }
+        return 0;
     }
 }

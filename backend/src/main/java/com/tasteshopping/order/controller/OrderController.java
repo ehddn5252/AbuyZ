@@ -29,6 +29,14 @@ public class OrderController {
     @Autowired
     OrderListService orderListService;
 
+    @GetMapping("/status/num/{status}")
+    public ResponseEntity<BaseRes> getByStatus(@AuthenticationPrincipal String email, @PathVariable String status) {
+        // 상품 상태로로 검색한 기록
+        // PROCESS,
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "order 상태에 맞는 order 개수 가져오기 성공!", orderService.getNumByStatus(status)));
+    }
+
+
     @GetMapping("")
     public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
         List<OrderListDto> orderListDtos = orderListService.getOrderLists(email);
@@ -38,7 +46,7 @@ public class OrderController {
     @GetMapping("/{order_lists_uid}")
     public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email,
                                                           @PathVariable Integer order_lists_uid) {
-        return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrder(email,order_lists_uid));
+        return ResponseEntity.status(HttpStatus.OK).body(orderListService.getOrderFromOrderListsUid(email,order_lists_uid));
     }
 
     @GetMapping("/no-review")
