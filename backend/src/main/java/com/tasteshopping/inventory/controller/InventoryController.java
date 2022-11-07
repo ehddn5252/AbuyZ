@@ -30,7 +30,14 @@ public class InventoryController {
         catch(OutOfStockException e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new BaseRes(204, "상품 재고가 남아있지 않습니다.",null));
         }
+    }
 
+    @GetMapping("/empty/num")
+    public ResponseEntity<BaseRes> getEmtpyInventoryNum(@AuthenticationPrincipal String email){
+        // 재고가 0인 옵션의 상품 개수 가져오기
+        
+        Integer num = inventoryService.getEmptyNum();
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "상품 재고 0의 개숙.",num));
     }
 
     @PostMapping("/basic/check-inventory")

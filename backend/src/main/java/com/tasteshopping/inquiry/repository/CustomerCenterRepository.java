@@ -12,4 +12,9 @@ import java.util.Optional;
 public interface CustomerCenterRepository extends JpaRepository<CustomerCenters,Integer> {
     @Query(value="select c from CustomerCenters c where c.user.email=:email")
     List<Optional<CustomerCenters>> findByUserEmail(String email);
+
+    List<CustomerCenters> findByStatus(String status);
+
+    @Query(value = "select c from CustomerCenters c Order by date desc")
+    List<CustomerCenters> orderByDate();
 }

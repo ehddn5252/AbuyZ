@@ -45,7 +45,7 @@ public class OrderListServiceImpl implements OrderListService {
     }
 
     @Override
-    public BaseRes getOrder(String email, int order_lists_uid) {
+    public BaseRes getOrderFromOrderListsUid(String email, int order_lists_uid) {
         Optional<OrderLists> ordersOptional = orderListRepository.findById(order_lists_uid);
         if (ordersOptional.isPresent()) {
             Users user = ordersOptional.get().getUser();

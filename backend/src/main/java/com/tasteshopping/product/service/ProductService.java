@@ -30,6 +30,8 @@ public interface ProductService {
 
     List<ProductDto> findByKeyword(String keyword);
 
+    List<ProductDto> findByStatus(String status);
+
     List<ProductDto> getProductBySmallCategory(int smallCategoriesUid);
 
     List<ProductDto> getProductByBigCategory(Integer bigCategoriesUid);

@@ -7,7 +7,11 @@ import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import java.util.List;
 
 public interface CustomerCenterService {
+
+    Integer getNoReplyNum(String status);
     BaseRes getMyCustomerCenter(String email);
+
+    List<CustomerCenterDto> getCurrent();
 
     List<CustomerCenterDto> getCustomerCenter();
     CustomerCenterDto getCustomerCenterByUid(Integer uid);

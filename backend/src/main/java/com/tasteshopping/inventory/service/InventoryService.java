@@ -13,4 +13,6 @@ public interface InventoryService {
     BaseRes checkCartByInventory(String email);
 
     BaseRes checkBasicByInventory(String email, CartDto cartDto);
+
+    Integer getEmptyNum();
 }

@@ -28,9 +28,14 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     @Autowired
     UserRepository userRepository;
 
-
     @Autowired
     CustomerCenterRepository customerCenterRepository;
+
+    @Override
+    public Integer getNoReplyNum(String status) {
+        List<CustomerCenters> l = customerCenterRepository.findByStatus(status);
+        return l.size();
+    }
 
     @Override
     public BaseRes getMyCustomerCenter(String email) {
@@ -42,7 +47,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         if (new_l.size() == 0) {
             throw new NoInquiryException();
         }
-
         return new BaseRes(200, "내 문의 목록 조회 성공", new_l);
     }
 
@@ -52,6 +56,23 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());
+        }
+        return new_l;
+    }
+
+    @Override
+    public List<CustomerCenterDto> getCurrent() {
+        List<CustomerCenters> l = customerCenterRepository.orderByDate();
+
+        List<CustomerCenterDto> new_l = new ArrayList<>();
+        if (l.size() < 4) {
+            for (int i = 0; i < l.size(); ++i) {
+                new_l.add(l.get(i).toDto());
+            }
+        } else {
+            for (int i = 0; i < 4; ++i) {
+                new_l.add(l.get(i).toDto());
+            }
         }
         return new_l;
     }

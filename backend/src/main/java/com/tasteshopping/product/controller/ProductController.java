@@ -1,23 +1,18 @@
 package com.tasteshopping.product.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.order.dto.OrderUidReqDto;
 import com.tasteshopping.product.dto.*;
-import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
-import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -29,6 +24,22 @@ public class ProductController {
     private final ProductService productService;
 
     private final ProductKeywordService productKeywordService;
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<BaseRes> getByStatus(@AuthenticationPrincipal String email, @PathVariable String status) {
+        // 상품 상태로로 검색한 기록
+        List<ProductDto> newL = productService.findByStatus(status);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
+    }
+
+    @GetMapping("/status/num/{status}")
+    public ResponseEntity<BaseRes> getNumByStatus(@AuthenticationPrincipal String email, @PathVariable String status) {
+        // 상품 상태로로 검색한 기록
+        List<ProductDto> newL = productService.findByStatus(status);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL.size()));
+    }
 
     @PostMapping("/bo-search")
     public ResponseEntity<BaseRes> boSearch(@AuthenticationPrincipal String email,
@@ -79,6 +90,7 @@ public class ProductController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
     }
+
 
     @PutMapping("/status")
     public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,

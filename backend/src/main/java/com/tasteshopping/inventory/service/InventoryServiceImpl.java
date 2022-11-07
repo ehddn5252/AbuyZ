@@ -129,4 +129,10 @@ public class InventoryServiceImpl implements InventoryService {
         }
         return new BaseRes(200, "재고 남아있음", null);
     }
+
+    @Override
+    public Integer getEmptyNum() {
+        List<Inventories> l = inventoryRepository.findByCount(0);
+        return l.size();
+    }
 }

@@ -27,4 +27,6 @@ public interface InventoryRepository  extends JpaRepository<Inventories,Integer>
     @Modifying
     @Query("DELETE from Inventories i WHERE i.product=:product")
     void deleteByProduct(Products product);
+
+    List<Inventories> findByCount(int i);
 }
