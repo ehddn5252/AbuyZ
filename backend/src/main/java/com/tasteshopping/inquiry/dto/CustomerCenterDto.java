@@ -1,6 +1,5 @@
 package com.tasteshopping.inquiry.dto;
 
-import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 
@@ -20,11 +19,11 @@ public class CustomerCenterDto {
     private String content;
 
     private String status;
-    private Date date;
+    private Date start_date;
+    private Date end_date;
     private String imgUrl;
     private String customerCenterCategory;
     private String userName;
+    private String reply;
 
-    // 부모 정의
-    //    private CustomerCenters parent;
 }

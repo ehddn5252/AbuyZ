@@ -1,7 +1,6 @@
 package com.tasteshopping.review.service;
 
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.product.entity.ProductOptions;
@@ -22,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -109,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
         // 이미 작성했는지 확인
         Reviews parent = reviewRepository.getReferenceById(dto.getReview_uid());
-        if (reviewRepository.existsByParentReview(parent)){
+        if (reviewRepository.existsByParentReview(parent)) {
             return new BaseRes(204, "리뷰 답글 작성 실패 - 이미 답글 작성함", null);
         }
         Reviews review = dto.toEntity(dto, findUser.get(), parent.getProduct(), parent);
@@ -142,51 +141,51 @@ public class ReviewServiceImpl implements ReviewService {
         boolean like = false;
         boolean reply;
         int likeCount = 0;
-        if(findUser.isPresent()){
+        if (findUser.isPresent()) {
             // 로그인 O
-            for (Reviews reviews : reviewList){
+            for (Reviews reviews : reviewList) {
                 // 옵션 찾기
                 Orders orders = reviews.getOrder();
-                List option = new ArrayList<HashMap<String,String>>();
+                List option = new ArrayList<HashMap<String, String>>();
                 String[] optionUids = orders.getInventory().getProductOptionList().split(" ");
-                for(int i=0;i<optionUids.length;++i){
+                for (int i = 0; i < optionUids.length; ++i) {
                     Optional<ProductOptions> productOption = productOptionRepository.findById(Integer.parseInt(optionUids[i]));
-                    if(productOption.isPresent()){
+                    if (productOption.isPresent()) {
                         String name = productOption.get().getName();
                         String value = productOption.get().getValue();
                         Map<String, Object> optionMap = new HashMap<>();
-                        optionMap.put(name,value);
+                        optionMap.put(name, value);
                         option.add(optionMap);
-                    }else{
+                    } else {
                         return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                     }
                 }
 
                 reply = false;
                 // 좋아요 여부, 좋아요 개수
-                if(likeRepository.existsByReviewAndUser(reviews, findUser.get())) like = true;
+                if (likeRepository.existsByReviewAndUser(reviews, findUser.get())) like = true;
                 likeCount = likeRepository.countByReview(reviews);
                 // 답글 존재여부, 답글 내용, 답글시간
                 Reviews replyReview = reviewRepository.findByParentReview(reviews);
-                if(replyReview != null) reply = true;
+                if (replyReview != null) reply = true;
                 dtoList.add(ReviewResDto.from(reviews, like, likeCount, reply, replyReview, option));
             }
-        }else{
+        } else {
             // 로그인 X
-            for (Reviews reviews : reviewList){
+            for (Reviews reviews : reviewList) {
                 // 옵션 찾기
                 Orders orders = reviews.getOrder();
-                List option = new ArrayList<HashMap<String,String>>();
+                List option = new ArrayList<HashMap<String, String>>();
                 String[] optionUids = orders.getInventory().getProductOptionList().split(" ");
-                for(int i=0;i<optionUids.length;++i){
+                for (int i = 0; i < optionUids.length; ++i) {
                     Optional<ProductOptions> productOption = productOptionRepository.findById(Integer.parseInt(optionUids[i]));
-                    if(productOption.isPresent()){
+                    if (productOption.isPresent()) {
                         String name = productOption.get().getName();
                         String value = productOption.get().getValue();
                         Map<String, Object> optionMap = new HashMap<>();
-                        optionMap.put(name,value);
+                        optionMap.put(name, value);
                         option.add(optionMap);
-                    }else{
+                    } else {
                         return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                     }
                 }
@@ -196,15 +195,15 @@ public class ReviewServiceImpl implements ReviewService {
                 likeCount = likeRepository.countByReview(reviews);
                 // 답글 존재여부, 답글 내용, 답글시간
                 Reviews replyReview = reviewRepository.findByParentReview(reviews);
-                if(replyReview != null) reply = true;
+                if (replyReview != null) reply = true;
                 dtoList.add(ReviewResDto.from(reviews, like, likeCount, reply, replyReview, option));
             }
         }
 
         Map<String, Object> map = new HashMap<>();
-        map.put("totalCnt",totalCount);
-        map.put("pageCnt",pageCount);
-        map.put("dto",dtoList);
+        map.put("totalCnt", totalCount);
+        map.put("pageCnt", pageCount);
+        map.put("dto", dtoList);
         return new BaseRes(200, "상품 리뷰 조회 성공", map);
     }
 
@@ -228,12 +227,12 @@ public class ReviewServiceImpl implements ReviewService {
         long totalCount = reviewPage.getTotalElements();
         List<Reviews> reviewList = reviewPage.getContent();
         List<PhotoResDto> dtoList = new LinkedList<>();
-        for (Reviews review: reviewList) {
+        for (Reviews review : reviewList) {
             dtoList.add(PhotoResDto.from(review));
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("totalCnt",totalCount);
-        map.put("dto",dtoList);
+        map.put("totalCnt", totalCount);
+        map.put("dto", dtoList);
         return new BaseRes(200, "상품 포토리뷰 조회(일부) 성공", map);
     }
 
@@ -242,7 +241,7 @@ public class ReviewServiceImpl implements ReviewService {
         Products products = productRepository.getReferenceById(product_uid);
         List<Reviews> reviewList = reviewRepository.findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(products);
         List<PhotoResDto> dto = new LinkedList<>();
-        for (Reviews review: reviewList) {
+        for (Reviews review : reviewList) {
             dto.add(PhotoResDto.from(review));
         }
         return new BaseRes(200, "상품 포토리뷰 조회(전체) 성공", dto);
@@ -256,48 +255,48 @@ public class ReviewServiceImpl implements ReviewService {
         boolean reply;
         int likeCount = 0;
         ReviewResDto dto;
-        if(findUser.isPresent()){
+        if (findUser.isPresent()) {
             // 로그인 O
             // 옵션 찾기
             Orders orders = review.getOrder();
-            List option = new ArrayList<HashMap<String,String>>();
+            List option = new ArrayList<HashMap<String, String>>();
             String[] optionUids = orders.getInventory().getProductOptionList().split(" ");
-            for(int i=0;i<optionUids.length;++i){
+            for (int i = 0; i < optionUids.length; ++i) {
                 Optional<ProductOptions> productOption = productOptionRepository.findById(Integer.parseInt(optionUids[i]));
-                if(productOption.isPresent()){
+                if (productOption.isPresent()) {
                     String name = productOption.get().getName();
                     String value = productOption.get().getValue();
                     Map<String, Object> optionMap = new HashMap<>();
-                    optionMap.put(name,value);
+                    optionMap.put(name, value);
                     option.add(optionMap);
-                }else{
+                } else {
                     return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                 }
             }
-                reply = false;
-                // 좋아요 여부, 좋아요 개수
-                if(likeRepository.existsByReviewAndUser(review, findUser.get())) like = true;
-                likeCount = likeRepository.countByReview(review);
-                // 답글 존재여부, 답글 내용, 답글시간
-                Reviews replyReview = reviewRepository.findByParentReview(review);
-                if(replyReview != null) reply = true;
-                dto = ReviewResDto.from(review, like, likeCount, reply, replyReview, option);
+            reply = false;
+            // 좋아요 여부, 좋아요 개수
+            if (likeRepository.existsByReviewAndUser(review, findUser.get())) like = true;
+            likeCount = likeRepository.countByReview(review);
+            // 답글 존재여부, 답글 내용, 답글시간
+            Reviews replyReview = reviewRepository.findByParentReview(review);
+            if (replyReview != null) reply = true;
+            dto = ReviewResDto.from(review, like, likeCount, reply, replyReview, option);
 
-        }else{
+        } else {
             // 로그인 X
             // 옵션 찾기
             Orders orders = review.getOrder();
-            List option = new ArrayList<HashMap<String,String>>();
+            List option = new ArrayList<HashMap<String, String>>();
             String[] optionUids = orders.getInventory().getProductOptionList().split(" ");
-            for(int i=0;i<optionUids.length;++i){
+            for (int i = 0; i < optionUids.length; ++i) {
                 Optional<ProductOptions> productOption = productOptionRepository.findById(Integer.parseInt(optionUids[i]));
-                if(productOption.isPresent()){
+                if (productOption.isPresent()) {
                     String name = productOption.get().getName();
                     String value = productOption.get().getValue();
                     Map<String, Object> optionMap = new HashMap<>();
-                    optionMap.put(name,value);
+                    optionMap.put(name, value);
                     option.add(optionMap);
-                }else{
+                } else {
                     return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                 }
             }
@@ -306,9 +305,90 @@ public class ReviewServiceImpl implements ReviewService {
             likeCount = likeRepository.countByReview(review);
             // 답글 존재여부, 답글 내용, 답글시간
             Reviews replyReview = reviewRepository.findByParentReview(review);
-            if(replyReview != null) reply = true;
+            if (replyReview != null) reply = true;
             dto = ReviewResDto.from(review, like, likeCount, reply, replyReview, option);
         }
         return new BaseRes(200, "상품 리뷰 상세보기 성공", dto);
+    }
+
+    @Override
+    @Transactional
+    public List<ReviewSearchDto> searchByDetail(ReviewSearchReqDto reviewSearchReqDto) {
+        /*
+        DTO
+        답변 유무, 평점, 제품명, 리뷰내용, 등록 일시, 답변 일시, 작성자
+         */
+        Integer bigCategoriesUid = reviewSearchReqDto.getBigCategoryUid();
+        Integer smallCategoriesUid = reviewSearchReqDto.getSmallCategoryUid();
+        String productName = reviewSearchReqDto.getProductName();
+        String content = reviewSearchReqDto.getContent();
+        Date startDate = reviewSearchReqDto.getStartDate();
+        Date endDate = reviewSearchReqDto.getEndDate();
+        Integer isAnswered = reviewSearchReqDto.getIsAnswered();
+
+        // 여기에서 NULL 이면 NULL 처리를 못하게 해야 한다.
+        if (productName == null) {
+            productName = "%%";
+        } else {
+            productName = "%" + productName + "%";
+        }
+        if (content == null) {
+            content = "%%";
+        } else {
+            content = "%" + content + "%";
+        }
+        if (endDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                endDate = format.parse("2300-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if (startDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                startDate = format.parse("1900-1-1");
+            } catch (Exception e) {
+            }
+        }
+        // 답변단 것인지 안 단 것인지 확인한다.Review
+        List<Reviews> filteredReviews = reviewRepository.findByDetailInfo(bigCategoriesUid, smallCategoriesUid, productName, content, startDate, endDate);
+
+        List<ReviewSearchDto> allAnswerReviewDtos = new ArrayList<>();
+        List<ReviewSearchDto> noAnswerReviewDtos = new ArrayList<>();
+        List<ReviewSearchDto> answerReviewDtos = new ArrayList<>();
+        //로직
+        //1. 위의 조건에서 거른 것전체 검색
+        //2. 2중 for 문 바깥 for 문은 전체 하나씩 검사
+        // 3. 안쪽에 있는 parent의 uid를 검사하여서 만약에 동일하다면 답변이 있는 review, 아니라면 답변이 없는 리뷰
+
+        for (int i = 0; i < filteredReviews.size(); ++i) {
+            for (int j = 0; j < filteredReviews.size(); ++j) {
+                if (filteredReviews.get(i).getParentReview() == null) {
+                    if (filteredReviews.get(j).getParentReview() != null) {
+                        if (filteredReviews.get(i).getUid() == filteredReviews.get(j).getParentReview().getUid()) {
+                            ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
+                            reviewSearchDto.setAnswered(true);
+                            reviewSearchDto.setAnswerDate(filteredReviews.get(j).getDate());
+                            answerReviewDtos.add(reviewSearchDto);
+                            allAnswerReviewDtos.add(reviewSearchDto);
+                            break;
+                        }
+                    }
+                }
+            }
+            ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
+            reviewSearchDto.setAnswered(false);
+            reviewSearchDto.setAnswerDate(null);
+            noAnswerReviewDtos.add(reviewSearchDto);
+            allAnswerReviewDtos.add(reviewSearchDto);
+        }
+        if (isAnswered == 1) {
+            return noAnswerReviewDtos;
+        } else if (isAnswered == 2) {
+            return answerReviewDtos;
+        } else {
+            return allAnswerReviewDtos;
+        }
     }
 }

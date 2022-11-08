@@ -3,11 +3,10 @@ package com.tasteshopping.review.entity;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.review.dto.ReviewDto;
-import com.tasteshopping.review.dto.ReviewResDto;
+import com.tasteshopping.review.dto.ReviewSearchDto;
 import com.tasteshopping.user.entity.Users;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import lombok.*;
@@ -70,5 +69,19 @@ public class Reviews {
                 .date(date)
                 .productName(product.getName())
                 .build();
+    }
+
+    public ReviewSearchDto toReviewSearchDto(){
+        return ReviewSearchDto.builder()
+                .uid(uid)
+                .content(content)
+                .createdDate(date)
+                .productName(product.getName())
+                .writer(user.getName())
+                .rating(rating)
+                .answerDate(date)
+                .build();
+
+
     }
 }

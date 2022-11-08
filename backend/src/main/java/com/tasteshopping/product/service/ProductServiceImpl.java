@@ -15,6 +15,7 @@ import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
+import com.tasteshopping.wish.dto.IsWished;
 import com.tasteshopping.wish.entity.WishLists;
 import com.tasteshopping.wish.repository.WishRepository;
 import lombok.AllArgsConstructor;
@@ -603,7 +604,9 @@ public class ProductServiceImpl implements ProductService {
             }
             if(email!=null){
                 Optional<WishLists> wish = wishRepository.findByUser_EmailAndProducts_Uid(email,uid);
-                if(wish.isPresent())productDetailDto.setWished(true);
+                if(wish.isPresent()){
+                    productDetailDto.setIsWished(new IsWished(wish.get().getUid(),true));
+                }
             }
 
             productDetailDto.setProductOptionListDtoList(productOptionListDtoList);

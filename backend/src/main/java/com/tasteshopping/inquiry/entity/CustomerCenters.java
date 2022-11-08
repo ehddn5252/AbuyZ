@@ -31,33 +31,42 @@ public class CustomerCenters {
     @Column(name ="img_url")
     private String imgUrl;
 
-//    @Column(name = "date", nullable = false)
-//    private Timestamp date;
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    Date date;
+    Date start_date;
+
+    @Column
+    private Date end_date;
+
     String customerCenterCategory;
 
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name="users_uid")
     private Users user;
 
-    // 부모 정의
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_centers_uid")
-    private CustomerCenters parent;
-
+    @Column
+    private String reply;
 
     public CustomerCenterDto toDto(){
-        return CustomerCenterDto.builder()
-                .customerCenterCategory(customerCenterCategory)
-                .content(content)
-                .date(date)
-                .status(status)
-                .title(title)
-                .uid(uid)
-                .imgUrl(imgUrl)
-                .userName(user.getName())
-                .build();
+
+        CustomerCenterDto customerCenterDto = new CustomerCenterDto();
+        customerCenterDto.setCustomerCenterCategory(customerCenterCategory);
+        customerCenterDto.setContent(content);
+        customerCenterDto.setStart_date(this.start_date);
+        customerCenterDto.setEnd_date(this.end_date);
+        customerCenterDto.setStatus(status);
+        customerCenterDto.setTitle(title);
+        customerCenterDto.setUid(uid);
+        customerCenterDto.setImgUrl(imgUrl);
+        customerCenterDto.setReply(this.reply);
+
+        return customerCenterDto;
+
     }
+
+    public void update(String content){
+        this.end_date = new Date();
+        this.content = content;
+    }
+
 }

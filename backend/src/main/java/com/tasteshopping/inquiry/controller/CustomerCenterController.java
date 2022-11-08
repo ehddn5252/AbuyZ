@@ -5,8 +5,8 @@ import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
 import com.tasteshopping.inquiry.dto.*;
 import com.tasteshopping.inquiry.service.CustomerCenterService;
-import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.review.service.AwsS3Service;
+import com.tasteshopping.user.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +26,15 @@ public class CustomerCenterController {
 
     final private CustomerCenterService customerCenterService;
     final private AwsS3Service awsS3Service;
+
+    @GetMapping("/my")
+    public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
+        System.out.println(email);
+        if (email.equals("anonymousUser")){
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+    }
 
     @GetMapping("/status/num/{status}")
     public ResponseEntity<BaseRes> getNoReplyNum(@AuthenticationPrincipal String email,@PathVariable String status) {
@@ -134,25 +143,18 @@ public class CustomerCenterController {
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<BaseRes> writeReplyInquiry(@AuthenticationPrincipal String email, @RequestBody ReplyReqDto replyReqDto) {
-        if (email.equals("anonymousUser")) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.writeReplyCustomerCenter(email, replyReqDto.getParent_uid(), replyReqDto.getContent()));
+    public ResponseEntity<ResponseDto> writeReplyInquiry(@RequestBody ReplyReqDto replyReqDto) {
+        return new ResponseEntity<>(customerCenterService.writeReplyCustomerCenter(replyReqDto),HttpStatus.OK);
     }
 
     @DeleteMapping("/reply/{uid}")
-    public ResponseEntity<BaseRes> deleteReplyInquiry(@AuthenticationPrincipal String email, @PathVariable Integer uid) {
-        if (email.equals("anonymousUser")) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
-        }
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.deleteCustomerCenterReplyByUid(uid, email));
-        }
-        catch (NoAuthorizationException e){
-              return e.baseResResponseEntity;
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BaseRes(403, "관리자 계정이 아닙니다.", null));
-        }
+    public ResponseEntity<ResponseDto> deleteReplyInquiry(@PathVariable int uid) {
+        return new ResponseEntity<>(customerCenterService.deleteReplyInquiry(uid),HttpStatus.OK);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<ResponseDto> search(@RequestBody SearchCondition searchCondition){
+        return new ResponseEntity<>(customerCenterService.search(searchCondition),HttpStatus.OK);
     }
     /**
      * 고객센터 - 신고
