@@ -19,9 +19,8 @@ export default function ReportCategory({ setReportSearch }) {
   const [endDate, setEndDate] = useState(new Date());
   const inquiryList = () => [
     { label: "전체" },
-    { label: "상품문의" },
-    { label: "이벤트 프로모션" },
-    { label: "주문, 결제" },
+    { label: "허위사실유포" },
+    { label: "욕설" },
   ];
   const dateList = () => [{ label: "전체" }, { label: "문의일시" }];
 
@@ -80,7 +79,7 @@ export default function ReportCategory({ setReportSearch }) {
               />
               <MyDatePicker
                 selected={endDate}
-                onChange={(date) => setStartDate(date)}
+                onChange={(date) => setEndDate(date)}
                 selectsStart
                 startDate={endDate}
                 dateFormat="yyyy/MM/dd"
