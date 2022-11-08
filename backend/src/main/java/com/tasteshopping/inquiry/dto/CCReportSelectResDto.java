@@ -1,4 +1,4 @@
-package com.tasteshopping.review.dto;
+package com.tasteshopping.inquiry.dto;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import java.util.Date;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReportSearchDto {
+public class CCReportSelectResDto {
     //해결유무 ( 0:대기, 1:거절, 2:승인 )
     private String status;
     //신고사유 ( 0:허위사실유포, 1:욕설 )

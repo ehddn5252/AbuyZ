@@ -20,4 +20,5 @@ public interface ReportRepository extends JpaRepository<Reports, Integer> {
 
 //    @Query("select a from reports a where a.creationDateTime <= :creationDateTime")
 //    List<Reports> findAllByDateAndReasonAndNameAndStatus();
+    
 }
