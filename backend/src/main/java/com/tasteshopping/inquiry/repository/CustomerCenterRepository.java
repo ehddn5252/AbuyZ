@@ -15,6 +15,6 @@ public interface CustomerCenterRepository extends JpaRepository<CustomerCenters,
 
     List<CustomerCenters> findByStatus(String status);
 
-    @Query(value = "select c from CustomerCenters c where c.parent is null Order by c.date desc  ")
+    @Query(value = "select c from CustomerCenters c where c.reply =null Order by c.start_date desc  ")
     List<CustomerCenters> orderByDate();
 }

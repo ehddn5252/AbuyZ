@@ -1,13 +1,8 @@
 package com.tasteshopping.review.dto;
 
-import com.tasteshopping.order.entity.Orders;
-import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.review.entity.Reviews;
-import com.tasteshopping.user.entity.Users;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
+
 import java.util.Date;
 
 @Getter
