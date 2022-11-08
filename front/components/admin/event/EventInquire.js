@@ -45,6 +45,9 @@ export default function CouponInquire() {
   // 이벤트 데이터
   const [eventArray, setEventArray] = useState([]);
 
+  // 삭제 감지기
+  const [delNum, setDelNum] = useState(0);
+
   // 숫자가 올라갈 때 리셋시키기
   const resetNumUp = () => {
     setReset(reset + 1);
@@ -111,7 +114,10 @@ export default function CouponInquire() {
           // 기준 기간에 따른 날짜를 측정
           // 기준기간 선택 안했을 때
           if (standDate === 0) {
-            if (moment(startDate).format().slice(0, 10) <= endDate) {
+            if (
+              moment(startDate).format().slice(0, 10) <=
+              moment(endDate).format().slice(0, 10)
+            ) {
               tmp.push(e_lst[i][1]);
             }
           }
@@ -145,7 +151,10 @@ export default function CouponInquire() {
     setEventArray([]);
   };
 
-  console.log(eventArray);
+  // 삭제 감지기
+  useEffect(() => {
+    getEvent();
+  }, [delNum]);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -334,7 +343,7 @@ export default function CouponInquire() {
           }}
         >
           {/* 조회한 쿠폰 리스트 */}
-          <EventList eventArray={eventArray} />
+          <EventList eventArray={eventArray} setDelNum={setDelNum} />
         </Grid2>
       </Grid2>
     </Grid2>
