@@ -12,34 +12,63 @@ import TextField from "@mui/material/TextField";
 // StyleComponent
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
 // API
 import { productDetail } from "../../pages/api/product";
 import { regiswish, delwish } from "../../pages/api/wish";
 
 export default function ProductInfo() {
+  const router = useRouter();
+
   const [wish, setWish] = useState(false);
   const [productId, setProductId] = useState(0);
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
+  const [option, setOption] = useState([]);
+  const [option2, setOption2] = useState([]);
 
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
     setProduct(res.data);
-    console.log(product);
+    setWish(res.data.wished);
   };
 
   const minus = () => {
     if (count > 1) {
-      setCcount(count - 1);
+      setCount(count - 1);
     }
   };
+
+  // 장바구니 가기
+  const goBasket = () => {
+    router.push("/basket");
+  };
+
+  // 바로 결제하기
+  const goPayment = () => {
+    router.push("/payment");
+  };
+
   useEffect(() => {
     const pathname = window.location.pathname;
-    const arr = pathname.split("/");
-    setProductId(arr[2]);
-    getProduct(arr[2]);
-  }, []);
+    const id = pathname.split("/")[2];
+    setProductId(id);
+    getProduct(id);
+  }, [productId]);
+  // 옵션 만들기
+  const MakeOption = () => {
+    if (product.length < 4) {
+      let temp = [];
+      arr.forEach((e) => {
+        let tempItem = e;
+        tempItem["label"] = e.name;
+        console.log(tempItem);
+      });
+      setOption();
+    }
+  };
   const colorList = () => [
     { label: "화이트" },
     { label: "블랙" },
@@ -68,15 +97,15 @@ export default function ProductInfo() {
     }
   };
 
-  return (
+  return product ? (
     <Container>
       <ImgBox>
         <MajorImgBox>
           <MajorImg src={product.products.repImg} />
         </MajorImgBox>
         <SubImgBox>
-          {product.productPictureDto.map((productImg) => (
-            <SubImg src={productImg.imgUrl} />
+          {product.productPictureDto.map((productImg, idx) => (
+            <SubImg key={idx} src={productImg.imgUrl} />
           ))}
         </SubImgBox>
       </ImgBox>
@@ -126,8 +155,8 @@ export default function ProductInfo() {
           </PriceBottom>
         </PriceBox>
         <OptionBox>
-          {/* <Option>
-            <p style={{ width: "20%" }}>사이즈</p>
+          <Option>
+            <p style={{ width: "20%" }}>색상</p>
             <Autocomplete
               disablePortal
               id="combo-box-demo"
@@ -149,7 +178,7 @@ export default function ProductInfo() {
               renderInput={(params) => <TextField {...params} />}
               defaultValue="-"
             />
-          </Option> */}
+          </Option>
           <Option>
             <p style={{ width: "20%" }}>수량</p>
             <MinusIcon onClick={minus}></MinusIcon>
@@ -160,7 +189,7 @@ export default function ProductInfo() {
           </Option>
           <Option>
             <p style={{ width: "20%" }}>선택옵션</p>
-            <p>XL/블랙</p>
+            {option.length ? <p>XL/블랙</p> : <p>기본</p>}
           </Option>
         </OptionBox>
         <ResultBox>
@@ -173,12 +202,12 @@ export default function ProductInfo() {
           </ContentTag>
         </ResultBox>
         <ButtonBox>
-          <BasketButton>장바구니</BasketButton>
-          <BuyButton>구매하기</BuyButton>
+          <BasketButton onClick={goBasket}>장바구니</BasketButton>
+          <BuyButton onClick={goPayment}>구매하기</BuyButton>
         </ButtonBox>
       </InfoBox>
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`

@@ -44,7 +44,7 @@ export default function Nav() {
   const throttledScroll = useMemo(
     () =>
       throttle(() => {
-        if (window.scrollY > 50 && isNavOn) {
+        if (window.scrollY > 150 && isNavOn) {
           setIsNavOn(false);
           return;
         }
@@ -52,7 +52,7 @@ export default function Nav() {
           setIsNavOn(true);
           return;
         }
-      }, 800),
+      }, 300),
     [isNavOn]
   );
 
@@ -149,152 +149,148 @@ export default function Nav() {
   };
   return (
     <div>
-      {isNavOn ? (
-        <Container>
-          <NavContainer>
-            <UserBox>
-              {username ? (
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <TopBox>{username}님</TopBox>
-                  <TopBox>환영합니다</TopBox>
-                  <TopBox onClick={Logout} style={{ cursor: "pointer" }}>
-                    로그아웃
-                  </TopBox>
+      <Container>
+        <NavContainer>
+          <UserBox>
+            {username ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <TopBox>{username}님</TopBox>
+                <TopBox>환영합니다</TopBox>
+                <TopBox onClick={Logout} style={{ cursor: "pointer" }}>
+                  로그아웃
+                </TopBox>
+              </div>
+            ) : (
+              <UserLink onClick={goLogin}>로그인</UserLink>
+            )}
+            <UserLink onClick={goService} sx={{ marginLeft: "1rem" }}>
+              고객센터
+            </UserLink>
+          </UserBox>
+          <SearchBox>
+            <div onClick={goHome}>
+              <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
+            </div>
+            <SearchPaper component="form">
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="찾으시는 상품을 검색해주세요"
+                inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
+                onChange={(e) => {
+                  setKeyword(e.target.value);
+                }}
+              />
+              <IconButton
+                type="button"
+                sx={{ color: "#56a9f1" }}
+                aria-label="search"
+                onClick={keywordSearch}
+              >
+                <SearchIcon sx={{ fontSize: "1.8rem" }} />
+              </IconButton>
+            </SearchPaper>
+            <div style={{ display: "flex" }}>
+              <IconBox>
+                <div onClick={goMypage}>
+                  <FavoriteBorderOutlinedIcon
+                    fontSize="medium"
+                    sx={{ color: "black" }}
+                  />
                 </div>
-              ) : (
-                <UserLink onClick={goLogin}>로그인</UserLink>
-              )}
-              <UserLink onClick={goService} sx={{ marginLeft: "1rem" }}>
-                고객센터
-              </UserLink>
-            </UserBox>
-            <SearchBox>
-              <div onClick={goHome}>
-                <img
-                  src="/images/ABUYZ_LOGO.png"
-                  style={{ width: "8rem" }}
-                ></img>
-              </div>
-              <SearchPaper component="form">
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="찾으시는 상품을 검색해주세요"
-                  inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
-                  onChange={(e) => {
-                    setKeyword(e.target.value);
-                  }}
-                />
-                <IconButton
-                  type="button"
-                  sx={{ color: "#56a9f1" }}
-                  aria-label="search"
-                  onClick={keywordSearch}
-                >
-                  <SearchIcon sx={{ fontSize: "1.8rem" }} />
-                </IconButton>
-              </SearchPaper>
-              <div style={{ display: "flex" }}>
-                <IconBox>
-                  <div onClick={goMypage}>
-                    <FavoriteBorderOutlinedIcon
-                      fontSize="medium"
-                      sx={{ color: "black" }}
-                    />
-                  </div>
-                </IconBox>
-                <IconBox>
-                  <div onClick={goMypage}>
-                    <PersonOutlineOutlinedIcon
-                      fontSize="medium"
-                      sx={{ color: "black" }}
-                    />
-                  </div>
-                </IconBox>
-                <IconBox>
-                  <div onClick={goBasket}>
-                    <ShoppingBasketOutlinedIcon
-                      fontSize="medium"
-                      sx={{ color: "black", fontWeight: 100 }}
-                    />
-                  </div>
-                </IconBox>
-              </div>
-            </SearchBox>
-          </NavContainer>
-          <CategoryBox>
-            <CategoryContainer>
-              <CategoryTagBox>
-                <MenuIcon sx={{ marginRight: "1rem" }} />
-                <CategoryTitle>카테고리</CategoryTitle>
-                <Menu id="menu">
-                  <MajorMenu>
-                    <MenuTitle>식품</MenuTitle>
-                    {/* <MenuList>
+              </IconBox>
+              <IconBox>
+                <div onClick={goMypage}>
+                  <PersonOutlineOutlinedIcon
+                    fontSize="medium"
+                    sx={{ color: "black" }}
+                  />
+                </div>
+              </IconBox>
+              <IconBox>
+                <div onClick={goBasket}>
+                  <ShoppingBasketOutlinedIcon
+                    fontSize="medium"
+                    sx={{ color: "black", fontWeight: 100 }}
+                  />
+                </div>
+              </IconBox>
+            </div>
+          </SearchBox>
+        </NavContainer>
+        <CategoryBox>
+          <CategoryContainer>
+            <CategoryTagBox>
+              <MenuIcon sx={{ marginRight: "1rem" }} />
+              <CategoryTitle>카테고리</CategoryTitle>
+              <Menu id="menu">
+                <MajorMenu>
+                  <MenuTitle>식품</MenuTitle>
+                  {/* <MenuList>
                   <MenuItem>과일</MenuItem>
                   <MenuItem>채소</MenuItem>
                   <MenuItem>고기</MenuItem>
                   <MenuItem>과자/디저트/아이스크림</MenuItem>
                   <MenuItem>생수/음료/주류</MenuItem>
                 </MenuList> */}
-                  </MajorMenu>
-                  <MajorMenu>
-                    <MenuTitle>생활건강</MenuTitle>
-                    {/* <MenuList>
+                </MajorMenu>
+                <MajorMenu>
+                  <MenuTitle>생활건강</MenuTitle>
+                  {/* <MenuList>
                   <MenuItem>의류</MenuItem>
                   <MenuItem>언더웨어</MenuItem>
                   <MenuItem>신발</MenuItem>
                   <MenuItem>가방</MenuItem>
                   <MenuItem>악세서리</MenuItem>
                 </MenuList> */}
-                  </MajorMenu>
-                  <MajorMenu>
-                    <MenuTitle>가구/인테리어</MenuTitle>
-                    {/* <MenuList>
+                </MajorMenu>
+                <MajorMenu>
+                  <MenuTitle>가구/인테리어</MenuTitle>
+                  {/* <MenuList>
                   <MenuItem>주방가구</MenuItem>
                   <MenuItem>거실가구</MenuItem>
                   <MenuItem>커튼/블라인드</MenuItem>
                   <MenuItem>학생/사무가구</MenuItem>
                   <MenuItem>침실가구</MenuItem>
                 </MenuList> */}
-                  </MajorMenu>
-                  <MajorMenu>
-                    <MenuTitle>반려/도서/취미</MenuTitle>
-                    {/* <MenuList>
+                </MajorMenu>
+                <MajorMenu>
+                  <MenuTitle>반려/도서/취미</MenuTitle>
+                  {/* <MenuList>
                   <MenuItem>도서</MenuItem>
                   <MenuItem>노트/다이어리</MenuItem>
                   <MenuItem>사료</MenuItem>
                   <MenuItem>필기류</MenuItem>
                   <MenuItem>반려 동물 용품</MenuItem>
                 </MenuList> */}
-                  </MajorMenu>
-                  <MajorMenu>
-                    <MenuTitle>뷰티</MenuTitle>
-                    {/* <MenuList>
+                </MajorMenu>
+                <MajorMenu>
+                  <MenuTitle>뷰티</MenuTitle>
+                  {/* <MenuList>
                   <MenuItem>스킨케어</MenuItem>
                   <MenuItem>향수</MenuItem>
                   <MenuItem>헤어/바디</MenuItem>
                   <MenuItem>메이크업</MenuItem>
                   <MenuItem>네일</MenuItem>
                 </MenuList> */}
-                  </MajorMenu>
-                </Menu>
-              </CategoryTagBox>
-              <TagBox>
-                <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
-              </TagBox>
-              <TagBox>
-                <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
-              </TagBox>
-              <TagBox>
-                <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
-              </TagBox>
-              <TagBox>
-                <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
-              </TagBox>
-            </CategoryContainer>
-          </CategoryBox>
-        </Container>
-      ) : (
+                </MajorMenu>
+              </Menu>
+            </CategoryTagBox>
+            <TagBox>
+              <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
+            </TagBox>
+            <TagBox>
+              <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
+            </TagBox>
+            <TagBox>
+              <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
+            </TagBox>
+            <TagBox>
+              <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
+            </TagBox>
+          </CategoryContainer>
+        </CategoryBox>
+      </Container>
+      {isNavOn ? null : (
         <ScrollContainer>
           <ScrollCategoryBox>
             <ScrollCategoryContainer>
