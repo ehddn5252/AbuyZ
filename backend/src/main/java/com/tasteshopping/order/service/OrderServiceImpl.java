@@ -6,7 +6,6 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
-import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
@@ -58,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
         orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-        Date date = UtilService.getDate();
+        Date date = UtilService.getToday();
         orderLists.setDate(date);
         return orderListRepository.save(orderLists);
     }
@@ -105,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
         orderLists = pay(cart,orderLists,user,0);
 
         // 아래는 배송료 추가하는 로직
-        orderLists.setTotalPrice(orderLists.getOrders().get(0).getInventory().getProduct().getDeliveryFee()+orderLists.getTotalPrice());
+//        orderLists.setTotalPrice(orderLists.getOrders().get(0).getInventory().getProduct().getDeliveryFee()+orderLists.getTotalPrice());
 
         orderListRepository.save(orderLists);
     }
