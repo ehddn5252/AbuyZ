@@ -20,18 +20,6 @@ public class UtilService {
         return date;
     }
 
-    public static Date getDayTest() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = new Date(System.currentTimeMillis());
-        try {
-            date = formatter.parse("2022-10-06");
-        } catch (ParseException pErr) {
-            System.out.println(pErr);
-        }
-        return date;
-    }
-
     public static Date getDateAfterDay(int day) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -50,17 +38,4 @@ public class UtilService {
         return date;
     }
 
-    public static Date strToDate(String dateStr) {
-        /*
-        yyyy-MM-dd
-         */
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        try {
-            date = formatter.parse(dateStr);
-        } catch (ParseException pErr) {
-            System.out.println(pErr);
-        }
-        return date;
-    }
 }
