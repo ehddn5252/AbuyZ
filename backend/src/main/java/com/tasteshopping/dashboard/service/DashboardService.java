@@ -1,6 +1,7 @@
 package com.tasteshopping.dashboard.service;
 
 import com.tasteshopping.dashboard.dto.AnalysisDataDto;
+import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.review.dto.ReviewDto;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,8 @@ public interface DashboardService {
    void doVisit(Date date, String pageName);
    AnalysisDataDto getVisit(Date date, String pageName);
    HashMap<String, Object> getDaily();
+
+   List<SummaryDto> getSummary();
 
    List<ReviewDto> getCurrent();
    Integer getReportNum();

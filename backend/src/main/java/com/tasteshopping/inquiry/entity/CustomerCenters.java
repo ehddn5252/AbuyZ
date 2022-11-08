@@ -49,15 +49,15 @@ public class CustomerCenters {
 
 
     public CustomerCenterDto toDto(){
-        CustomerCenterDto customerCenterDto = new CustomerCenterDto();
-        customerCenterDto.setCustomerCenterCategory(customerCenterCategory);
-        customerCenterDto.setContent(content);
-        customerCenterDto.setDate(date);
-//        customerCenterDto.setParent(parent);
-        customerCenterDto.setStatus(status);
-        customerCenterDto.setTitle(title);
-        customerCenterDto.setUid(uid);
-        customerCenterDto.setImgUrl(imgUrl);
-        return customerCenterDto;
+        return CustomerCenterDto.builder()
+                .customerCenterCategory(customerCenterCategory)
+                .content(content)
+                .date(date)
+                .status(status)
+                .title(title)
+                .uid(uid)
+                .imgUrl(imgUrl)
+                .userName(user.getName())
+                .build();
     }
 }

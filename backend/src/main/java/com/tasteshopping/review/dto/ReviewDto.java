@@ -29,4 +29,5 @@ public class ReviewDto {
     private String reviewContent;
     private String writer;
     private Date date;
+    private String productName;
 }

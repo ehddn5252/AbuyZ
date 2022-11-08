@@ -30,7 +30,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Autowired
     CustomerCenterRepository customerCenterRepository;
-
     @Override
     public Integer getNoReplyNum(String status) {
         List<CustomerCenters> l = customerCenterRepository.findByStatus(status);
@@ -62,15 +61,17 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Override
     public List<CustomerCenterDto> getCurrent() {
+        
+        // 고객 센터는 3개
         List<CustomerCenters> l = customerCenterRepository.orderByDate();
 
         List<CustomerCenterDto> new_l = new ArrayList<>();
-        if (l.size() < 4) {
+        if (l.size() < 3) {
             for (int i = 0; i < l.size(); ++i) {
                 new_l.add(l.get(i).toDto());
             }
         } else {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 new_l.add(l.get(i).toDto());
             }
         }
