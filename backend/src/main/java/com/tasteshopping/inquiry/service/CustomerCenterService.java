@@ -1,6 +1,8 @@
 package com.tasteshopping.inquiry.service;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.inquiry.dto.CCReportReqDto;
+import com.tasteshopping.inquiry.dto.CCReportSelectReqDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.ReplyReqDto;
@@ -25,6 +27,13 @@ public interface CustomerCenterService {
 
     void deleteCustomerCenterByUid(Integer uid);
     BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
+
+    BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
+    /**
+     * 고객센터 - 신고
+     */
+    BaseRes updateReportStatus(CCReportReqDto dto);
+    BaseRes getReportList(CCReportSelectReqDto dto);
 
 
     ResponseDto deleteReplyInquiry(int uid);
