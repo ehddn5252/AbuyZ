@@ -44,15 +44,20 @@ export default function ReviewStatus() {
     loadData();
   }, []);
 
+  // console.log(customerCenters);
   const ServiceListDiv = customerCenters.map((e) => (
     <div key={e.uid}>
       <div style={{ marginLeft: "2rem" }}>
         <p style={{ fontWeight: "bold" }}>
           [{e.customerCenterCategory}] {e.title}
         </p>
-        <p style={{ color: "#969696" }}>
-          {e.userName} | {e.date.slice(0, 10)} {e.date.slice(11, 16)}
-        </p>
+        {/* 일단 임시로 버그 수정 */}
+        {e.start_date && e.end_date ? (
+          <p style={{ color: "#969696" }}>
+            {e.userName} | {e.start_date.slice(0, 10)}{" "}
+            {e.end_date.slice(11, 16)}
+          </p>
+        ) : null}
       </div>
 
       <hr />
