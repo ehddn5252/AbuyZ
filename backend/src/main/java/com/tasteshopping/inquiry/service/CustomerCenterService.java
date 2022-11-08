@@ -28,7 +28,8 @@ public interface CustomerCenterService {
     void deleteCustomerCenterByUid(Integer uid);
     BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
-    BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
+//    BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
+    ResponseDto writeReplyCustomerCenter(ReplyReqDto replyReqDto);
     /**
      * 고객센터 - 신고
      */
@@ -38,6 +39,6 @@ public interface CustomerCenterService {
 
     ResponseDto deleteReplyInquiry(int uid);
 
-    ResponseDto writeReplyCustomerCenter(ReplyReqDto replyReqDto);
+//    ResponseDto writeReplyCustomerCenter(ReplyReqDto replyReqDto);
     ResponseDto search(SearchCondition searchCondition);
 }
