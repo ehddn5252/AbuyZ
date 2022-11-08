@@ -7,7 +7,6 @@ import com.tasteshopping.user.dto.ResultDto;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.wish.dto.WishListDto;
-import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.entity.WishLists;
 import com.tasteshopping.wish.repository.WishRepository;
 import lombok.AllArgsConstructor;
@@ -72,9 +71,9 @@ public class WishServiceImpl implements WishService {
 
     @Override
     @Transactional
-    public ResponseDto cancel(String email, WishUidDto wishUidDto) {
+    public ResponseDto cancel(String email, int wish_uid) {
         ResponseDto responseDto = new ResponseDto();
-        Optional<WishLists> wishLists = wishRepository.findByUser_EmailAndUid(email,wishUidDto.getWish_uid());
+        Optional<WishLists> wishLists = wishRepository.findByUser_EmailAndUid(email,wish_uid);
         if(!wishLists.isPresent()){
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("잘못된 접근");
