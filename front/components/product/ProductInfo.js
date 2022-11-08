@@ -26,18 +26,21 @@ export default function ProductInfo() {
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
   const [option, setOption] = useState([]);
+  const [option2, setOption2] = useState([]);
+
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
     setProduct(res.data);
-    // return res.data;
-    // console.log(res);
+    setWish(res.data.wished);
   };
+
   const minus = () => {
     if (count > 1) {
       setCount(count - 1);
     }
   };
+
   // 장바구니 가기
   const goBasket = () => {
     router.push("/basket");
@@ -47,13 +50,6 @@ export default function ProductInfo() {
   const goPayment = () => {
     router.push("/payment");
   };
-  useEffect(() => {
-    // const pathname = window.location.pathname;
-    // const id = pathname.split("/")[2];
-    // getProduct(id);
-    // setProductId(id);
-    console.log(product);
-  }, [product]);
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -61,8 +57,18 @@ export default function ProductInfo() {
     setProductId(id);
     getProduct(id);
   }, [productId]);
-
   // 옵션 만들기
+  const MakeOption = () => {
+    if (product.length < 4) {
+      let temp = [];
+      arr.forEach((e) => {
+        let tempItem = e;
+        tempItem["label"] = e.name;
+        console.log(tempItem);
+      });
+      setOption();
+    }
+  };
   const colorList = () => [
     { label: "화이트" },
     { label: "블랙" },
@@ -149,8 +155,8 @@ export default function ProductInfo() {
           </PriceBottom>
         </PriceBox>
         <OptionBox>
-          {/* <Option>
-            <p style={{ width: "20%" }}>사이즈</p>
+          <Option>
+            <p style={{ width: "20%" }}>색상</p>
             <Autocomplete
               disablePortal
               id="combo-box-demo"
@@ -172,7 +178,7 @@ export default function ProductInfo() {
               renderInput={(params) => <TextField {...params} />}
               defaultValue="-"
             />
-          </Option> */}
+          </Option>
           <Option>
             <p style={{ width: "20%" }}>수량</p>
             <MinusIcon onClick={minus}></MinusIcon>
