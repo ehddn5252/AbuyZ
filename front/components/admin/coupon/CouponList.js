@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // 컴포넌트
@@ -16,6 +16,14 @@ import Pagination from "./Pagination";
 export default function CouponList(props) {
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
+
+  // 쿠폰 목록
+  const couponArr = props.couponArray;
+
+  // 내림차순정렬
+  couponArr.sort(function (a, b) {
+    return b.uid - a.uid;
+  });
 
   const header = [
     "수정",
@@ -54,7 +62,7 @@ export default function CouponList(props) {
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
       const idArray = [];
-      props.couponArray.forEach((el) => idArray.push(el.uid));
+      couponArr.forEach((el) => idArray.push(el.uid));
       setCheckItems(idArray);
     } else {
       // 전체 선택 해제 시 checkItems 를 빈 배열로 상태 업데이트
@@ -105,11 +113,10 @@ export default function CouponList(props) {
             <TableRow>
               <Th>
                 <input
-                  // name="select-all"
                   type="checkbox"
                   onChange={(e) => handleAllCheck(e.target.checked)}
                   checked={
-                    checkItems.length !== props.couponArray.length ||
+                    checkItems.length !== couponArr.length ||
                     checkItems.length === 0
                       ? false
                       : true
@@ -123,11 +130,10 @@ export default function CouponList(props) {
             </TableRow>
           </thead>
           <tbody style={{ height: "50%" }}>
-            {props.couponArray.slice(offset, offset + limit).map((e) => (
+            {couponArr.slice(offset, offset + limit).map((e) => (
               <TableRow key={e.uid}>
                 <Td>
                   <input
-                    // name={`select-${e.uid}`}
                     type="checkbox"
                     onChange={(v) => handleSingleCheck(v.target.checked, e.uid)}
                     checked={checkItems.includes(e.uid) ? true : false}
@@ -149,9 +155,9 @@ export default function CouponList(props) {
       </div>
       <ButtonBox>
         <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
-        {props.couponArray.length === 0 ? null : (
+        {couponArr.length === 0 ? null : (
           <Pagination
-            total={props.couponArray.length}
+            total={couponArr.length}
             limit={limit}
             page={page}
             setPage={setPage}

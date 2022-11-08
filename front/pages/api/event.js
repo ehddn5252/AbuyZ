@@ -90,6 +90,7 @@ export async function delEvent(eventnumber) {
         if (response.status === 200) {
           console.log("이벤트 삭제 성공", response);
           resolve(response.data);
+          location.reload();
         } else {
           console.log("이벤트 삭제 실패", response);
           resolve(response);

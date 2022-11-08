@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
-// import Image from "next/image";
 
 // API
 import { delEvent } from "../../../pages/api/event";
@@ -11,13 +10,13 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import EditEventModal from "./EditEventModal";
 
 export default function SaleEventList(props) {
-  // 이벤트 수정 모달
-  const [edit, setEdit] = useState(false);
+  // 이벤트 목록
+  const eventArr = props.eventArray;
 
-  // 이벤트 수정 모달
-  const handleClickOpen = () => {
-    setAdd(true);
-  };
+  // 내림차순정렬
+  eventArr.sort(function (a, b) {
+    return b.uid - a.uid;
+  });
 
   return (
     <div>
@@ -26,7 +25,7 @@ export default function SaleEventList(props) {
         spacing={6}
         sx={{ padding: "3rem", margin: "0", width: "100%" }}
       >
-        {props.eventArray.map((data) => (
+        {eventArr.map((data) => (
           <Grid2 xs={6} md={6} key={data.uid}>
             <EventItemBox>
               <Grid2 container spacing={3}>
@@ -74,9 +73,9 @@ export default function SaleEventList(props) {
                     >
                       삭제
                     </DeleteButton>
-                    <EditButton onClick={() => setEdit(true)}>수정</EditButton>
+                    {/* 수정 */}
+                    <EditEventModal eventInfo={data} />
                   </ButtonBox>
-                  <EditEventModal edit={edit} setEdit={setEdit} />
                 </Grid2>
               </Grid2>
             </EventItemBox>

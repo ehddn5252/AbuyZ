@@ -84,11 +84,6 @@ export default function CouponInquire() {
   // 이벤트 등록 모달
   const [add, setAdd] = useState(false);
 
-  // 이벤트 등록 껐다 켜기
-  const handleClickOpen = () => {
-    setAdd(true);
-  };
-
   // Object에 특정 value가 존재하는지 확인
   const getKeyByValue = (obj, value) => {
     if (obj === undefined) {
@@ -154,7 +149,8 @@ export default function CouponInquire() {
   // 삭제 감지기
   useEffect(() => {
     getEvent();
-  }, [delNum]);
+    // location.reload();
+  }, []);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -324,9 +320,8 @@ export default function CouponInquire() {
             </ResetButton>
             <SearchButton onClick={getEvent}>검색</SearchButton>
           </div>
-          <AddButton onClick={handleClickOpen}>이벤트 등록</AddButton>
+          <AddEventModal add={add} setAdd={setAdd} couponList={couponList} />
         </ButtonBox>
-        <AddEventModal add={add} setAdd={setAdd} couponList={couponList} />
       </Grid2>
       <Grid2
         container
@@ -397,19 +392,6 @@ const SearchButton = styled.button`
   margin-left: 1rem;
   height: 3rem;
   width: 7rem;
-  font-size: 1.5rem;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const AddButton = styled.button`
-  background-color: #1a6dff;
-  color: white;
-  border: 1px solid;
-  margin-right: 3rem;
-  height: 3rem;
-  width: fit-content;
   font-size: 1.5rem;
   &:hover {
     cursor: pointer;
