@@ -1,32 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 
+import { getDashboardList } from "../../../pages/api/dashboard";
+
 export default function ReviewStatus() {
-  const ServiceList = [
+  // 문의
+  const [customerCenters, setCustomerCenters] = useState([
     {
-      id: 0,
-      tag: "교환/환불",
-      title: "환불해주세요",
-      name: "홍길동",
-      date: "2022-10-01 15:15",
+      uid: 0,
+      title: "",
+      content: "",
+      status: "",
+      imgUrl: "",
+      customerCenterCategory: "",
+      date: "",
+      user: "",
     },
-    {
-      id: 1,
-      tag: "주문/결제",
-      title: "문의합니다",
-      name: "홍길동",
-      date: "2022-10-01 15:25",
-    },
-    {
-      id: 2,
-      tag: "이벤트 프로모션",
-      title: "이벤트 해주세요",
-      name: "홍길동",
-      date: "2022-10-01 16:15",
-    },
-  ];
+  ]);
+  // 리뷰
+  const [reviews, setReviews] = useState({
+    uid: 0,
+    productsUid: 0,
+    title: "",
+    rating: 0,
+    repImg: "",
+    reviewContent: "",
+    writer: "",
+    date: "",
+  });
 
   const ReviewList = [
     {
@@ -46,14 +49,25 @@ export default function ReviewStatus() {
       date: "2022-10-01 15:45",
     },
   ];
-  const ServiceListDiv = ServiceList.map((e) => (
-    <div key={e.id}>
+
+  const loadData = async () => {
+    const res = await getDashboardList();
+    setCustomerCenters(res.data.customerCenter);
+    setReviews(res.data.review);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const ServiceListDiv = customerCenters.map((e) => (
+    <div key={e.uid}>
       <div style={{ marginLeft: "2rem" }}>
         <p style={{ fontWeight: "bold" }}>
-          {e.tag} {e.title}
+          [{e.customerCenterCategory}] {e.title}
         </p>
         <p style={{ color: "#969696" }}>
-          {e.name} | {e.date}
+          {e.user} | {e.date}
         </p>
       </div>
 

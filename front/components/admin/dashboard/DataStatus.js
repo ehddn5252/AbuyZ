@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getDashboardTodo } from "../../../pages/api/dashboard";
+import {
+  getDashboardTodo,
+  getDashboardDaily,
+} from "../../../pages/api/dashboard";
 
 // MUI
 import Grid from "@mui/material/Grid";
@@ -8,7 +11,17 @@ import Grid from "@mui/material/Grid";
 import styled from "styled-components";
 
 export default function DataStatus() {
+  // 오늘의 할일
   const [todos, setTodos] = useState({
+    noReplyNum: 0,
+    newReviewNum: 0,
+    watiNum: 0,
+    reportReviewNum: 0,
+    inventoryCount0num: 0,
+    statusNum: 0,
+  });
+  // 일자별 요약
+  const [daily, setDaily] = useState({
     noReplyNum: 0,
     newReviewNum: 0,
     watiNum: 0,
@@ -19,11 +32,9 @@ export default function DataStatus() {
 
   const loadData = async () => {
     const res = await getDashboardTodo();
-    // console.log("test");
-    // console.log(res.data);
     setTodos(res.data);
-    console.log(todos);
   };
+
   useEffect(() => {
     loadData();
   }, []);
