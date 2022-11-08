@@ -37,11 +37,9 @@ public class DashboardServiceImpl implements DashboardService {
         analysisRepository.save(analysisData);
     }
 
-
     @Transactional
     @Override
     public void doVisit(Date date, String pageName) {
-
         analysisRepository.findByDateAndPageName(date, pageName).get(0).visit();
     }
 
@@ -107,7 +105,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public int getNoReplyNum() {
-        // 답글이 아닌 친구를 가져오고
+        // 답글이 안달린 개수 가져오기
         List<Reviews> reviewList = reviewRepository.findByParentReviewIsNull();
         List<Reviews> replyList = reviewRepository.findByParentReviewIsNotNull();
         int noReplyCount = reviewList.size();
@@ -119,7 +117,6 @@ public class DashboardServiceImpl implements DashboardService {
                 }
             }
         }
-        // 답글인 친구를 가져온다. 답글인 친구들의 parent uid 들을 가져오고 만약에 그 것들의
         return noReplyCount;
     }
 }

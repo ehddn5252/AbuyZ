@@ -84,20 +84,6 @@ public class DashboardController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "order 상태에 맞는 order 개수 가져오기 성공!", h));
     }
 
-//    @GetMapping("/inquiry")
-//    public ResponseEntity<BaseRes> getCurrentInquiry(@AuthenticationPrincipal String email){
-//        // 8. 최근 문의 리스트
-//        return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "최근 문의 리스트.",customerCenterService.getCurrent()));
-//    }
-//
-//    @GetMapping("/review")
-//    public ResponseEntity<BaseRes> getCurrentReview(@AuthenticationPrincipal String email){
-//        List<ReviewDto> l = dashboardService.getCurrent();
-//        // 8. 최근 문의 리스트
-//        return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "최근 문의 리스트.",l));
-//    }
-
-
     @GetMapping("/daily")
     public ResponseEntity<BaseRes> getCurrentReview(@AuthenticationPrincipal String email) {
         return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "분석 데이터 제공 성공.",dashboardService.getDaily()));

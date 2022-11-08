@@ -14,11 +14,4 @@ public class AnalysisDataDto {
     int visitCount;
     Date date;
     String pageName;
-//    int totalOrder;
-//    int orderNum;
-//
-//    public void modifyInfo(int totalOrder, int orderNum){
-//        this.totalOrder = totalOrder;
-//        this.orderNum = orderNum;
-//    }
 }

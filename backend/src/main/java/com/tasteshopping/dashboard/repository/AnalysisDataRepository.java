@@ -7,6 +7,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface AnalysisDataRepository extends JpaRepository<AnalysisData,Integer> {
-    List<AnalysisData> findByPageName(String pageName);
     List<AnalysisData> findByDateAndPageName(Date date, String pageName);
 }
