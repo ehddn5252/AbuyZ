@@ -1,29 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Image from "next/image";
+import moment from "moment";
+// import Image from "next/image";
+
+// API
+import { delEvent } from "../../../pages/api/event";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 import EditEventModal from "./EditEventModal";
 
-const event = [
-  {
-    title: "빼빼로 데이 이벤트",
-    image: "event",
-    content: "11월 빼빼로데이를 맞아 작은 이벤트를 준비했습니다!",
-    startDate: "2022.10.18 16:00",
-    endDate: "2022.11.11 12:00",
-  },
-  {
-    title: "빼빼로 데이 이벤트",
-    image: "빼빼로 사진",
-    content: "11월 빼빼로데이를 맞아 작은 이벤트를 준비했습니다!",
-    startDate: "2022.10.18 16:00",
-    endDate: "2022.11.11 12:00",
-  },
-];
-
-export default function SaleEventList() {
+export default function SaleEventList(props) {
   // 이벤트 수정 모달
   const [edit, setEdit] = useState(false);
 
@@ -39,8 +26,8 @@ export default function SaleEventList() {
         spacing={6}
         sx={{ padding: "3rem", margin: "0", width: "100%" }}
       >
-        {event.map((data, idx) => (
-          <Grid2 xs={6} md={6} key={idx}>
+        {props.eventArray.map((data) => (
+          <Grid2 xs={6} md={6} key={data.uid}>
             <EventItemBox>
               <Grid2 container spacing={3}>
                 <Grid2
@@ -48,9 +35,9 @@ export default function SaleEventList() {
                   md={12}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  <Image
-                    alt="인기 서비스"
-                    src="/images/event.png"
+                  <img
+                    alt="이미지 준비중"
+                    src={data.thumbnail}
                     // layout="fill"
                     width={600}
                     height={200}
@@ -72,14 +59,21 @@ export default function SaleEventList() {
                       marginLeft: "1rem",
                     }}
                   >
-                    <Title>{data.title}</Title>
+                    <Title>{data.name}</Title>
                     <Content>{data.content}</Content>
                     <Content>
-                      {data.startDate} ~ {data.endDate}
+                      {moment(data.start_date).format().slice(0, 10)} ~{" "}
+                      {moment(data.end_date).format().slice(0, 10)}
                     </Content>
                   </div>
                   <ButtonBox>
-                    <DeleteButton>삭제</DeleteButton>
+                    <DeleteButton
+                      onClick={() => {
+                        delEvent(data.uid), props.setDelNum(data.uid);
+                      }}
+                    >
+                      삭제
+                    </DeleteButton>
                     <EditButton onClick={() => setEdit(true)}>수정</EditButton>
                   </ButtonBox>
                   <EditEventModal edit={edit} setEdit={setEdit} />
@@ -108,12 +102,6 @@ const Title = styled.div`
   margin-bottom: 2rem;
   margin-left: 0;
 `;
-
-// const EventImg = styled.img`
-//   object-fit: fill;
-//   width: 100%;
-//   height: 100%;
-// `;
 
 const Content = styled.div`
   font-weight: 600;
