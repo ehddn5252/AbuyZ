@@ -26,8 +26,8 @@ public class EventController {
         return new ResponseEntity<>(eventService.create(email, thumbnail,content_img,eventDto), HttpStatus.OK);
     }
     @GetMapping
-    public ResponseEntity<ResponseDto>getEventList(@AuthenticationPrincipal String email){
-        return new ResponseEntity<>(eventService.getEventList(email),HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getEventList(){
+        return new ResponseEntity<>(eventService.getEventList(),HttpStatus.OK);
     }
     @DeleteMapping("/{event_uid}")
     public ResponseEntity<ResponseDto>deleteEvent(@AuthenticationPrincipal String email,

@@ -22,4 +22,11 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     Page<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product, Pageable pageable);
     List<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product);
 
+
+    @Query("select r from Reviews r where r.parentReview is null order by r.date desc")
+    List<Reviews> findCurrent();
+
+    List<Reviews> findByParentReviewIsNull();
+
+    List<Reviews> findByParentReviewIsNotNull();
 }

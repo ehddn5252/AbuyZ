@@ -15,7 +15,10 @@ import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
+import com.tasteshopping.wish.entity.WishLists;
+import com.tasteshopping.wish.repository.WishRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +29,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductPictureService productPictureService;
@@ -40,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private final InventoryRepository inventoryRepository;
     private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
+    private final WishRepository wishRepository;
 
     @Override
     public BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto) {
@@ -579,7 +584,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDetailDto getDetailProduct(int uid) {
+    public ProductDetailDto getDetailProduct(String email, int uid) {
         Optional<Products> productsOptional = productRepository.findById(uid);
         if (productsOptional.isPresent()) {
             Products p = productsOptional.get();
@@ -596,6 +601,11 @@ public class ProductServiceImpl implements ProductService {
             for (int i = 0; i < productPicturesList.size(); ++i) {
                 productPictureDtoList.add(productPicturesList.get(i).toDto());
             }
+            if(email!=null){
+                Optional<WishLists> wish = wishRepository.findByUser_EmailAndProducts_Uid(email,uid);
+                if(wish.isPresent())productDetailDto.setWished(true);
+            }
+
             productDetailDto.setProductOptionListDtoList(productOptionListDtoList);
             productDetailDto.setProductPictureDto(productPictureDtoList);
             return productDetailDto;
@@ -783,7 +793,7 @@ public class ProductServiceImpl implements ProductService {
             smallCategories = smallCategoriesOptional.get();
         }
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
-        product1.setCreatedDate(UtilService.getDate());
+        product1.setCreatedDate(UtilService.getToday());
         return productRepository.save(product1);
     }
 

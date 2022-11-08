@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.util.annotation.Nullable;
 
 import java.util.*;
 
@@ -119,9 +120,9 @@ public class ProductController {
 
 
     @PostMapping("/detail")
-    public ResponseEntity<BaseRes> getProductDetailPage(@RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> getProductDetailPage(@Nullable @AuthenticationPrincipal String email , @RequestBody ProductUidReqDto productUidReqDto) {
         try {
-            ProductDetailDto l = productService.getDetailProduct(productUidReqDto.getProducts_uid());
+            ProductDetailDto l = productService.getDetailProduct(email,productUidReqDto.getProducts_uid());
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
         } catch (ProductNotFoundException e) {
             return e.baseResResponseEntity;

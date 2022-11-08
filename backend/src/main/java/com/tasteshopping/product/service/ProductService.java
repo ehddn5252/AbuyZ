@@ -46,7 +46,7 @@ public interface ProductService {
 
     public ProductDto getOneProduct(Integer productsUid);
 
-    ProductDetailDto getDetailProduct(int productsUid);
+    ProductDetailDto getDetailProduct(String email, int productsUid);
 
     List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid,
                                                               Integer startPrice,

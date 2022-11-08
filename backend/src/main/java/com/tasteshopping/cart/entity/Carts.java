@@ -5,8 +5,11 @@ import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -31,6 +34,9 @@ public class Carts {
     @JoinColumn(name="inventories_uid")
     Inventories inventory;
 
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    Date date;
 
     public void modifyInfo(int productCount, Users user, Inventories inventory){
         this.productCount = productCount;
