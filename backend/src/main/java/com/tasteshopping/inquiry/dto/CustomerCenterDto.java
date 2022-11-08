@@ -11,6 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class CustomerCenterDto {
     Integer uid;
 
@@ -22,7 +23,7 @@ public class CustomerCenterDto {
     private Date date;
     private String imgUrl;
     private String customerCenterCategory;
-    private Users user;
+    private String userName;
 
     // 부모 정의
     //    private CustomerCenters parent;
