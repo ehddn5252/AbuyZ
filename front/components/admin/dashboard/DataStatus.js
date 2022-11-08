@@ -21,73 +21,37 @@ export default function DataStatus() {
     statusNum: 0,
   });
   // 일자별 요약
-  const [daily, setDaily] = useState({
-    noReplyNum: 0,
-    newReviewNum: 0,
-    watiNum: 0,
-    reportReviewNum: 0,
-    inventoryCount0num: 0,
-    statusNum: 0,
-  });
+  const [daily, setDaily] = useState([
+    {
+      date: "",
+      visitMainNum: 0,
+      clickLikeNum: 0,
+      totalPrice: 0,
+      orderNum: 0,
+      loginNum: 0,
+      putCartNum: 0,
+      registerNum: 0,
+    },
+  ]);
 
   const loadData = async () => {
     const res = await getDashboardTodo();
     setTodos(res.data);
+    const res2 = await getDashboardDaily();
+    setDaily(res2.data);
   };
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const datas = [
-    {
-      id: 0,
-      date: "2022.10.24",
-      orderCount: 3,
-      dailyPrice: "13,000",
-      visitor: "3",
-      subscriber: "1",
-    },
-    {
-      id: 1,
-      date: "2022.10.23",
-      orderCount: 1,
-      dailyPrice: "133,000",
-      visitor: "45",
-      subscriber: "1",
-    },
-    {
-      id: 2,
-      date: "2022.10.22",
-      orderCount: 4,
-      dailyPrice: "23,000",
-      visitor: "12",
-      subscriber: "1",
-    },
-    {
-      id: 3,
-      date: "2022.10.21",
-      orderCount: 7,
-      dailyPrice: "15,000",
-      visitor: "73",
-      subscriber: "1",
-    },
-    {
-      id: 4,
-      date: "2022.10.20",
-      orderCount: 6,
-      dailyPrice: "18,000",
-      visitor: "31",
-      subscriber: "0",
-    },
-  ];
-  const dataList = datas.map((e) => (
+  const dataList = daily.map((e) => (
     <TableRow key={e.id}>
-      <td style={{ textAlign: "center" }}>{e.date}</td>
-      <td style={{ textAlign: "center" }}>{e.orderCount}</td>
-      <td style={{ textAlign: "center" }}>{e.dailyPrice}</td>
-      <td style={{ textAlign: "center" }}>{e.visitor}</td>
-      <td style={{ textAlign: "center" }}>{e.subscriber}</td>
+      <td style={{ textAlign: "center" }}>{e.date.slice(0, 10)}</td>
+      <td style={{ textAlign: "center" }}>{e.orderNum}</td>
+      <td style={{ textAlign: "center" }}>{e.totalPrice}</td>
+      <td style={{ textAlign: "center" }}>{e.visitMainNum}</td>
+      <td style={{ textAlign: "center" }}>{e.registerNum}</td>
     </TableRow>
   ));
   return (
