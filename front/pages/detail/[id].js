@@ -13,6 +13,8 @@ import ProductReview from "../../components/product/ProductReview";
 import ProductInfo from "../../components/product/ProductInfo";
 import ExchangeReturn from "../../components/product/ExchangeReturn";
 
+// 스크롤
+import { Link } from "react-scroll";
 export default function Detail() {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
@@ -47,9 +49,15 @@ export default function Detail() {
           </SpippingInfo>
         </ShippingBox>
         <ButtonBox>
-          <MoveButton>상세정보</MoveButton>
-          <MoveButton>리뷰</MoveButton>
-          <MoveButton>교환/반품 안내</MoveButton>
+          <Link to="detailView" spy={true} smooth={true} offset={-108}>
+            <MoveButton>상세정보</MoveButton>
+          </Link>
+          <Link to="reviewView" spy={true} smooth={true} offset={-108}>
+            <MoveButton>리뷰</MoveButton>
+          </Link>
+          <Link to="changeView" spy={true} smooth={true} offset={-108}>
+            <MoveButton>교환/반품 안내</MoveButton>
+          </Link>
         </ButtonBox>
         <ProductDetailInfo />
         <hr />
@@ -105,7 +113,8 @@ const MoveButton = styled.button`
   background-color: #fff;
   font-weight: 1000;
   border: none;
-  width: 20%;
+  width: 100%;
   height: 5rem;
   font-size: 1.6rem;
+  cursor: pointer;
 `;
