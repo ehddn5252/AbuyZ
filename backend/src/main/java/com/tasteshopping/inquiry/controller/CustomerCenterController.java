@@ -8,7 +8,6 @@ import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.ReplyReqDto;
 import com.tasteshopping.inquiry.dto.SearchCondition;
 import com.tasteshopping.inquiry.service.CustomerCenterService;
-import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;

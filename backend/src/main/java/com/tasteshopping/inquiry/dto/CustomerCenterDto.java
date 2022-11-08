@@ -23,6 +23,7 @@ public class CustomerCenterDto {
     private Date end_date;
     private String imgUrl;
     private String customerCenterCategory;
+    private String userName;
     private String reply;
 
 }
