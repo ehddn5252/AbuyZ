@@ -26,3 +26,9 @@ export const mypageNum = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const paymentNum = atom({
+  key: "paymentNum",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

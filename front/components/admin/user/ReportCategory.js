@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 
@@ -7,10 +7,16 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 
+// Calender
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 // StyledComponent
 import styled from "styled-components";
 
 export default function ReportCategory({ setReportSearch }) {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const inquiryList = () => [
     { label: "전체" },
     { label: "상품문의" },
@@ -55,7 +61,7 @@ export default function ReportCategory({ setReportSearch }) {
           <TitleDiv>
             <p style={{ margin: 0 }}>기간</p>
           </TitleDiv>
-          <CategoryDiv>
+          <DateDiv>
             <Autocomplete
               disablePortal
               options={dateList()}
@@ -64,7 +70,23 @@ export default function ReportCategory({ setReportSearch }) {
               renderInput={(params) => <TextField {...params} />}
               defaultValue="전체"
             />
-          </CategoryDiv>
+            <CalendarDiv>
+              <MyDatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                dateFormat="yyyy/MM/dd"
+              />
+              <MyDatePicker
+                selected={endDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={endDate}
+                dateFormat="yyyy/MM/dd"
+              />
+            </CalendarDiv>
+          </DateDiv>
         </ColumnBox>
         <ColumnBox>
           <TitleDiv>
@@ -137,6 +159,38 @@ const CategoryDiv = styled.div`
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: white;
+`;
+
+const DateDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 80%;
+  height: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: white;
+`;
+
+const CalendarDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: white;
+`;
+const MyDatePicker = styled(DatePicker)`
+  width: 10rem;
+  /* background-color: transparent; */
+  border-color: #c4c4c4;
+  height: 2rem;
+  margin-left: 10rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+  border: 1px solid;
 `;
 
 const ButtonDiv = styled.div`

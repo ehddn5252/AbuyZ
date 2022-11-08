@@ -8,14 +8,7 @@ export async function regiscart(cartDto) {
 
   return new Promise((resolve) => {
     https
-      .post("/cart", {
-        products_uid: cartDto.products_uid,
-        product_count: cartDto.product_count,
-        option_values: {
-          size: cartDto.size,
-          color: cartDto.color,
-        },
-      })
+      .post("/cart", cartDto)
       .then((response) => {
         if (response.status === 200) {
           console.log("장바구니에 담기 완료", response);
@@ -27,6 +20,7 @@ export async function regiscart(cartDto) {
       })
       .catch((e) => {
         console.log(e);
+        alert("재고가 부족합니다");
       });
   });
 }
