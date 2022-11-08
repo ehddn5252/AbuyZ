@@ -1,6 +1,4 @@
 package com.tasteshopping.review.dto;
-import com.tasteshopping.order.entity.Orders;
-import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.user.entity.Users;

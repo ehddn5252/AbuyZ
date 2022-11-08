@@ -1,13 +1,11 @@
 package com.tasteshopping.review.dto;
 
-import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.review.entity.Reviews;
 import lombok.*;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
