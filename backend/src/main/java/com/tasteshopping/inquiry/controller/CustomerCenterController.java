@@ -30,6 +30,15 @@ public class CustomerCenterController {
     final private CustomerCenterService customerCenterService;
     final private AwsS3Service awsS3Service;
 
+    @GetMapping("/my")
+    public ResponseEntity<BaseRes> getMyInquiry(@AuthenticationPrincipal String email) {
+        System.out.println(email);
+        if (email.equals("anonymousUser")){
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+    }
+
     @GetMapping("/status/num/{status}")
     public ResponseEntity<BaseRes> getNoReplyNum(@AuthenticationPrincipal String email,@PathVariable String status) {
         if (email.equals("anonymousUser")) {

@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -22,11 +24,23 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     Page<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product, Pageable pageable);
     List<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product);
 
+    @Query(value = "select r from Reviews r " +
+            "join fetch Products p on r.product=p " +
+            "join fetch SmallCategories sc on p.smallCategory= sc " +
+            "join fetch BigCategories  bc on sc.bigCategory = bc " +
+            "where p.smallCategory.bigCategory.uid = coalesce(:bigCategoriesUid,p.smallCategory.bigCategory.uid) " +
+            "and p.smallCategory.uid = coalesce(:smallCategoriesUid,p.smallCategory.uid) " +
+            "and p.name like :productName " +
+            "and r.content like :content " +
+            "and r.date between :startDate and :endDate")
+    List<Reviews> findByDetailInfo(Integer bigCategoriesUid, Integer smallCategoriesUid, String productName, String content, Date startDate, Date endDate);
 
-    @Query("select r from Reviews r where r.parentReview is null order by r.date desc")
+    @Query("select r from Reviews r order by r.date desc")
     List<Reviews> findCurrent();
 
     List<Reviews> findByParentReviewIsNull();
 
     List<Reviews> findByParentReviewIsNotNull();
+
+
 }
