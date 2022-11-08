@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getDashboardTodo } from "../../../pages/api/dashboard";
 
 // MUI
 import Grid from "@mui/material/Grid";
@@ -7,6 +8,26 @@ import Grid from "@mui/material/Grid";
 import styled from "styled-components";
 
 export default function DataStatus() {
+  const [todos, setTodos] = useState({
+    noReplyNum: 0,
+    newReviewNum: 0,
+    watiNum: 0,
+    reportReviewNum: 0,
+    inventoryCount0num: 0,
+    statusNum: 0,
+  });
+
+  const loadData = async () => {
+    const res = await getDashboardTodo();
+    // console.log("test");
+    // console.log(res.data);
+    setTodos(res.data);
+    console.log(todos);
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const datas = [
     {
       id: 0,
@@ -66,27 +87,27 @@ export default function DataStatus() {
         <TodayContentBox container>
           <TodayDiv item xs={4}>
             <TodayTitle>승인대기중인 상품</TodayTitle>
-            <TodayContent>2</TodayContent>
+            <TodayContent>{todos.waitNum}</TodayContent>
           </TodayDiv>
           <TodayDiv item xs={4}>
             <TodayTitle>답변대기중인 문의</TodayTitle>
-            <TodayContent>0</TodayContent>
-          </TodayDiv>
-          <TodayDiv item xs={4}>
-            <TodayTitle>신고</TodayTitle>
-            <TodayContent>1</TodayContent>
-          </TodayDiv>
-          <TodayDiv item xs={4}>
-            <TodayTitle>교환/환불</TodayTitle>
-            <TodayContent>1</TodayContent>
+            <TodayContent>{todos.noReplyNum}</TodayContent>
           </TodayDiv>
           <TodayDiv item xs={4}>
             <TodayTitle>신고 리뷰</TodayTitle>
-            <TodayContent>0</TodayContent>
+            <TodayContent>{todos.reportReviewNum}</TodayContent>
+          </TodayDiv>
+          <TodayDiv item xs={4}>
+            <TodayTitle>교환/환불</TodayTitle>
+            <TodayContent>{todos.statusNum}</TodayContent>
+          </TodayDiv>
+          <TodayDiv item xs={4}>
+            <TodayTitle>신규 리뷰</TodayTitle>
+            <TodayContent>{todos.newReviewNum}</TodayContent>
           </TodayDiv>
           <TodayDiv item xs={4}>
             <TodayTitle>품절 상품</TodayTitle>
-            <TodayContent>0</TodayContent>
+            <TodayContent>{todos.inventoryCount0num}</TodayContent>
           </TodayDiv>
         </TodayContentBox>
       </TodayBox>
