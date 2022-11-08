@@ -14,6 +14,12 @@ import ProductInfo from "../../components/product/ProductInfo";
 import ExchangeReturn from "../../components/product/ExchangeReturn";
 
 export default function Detail() {
+  const [day, setDay] = useState("");
+
+  useEffect(() => {
+    let temp = new Date();
+    setDate(temp.getDate());
+  }, []);
   return (
     <Container>
       <div style={{ width: "55%" }}>
