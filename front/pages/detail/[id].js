@@ -15,10 +15,11 @@ import ExchangeReturn from "../../components/product/ExchangeReturn";
 
 export default function Detail() {
   const [day, setDay] = useState("");
-
+  const [month, setMonth] = useState("");
   useEffect(() => {
     let temp = new Date();
-    setDate(temp.getDate());
+    setDay(temp.getDate());
+    setMonth(temp.getMonth());
   }, []);
   return (
     <Container>
@@ -29,10 +30,12 @@ export default function Detail() {
             <RocketLaunchIcon sx={{ fontSize: "8rem" }} />
           </IconBox>
           <SpippingInfo>
-            <p>오늘 당일 발송 마감 14시</p>
-            <p>오늘 구매 시 내일 10/14(금) 발송 예정</p>
+            <p>오늘 당일 발송 마감 18시</p>
             <p>
-              10/15(토)에 상품 도착할 확률{" "}
+              오늘 구매 시 내일 {month}/{day + 1} 발송 예정
+            </p>
+            <p>
+              {month}/{day + 3}에 상품 도착할 확률{" "}
               <span style={{ color: "#56A9F1", fontWeight: "1000" }}>98%</span>
             </p>
             <p style={{ fontSize: "1rem" }}>
