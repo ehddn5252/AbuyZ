@@ -1,25 +1,43 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment";
 
 // API
 import axios from "axios";
-import { createEvent } from "../../../pages/api/event";
 
 // 달력
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 // mui
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Dialog from "@mui/material/Dialog";
+import "react-datepicker/dist/react-datepicker.css";
 import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  //   width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function AddEventModal(props) {
+  // 모달
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   // 이벤트명
   const [name, setName] = useState("");
 
@@ -31,6 +49,14 @@ export default function AddEventModal(props) {
 
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
+
+  // 쿠폰 목록
+  const couponArr = props.couponList;
+
+  // 내림차순정렬
+  couponArr.sort(function (a, b) {
+    return b.uid - a.uid;
+  });
 
   // 적용 쿠폰
   const [couponName, setCouponName] = useState("");
@@ -70,8 +96,8 @@ export default function AddEventModal(props) {
 
   // 상세 이미지 등록 함수
   const uploadDetailImg = (e) => {
-    const profileList = e.target.files[0];
-    setDetailImg(profileList);
+    const detailList = e.target.files[0];
+    setDetailImg(detailList);
   };
 
   // 이벤트 등록 API
@@ -79,11 +105,11 @@ export default function AddEventModal(props) {
     let formData = new FormData();
 
     let data = {
-      name: "권도건 이벤트",
-      start_date: "2022-12-22",
-      end_date: "2022-12-25",
-      coupon_lists: [10],
-      content: "권도건입니다.",
+      name: name,
+      start_date: moment(startDate).format().slice(0, 10),
+      end_date: moment(endDate).format().slice(0, 10),
+      coupon_lists: [couponName],
+      content: content,
     };
 
     formData.append(
@@ -92,6 +118,7 @@ export default function AddEventModal(props) {
     );
 
     formData.append("thumbnail", profileImg);
+    formData.append("content_img", detailImg);
 
     const accessToken = sessionStorage.getItem("access-token");
     axios.defaults.headers.common["access_token"] = accessToken;
@@ -110,275 +137,297 @@ export default function AddEventModal(props) {
       });
   };
 
-  // console.log(profileImg);
-
   return (
     <div>
-      <Dialog open={props.add} onClose={() => props.setAdd(false)}>
-        <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
-          {/* 헤더 */}
-          <Grid2
-            xs={5}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              padding: "1rem",
-            }}
-          >
-            <ModalHeader>이벤트 등록</ModalHeader>
-          </Grid2>
-          <Grid2 xs={5.5} />
-          <Grid2
-            xs={1}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              // paddingLeft: "80%",
-            }}
-          >
-            <IconButton>
-              <CloseIcon
-                onChange={() => props.setAdd(false)}
-                aria-label="Delete"
+      <InquireAddButton
+        style={{ background: "#1A6DFF", color: "#fff" }}
+        onClick={handleOpen}
+      >
+        이벤트 등록
+      </InquireAddButton>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
+            {/* 헤더 */}
+            <Grid2
+              xs={5}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                padding: "1rem",
+              }}
+            >
+              <ModalHeader>이벤트 등록</ModalHeader>
+            </Grid2>
+            <Grid2 xs={5.5} />
+            <Grid2
+              xs={1}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "1.5rem",
+                fontWeight: "600",
+                // paddingLeft: "80%",
+              }}
+            >
+              <CloseIcon onClick={handleClose} style={{ cursor: "pointer" }} />
+            </Grid2>
+            <Grid2
+              xs={12}
+              sx={{
+                margin: "0",
+                padding: "0",
+                width: "100%",
+              }}
+            >
+              <hr
+                style={{ background: "#ff9494", margin: "0", padding: "0" }}
               />
-            </IconButton>
-          </Grid2>
-          <Grid2
-            xs={12}
-            sx={{
-              margin: "0",
-              padding: "0",
-              width: "100%",
-            }}
-          >
-            <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-          </Grid2>
-          {/* 이벤트명 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              textAlign: "center",
-              alignSelf: "center",
-            }}
-          >
-            이벤트명
-          </Grid2>
-          <Grid2 xs={8}>
-            <NameInput onChange={(e) => setName(e.target.value)} />
-          </Grid2>
-          {/* 내용 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              paddingRight: "2.5rem",
-              textAlign: "center",
-            }}
-          >
-            내용
-          </Grid2>
-          <Grid2 xs={8}>
-            <ContentInput onChange={(e) => setContent(e.target.value)} />
-          </Grid2>
-          {/* 기간 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              paddingRight: "2.5rem",
-              textAlign: "center",
-            }}
-          >
-            기간
-          </Grid2>
-          <Grid2
-            xs={8}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              fontSize: "1rem",
-              fontWeight: "800",
-              textAlign: "start",
-              paddingLeft: "1.5rem",
-            }}
-          >
-            <div>
-              <MyDatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
-                startDate={startDate}
-                dateFormat="yyyy/MM/dd"
+            </Grid2>
+            {/* 이벤트명 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                textAlign: "center",
+                alignSelf: "center",
+              }}
+            >
+              이벤트명
+            </Grid2>
+            <Grid2 xs={8}>
+              <NameInput onChange={(e) => setName(e.target.value)} />
+            </Grid2>
+            {/* 내용 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                paddingRight: "2.5rem",
+                textAlign: "center",
+              }}
+            >
+              내용
+            </Grid2>
+            <Grid2 xs={8}>
+              <ContentInput onChange={(e) => setContent(e.target.value)} />
+            </Grid2>
+            {/* 기간 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                paddingRight: "2.5rem",
+                textAlign: "center",
+              }}
+            >
+              기간
+            </Grid2>
+            <Grid2
+              xs={8}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                fontSize: "1rem",
+                fontWeight: "800",
+                textAlign: "start",
+                paddingLeft: "1.5rem",
+              }}
+            >
+              <div style={{ width: "9rem" }}>
+                <MyDatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  dateFormat="yyyy/MM/dd"
+                />
+              </div>
+              <WaveTag>~</WaveTag>
+              <div style={{ width: "9rem" }}>
+                <MyDatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  dateFormat="yyyy/MM/dd"
+                />
+              </div>
+            </Grid2>
+            {/* 적용 쿠폰 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                textAlign: "center",
+                alignSelf: "center",
+              }}
+            >
+              적용 쿠폰
+            </Grid2>
+            <Grid2
+              xs={8}
+              sx={{
+                padding: "0",
+                paddingTop: "1rem",
+                paddingBottom: "1rem",
+                background: "white",
+                paddingLeft: "1.5rem",
+              }}
+            >
+              <FormControl sx={{ minWidth: 200, width: 300 }}>
+                <InputLabel>쿠폰명</InputLabel>
+                <Select
+                  value={couponName}
+                  onChange={handleChange}
+                  label="쿠폰명"
+                  MenuProps={{
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "left",
+                    },
+                    transformOrigin: {
+                      vertical: "top",
+                      horizontal: "left",
+                    },
+                    // getContentAnchorEl: null,
+                  }}
+                  sx={{ border: 1, height: 50, borderRadius: 0 }}
+                >
+                  {/* 쿠폰 이름 map으로 불러오기 */}
+                  {couponArr.map((e, idx) => (
+                    <MenuItem key={idx} value={e[1].uid}>
+                      {e[1].name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid2>
+            {/* 대표 이미지 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                textAlign: "center",
+                alignSelf: "center",
+                paddingLeft: "2rem",
+              }}
+            >
+              대표 이미지
+            </Grid2>
+            <Grid2
+              xs={2}
+              sx={{
+                paddingLeft: "1.5rem",
+              }}
+            >
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={profileImgRef}
+                onChange={uploadProfileImg}
+                style={{ display: "none" }}
               />
-            </div>
-            <WaveTag>~</WaveTag>
-            <div>
-              <MyDatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                dateFormat="yyyy/MM/dd"
-              />
-            </div>
-          </Grid2>
-          {/* 적용 쿠폰 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              textAlign: "center",
-              alignSelf: "center",
-            }}
-          >
-            적용 쿠폰
-          </Grid2>
-          <Grid2
-            xs={8}
-            sx={{
-              padding: "0",
-              paddingTop: "1rem",
-              paddingBottom: "1rem",
-              background: "white",
-              paddingLeft: "1.5rem",
-            }}
-          >
-            <FormControl sx={{ minWidth: 200, width: 300 }}>
-              <InputLabel>쿠폰명</InputLabel>
-              <Select
-                value={couponName}
-                onChange={handleChange}
-                label="쿠폰명"
-                MenuProps={{
-                  anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "left",
-                  },
-                  transformOrigin: {
-                    vertical: "top",
-                    horizontal: "left",
-                  },
-                  // getContentAnchorEl: null,
-                }}
-                sx={{ border: 1, height: 50, borderRadius: 0 }}
-              >
-                {/* 쿠폰 이름 map으로 불러오기 */}
-                {props.couponList.map((e, idx) => (
-                  <MenuItem key={idx} value={e[1].uid}>
-                    {e[1].name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid2>
-          {/* 대표 이미지 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              textAlign: "center",
-              alignSelf: "center",
-              paddingLeft: "2rem",
-            }}
-          >
-            대표 이미지
-          </Grid2>
-          <Grid2
-            xs={3}
-            sx={{
-              paddingLeft: "1.5rem",
-            }}
-          >
-            <input
-              type="file"
-              accept="image/jpg, image/jpeg, image/png"
-              ref={profileImgRef}
-              onChange={uploadProfileImg}
-              style={{ display: "none" }}
-            />
-            <LeadButton onClick={handleClickProfileImg}>대표 이미지</LeadButton>
-          </Grid2>
-          <Grid2
-            xs={4}
-            sx={{
-              display: "flex",
-              alignContent: "center",
-            }}
-          >
-            <Description>권장 크기 : 600px X 200px</Description>
-          </Grid2>
-          {/* 상세 이미지 */}
-          <Grid2
-            xs={4}
-            sx={{
-              fontSize: "1rem",
-              fontWeight: "800",
-              padding: "1rem",
-              textAlign: "center",
-              alignSelf: "center",
-              paddingLeft: "2rem",
-            }}
-          >
-            상세 이미지
-          </Grid2>
-          <Grid2
-            xs={3}
-            sx={{
-              paddingLeft: "1.5rem",
-            }}
-          >
-            <input
-              type="file"
-              accept="image/jpg, image/jpeg, image/png"
-              ref={detailImgRef}
-              onChange={uploadDetailImg}
-              style={{ display: "none" }}
-            />
-            <DetailButton onClick={handleClickDetailImg}>
+              <LeadButton onClick={handleClickProfileImg}>
+                대표 이미지
+              </LeadButton>
+            </Grid2>
+            <Grid2
+              xs={4}
+              sx={{
+                display: "flex",
+                alignContent: "center",
+              }}
+            >
+              {profileImg ? (
+                <Description>{profileImg.name}</Description>
+              ) : (
+                <Description>권장 크기 : 600px X 200px</Description>
+              )}
+            </Grid2>
+            {/* 상세 이미지 */}
+            <Grid2
+              xs={4}
+              sx={{
+                fontSize: "1rem",
+                fontWeight: "800",
+                padding: "1rem",
+                textAlign: "center",
+                alignSelf: "center",
+                paddingLeft: "2rem",
+              }}
+            >
               상세 이미지
-            </DetailButton>
+            </Grid2>
+            <Grid2
+              xs={2}
+              sx={{
+                paddingLeft: "1.5rem",
+              }}
+            >
+              <input
+                type="file"
+                accept="image/jpg, image/jpeg, image/png"
+                ref={detailImgRef}
+                onChange={uploadDetailImg}
+                style={{ display: "none" }}
+              />
+              <DetailButton onClick={handleClickDetailImg}>
+                상세 이미지
+              </DetailButton>
+            </Grid2>
+            <Grid2
+              xs={4}
+              sx={{
+                display: "flex",
+                alignContent: "center",
+              }}
+            >
+              {detailImg ? (
+                <Description>{detailImg.name}</Description>
+              ) : (
+                <Description>권장 크기 : 600px X 200px</Description>
+              )}
+            </Grid2>
+            <Grid2
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "1rem",
+                // paddingLeft: "1.5rem",
+              }}
+            >
+              <AddButton
+                onClick={() => {
+                  handleAddEvent(),
+                    alert("이벤트가 생성되었습니다."),
+                    location.reload(),
+                    handleClose();
+                }}
+              >
+                등록
+              </AddButton>
+            </Grid2>
           </Grid2>
-          <Grid2
-            xs={4}
-            sx={{
-              display: "flex",
-              alignContent: "center",
-            }}
-          >
-            <Description>권장 크기 : 600px X 200px</Description>
-          </Grid2>
-          <Grid2
-            xs={12}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "1rem",
-              // paddingLeft: "1.5rem",
-            }}
-          >
-            <AddButton onClick={() => handleAddEvent()}>등록</AddButton>
-          </Grid2>
-        </Grid2>
-      </Dialog>
+        </Box>
+      </Modal>
     </div>
   );
 }
@@ -456,6 +505,19 @@ const AddButton = styled.button`
   height: 2rem;
   width: 6rem;
   font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const InquireAddButton = styled.button`
+  background-color: #1a6dff;
+  color: white;
+  border: 1px solid;
+  margin-right: 3rem;
+  height: 3rem;
+  width: 10rem;
+  font-size: 1.5rem;
   &:hover {
     cursor: pointer;
   }

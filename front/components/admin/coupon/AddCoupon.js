@@ -68,9 +68,7 @@ export default function AddCoupon() {
       big_categories_uid: Number(category),
     };
     createcoupon(couponDto);
-    // window.location.reload();
   };
-  // console.log('DSD')
 
   return (
     <Grid2
@@ -350,7 +348,13 @@ export default function AddCoupon() {
         }}
       >
         <ButtonBox>
-          <AddButton onClick={() => regisCoupon()}>등록</AddButton>
+          <AddButton
+            onClick={() => {
+              regisCoupon(), alert("쿠폰이 등록되었습니다."), location.reload();
+            }}
+          >
+            등록
+          </AddButton>
         </ButtonBox>
       </Grid2>
     </Grid2>
