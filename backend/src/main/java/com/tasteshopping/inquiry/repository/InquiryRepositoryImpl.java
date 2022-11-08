@@ -25,7 +25,6 @@ public class InquiryRepositoryImpl {
     private final JPAQueryFactory factory;
 
     public List<FilteredDto> filterSearch(SearchCondition searchCondition){
-        log.warn(searchCondition.toString());
 
         BooleanBuilder builder = new BooleanBuilder();
         if(searchCondition.getTitle() != null){
