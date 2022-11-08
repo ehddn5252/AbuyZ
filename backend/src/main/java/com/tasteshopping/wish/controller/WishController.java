@@ -1,7 +1,6 @@
 package com.tasteshopping.wish.controller;
 
 import com.tasteshopping.user.dto.ResponseDto;
-import com.tasteshopping.wish.dto.WishUidDto;
 import com.tasteshopping.wish.service.WishServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +25,9 @@ public class WishController {
                                            @PathVariable String product_uid){
         return new ResponseEntity<>(wishService.wish(email,product_uid),HttpStatus.OK);
     }
-    @DeleteMapping
+    @DeleteMapping("/{wish_uid}")
     public ResponseEntity<ResponseDto>cancel(@AuthenticationPrincipal String email,
-                                             @RequestBody WishUidDto wishUidDto){
-        return new ResponseEntity<>(wishService.cancel(email,wishUidDto),HttpStatus.OK);
+                                             @PathVariable int wish_uid){
+        return new ResponseEntity<>(wishService.cancel(email,wish_uid),HttpStatus.OK);
     }
 }

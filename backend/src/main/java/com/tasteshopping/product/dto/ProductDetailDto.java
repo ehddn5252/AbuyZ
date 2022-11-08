@@ -1,5 +1,6 @@
 package com.tasteshopping.product.dto;
 
+import com.tasteshopping.wish.dto.IsWished;
 import lombok.*;
 
 import java.util.List;
@@ -15,6 +16,5 @@ public class ProductDetailDto {
     ProductDto products;
     List<ProductPictureDto> productPictureDto;
     List<ProductOptionListDto> productOptionListDtoList;
-    private boolean isWished;
-
+    private IsWished isWished;
 }
