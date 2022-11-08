@@ -96,6 +96,8 @@ export async function kwcdSearch(detailDto) {
 
 // 상품 상세 페이지
 export async function productDetail(product_id) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
       .post("/product/detail", {
@@ -104,6 +106,7 @@ export async function productDetail(product_id) {
       .then((response) => {
         if (response.status === 200) {
           console.log("상품 상세 페이지 성공", response);
+
           resolve(response.data);
         } else {
           console.log("상품 상세 페이지 실패", response);
