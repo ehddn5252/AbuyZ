@@ -1,6 +1,5 @@
 package com.tasteshopping.inquiry.dto;
 
-import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 
@@ -11,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class CustomerCenterDto {
     Integer uid;
 
@@ -23,6 +23,6 @@ public class CustomerCenterDto {
     private Date end_date;
     private String imgUrl;
     private String customerCenterCategory;
-    private Users user;
     private String reply;
+
 }
