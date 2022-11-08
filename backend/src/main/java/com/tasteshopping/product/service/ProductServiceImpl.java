@@ -783,7 +783,7 @@ public class ProductServiceImpl implements ProductService {
             smallCategories = smallCategoriesOptional.get();
         }
         Products product1 = ProductCreateDto.toEntity(productCreateDto, brands, smallCategories);
-        product1.setCreatedDate(UtilService.getDate());
+        product1.setCreatedDate(UtilService.getToday());
         return productRepository.save(product1);
     }
 
