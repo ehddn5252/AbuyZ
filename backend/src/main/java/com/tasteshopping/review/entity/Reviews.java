@@ -60,6 +60,7 @@ public class Reviews {
 
     public ReviewDto toDto() {
         return ReviewDto.builder()
+                .uid(uid)
                 .productsUid(product.getUid())
                 .reviewContent(content)
                 .writer(user.getName())
