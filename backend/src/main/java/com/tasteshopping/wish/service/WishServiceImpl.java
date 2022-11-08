@@ -74,8 +74,7 @@ public class WishServiceImpl implements WishService {
     @Transactional
     public ResponseDto cancel(String email, WishUidDto wishUidDto) {
         ResponseDto responseDto = new ResponseDto();
-        Users user = userRepository.findByEmail(email).get();
-        Optional<WishLists> wishLists = wishRepository.findByUserAndUid(user,wishUidDto.getWish_uid());
+        Optional<WishLists> wishLists = wishRepository.findByUser_EmailAndUid(email,wishUidDto.getWish_uid());
         if(!wishLists.isPresent()){
             responseDto.setData(new ResultDto(false));
             responseDto.setMessage("잘못된 접근");

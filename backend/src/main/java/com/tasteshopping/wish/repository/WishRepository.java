@@ -18,5 +18,6 @@ public interface WishRepository extends JpaRepository<WishLists,Integer> {
     @EntityGraph(attributePaths ={"user","products"})
     Page<WishLists> findByUserEmail(@Param("email")String email, Pageable pageable);
     Optional<WishLists> findByUserAndProducts(Users users, Products products);
-    Optional<WishLists> findByUserAndUid(Users users, Integer uid);
+    Optional<WishLists>findByUser_EmailAndProducts_Uid(String email,int products_uid);
+    Optional<WishLists> findByUser_EmailAndUid(String email, Integer uid);
 }

@@ -15,6 +15,6 @@ public class ProductDetailDto {
     ProductDto products;
     List<ProductPictureDto> productPictureDto;
     List<ProductOptionListDto> productOptionListDtoList;
-
+    private boolean isWished;
 
 }
