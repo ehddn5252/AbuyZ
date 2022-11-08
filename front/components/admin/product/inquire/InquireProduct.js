@@ -1,6 +1,13 @@
-import { Container } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment";
+
+// API
+import {
+  inquireProduct,
+  inquireProductStatus,
+  inquireProductStatusCount,
+} from "../../../../pages/api/product";
 
 // 컴포넌트
 import InquireList from "./InquireList";
@@ -18,6 +25,9 @@ import ProductionQuantityLimitsOutlined from "@mui/icons-material/ProductionQuan
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductSearch() {
+  // 상품 목록
+  const [productInfo, setProductInfo] = useState([]);
+
   const status = [
     [WidgetsOutlinedIcon, "전체", 3],
     [ShoppingCartOutlinedIcon, "판매중", 2],
@@ -25,6 +35,20 @@ export default function SaleProductSearch() {
     [ProductionQuantityLimitsOutlined, "교환/환불", 3],
     [TaskAltOutlinedIcon, "판매완료", 1],
   ];
+
+  const getProduct = async () => {
+    const p = await inquireProduct();
+    console.log(p);
+  };
+
+  const getProductStatus = async () => {
+    const ps = await inquireProductStatus();
+    console.log(ps);
+  };
+  const getProductStatusCount = async () => {
+    const psc = await inquireProductStatusCount();
+    console.log(psc);
+  };
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -140,8 +164,8 @@ export default function SaleProductSearch() {
         <Period />
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
-          <ResetButton>초기화</ResetButton>
-          <SearchButton>검색</SearchButton>
+          <ResetButton onClick={() => getProductStatus()}>초기화</ResetButton>
+          <SearchButton onClick={() => getProduct()}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       {/* 상품 목록 */}
@@ -149,14 +173,6 @@ export default function SaleProductSearch() {
     </Grid2>
   );
 }
-
-// const Title = styled.p`
-//   font-size: xx-large;
-//   font-weight: 800;
-//   padding-bottom: 3rem;
-//   margin: 3rem;
-//   margin-bottom: 0;
-// `;
 
 const StatusContainer = styled.div`
   display: flex;

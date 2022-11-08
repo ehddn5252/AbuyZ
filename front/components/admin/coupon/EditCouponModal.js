@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "./CouponPeriod";
-import { createcoupon } from "../../../pages/api/coupon";
+
+// API
+import { modifycoupon } from "../../../pages/api/coupon";
 
 // mui
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -81,6 +82,17 @@ export default function EditCouponModal(props) {
   };
   const saleBlur = () => {
     setSalePlaceholder(props.couponInfo.discount_price);
+  };
+
+  const modiCoupon = () => {
+    const couponDto = {
+      name: name,
+      discount_price: sale,
+      start_date: startDate.toISOString().slice(0, 10),
+      end_date: endDate.toISOString().slice(0, 10),
+      big_categories_uid: Number(category),
+    };
+    modifycoupon(couponDto, props.couponInfo.uid);
   };
 
   return (
@@ -374,7 +386,13 @@ export default function EditCouponModal(props) {
               }}
             >
               <ButtonBox>
-                <AddButton onClick={() => regisCoupon()}>수정</AddButton>
+                <AddButton
+                  onClick={() => {
+                    modiCoupon(), location.reload();
+                  }}
+                >
+                  수정
+                </AddButton>
               </ButtonBox>
             </Grid2>
           </Grid2>
@@ -383,21 +401,6 @@ export default function EditCouponModal(props) {
     </div>
   );
 }
-
-export const ModalContainer = styled.div`
-  position: absolute;
-  top: 80%;
-  left: 70%;
-  transform: translate(-50%, -20%);
-  border: 1px solid #000;
-  background-color: #fff;
-  padding: 2rem;
-  z-index: 99;
-  &::backdrop {
-    background: red;
-  }
-`;
-
 const WaveTag = styled.div`
   font-size: 2rem;
 `;

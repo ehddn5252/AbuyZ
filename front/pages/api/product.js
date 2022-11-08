@@ -6,9 +6,43 @@ export async function inquireProduct() {
     https.get("/product").then((response) => {
       if (response.status === 200) {
         console.log("모든 상품 가져오기 성공", response);
-        resolve(response.data);
+        resolve(response.data.data);
       } else {
         console.log("모든 상품 가져오기 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 모든 상품 상태 조회
+export async function inquireProductStatus() {
+  return new Promise((resolve) => {
+    https.get("/product/status/selling").then((response) => {
+      if (response.status === 200) {
+        console.log("모든 상품 상태 가져오기 성공", response);
+        resolve(response.data.data);
+      } else {
+        console.log("모든 상품 상태 가져오기 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 모든 상품 상태 개수로 조회
+export async function inquireProductStatusCount() {
+  return new Promise((resolve) => {
+    https.get("/product/status/num/selling").then((response) => {
+      if (response.status === 200) {
+        console.log("모든 상품 상태 개수 가져오기 성공", response);
+        resolve(response.data.data);
+      } else {
+        console.log("모든 상품 상태 개수 가져오기 실패", response);
         resolve(response);
       }
     });

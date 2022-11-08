@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function Add() {
+export default function Edit() {
   return (
     <ProductPage>
-      <h1>하이</h1>
+      <h1>상품 수정페이지</h1>
     </ProductPage>
   );
 }
