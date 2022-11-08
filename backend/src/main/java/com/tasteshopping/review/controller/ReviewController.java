@@ -35,10 +35,17 @@ public class ReviewController {
     private final AwsS3Service awsS3Service;
 
 
+    @PostMapping("/searchReview")
+    public ResponseEntity<BaseRes> searchReview(@AuthenticationPrincipal String email, @RequestBody ReviewSearchReqDto reviewSearchReqDto) {
+        // 검색 조건에 맞는 리뷰 목록 가져오기
+        List<ReviewSearchDto> l = reviewService.searchByDetail(reviewSearchReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "조건에 맞는 리뷰 목록 들고오기 성공!", l));
+    }
+
     @PostMapping("")
     public ResponseEntity<BaseRes> reviewWrite(@AuthenticationPrincipal String email,
                                                @RequestPart ReviewReqDto dto,
-                                               @RequestPart(name = "file",required = false) MultipartFile multipartFile) {
+                                               @RequestPart(name = "file", required = false) MultipartFile multipartFile) {
         String imagePath = null; //파일서버에업로드후 img_url 데려오기
         BaseRes res = null;
         try {
@@ -47,7 +54,7 @@ public class ReviewController {
         } catch (IOException e) {
             e.printStackTrace();
 //            res = exception(e);
-            res = new BaseRes(202,"파일 업로드 에러", null);
+            res = new BaseRes(202, "파일 업로드 에러", null);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -83,7 +90,7 @@ public class ReviewController {
 
     @GetMapping("/{product_id}/{page}")
     public ResponseEntity<BaseRes> productReviewList(@AuthenticationPrincipal String email, @PathVariable int product_id, @PathVariable int page) {
-        return new ResponseEntity<>(reviewService.productReviewList(email, product_id, page-1), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.productReviewList(email, product_id, page - 1), HttpStatus.OK);
     }
 
     @PostMapping("/report")
