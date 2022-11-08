@@ -16,39 +16,23 @@ export default function ReviewStatus() {
       imgUrl: "",
       customerCenterCategory: "",
       date: "",
-      user: "",
+      userName: "",
     },
   ]);
   // 리뷰
-  const [reviews, setReviews] = useState({
-    uid: 0,
-    productsUid: 0,
-    title: "",
-    rating: 0,
-    repImg: "",
-    reviewContent: "",
-    writer: "",
-    date: "",
-  });
-
-  const ReviewList = [
+  const [reviews, setReviews] = useState([
     {
-      id: 0,
-      name: "맛있는 부산우유 500ml",
-      star: 5,
-      content: "우리 아들 사다줬는데, 너무 잘 먹네요.",
-      userName: "홍길동",
-      date: "2022-10-01 15:15",
+      uid: 0,
+      productsUid: 0,
+      title: "",
+      rating: 0,
+      repImg: "",
+      reviewContent: "",
+      writer: "",
+      date: "",
+      productName: "",
     },
-    {
-      id: 0,
-      name: "맛있는 부산우유 500ml",
-      star: 3,
-      content: "우리 아들 사다줬는데, 너무 잘 먹네요.",
-      userName: "홍길동",
-      date: "2022-10-01 15:45",
-    },
-  ];
+  ]);
 
   const loadData = async () => {
     const res = await getDashboardList();
@@ -67,7 +51,7 @@ export default function ReviewStatus() {
           [{e.customerCenterCategory}] {e.title}
         </p>
         <p style={{ color: "#969696" }}>
-          {e.user} | {e.date}
+          {e.userName} | {e.date.slice(0, 10)} {e.date.slice(11, 16)}
         </p>
       </div>
 
@@ -75,20 +59,20 @@ export default function ReviewStatus() {
     </div>
   ));
 
-  const ReviewListDiv = ReviewList.map((e) => (
-    <div key={e.id}>
+  const ReviewListDiv = reviews.map((e) => (
+    <div key={e.uid}>
       <div style={{ marginLeft: "2rem" }}>
-        <p style={{ fontWeight: "bold" }}>{e.name}</p>
-        <p>{e.content}</p>
+        <p style={{ fontWeight: "bold" }}>{e.productName}</p>
+        <p>{e.reviewContent}</p>
         <Rating
           name="text-feedback"
-          value={e.star}
+          value={e.rating}
           readOnly
           precision={0.5}
           emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
         />
         <p style={{ fontSize: "0.8rem", color: "#969696", margin: 0 }}>
-          {e.name} | {e.date}
+          {e.writer} | {e.date.slice(0, 10)} {e.date.slice(11, 16)}
         </p>
       </div>
       <hr />
