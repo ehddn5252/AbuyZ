@@ -23,7 +23,7 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     List<Reviews> findByProductAndImgUrlIsNotNullAndParentReviewIsNullOrderByUidDesc(Products product);
 
 
-    @Query("select r from Reviews r order by r.date desc")
+    @Query("select r from Reviews r where r.parentReview is null order by r.date desc")
     List<Reviews> findCurrent();
 
     List<Reviews> findByParentReviewIsNull();

@@ -2,6 +2,7 @@ package com.tasteshopping.dashboard.service;
 
 import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.dashboard.dto.AnalysisDataDto;
+import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.dashboard.entity.AnalysisData;
 import com.tasteshopping.dashboard.repository.AnalysisDataRepository;
 import com.tasteshopping.order.entity.OrderLists;
@@ -60,7 +61,7 @@ public class DashboardServiceImpl implements DashboardService {
         Date date = UtilService.getToday();
         HashMap<String, Object> h = new HashMap<>();
         for (String page : pages) {
-            h.put(page, getVisit(date, page));
+            h.put(page, getVisit(date, page).getVisitCount());
         }
         return addDailyOrder(h);
     }
@@ -80,6 +81,45 @@ public class DashboardServiceImpl implements DashboardService {
         h.put("totalPrice", totalPrice);
         h.put("orderNum", count);
         return h;
+    }
+
+
+    @Override
+    public List<SummaryDto> getSummary() {
+        List<String> pages = Arrays.asList(new String[]{"main", "login", "cart", "like", "register"});
+        // 날짜별 주문 수, 매출액, 가입자 수, 방문자 수, 찜 수, 장바구니 수
+        int CURRENT_SUMMARIZE_SIZE = 5;
+        ArrayList<SummaryDto> l = new  ArrayList<>();
+        for(int i=0;i<CURRENT_SUMMARIZE_SIZE;++i){
+            SummaryDto summaryDto = new SummaryDto();
+            Date date = UtilService.getDateAfterDay(-i);
+            summaryDto.setDate(date);
+            summaryDto.setVisitMainNum(getVisit(date,"main").getVisitCount());
+            summaryDto.setLoginNum(getVisit(date,"login").getVisitCount());
+            summaryDto.setClickLikeNum(getVisit(date,"like").getVisitCount());
+            summaryDto.setPutCartNum(getVisit(date,"cart").getVisitCount());
+            summaryDto.setRegisterNum(getVisit(date,"register").getVisitCount());
+            summaryDto = addDailyOrder(summaryDto);
+            l.add(summaryDto);
+        }
+        return l;
+    }
+
+    public SummaryDto addDailyOrder(SummaryDto summaryDto) {
+//        Date date = UtilService.getToday();
+        Date startDate = UtilService.getDateAfterDay(0);
+        Date endDate = UtilService.getDateAfterDay(1);
+
+        List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
+        Integer totalPrice = 0;
+        Integer count = 0;
+        for (int i = 0; i < orderLists.size(); ++i) {
+            count += orderRepository.findByOrderList(orderLists.get(i)).size();
+            totalPrice += orderLists.get(i).getTotalPrice();
+        }
+        summaryDto.setOrderNum(count);
+        summaryDto.setTotalPrice(count);
+        return summaryDto;
     }
 
 

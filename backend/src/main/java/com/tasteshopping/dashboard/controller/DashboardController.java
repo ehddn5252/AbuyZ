@@ -86,7 +86,9 @@ public class DashboardController {
 
     @GetMapping("/daily")
     public ResponseEntity<BaseRes> getCurrentReview(@AuthenticationPrincipal String email) {
-        return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "분석 데이터 제공 성공.",dashboardService.getDaily()));
+        
+        // 5일 기준으로
+        return ResponseEntity.status(HttpStatus.OK).body(new BaseRes(200, "분석 데이터 제공 성공.",dashboardService.getSummary()));
     }
 
     @GetMapping("/list")
