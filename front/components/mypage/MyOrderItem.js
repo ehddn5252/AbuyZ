@@ -17,6 +17,8 @@ export default function MyOrderItem({ uid }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [productsUid, setProductsUid] = useState("");
+  const [cartOptions, setCartOptions] = useState({});
   const modalRef = useRef(null);
 
   // 장바구니 내 모든 리스트
@@ -28,6 +30,10 @@ export default function MyOrderItem({ uid }) {
     setOrderBundleItem(rres.data);
   };
 
+  const handleclick = (e) => {
+    setProductsUid(e.inventoryDto.productsUid);
+  };
+  console.log("상품 번호이다", productsUid);
   useEffect(() => {
     bundleitem();
   }, []);
@@ -40,6 +46,21 @@ export default function MyOrderItem({ uid }) {
           </div>
           <InfoContainer>
             <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
+            {e.inventoryDto.productOptions.length > 0 ? (
+              <div>
+                {e.inventoryDto.productOptions.map((e) => (
+                  <div>
+                    {Object.keys(e) == "x" ? null : (
+                      <span>[{Object.keys(e)} :</span>
+                    )}
+                    {e[Object.keys(e)] == "x" ? null : (
+                      <span> {e[Object.keys(e)]}]</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {/* <ProductIntro>{e.inventoryDto.productOptions.size}</ProductIntro> */}
             {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
           </InfoContainer>
           <ButtonContainer>
@@ -48,7 +69,9 @@ export default function MyOrderItem({ uid }) {
           ) : (
             <ReviewButton onClick={handleOpen}>리뷰 작성</ReviewButton>
           )} */}
-            <CartButton>장바구니 담기</CartButton>
+            <CartButton onClick={(e) => handleclick(e)}>
+              장바구니 담기
+            </CartButton>
             <Modal
               ref={modalRef}
               open={open}

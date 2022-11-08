@@ -15,17 +15,25 @@ export default function ReviewAddModel({
   setOpen,
   image,
   uid,
+  productuid,
 }) {
+  const [file, setFile] = useState("");
   const [value, setValue] = React.useState(0);
-  const regisrv = async () => {
+  const regisrv = async (e) => {
+    e.preventDefault();
+    var formdata = new FormData();
+    formdata.append("file", file[0]);
+
     const reviewDto = {
-      product_uid: uid,
+      product_uid: productuid,
       rating: value,
       content: content,
-      // order_uid,
+      order_uid: uid,
     };
-    const res = await regisreview(reviewDto);
-    console.log(res.data);
+
+    formdata.append("dto", reviewDto);
+
+    const res = await regisreview(formdata);
   };
   const [content, setContent] = useState("");
   const closeModal = () => {
@@ -34,7 +42,7 @@ export default function ReviewAddModel({
   return (
     <Container>
       <IconDiv>
-        <CloseIcon onClick={() => closeModal} sx={{ cursor: "pointer" }} />
+        <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
       </IconDiv>
       <ModalTitle style={{ fontWeight: "bold", fontSize: "2rem" }}>
         리뷰 작성
@@ -69,6 +77,17 @@ export default function ReviewAddModel({
         <span>리뷰 내용</span>
       </div>
       <AnswerDiv onChange={(event) => setContent(event)}></AnswerDiv>
+      <div style={{ marginTop: "4rem" }}>
+        <span>사진 첨부</span>
+        <div style={{ flex: 10 }}>
+          <input
+            type="file"
+            id="file"
+            onChange={() => setFile(event.target.files[0])}
+            multiple="multiple"
+          />
+        </div>
+      </div>
       <Box
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >

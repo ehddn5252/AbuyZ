@@ -1,13 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-
-// API
-import axios from "axios";
-import { createEvent } from "../../../pages/api/event";
-
-// 달력
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { MyDatePicker } from "./AddEventModal";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -18,103 +11,105 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import { inquirecoupon } from "../../../pages/api/coupon";
 
-export default function AddEventModal(props) {
-  // 이벤트명
+export default function EditEventModal(props) {
+  // 이벤트 이름
   const [name, setName] = useState("");
-
-  // 내용
-  const [content, setContent] = useState("");
+  const [namePlaceholder, setNamePlaceholder] =
+    useState("쿠폰 이름을 입력해주세요.");
 
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
-
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
-  // 적용 쿠폰
-  const [couponName, setCouponName] = useState("");
+  // 쿠폰 리스트
+  const [couponArray, setCouponArray] = useState([]);
 
-  // 적용 쿠폰 셀렉트 했을 때
-  const handleChange = (event) => {
-    setCouponName(event.target.value);
+  // 선택한 쿠폰 인덱스
+  const [selectCoupon, setSelectCoupon] = useState("");
+
+  // 이벤트명 입력하면
+  const nameChange = (event) => {
+    setName(event.target.value);
+    console.log(name);
+  };
+  const nameFocus = () => {
+    setNamePlaceholder("");
+  };
+  const nameBlur = () => {
+    setNamePlaceholder("쿠폰 이름을 입력해주세요.");
   };
 
+  // 쿠폰명 셀렉트 했을 때
+  const handleChange = (event) => {
+    setSelectCoupon(event.target.value);
+  };
+
+  useEffect(() => {
+    getCoupong();
+  }, []);
+
+  const getCoupong = async () => {
+    const c = await inquirecoupon();
+    const c_lst = Object.entries(c.data);
+    setCouponArray(c_lst);
+  };
+
+  // -------------------------------------------------------------
+
+  // 대분류
+  const [bigCategory, setBigCategory] = useState("");
+
   // 대표 이미지 정보
-  const [profileImg, setProfileImg] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   // 대표 이미지
-  const profileImgRef = useRef(null);
+  const profileRef = useRef(null);
 
   // 대표 이미지 등록
-  const handleClickProfileImg = () => {
-    profileImgRef.current?.click();
+  const handleClickProfile = () => {
+    profileRef.current?.click();
   };
 
   // 대표 이미지 등록 함수
-  const uploadProfileImg = (e) => {
+  const uploadProfile = (e) => {
     const profileList = e.target.files[0];
-    setProfileImg(profileList);
-  };
-
-  // 상세 이미지 정보
-  const [detailImg, setDetailImg] = useState(null);
-
-  // 상세 이미지
-  const detailImgRef = useRef(null);
-
-  // 상세 이미지 등록
-  const handleClickDetailImg = () => {
-    detailImgRef.current?.click();
-  };
-
-  // 상세 이미지 등록 함수
-  const uploadDetailImg = (e) => {
-    const profileList = e.target.files[0];
-    setDetailImg(profileList);
-  };
-
-  // 이벤트 등록 API
-  const handleAddEvent = () => {
-    let formData = new FormData();
-
-    let data = {
-      name: "권도건 이벤트",
-      start_date: "2022-12-22",
-      end_date: "2022-12-25",
-      coupon_lists: [10],
-      content: "권도건입니다.",
-    };
-
-    formData.append(
-      "eventDto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    formData.append("thumbnail", profileImg);
-
-    const accessToken = sessionStorage.getItem("access-token");
-    axios.defaults.headers.common["access_token"] = accessToken;
-
-    axios
-      .post("https://k7e201.p.ssafy.io:8081/api/event/create", formData, {
-        headers: {
-          "Contest-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err, "등록을 실패하였습니다.");
+    // console.log(profileList[0]);
+    // console.log(profileList);
+    if (profileList) {
+      // console.log("####");
+      const url = URL.createObjectURL(profileList);
+      setProfile({
+        file: profileList,
+        thumbnail: url,
+        type: profileList.type.slice(0, 5),
       });
+    }
   };
 
-  // console.log(profileImg);
+  // 1번 방법
+  const handleAddEvet = () => {
+    const formData = new FormData();
+    // formData.append("image", profile);
+    const data = {
+      name: "도건 이벤트",
+      content: "안녕하세요",
+      start_date: startDate.toISOString().slice(0, 10),
+      end_date: endDate.toISOString().slice(0, 10),
+      coupon_lists: [11, 12],
+    };
+    formData.append("eventDto", JSON.stringify(data));
+    console.log(formData);
+    createEvent(formData);
+  };
+
+  // -------------------------------------------------------------
 
   return (
     <div>
-      <Dialog open={props.add} onClose={() => props.setAdd(false)}>
+      <Dialog open={props.edit} onClose={() => props.setEdit(false)}>
         <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
           {/* 헤더 */}
           <Grid2
@@ -173,7 +168,7 @@ export default function AddEventModal(props) {
             이벤트명
           </Grid2>
           <Grid2 xs={8}>
-            <NameInput onChange={(e) => setName(e.target.value)} />
+            <NameInput />
           </Grid2>
           {/* 내용 */}
           <Grid2
@@ -189,7 +184,7 @@ export default function AddEventModal(props) {
             내용
           </Grid2>
           <Grid2 xs={8}>
-            <ContentInput onChange={(e) => setContent(e.target.value)} />
+            <ContentInput />
           </Grid2>
           {/* 기간 */}
           <Grid2
@@ -263,7 +258,7 @@ export default function AddEventModal(props) {
             <FormControl sx={{ minWidth: 200, width: 300 }}>
               <InputLabel>쿠폰명</InputLabel>
               <Select
-                value={couponName}
+                value={couponArray[selectCoupon]}
                 onChange={handleChange}
                 label="쿠폰명"
                 MenuProps={{
@@ -280,11 +275,18 @@ export default function AddEventModal(props) {
                 sx={{ border: 1, height: 50, borderRadius: 0 }}
               >
                 {/* 쿠폰 이름 map으로 불러오기 */}
-                {props.couponList.map((e, idx) => (
-                  <MenuItem key={idx} value={e[1].uid}>
-                    {e[1].name}
-                  </MenuItem>
-                ))}
+                {couponArray.map((e, idx) => {
+                  <MenuItem key={idx} value={idx}>
+                    {e.name}
+                  </MenuItem>;
+                })}
+                {/* <MenuItem value={"2"}>생활/건강</MenuItem>
+                <MenuItem value={"3"}>가구/인테리어</MenuItem>
+                <MenuItem value={"4"}>반려/도서/취미</MenuItem>
+                <MenuItem value={"5"}>뷰티</MenuItem>
+                <MenuItem value={"6"}>유아동</MenuItem>
+                <MenuItem value={"7"}>가전</MenuItem>
+                <MenuItem value={"8"}>스포츠/레저/자동차</MenuItem> */}
               </Select>
             </FormControl>
           </Grid2>
@@ -311,11 +313,11 @@ export default function AddEventModal(props) {
             <input
               type="file"
               accept="image/jpg, image/jpeg, image/png"
-              ref={profileImgRef}
-              onChange={uploadProfileImg}
+              ref={profileRef}
+              onChange={uploadProfile}
               style={{ display: "none" }}
             />
-            <LeadButton onClick={handleClickProfileImg}>대표 이미지</LeadButton>
+            <LeadButton onClick={handleClickProfile}>대표 이미지</LeadButton>
           </Grid2>
           <Grid2
             xs={4}
@@ -346,16 +348,7 @@ export default function AddEventModal(props) {
               paddingLeft: "1.5rem",
             }}
           >
-            <input
-              type="file"
-              accept="image/jpg, image/jpeg, image/png"
-              ref={detailImgRef}
-              onChange={uploadDetailImg}
-              style={{ display: "none" }}
-            />
-            <DetailButton onClick={handleClickDetailImg}>
-              상세 이미지
-            </DetailButton>
+            <DetailButton>상세 이미지</DetailButton>
           </Grid2>
           <Grid2
             xs={4}
@@ -383,6 +376,8 @@ export default function AddEventModal(props) {
   );
 }
 
+// ------------------------------------------------------------
+
 const ModalHeader = styled.div`
   font-size: 2rem;
 `;
@@ -402,21 +397,6 @@ const ContentInput = styled.textarea`
 const WaveTag = styled.div`
   font-size: 2rem;
   padding-right: 1rem;
-`;
-
-export const MyDatePicker = styled(DatePicker)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
-  height: 3rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: black;
-  border: 1px solid;
-  width: 80%;
-
-  .react-datepicker-wrapper {
-    width: 10rem;
-  }
 `;
 
 const LeadButton = styled.button`
@@ -455,6 +435,88 @@ const AddButton = styled.button`
   border: 1px solid;
   height: 2rem;
   width: 6rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+// ------------------------------------------------------------
+
+const AddCouponBox = styled.div`
+  border: 0.3rem solid #ff9494;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+`;
+
+const ContentBox = styled.div`
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 4rem;
+  display: flex;
+`;
+
+const ContentTitle = styled.div`
+  width: 10%;
+  display: flex;
+  align-items: center;
+`;
+
+const Input = styled.input`
+  border: 0.1rem solid #ff9494;
+  border-radius: 0.5rem;
+  width: 15rem;
+  height: 2rem;
+  font-size: 1.3rem;
+
+  &::placeholder {
+    color: gray;
+    font-size: 1rem;
+    padding-left: 1rem;
+  }
+`;
+
+const ImgAddButton = styled.button`
+  background-color: #ffffff;
+  color: black;
+  border: 1px solid;
+  border-radius: 0.4rem;
+  margin-left: 1rem;
+  height: 2rem;
+  width: 8rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background-color: #ffffff;
+  color: gray;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  height: 2rem;
+  width: 3rem;
+  font-size: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const EditButton = styled.button`
+  background-color: #ff7171;
+  color: white;
+  border: 1px solid;
+  border-radius: 0.8rem;
+  margin-left: 1rem;
+  height: 2rem;
+  width: 5rem;
   font-size: 1rem;
   &:hover {
     cursor: pointer;

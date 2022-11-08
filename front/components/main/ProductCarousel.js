@@ -8,8 +8,13 @@ import { getMyInfo } from "../../pages/api/user";
 export default function ProductCarousel() {
   const [user, setUser] = useState("");
   const uuser = async () => {
-    const res = await getMyInfo();
-    setUser(res.data.name);
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        const res = await getMyInfo();
+        setUser(res.data.name);
+      }
+    }
   };
   const settings = {
     // dots: true,

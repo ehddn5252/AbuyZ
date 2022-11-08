@@ -21,6 +21,7 @@ export default function MyOrderList() {
   // 결제 목록 불러오기
   const bundle = async () => {
     const res = await getOrderList();
+    res.data.sort((a, b) => b.uid - a.uid);
     setOrderBundle(res.data);
   };
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function MyOrderList() {
       ) : (
         <div>
           {orderBundle.map((e, idx) => (
-            <div style={{ marginTop: "2rem" }}>
+            <div style={{ marginTop: "4rem" }}>
               <span style={{ color: "#aaaaaa", fontWeight: "bold" }}>
                 주문 일시: {e.date.slice(0, 10)} {e.date.slice(11, 16)}
               </span>

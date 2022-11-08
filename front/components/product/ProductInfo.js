@@ -14,20 +14,30 @@ import styled from "styled-components";
 
 // API
 import { productDetail } from "../../pages/api/product";
+import { regiswish, delwish } from "../../pages/api/wish";
 
-export default function ProductInfo({}) {
+export default function ProductInfo() {
   const [wish, setWish] = useState(false);
+  const [productId, setProductId] = useState(0);
   const [product, setProduct] = useState([]);
+  const [count, setCount] = useState(1);
 
+  // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
     setProduct(res.data);
     console.log(product);
   };
 
+  const minus = () => {
+    if (count > 1) {
+      setCcount(count - 1);
+    }
+  };
   useEffect(() => {
     const pathname = window.location.pathname;
     const arr = pathname.split("/");
+    setProductId(arr[2]);
     getProduct(arr[2]);
   }, []);
   const colorList = () => [
@@ -42,27 +52,39 @@ export default function ProductInfo({}) {
     { label: "S" },
   ];
   const changeWish = () => {
-    if (wish) setWish(false);
-    else setWish(true);
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        if (wish) {
+          delwish(productId);
+          setWish(false);
+        } else {
+          regiswish(productId);
+          setWish(true);
+        }
+      } else {
+        alert("로그인이 필요한 기능입니다.");
+      }
+    }
   };
 
   return (
     <Container>
       <ImgBox>
         <MajorImgBox>
-          {/* <MajorImg src={product.products.repImg} /> */}
+          <MajorImg src={product.products.repImg} />
         </MajorImgBox>
         <SubImgBox>
-          {/* {product.productPictureDto.map((productImg) => (
-            <SubImg src="/images/cloth1.png" />
-          ))} */}
+          {product.productPictureDto.map((productImg) => (
+            <SubImg src={productImg.imgUrl} />
+          ))}
         </SubImgBox>
       </ImgBox>
       <InfoBox>
         <TitleBox>
           <div>
             <p style={{ margin: 0, marginBottom: "0.5rem", fontSize: "2rem" }}>
-              지프 키즈 맨투맨
+              {product.products.name}
             </p>
           </div>
           <div onClick={changeWish}>
@@ -83,9 +105,13 @@ export default function ProductInfo({}) {
                 fontSize: "1.1rem ",
               }}
             >
-              61%
+              {product.products.discountRate}%
             </p>
-            <p style={{ margin: 0 }}>23,010원</p>
+            <p style={{ margin: 0 }}>
+              {product.products.price -
+                0.01 * product.products.discountRate * product.products.price}
+              원
+            </p>
           </PriceTop>
           <PriceBottom>
             <p
@@ -95,7 +121,7 @@ export default function ProductInfo({}) {
                 textDecoration: "line-through",
               }}
             >
-              35,400원
+              {product.products.price}원
             </p>
           </PriceBottom>
         </PriceBox>
@@ -126,11 +152,11 @@ export default function ProductInfo({}) {
           </Option> */}
           <Option>
             <p style={{ width: "20%" }}>수량</p>
-            <MinusIcon></MinusIcon>
+            <MinusIcon onClick={minus}></MinusIcon>
             <CountDiv>
-              <p>1</p>
+              <p>{count}</p>
             </CountDiv>
-            <PlusIcon></PlusIcon>
+            <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
           </Option>
           <Option>
             <p style={{ width: "20%" }}>선택옵션</p>
@@ -139,7 +165,12 @@ export default function ProductInfo({}) {
         </OptionBox>
         <ResultBox>
           <TitleTag>총 금액</TitleTag>
-          <ContentTag>23,010원</ContentTag>
+          <ContentTag>
+            {(product.products.price -
+              0.01 * product.products.discountRate * product.products.price) *
+              count}
+            원
+          </ContentTag>
         </ResultBox>
         <ButtonBox>
           <BasketButton>장바구니</BasketButton>

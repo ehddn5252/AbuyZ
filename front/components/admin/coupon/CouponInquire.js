@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import moment from "moment";
+
+// API
+import { inquirecoupon } from "../../../pages/api/coupon";
+
+// 컴포넌트
 import AddCoupon from "./AddCoupon";
 import CouponList from "./CouponList";
 import CouponPeriod from "./CouponPeriod";
-import { inquirecoupon } from "../../../pages/api/coupon";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -39,6 +44,14 @@ export default function CouponInquire() {
 
   // 쿠폰 리스트
   const [couponArray, setCouponArray] = useState([]);
+
+  // 리셋 감지기
+  const [reset, setReset] = useState(0);
+
+  // 숫자가 올라갈 때 리셋시키기
+  const resetNumUp = () => {
+    setReset(reset + 1);
+  };
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -78,7 +91,8 @@ export default function CouponInquire() {
     setRightSalePlaceholder("0");
   };
 
-  const getCoupong = async () => {
+  // 조건에 맞는 쿠폰 조회
+  const getCoupon = async () => {
     const c = await inquirecoupon();
     const c_lst = Object.entries(c.data);
     const tmp = [];
@@ -100,19 +114,27 @@ export default function CouponInquire() {
             // 기준 기간에 따른 날짜를 측정
             // 기준기간 선택 안했을 때
             if (standDate === 0) {
-              if (startDate <= endDate) {
+              if (
+                moment(startDate).format().slice(0, 10) <=
+                moment(endDate).format().slice(0, 10)
+              ) {
                 tmp.push(c_lst[i][1]);
               }
             }
             // 쿠폰사용일시
             else if (standDate === 1) {
-              if (startDate <= c_lst[i][1].start_date) {
+              if (
+                moment(startDate).format().slice(0, 10) <=
+                c_lst[i][1].start_date
+              ) {
                 tmp.push(c_lst[i][1]);
               }
             }
             // 쿠폰마감일시
             else if (standDate === 2) {
-              if (c_lst[i][1].end_date <= endDate) {
+              if (
+                c_lst[i][1].end_date <= moment(endDate).format().slice(0, 10)
+              ) {
                 tmp.push(c_lst[i][1]);
               }
             }
@@ -123,7 +145,17 @@ export default function CouponInquire() {
     setCouponArray(tmp);
   };
 
-  // console.log(couponArray);
+  // 초기화
+  const handleReset = () => {
+    setBigCategory("");
+    setName("");
+    setLeftSale("");
+    setRightSale("");
+    setStandDate(0);
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setCouponArray([]);
+  };
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -177,9 +209,6 @@ export default function CouponInquire() {
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              {/* <MenuItem value="대분류">
-                <em>대분류</em>
-              </MenuItem> */}
               <MenuItem value={"1"}>식품</MenuItem>
               <MenuItem value={"2"}>생활/건강</MenuItem>
               <MenuItem value={"3"}>가구/인테리어</MenuItem>
@@ -231,6 +260,7 @@ export default function CouponInquire() {
         }}
       >
         <Input
+          value={name}
           placeholder={namePlaceholder}
           onChange={nameChange}
           onFocus={nameFocus}
@@ -276,6 +306,7 @@ export default function CouponInquire() {
         }}
       >
         <SaleInput
+          value={leftSale}
           placeholder={leftSalePlaceholder}
           onChange={leftSaleChange}
           onFocus={leftSaleFocus}
@@ -283,6 +314,7 @@ export default function CouponInquire() {
         />
         <WaveTag>~</WaveTag>
         <SaleInput
+          value={rightSale}
           style={{ margin: "0" }}
           placeholder={rightSalePlaceholder}
           onChange={rightSaleChange}
@@ -310,6 +342,7 @@ export default function CouponInquire() {
         }}
       >
         <CouponPeriod
+          reset={reset}
           setStandDate={setStandDate}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
@@ -336,8 +369,15 @@ export default function CouponInquire() {
         }}
       >
         <ButtonBox>
-          <ResetButton>초기화</ResetButton>
-          <SearchButton onClick={getCoupong}>검색</SearchButton>
+          <ResetButton
+            onClick={() => {
+              handleReset();
+              resetNumUp();
+            }}
+          >
+            초기화
+          </ResetButton>
+          <SearchButton onClick={getCoupon}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       <Grid2

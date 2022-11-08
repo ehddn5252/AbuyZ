@@ -1,19 +1,28 @@
 import https from "./https.js";
 
 // 이벤트 등록
-export async function createEvent(eventDto) {
+export async function createEvent() {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
+  // console.log(https.defaults.headers.common);
+  let formData = new FormData();
+
+  let data = {
+    name: "테스트 이벤트",
+    start_date: "2022-10-21",
+    end_date: "2022-11-21",
+    coupon_lists: [9, 10],
+    content: "testsetsets",
+  };
+
+  formData.append(
+    "eventDto",
+    new Blob([JSON.stringify(data)], { type: "application/json" })
+  );
   return new Promise((resolve) => {
     console.log("1단계");
     https
-      .post("/event/create", {
-        name: eventDto.name,
-        start_date: eventDto.start_date,
-        end_date: eventDto.end_date,
-        coupon_lists: eventDto.coupon_lists,
-        content: eventDto.content,
-      })
+      .post("/event/create", formData)
       .then((response) => {
         if (response.status === 200) {
           console.log("이벤트 등록 성공", response);
@@ -24,7 +33,7 @@ export async function createEvent(eventDto) {
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.log(e, "@@@");
       });
   });
 }

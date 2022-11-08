@@ -9,9 +9,12 @@ import { delwish } from "../../pages/api/wish";
 
 export default function MyWishItem(product) {
   const deletezzim = async () => {
-    const res = await delwish(product.product.wish_uid);
-    console.log(res);
-    router.reload();
+    const wishDto = {
+      wish_uid: product.product.wish_uid,
+    };
+    const res = await delwish(wishDto);
+    console.log(res.data);
+    // router.reload();
   };
 
   return (
