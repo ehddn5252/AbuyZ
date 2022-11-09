@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 // API
 import axios from "axios";
+import { getStockInventory } from "../../../../pages/api/product";
 
 // mui
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -115,7 +116,7 @@ export default function SaleProductOption(props) {
   const [optionValue1, setOptionValue1] = useState([]);
 
   // 옵션값 갯수 1
-  const [count1, setCount1] = useState(0);
+  const [count1, setCount1] = useState(1);
 
   // 옵션명 2
   const [optionName2, setOptionName2] = useState("");
@@ -124,7 +125,7 @@ export default function SaleProductOption(props) {
   const [optionValue2, setOptionValue2] = useState([]);
 
   // 옵션값 갯수 2
-  const [count2, setCount2] = useState(0);
+  const [count2, setCount2] = useState(1);
 
   // 옵션명 3
   const [optionName3, setOptionName3] = useState("");
@@ -133,7 +134,7 @@ export default function SaleProductOption(props) {
   const [optionValue3, setOptionValue3] = useState([]);
 
   // 옵션값 갯수 3
-  const [count3, setCount3] = useState(0);
+  const [count3, setCount3] = useState(1);
 
   // 옵션 목록 보여주기
   const [show, setShow] = useState(false);
@@ -144,14 +145,17 @@ export default function SaleProductOption(props) {
   // 옵션 미설정 시 재고수량
   const [stock, setStock] = useState(0);
 
+  // 상품 아이디
+  const [productId, setProductId] = useState(0);
+
   // 옵션 설정 시 ------------------------------------------
   // 옵션
   const [options, setOptions] = useState({});
 
-  // 재고
-  const [count, setCount] = useState(0);
+  // 재고 리스트(상품별 재고 조회 했을 때)
+  const [stockList, setStockList] = useState([]);
 
-  // 옵션명 갯수 뺴기
+  // 옵션명 갯수 뻬기
   const optionMinus = () => {
     if (optionCount > 1) {
       setOptionCount(optionCount - 1);
@@ -240,7 +244,7 @@ export default function SaleProductOption(props) {
     }
   };
 
-  // 이벤트 등록 API ------------------------------------------
+  // 상품 등록 API ------------------------------------------
   const handleAddProduct = () => {
     let formData = new FormData();
 
@@ -255,8 +259,6 @@ export default function SaleProductOption(props) {
       keywords: keywords,
       metaTag: metaTag,
     };
-
-    console.log(data);
 
     formData.append(
       "productCreateDto",
@@ -275,15 +277,105 @@ export default function SaleProductOption(props) {
     axios
       .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
         headers: {
-          "Contest-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         console.log(res, "상품등록에 성공!");
         changeShow();
+        setOptionTotal(count1 * count2 * count3);
+        getStock(res.data.data);
       })
       .catch((err) => {
         console.log(err, "상품등록에 실패하였습니다.");
+      });
+  };
+
+  // 총 옵션의 수
+  const [optionTotal, setOptionTotal] = useState(0);
+
+  // 옵션별 가격
+  const [optionPrice, setOptionPrice] = useState([]);
+
+  // 옵션별 수량
+  const [optionStock, setOptionStock] = useState([]);
+
+  // 상품 재고 조회 API ------------------------------------------
+  const getStock = async (productUid) => {
+    const stocks = await getStockInventory(productUid);
+    setStockList(stocks);
+    const tmpPrice = [];
+    const tmpStock = [];
+    console.log(optionTotal, "~~~~~~~~~");
+    for (let i = 0; i < optionTotal; i++) {
+      tmpPrice.push(i * 0);
+      tmpStock.push(i * 0);
+    }
+    setOptionPrice(tmpPrice);
+    setOptionStock(tmpStock);
+  };
+
+  // 옵션가 입력 함수(옵션 1개일 때)
+  const handleOptionPrice1 = (e, idx1) => {
+    optionPrice[idx1] = e.target.value;
+  };
+
+  // 옵션 수량 입력 함수(옵션 1개일 때)
+  const handleOptionStock1 = (e, idx1) => {
+    optionStock[idx1] = e.target.value;
+  };
+
+  // 옵션가 입력 함수(옵션 2개일 때)
+  const handleOptionPrice2 = (e, idx1, idx2) => {
+    optionPrice[idx1 + idx2] = e.target.value;
+  };
+
+  // 옵션 수량 입력 함수(옵션 2개일 때)
+  const handleOptionStock2 = (e, idx1, idx2) => {
+    optionStock[idx1 + idx2] = e.target.value;
+  };
+
+  // 옵션가 입력 함수(옵션 3개일 때)
+  const handleOptionPrice3 = (e, idx1, idx2, idx3) => {
+    optionPrice[idx1 + idx2 + idx3] = e.target.value;
+  };
+
+  // 옵션 수량 입력 함수(옵션 3개일 때)
+  const handleOptionStock3 = (e, idx1, idx2, idx3) => {
+    optionStock[idx1 + idx2 + idx3] = e.target.value;
+  };
+
+  // console.log(optionTotal, "옵션 총합");
+
+  // console.log(stockList ? stockList : null, "재고리스트");
+
+  // console.log(optionPrice, optionStock, "옵션별 가격, 옵션별 재고");
+
+  // 옵션 가격 및 수량 수정 API ------------------------------------------
+  const handleChangeOption = () => {
+    let formData = new FormData();
+
+    const data = stockList;
+
+    const res = {};
+
+    for (let i = 0; i < optionTotal; i++) {
+      res[data[i].productOptionUidString] = {
+        price: optionPrice[i],
+        count: optionStock[i],
+      };
+    }
+
+    axios
+      .put("https://k7e201.p.ssafy.io:8081/api/inventory", {
+        inventory_option_list: res,
+      })
+      .then((res) => {
+        console.log(res, "재고 수정에 성공!");
+        location.reload();
+      })
+      .catch((err) => {
+        console.log(err, "재고 수정에 실패하였습니다.");
       });
   };
 
@@ -534,47 +626,83 @@ export default function SaleProductOption(props) {
                   </thead>
                   <tbody>
                     {optionCount >= 3
-                      ? optionValue1.map((v1) =>
-                          optionValue2.map((v2) =>
-                            optionValue3.map((v3, idx) => (
-                              <TableRow key={idx}>
+                      ? optionValue1.map((v1, idx1) =>
+                          optionValue2.map((v2, idx2) =>
+                            optionValue3.map((v3, idx3) => (
+                              <TableRow key={idx3}>
                                 <Td>{v1}</Td>
                                 <Td>{v2}</Td>
                                 <Td>{v3}</Td>
                                 <Td>
-                                  <OptionInput placeholder="숫자만 입력해주세요. ex) 19000" />
+                                  <OptionInput
+                                    onChange={(e) =>
+                                      handleOptionPrice3(
+                                        e,
+                                        idx1 * (count2 * count3),
+                                        idx2 * count3,
+                                        idx3
+                                      )
+                                    }
+                                    placeholder="숫자만 입력해주세요. ex) 19000"
+                                  />
                                 </Td>
                                 <Td>
-                                  <OptionInput placeholder="숫자만 입력해주세요. ex) 100" />
+                                  <OptionInput
+                                    onChange={(e) =>
+                                      handleOptionStock3(
+                                        e,
+                                        idx1 * (count2 * count3),
+                                        idx2 * count3,
+                                        idx3
+                                      )
+                                    }
+                                    placeholder="숫자만 입력해주세요. ex) 100"
+                                  />
                                 </Td>
                               </TableRow>
                             ))
                           )
                         )
                       : optionCount >= 2
-                      ? optionValue1.map((v1) =>
-                          optionValue2.map((v2, idx) => (
-                            <TableRow key={idx}>
+                      ? optionValue1.map((v1, idx1) =>
+                          optionValue2.map((v2, idx2) => (
+                            <TableRow key={idx1 * count2 + idx2}>
                               <Td>{v1}</Td>
                               <Td>{v2}</Td>
                               <Td>
-                                <OptionInput placeholder="숫자만 입력해주세요. ex) 19000" />
+                                <OptionInput
+                                  onChange={(e) =>
+                                    handleOptionPrice2(e, idx1 * count2, idx2)
+                                  }
+                                  placeholder="숫자만 입력해주세요. ex) 19000"
+                                />
                               </Td>
                               <Td>
-                                <OptionInput placeholder="숫자만 입력해주세요. ex) 100" />
+                                <OptionInput
+                                  onChange={(e) =>
+                                    handleOptionStock2(e, idx1 * count2, idx2)
+                                  }
+                                  placeholder="숫자만 입력해주세요. ex) 100"
+                                />
                               </Td>
                             </TableRow>
                           ))
                         )
                       : optionCount >= 1
-                      ? optionValue1.map((v1, idx) => (
-                          <TableRow key={idx}>
+                      ? optionValue1.map((v1, idx1) => (
+                          <TableRow key={idx1}>
                             <Td>{v1}</Td>
                             <Td>
-                              <OptionInput placeholder="숫자만 입력해주세요. ex) 19000" />
+                              <OptionInput
+                                onChange={(e) => handleOptionPrice1(e, idx1)}
+                                placeholder="숫자만 입력해주세요. ex) 19000"
+                              />
                             </Td>
                             <Td>
-                              <OptionInput placeholder="숫자만 입력해주세요. ex) 100" />
+                              <OptionInput
+                                onChange={(e) => handleOptionStock1(e, idx1)}
+                                placeholder="숫자만 입력해주세요. ex) 100"
+                              />
                             </Td>
                           </TableRow>
                         ))
@@ -593,8 +721,10 @@ export default function SaleProductOption(props) {
                   }}
                 >
                   <ButtonBox>
-                    <CancelButton>취소</CancelButton>
-                    <AddButton>등록</AddButton>
+                    <CancelButton onClick={() => getStockInventory(563)}>
+                      초기화
+                    </CancelButton>
+                    <AddButton onClick={handleChangeOption}>등록</AddButton>
                   </ButtonBox>
                 </Grid2>
               </Grid2>

@@ -152,82 +152,15 @@ export async function productDetail(product_id) {
   });
 }
 
-// 상품 등록
-export async function regisProduct(productCreateReqDto) {
-  const accessToken = sessionStorage.getItem("access-token");
-  https.defaults.headers.common["access_token"] = accessToken;
-  return new Promise((resolve) => {
-    https
-      .post(
-        "/product/register",
-        {
-          user_id: productCreateReqDto.user_id,
-          small_categories_uid: productCreateReqDto.small_categories_uid,
-          name: productCreateReqDto.name,
-          discount_rate: productCreateReqDto.discount_rate,
-          price: productCreateReqDto.price,
-          delivery_fee: productCreateReqDto.delivery_fee,
-          brand_name: productCreateReqDto.brand_name,
-          description_img: productCreateReqDto.description_img,
-          rep_img: productCreateReqDto.rep_img,
-          options: productCreateReqDto.options,
-          keywords: productCreateReqDto.keywords,
-          meta_tag: productCreateReqDto.meta_tag,
-        },
-        {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("상품 등록 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("상품 등록 실패", response);
-          resolve(response);
-        }
-      });
-  }).catch((e) => {
-    console.log(e);
-  });
-}
-
-// 상품 변경
-export async function modifyProduct(productCreateReqDto) {
-  const accessToken = sessionStorage.getItem("access-token");
-  https.defaults.headers.common["access_token"] = accessToken;
-  return new Promise((resolve) => {
-    https
-      .put("/product/modify", productCreateReqDto, {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("상품 변경 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("상품 변경 실패", response);
-          resolve(response);
-        }
-      });
-  }).catch((e) => {
-    console.log(e);
-  });
-}
-
 // 재고 목록 가져오기
-export async function stock() {
+export async function getStockInventory(product_id) {
   return new Promise((resolve) => {
-    https.get("/inventory").then((response) => {
+    https.get(`/inventory/${product_id}`).then((response) => {
       if (response.status === 200) {
-        console.log("모든 상품 가져오기 성공", response);
-        resolve(response.data);
+        console.log("재고 목록 가져오기 성공", response);
+        resolve(response.data.data);
       } else {
-        console.log("모든 상품 가져오기 실패", response);
+        console.log("재고 목록 가져오기 실패", response);
         resolve(response);
       }
     });
