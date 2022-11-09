@@ -48,7 +48,7 @@ const TotalDiv = styled.div`
 const TitleText = styled.p`
   margin: 0;
   padding: 0;
-  padding-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
 `;
 
 const ResultText = styled.p`
