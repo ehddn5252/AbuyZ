@@ -1,9 +1,6 @@
 package com.tasteshopping.statistics.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.TreeMap;
 
@@ -11,6 +8,7 @@ import java.util.TreeMap;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PercentStatisticsListDto {
     private TreeMap<String,BigCategoryPercentDto> big_category;
     private int total_sales;

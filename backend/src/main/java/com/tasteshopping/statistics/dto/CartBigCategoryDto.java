@@ -8,6 +8,7 @@ import java.util.TreeMap;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CartBigCategoryDto implements Comparable<CartBigCategoryDto>{
     private TreeMap<String,Integer> smallCategories;
     private int totalCount;

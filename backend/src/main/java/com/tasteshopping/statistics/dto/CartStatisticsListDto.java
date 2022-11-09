@@ -8,6 +8,7 @@ import java.util.TreeMap;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CartStatisticsListDto{
     private TreeMap<String,CartBigCategoryDto>big_categories;
     private int total_count;
