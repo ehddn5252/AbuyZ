@@ -20,9 +20,10 @@ import Link from "@mui/material/Link";
 
 // API
 import { getMyInfo, logout, refresh } from "../../pages/api/user";
+import { BigCategory } from "../../pages/api/category";
 
 // State
-import { searchName, filterName } from "../../states";
+import { searchName, filterName, bigCategoryValue } from "../../states";
 import { useRecoilState } from "recoil";
 
 //  lodash
@@ -31,12 +32,18 @@ import { throttle } from "lodash";
 export default function Nav() {
   const router = useRouter();
 
+  // User data
   const [username, setUsername] = useState("");
   const [atoken, setAToken] = useState("");
+
   // 검색어
   const [keyword, setKeyword] = useState("");
   const [searchValue, setSearchValue] = useRecoilState(searchName);
   const [filterValue, setFilterValue] = useRecoilState(filterName);
+  const [categoryValue, setCategoryValue] = useRecoilState(bigCategoryValue);
+  // 카테고리
+  const [bigCategory, setBigCategory] = useState([]);
+
   // window 위치
   const [isNavOn, setIsNavOn] = useState(true);
 
@@ -63,7 +70,10 @@ export default function Nav() {
     };
   }, [throttledScroll]);
 
+  // 검색시 동작
   const keywordSearch = () => {
+    setCategoryValue("");
+    setFilterValue("최근 등록 순");
     setSearchValue(keyword);
     if (router.pathname === "/search") {
       router.reload();
@@ -85,6 +95,7 @@ export default function Nav() {
       }
     }
   }, 1000 * 60 * 20);
+
   useEffect(() => {
     // 창 닫기시 블랙리스트 추가
     window.addEventListener("unload", async () => {
@@ -110,6 +121,24 @@ export default function Nav() {
     }
   }, [atoken]);
 
+  // 카테고리 값 가져오기
+  const getCategory = async () => {
+    const res = await BigCategory();
+    setBigCategory(res.data);
+  };
+  useEffect(() => {
+    getCategory();
+  }, []);
+  const searchCategory = (uid) => {
+    setCategoryValue(uid);
+    setFilterValue("최근 등록 순");
+    setSearchValue("");
+    if (router.pathname === "/search") {
+      router.reload();
+    }
+    router.push("/search");
+  };
+
   const goEvent = () => {
     router.push("/event");
   };
@@ -127,21 +156,33 @@ export default function Nav() {
     router.push("/");
   };
 
-  const goSearch = () => {
-    router.push("/search");
-  };
   const goSearch1 = () => {
-    setFilterValue("최근 등록순");
+    setFilterValue("최근 등록 순");
+    setCategoryValue("");
+    setSearchValue("");
+    if (router.pathname === "/search") {
+      router.reload();
+    }
     router.push("/search");
   };
 
   const goSearch2 = () => {
     setFilterValue("평점 높은 순");
+    setSearchValue("");
+    setCategoryValue("");
+    if (router.pathname === "/search") {
+      router.reload();
+    }
     router.push("/search");
   };
 
   const goSearch3 = () => {
     setFilterValue("가격 낮은 순");
+    setSearchValue("");
+    setCategoryValue("");
+    if (router.pathname === "/search") {
+      router.reload();
+    }
     router.push("/search");
   };
 
@@ -185,13 +226,18 @@ export default function Nav() {
             <div onClick={goHome} style={{ cursor: "pointer" }}>
               <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
             </div>
-            <SearchPaper component="form">
+            <SearchPaper>
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="찾으시는 상품을 검색해주세요"
                 inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
                 onChange={(e) => {
                   setKeyword(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    keywordSearch();
+                  }
                 }}
               />
               <IconButton
@@ -237,56 +283,20 @@ export default function Nav() {
               <MenuIcon sx={{ marginRight: "1rem" }} />
               <CategoryTitle>카테고리</CategoryTitle>
               <Menu id="menu">
-                <MajorMenu>
-                  <MenuTitle>식품</MenuTitle>
-                  {/* <MenuList>
+                {bigCategory.map((e, idx) => (
+                  <MajorMenu key={e.uid}>
+                    <MenuTitle onClick={() => searchCategory(e.uid)}>
+                      {e.categoryName}
+                    </MenuTitle>
+                    {/* <MenuList>
                   <MenuItem>과일</MenuItem>
                   <MenuItem>채소</MenuItem>
                   <MenuItem>고기</MenuItem>
                   <MenuItem>과자/디저트/아이스크림</MenuItem>
                   <MenuItem>생수/음료/주류</MenuItem>
                 </MenuList> */}
-                </MajorMenu>
-                <MajorMenu>
-                  <MenuTitle>생활건강</MenuTitle>
-                  {/* <MenuList>
-                  <MenuItem>의류</MenuItem>
-                  <MenuItem>언더웨어</MenuItem>
-                  <MenuItem>신발</MenuItem>
-                  <MenuItem>가방</MenuItem>
-                  <MenuItem>악세서리</MenuItem>
-                </MenuList> */}
-                </MajorMenu>
-                <MajorMenu>
-                  <MenuTitle>가구/인테리어</MenuTitle>
-                  {/* <MenuList>
-                  <MenuItem>주방가구</MenuItem>
-                  <MenuItem>거실가구</MenuItem>
-                  <MenuItem>커튼/블라인드</MenuItem>
-                  <MenuItem>학생/사무가구</MenuItem>
-                  <MenuItem>침실가구</MenuItem>
-                </MenuList> */}
-                </MajorMenu>
-                <MajorMenu>
-                  <MenuTitle>반려/도서/취미</MenuTitle>
-                  {/* <MenuList>
-                  <MenuItem>도서</MenuItem>
-                  <MenuItem>노트/다이어리</MenuItem>
-                  <MenuItem>사료</MenuItem>
-                  <MenuItem>필기류</MenuItem>
-                  <MenuItem>반려 동물 용품</MenuItem>
-                </MenuList> */}
-                </MajorMenu>
-                <MajorMenu>
-                  <MenuTitle>뷰티</MenuTitle>
-                  {/* <MenuList>
-                  <MenuItem>스킨케어</MenuItem>
-                  <MenuItem>향수</MenuItem>
-                  <MenuItem>헤어/바디</MenuItem>
-                  <MenuItem>메이크업</MenuItem>
-                  <MenuItem>네일</MenuItem>
-                </MenuList> */}
-                </MajorMenu>
+                  </MajorMenu>
+                ))}
               </Menu>
             </CategoryTagBox>
             <TagBox>
@@ -311,6 +321,15 @@ export default function Nav() {
               <ScrollCategoryTagBox>
                 <MenuIcon sx={{ marginRight: "0.5rem" }} />
                 <ScrollCategoryTitle>카테고리</ScrollCategoryTitle>
+                <ScrollMenu id="menu1">
+                  {bigCategory.map((e) => (
+                    <ScrollMajorMenu key={e.uid}>
+                      <ScrollMenuTitle onClick={() => searchCategory(e.uid)}>
+                        {e.categoryName}
+                      </ScrollMenuTitle>
+                    </ScrollMajorMenu>
+                  ))}
+                </ScrollMenu>
               </ScrollCategoryTagBox>
               <ScrollTagBox>
                 <ScrollCategoryTitle onClick={goSearch1}>
@@ -333,13 +352,18 @@ export default function Nav() {
                 </ScrollCategoryTitle>
               </ScrollTagBox>
             </ScrollCategoryContainer>
-            <ScrollSearchPaper component="form">
+            <ScrollSearchPaper>
               <InputBase
                 sx={{ ml: 1, flex: 1, fontSize: "0.8rem" }}
                 placeholder="찾으시는 상품을 검색해주세요"
                 inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
                 onChange={(e) => {
                   setKeyword(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    keywordSearch();
+                  }
                 }}
               />
               <IconButton
@@ -532,26 +556,25 @@ const MajorMenu = styled.li`
     background-color: #eee;
   }
 `;
-const MenuList = styled.li`
-  font-size: 0.8rem;
-  list-style: none;
-  position: absolute;
-  width: 100%;
-  margin: 0;
-  padding: 0.5rem;
-  padding-left: 2rem;
-  padding-right: 3rem;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.15s ease-in;
-  &:hover {
-    background-color: #eee;
-  }
-`;
+// const MenuList = styled.li`
+//   font-size: 0.8rem;
+//   list-style: none;
+//   position: absolute;
+//   width: 100%;
+//   margin: 0;
+//   padding: 0.5rem;
+//   padding-left: 2rem;
+//   padding-right: 3rem;
+//   opacity: 0;
+//   visibility: hidden;
+//   transition: all 0.15s ease-in;
+//   &:hover {
+//     background-color: #eee;
+//   }
+// `;
 
 const MenuTitle = styled.div``;
 
-const MenuItem = styled.li``;
 const ScrollContainer = styled.div`
   width: 100%;
 `;
@@ -596,12 +619,6 @@ const ScrollCategoryContainer = styled.div`
   padding: 0;
 `;
 
-const ScrollCategoryTagBox = styled.li`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`;
-
 const ScrollTagBox = styled.li`
   display: flex;
   align-items: center;
@@ -624,4 +641,45 @@ const ScrollCategoryTitle = styled.p`
 const ScrollIconDiv = styled.div`
   display: flex;
   margin-left: 3rem;
+`;
+
+const ScrollMenu = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  top: 15%;
+  position: absolute;
+  margin-top: 2.5rem;
+  list-style: none;
+  background: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.15s ease-in;
+  z-index: 1000;
+`;
+
+const ScrollMajorMenu = styled.li`
+  font-size: 0.8rem;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 3rem;
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const ScrollMenuTitle = styled.div``;
+
+const ScrollCategoryTagBox = styled.li`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  &:hover #menu1 {
+    opacity: 1;
+    visibility: visible;
+  }
 `;

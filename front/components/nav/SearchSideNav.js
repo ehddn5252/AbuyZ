@@ -9,9 +9,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
 // StyledComponents
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
 export default function SearchSideNav({
   setFeeOption,
   setPriceOption,
@@ -19,6 +22,8 @@ export default function SearchSideNav({
   setStartPrice,
   setEndPrice,
 }) {
+  const router = useRouter();
+
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
 
@@ -29,6 +34,7 @@ export default function SearchSideNav({
     setCategoryOption(null);
     setStartPrice(null);
     setEndPrice(null);
+    router.reload();
   };
 
   // 시작 끝값 변경 적용
