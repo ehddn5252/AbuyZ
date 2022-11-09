@@ -4,7 +4,7 @@ import styled from "styled-components";
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductMore() {
+export default function SaleProductMore(props) {
   // 브랜드
   const [brand, setBrand] = useState("");
   const [brandPlaceholder, setBrandPlaceholder] =
@@ -21,6 +21,7 @@ export default function SaleProductMore() {
   // 브랜드
   const brandChange = (event) => {
     setBrand(event.target.value);
+    props.setBrandName(event.target.value);
   };
   const brandFocus = () => {
     setBrandPlaceholder("");
@@ -31,6 +32,7 @@ export default function SaleProductMore() {
   // 키워드
   const keyWordChange = (event) => {
     setKeyWord(event.target.value);
+    props.setKeywords(event.target.value);
   };
   const keyWordFocus = () => {
     setKeyWordPlaceholder("");
@@ -41,6 +43,7 @@ export default function SaleProductMore() {
   // 메타태그
   const metaTagChange = (event) => {
     setMetaTag(event.target.value);
+    props.setMetaTag(event.target.value);
   };
   const metaTagFocus = () => {
     setMetaTagPlaceholder("");

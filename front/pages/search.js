@@ -4,7 +4,7 @@ import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
 // API
-import { keywordSearch, kwcdSearch } from "./api/product";
+import { keywordSearch, kwcdSearch, inquireProduct } from "./api/product";
 
 import { useRecoilState } from "recoil";
 // State
@@ -21,8 +21,14 @@ export default function Search() {
   const [startPrice, setStartPrice] = useState(null);
   const [endPrice, setEndPrice] = useState(null);
   const getProductList = async () => {
-    const res = await keywordSearch(searchValue);
-    setProductList(res.data);
+    let res;
+    if (searchValue) {
+      const temp = await keywordSearch(searchValue);
+      res = temp.data;
+    } else {
+      res = await inquireProduct();
+    }
+    setProductList(res);
   };
 
   const filterProductList = async () => {

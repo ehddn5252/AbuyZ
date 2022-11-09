@@ -32,3 +32,9 @@ export const paymentNum = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const filterName = atom({
+  key: "filterName",
+  default: "최근 등록순",
+  effects_UNSTABLE: [persistAtom],
+});

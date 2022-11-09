@@ -15,6 +15,10 @@ import Grid from "@mui/material/Grid";
 // Next.js
 import { useRouter } from "next/router";
 
+import { useRecoilState } from "recoil";
+// State
+import { filterName } from "../../states/index";
+
 export default function ProductLIst({ productList }) {
   const router = useRouter();
   const options = [
@@ -24,9 +28,8 @@ export default function ProductLIst({ productList }) {
     "평점 높은 순",
     "리뷰 많은 순",
   ];
-  const [value, setValue] = useState("최근 등록 순");
+  const [value, setValue] = useRecoilState(filterName);
   const [inputValue, setInputValue] = useState([productList]);
-
   // 가격 낮은순
   function getLowPrcie(arr) {
     let sortable = [];
