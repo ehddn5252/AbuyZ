@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // Chart
 import {
@@ -16,6 +16,7 @@ import { Line } from "react-chartjs-2";
 
 // StyledComponent
 import styled from "styled-components";
+import { set } from "lodash";
 
 ChartJS.register(
   CategoryScale,
@@ -40,26 +41,39 @@ export const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+export default function LineChart({ lineChartData }) {
+  const [lineLabel, setLineLabel] = useState("");
+  const [lineData, setLineData] = useState("");
+  const labels = lineLabel;
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Dataset 1",
+        data: lineData,
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [30, 10, 11, 40, 60, 12, 22],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-  ],
-};
-
-export default function LineChart() {
-  return (
+  useEffect(() => {
+    if (lineChartData) {
+      let templabel = [];
+      let tempdata = [];
+      for (let [key, value] of Object.entries(lineChartData)) {
+        templabel.push(key.slice(5, 10));
+        tempdata.push(value);
+      }
+      setLineLabel(templabel);
+      setLineData(tempdata);
+    }
+  }, []);
+  return lineChartData ? (
     <Container>
       <Line options={options} data={data} />
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`

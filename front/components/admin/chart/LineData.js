@@ -4,25 +4,26 @@ import React from "react";
 // StyledComponent
 import styled from "styled-components";
 
-export default function LineData() {
+export default function LineData({ lineChartData, day }) {
   return (
     <Container>
       <TotalDiv style={{ backgroundColor: "#fff5d6" }}>
         <TitleText>총 매출액(원)</TitleText>
         <ResultText className="countNum" style={{ color: "#fda700" }}>
-          1,300<span>K</span>
+          {lineChartData.total_sales / 1000}
+          <span>K</span>
         </ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#ffe27f" }}>
         <TitleText>총 판매수량(개)</TitleText>
         <ResultText className="countNum" style={{ color: "#fda700" }}>
-          102
+          {lineChartData.total_count}
         </ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
         <TitleText>총 기간(일)</TitleText>
         <ResultText className="countNum" style={{ color: "#2daf43" }}>
-          70
+          {day}
         </ResultText>
       </TotalDiv>
     </Container>

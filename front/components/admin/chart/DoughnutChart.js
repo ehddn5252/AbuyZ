@@ -48,7 +48,7 @@ export const data = {
     },
   ],
 };
-export default function DoughnutChart() {
+export default function DoughnutChart({ doughnutChartData }) {
   return (
     <Container>
       <Doughnut data={data} options={options} style={{ padding: "1rem" }} />
