@@ -6,6 +6,7 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -149,6 +151,23 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(status);
         orderRepository.save(order);
         return new BaseRes(200, "주문 상태 변경 성공", null);
+    }
+
+    @Override
+    public BaseRes getStatus(String status) {
+        List<Orders> l = orderRepository.findByStatus(status);
+        List<OrderDto> newL = new ArrayList<>();
+        for(int i=0;i<l.size();++i){
+            newL.add(l.get(i).toDto());
+        }
+        return new BaseRes(200, "주문 상태 가져오기 성공", newL);
+    }
+
+    @Override
+    public BaseRes getStatusNum(String status) {
+        List<Orders> l = orderRepository.findByStatus(status);
+
+        return new BaseRes(200, "주문 상태 가져오기 성공", l.size());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ProductDto {
     private String brandName;
 
     private LocalDateTime date;
-
+    private String status;
     private Integer reviewNum;
     private Integer inventoryNum;
 }

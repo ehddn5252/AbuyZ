@@ -148,6 +148,57 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
+    public void putStatus(int uid,String status) {
+        Optional<Products> productsOptional = productRepository.findById(uid);
+        if(productsOptional.isPresent()){
+            productsOptional.get().setStatus(status);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void checkStatus(int uid) {
+        Products product = productRepository.findById(uid).get();
+
+        List<Inventories> l = inventoryRepository.findByProduct(product);
+        int count = 0;
+        for(int i=0;i<l.size();++i){
+            count+=l.get(i).getCount();
+        }
+        //SELLING, SOLD_OUT, GETTING_READY
+        if(count==0){
+            product.setStatus("SOLD_OUT");
+        }
+        else{
+            product.setStatus("SELLING");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void productStatusSetting() {
+        List<Products> productsList = productRepository.findAll();
+
+        for(int i=0;i<productsList.size();++i){
+            Products product = productsList.get(i);
+            List<Inventories> l = inventoryRepository.findByProduct(product);
+//            Integer count = inventoryRepository.sumCount(product);
+            int count = 0;
+            for(int j=0;j<l.size();++j){
+                count+=l.get(j).getCount();
+            }
+            //SELLING, SOLD_OUT, GETTING_READY
+            if(count==0){
+                product.setStatus("SOLD_OUT");
+            }
+            else{
+                product.setStatus("SELLING");
+            }
+        }
+    }
+
+    @Override
     public void modifyProductOption(ProductCreateDto productCreateDto) {
         /*
         1. 상품에 맞는 상품 옵션 유아이디를 가져온다. findByProductsUid()

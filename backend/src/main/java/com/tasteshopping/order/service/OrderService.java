@@ -17,5 +17,8 @@ public interface OrderService {
 
     BaseRes changeStatus(Integer order_uid, String status);
 
+    BaseRes getStatus(String status);
+    BaseRes getStatusNum(String status);
+
     Integer getNumByStatus(String status);
 }
