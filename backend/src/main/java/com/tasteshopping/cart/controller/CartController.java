@@ -1,6 +1,7 @@
 package com.tasteshopping.cart.controller;
 
 import com.tasteshopping.cart.dto.*;
+import com.tasteshopping.cart.exception.NotCorrectProductException;
 import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
@@ -34,6 +35,9 @@ public class CartController {
         catch (OutOfStockException e){
 
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(BaseRes.of(406, "재고가 없습니다."));
+        }
+        catch(NotCorrectProductException e){
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(BaseRes.of(503, "해당 DB가 없어 제대로된 서비스를 제공하지 못합니다."));
         }
     }
 

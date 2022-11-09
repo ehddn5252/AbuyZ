@@ -29,4 +29,7 @@ public interface InventoryRepository  extends JpaRepository<Inventories,Integer>
     void deleteByProduct(Products product);
 
     List<Inventories> findByCount(int i);
+
+    @Query("select SUM(i.count) from Inventories i join fetch Products p on i.product=p")
+    Integer sumCount(Products product);
 }

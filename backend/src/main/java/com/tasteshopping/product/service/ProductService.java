@@ -5,6 +5,7 @@ import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.Products;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,9 @@ public interface ProductService {
 
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
+
+    @Transactional
+    void productStatusSetting();
 
     // 재고 방식 -> 수정 요함
     void modifyProductOption(ProductCreateDto productCreateDto);
@@ -57,4 +61,8 @@ public interface ProductService {
     BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto);
 
     BaseRes modifyStatus(String email, int products_uid, String status);
+
+    void putStatus(int uid,String status );
+
+    void checkStatus(int uid);
 }

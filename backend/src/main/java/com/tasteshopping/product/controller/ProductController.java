@@ -26,12 +26,25 @@ public class ProductController {
 
     private final ProductKeywordService productKeywordService;
 
+    @PutMapping("/status/setting/{uid}")
+    public ResponseEntity<BaseRes> checkByStatus(@AuthenticationPrincipal String email, @PathVariable int uid) {
+        productService.checkStatus(uid);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "특정 uid 상품 상태 세팅 성공!", null));
+    }
+
+    @PutMapping("/status/setting")
+    public ResponseEntity<BaseRes> settingStatus(@AuthenticationPrincipal String email) {
+        productService.productStatusSetting();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "모든 상품 상태 세팅 성공!",null ));
+    }
+
+
     @GetMapping("/status/{status}")
     public ResponseEntity<BaseRes> getByStatus(@AuthenticationPrincipal String email, @PathVariable String status) {
         // 상품 상태로로 검색한 기록
         List<ProductDto> newL = productService.findByStatus(status);
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 상태로 검색 성공!", newL));
     }
 
     @GetMapping("/status/num/{status}")
@@ -39,7 +52,15 @@ public class ProductController {
         // 상품 상태로로 검색한 기록
         List<ProductDto> newL = productService.findByStatus(status);
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "fo 기본 검색 성공!", newL.size()));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 상태로 수 가져오기 성공!", newL.size()));
+    }
+
+    @PutMapping("/status/{uid}/{status}")
+    public ResponseEntity<BaseRes> getNumByStatus(@AuthenticationPrincipal String email, @PathVariable int uid, @PathVariable String status) {
+        // 상품 상태로로 검색한 기록
+        productService.putStatus(uid, status);
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 상태 변경 성공!", null));
     }
 
     @PostMapping("/bo-search")
@@ -120,9 +141,9 @@ public class ProductController {
 
 
     @PostMapping("/detail")
-    public ResponseEntity<BaseRes> getProductDetailPage(@Nullable @AuthenticationPrincipal String email , @RequestBody ProductUidReqDto productUidReqDto) {
+    public ResponseEntity<BaseRes> getProductDetailPage(@Nullable @AuthenticationPrincipal String email, @RequestBody ProductUidReqDto productUidReqDto) {
         try {
-            ProductDetailDto l = productService.getDetailProduct(email,productUidReqDto.getProducts_uid());
+            ProductDetailDto l = productService.getDetailProduct(email, productUidReqDto.getProducts_uid());
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
         } catch (ProductNotFoundException e) {
             return e.baseResResponseEntity;
