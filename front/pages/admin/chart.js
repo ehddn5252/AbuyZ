@@ -105,7 +105,7 @@ export default function Chart() {
         </SmallChart>
         <SmallChart onClick={DoughnutChartClick} className="ChartTag">
           <ChartTitle>카테고리별 판매비율</ChartTitle>
-          <DoughnutChart doughnutChartData={doughnutChartData} />
+          <DoughnutChart doughnutChartData={doughnutChartData.big_category} />
         </SmallChart>
         <SmallChart>
           <ChartTitle>조회 기간 설정</ChartTitle>
@@ -143,7 +143,9 @@ export default function Chart() {
                   <BarChart barChartData={barChartData} />
                 ) : null}
                 {chartType === 2 ? (
-                  <DoughnutChart doughnutChartData={doughnutChartData} />
+                  <DoughnutChart
+                    doughnutChartData={doughnutChartData.big_category}
+                  />
                 ) : null}
                 {chartType === 4 ? (
                   <StackChart stackChartData={stackChartData} />
@@ -159,10 +161,12 @@ export default function Chart() {
                   <BarData barChartData={barChartData} />
                 ) : null}
                 {chartType === 2 ? (
-                  <DoughnutData doughnutChartData={doughnutChartData} />
+                  <DoughnutData
+                    doughnutChartData={doughnutChartData.big_category}
+                  />
                 ) : null}
                 {chartType === 4 ? (
-                  <StackData stackChartData={stackChartData} />
+                  <StackData stackChartData={stackChartData.big_categories} />
                 ) : null}
               </LargeChartExplantion>
             )}
@@ -175,7 +179,7 @@ export default function Chart() {
             style={{ marginBottom: "1rem" }}
           >
             <ChartTitle>상품별 결제금액</ChartTitle>
-            {/* <DataChart /> */}
+            <DataChart dataChartData={dataChartData} />
           </SmallChart2>
           <SmallChart2
             className="ChartTag"
@@ -262,6 +266,7 @@ const SmallChart2 = styled.div`
   height: 100%;
   background-color: white;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  overflow: hidden;
 `;
 
 const ChartTitle = styled.div`

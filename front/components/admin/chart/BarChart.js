@@ -57,7 +57,6 @@ export default function BarChart({ barChartData }) {
     let tempdata = [0, 0, 0, 0, 0, 0, 0];
     if (barChartData) {
       for (let [key, value] of Object.entries(barChartData)) {
-        console.log(`${key}: ${value}`);
         if (key === "MONDAY") {
           tempdata[0] = value;
         } else if (key === "TUESDAY") {

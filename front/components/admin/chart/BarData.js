@@ -11,7 +11,6 @@ export default function BarData({ barChartData }) {
   const [maxValue, setMaxValue] = useState("");
 
   useEffect(() => {
-    console.log(barChartData);
     let tempMinDay = "MONDAY";
     let tempMinValue = 99999999999;
     let tempMaxDay = "SUNDAY";

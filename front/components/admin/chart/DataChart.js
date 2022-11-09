@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import Table from "@mui/material/Table";
@@ -13,50 +13,27 @@ import Paper from "@mui/material/Paper";
 // StyledComponent
 import styled from "styled-components";
 
-export default function DataChart() {
-  const rows = [
-    {
-      Rank: 1,
-      ProductName: "에스티 로더 더블 웨어",
-      BigCategory: "",
-      SmallCategory: "",
-      SaleCount: 54,
-      SalePrice: "4,067,820",
-    },
-    {
-      Rank: 2,
-      ProductName: "에스티 로더 더블 웨어",
-      BigCategory: "",
-      SmallCategory: "",
-      SaleCount: 54,
-      SalePrice: "4,067,820",
-    },
-    {
-      Rank: 3,
-      ProductName: "에스티 로더 더블 웨어",
-      BigCategory: "",
-      SmallCategory: "",
-      SaleCount: 54,
-      SalePrice: "4,067,820",
-    },
-    {
-      Rank: 4,
-      ProductName: "에스티 로더 더블 웨어",
-      BigCategory: "",
-      SmallCategory: "",
-      SaleCount: 54,
-      SalePrice: "4,067,820",
-    },
-    {
-      Rank: 5,
-      ProductName: "에스티 로더 더블 웨어",
-      BigCategory: "",
-      SmallCategory: "",
-      SaleCount: 54,
-      SalePrice: "4,067,820",
-    },
-  ];
-  return (
+export default function DataChart({ dataChartData }) {
+  const [rows, setrows] = useState([]);
+
+  useEffect(() => {
+    let tempList = [];
+    if (dataChartData) {
+      for (let [key, value] of Object.entries(dataChartData)) {
+        let temp = {
+          Rank: value.rank,
+          ProductName: value.product_name,
+          BigCategory: value.big_category_name,
+          SmallCategory: value.small_category_name,
+          SaleCount: value.count,
+          SalePrice: value.sales_amount,
+        };
+        tempList.push(temp);
+      }
+    }
+    setrows(tempList);
+  }, []);
+  return dataChartData ? (
     <Container>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -71,8 +48,8 @@ export default function DataChart() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
+            {rows.map((row, idx) => (
+              <TableRow key={idx}>
                 <TableCell component="th" scope="row">
                   {row.Rank}
                 </TableCell>
@@ -87,7 +64,7 @@ export default function DataChart() {
         </Table>
       </TableContainer>
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`
@@ -96,4 +73,5 @@ const Container = styled.div`
   width: 100%;
   height: 80%;
   padding: 1rem;
+  overflow: hidden;
 `;
