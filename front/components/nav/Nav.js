@@ -132,16 +132,19 @@ export default function Nav() {
   };
   const goSearch1 = () => {
     setFilterValue("최근 등록순");
+    setSearchValue("");
     router.push("/search");
   };
 
   const goSearch2 = () => {
     setFilterValue("평점 높은 순");
+    setSearchValue("");
     router.push("/search");
   };
 
   const goSearch3 = () => {
     setFilterValue("가격 낮은 순");
+    setSearchValue("");
     router.push("/search");
   };
 
@@ -185,13 +188,18 @@ export default function Nav() {
             <div onClick={goHome} style={{ cursor: "pointer" }}>
               <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
             </div>
-            <SearchPaper component="form">
+            <SearchPaper>
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="찾으시는 상품을 검색해주세요"
                 inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
                 onChange={(e) => {
                   setKeyword(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    keywordSearch();
+                  }
                 }}
               />
               <IconButton
@@ -333,13 +341,18 @@ export default function Nav() {
                 </ScrollCategoryTitle>
               </ScrollTagBox>
             </ScrollCategoryContainer>
-            <ScrollSearchPaper component="form">
+            <ScrollSearchPaper>
               <InputBase
                 sx={{ ml: 1, flex: 1, fontSize: "0.8rem" }}
                 placeholder="찾으시는 상품을 검색해주세요"
                 inputProps={{ "aria-label": "찾으시는 상품을 검색해주세요" }}
                 onChange={(e) => {
                   setKeyword(e.target.value);
+                }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    keywordSearch();
+                  }
                 }}
               />
               <IconButton
