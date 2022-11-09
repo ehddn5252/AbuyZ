@@ -14,6 +14,7 @@ import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.inventory.entity.Inventories;
+import com.tasteshopping.product.service.ProductService;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.common.service.UtilService;
@@ -39,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderListRepository orderListRepository;
 
     private final CartService cartService;
+
+    private final ProductService productService;
 
     @Override
     @Transactional
@@ -86,8 +89,9 @@ public class OrderServiceImpl implements OrderService {
         totalPrice += price * orders.getCount();
         orderRepository.save(orders);
         cartRepository.delete(cart);
-        // 배송료 추가
-
+        
+        // 결제시 재고확인해서 상품 상태 확인
+        productService.checkStatus(cart.getInventory().getProduct().getUid());
         orderLists.setTotalPrice(totalPrice);
         return orderLists;
     }
