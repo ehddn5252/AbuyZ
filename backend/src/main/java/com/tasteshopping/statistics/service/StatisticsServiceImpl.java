@@ -120,7 +120,24 @@ public class StatisticsServiceImpl implements StatisticsService {
                         productStatisticsDto.updateSalesAmount(order.getPrice());
                         productStatistics.put(order.getInventory().getProduct().getName(),productStatisticsDto);
                     }
-                    responseDto.setData(productStatistics);
+                    List<ProductSaleRankDto>productSaleRanks = new ArrayList<>();
+                    int count= 0;
+                    for(Map.Entry<String,ProductStatisticsDto> entry : productStatistics.entrySet()) {
+                        if(count++==5)break;
+                        String key = entry.getKey();
+                        ProductStatisticsDto value = entry.getValue();
+                        ProductSaleRankDto productSaleRankDto = ProductSaleRankDto.builder()
+                                                                .big_category_name(value.getBig_category_name())
+                                                                .rank(count)
+                                                                .count(value.getCount())
+                                                                .product_name(key)
+                                                                .small_category_name(value.getSmall_category_name())
+                                                                .sales_amount(value.getSales_amount())
+                                                                .build();
+                        productSaleRanks.add(productSaleRankDto);
+                    }
+
+                    responseDto.setData(productSaleRanks);
                     responseDto.setMessage("조회 성공");
                 }
                 else{
