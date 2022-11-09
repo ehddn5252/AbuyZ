@@ -1,12 +1,107 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+// API
+import axios from "axios";
+
 // mui
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductOption() {
+export default function SaleProductOption(props) {
+  // 부모 상속 --------------------------------------------
+  // 소분류 uid
+  const [smallCategoriesUid, setSmallCategoriesUid] = useState(
+    props.smallCategoriesUid
+  );
+
+  // 상품명
+  const [name, setName] = useState(props.name);
+
+  // 할인
+  const [discountRate, setDiscountRate] = useState(props.discountRate);
+
+  // 대표가격
+  const [price, setPrice] = useState(props.price);
+
+  // 배송비
+  const [deliveryFee, setDeliveryFee] = useState(props.deliveryFee);
+
+  // 브랜드명
+  const [brandName, setBrandName] = useState(props.brandName);
+
+  // 키워드
+  const [keywords, setKeywords] = useState(props.keywords);
+
+  // 메타태그
+  const [metaTag, setMetaTag] = useState(props.metaTag);
+
+  // 대표 이미지
+  const [mainImg, setMainImg] = useState(props.mainImg);
+
+  // 추가 이미지
+  const [extraImg, setExtraImg] = useState(props.extraImg);
+
+  // 상세 이미지
+  const [descImg, setDescImg] = useState(props.descImg);
+
+  // 소분류 uid 실시간 불러오기
+  useEffect(() => {
+    setSmallCategoriesUid(props.smallCategoriesUid);
+  }, [props.smallCategoriesUid]);
+
+  // 상품명 실시간 불러오기
+  useEffect(() => {
+    setName(props.name);
+  }, [props.name]);
+
+  // 할인 실시간 불러오기
+  useEffect(() => {
+    setDiscountRate(props.discountRate);
+  }, [props.discountRate]);
+
+  // 배송비 실시간 불러오기
+  useEffect(() => {
+    setDeliveryFee(props.deliveryFee);
+  }, [props.deliveryFee]);
+
+  // 대표가격 실시간 불러오기
+  useEffect(() => {
+    setPrice(props.price);
+  }, [props.price]);
+
+  // 브랜드명 실시간 불러오기
+  useEffect(() => {
+    setBrandName(props.brandName);
+  }, [props.brandName]);
+
+  // 키워드 실시간 불러오기
+  useEffect(() => {
+    setKeywords(props.keywords);
+  }, [props.keywords]);
+
+  // 메타태그 실시간 불러오기
+  useEffect(() => {
+    setMetaTag(props.metaTag);
+  }, [props.metaTag]);
+
+  // 대표 이미지 실시간 불러오기
+  useEffect(() => {
+    setMainImg(props.mainImg);
+  }, [props.mainImg]);
+
+  // 추가 이미지 실시간 불러오기
+  useEffect(() => {
+    setExtraImg(props.extraImg);
+  }, [props.extraImg]);
+
+  // 상세 이미지 실시간 불러오기
+  useEffect(() => {
+    setDescImg(props.descImg);
+  }, [props.descImg]);
+
+  // 여기서 생성 ------------------------------------------
   // 옵션명 갯수
   const [optionCount, setOptionCount] = useState(1);
 
@@ -49,6 +144,13 @@ export default function SaleProductOption() {
   // 옵션 미설정 시 재고수량
   const [stock, setStock] = useState(0);
 
+  // 옵션 설정 시 ------------------------------------------
+  // 옵션
+  const [options, setOptions] = useState({});
+
+  // 재고
+  const [count, setCount] = useState(0);
+
   // 옵션명 갯수 뺴기
   const optionMinus = () => {
     if (optionCount > 1) {
@@ -76,6 +178,7 @@ export default function SaleProductOption() {
     }
     setOptionValue1(value);
     setCount1(value.length);
+    setOptions({ ...options, [optionName1]: value.join(", ") });
   };
 
   // 옵션명 구하기 2
@@ -91,6 +194,7 @@ export default function SaleProductOption() {
     }
     setOptionValue2(value);
     setCount2(value.length);
+    setOptions({ ...options, [optionName2]: value.join(", ") });
   };
 
   // 옵션명 구하기 3
@@ -106,6 +210,7 @@ export default function SaleProductOption() {
     }
     setOptionValue3(value);
     setCount3(value.length);
+    setOptions({ ...options, [optionName3]: value.join(", ") });
   };
 
   // 옵션 갯수에 맞는 optionNameList 만들기
@@ -133,6 +238,53 @@ export default function SaleProductOption() {
         }
       }
     }
+  };
+
+  // 이벤트 등록 API ------------------------------------------
+  const handleAddProduct = () => {
+    let formData = new FormData();
+
+    let data = {
+      smallCategoriesUid: smallCategoriesUid,
+      name: name,
+      discountRate: discountRate,
+      price: price,
+      deliveryFee: deliveryFee,
+      brandName: brandName,
+      options: options,
+      keywords: keywords,
+      metaTag: metaTag,
+    };
+
+    console.log(data);
+
+    formData.append(
+      "productCreateDto",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+
+    formData.append("file", mainImg);
+    for (let i = 0; i < extraImg.length; i++) {
+      formData.append("file", extraImg[i]);
+    }
+    formData.append("descFile", descImg);
+
+    const accessToken = sessionStorage.getItem("access-token");
+    axios.defaults.headers.common["access_token"] = accessToken;
+
+    axios
+      .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
+        headers: {
+          "Contest-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res, "상품등록에 성공!");
+        changeShow();
+      })
+      .catch((err) => {
+        console.log(err, "상품등록에 실패하였습니다.");
+      });
   };
 
   return (
@@ -347,7 +499,11 @@ export default function SaleProductOption() {
                 </RowBox>
               ) : null}
             </Grid2>
-            <SearchButton onClick={changeShow}>
+            <SearchButton
+              onClick={() => {
+                handleAddProduct();
+              }}
+            >
               상품 등록 후 상세 옵션 설정
             </SearchButton>
             {show ? (
