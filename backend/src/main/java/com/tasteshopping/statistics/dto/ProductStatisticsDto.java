@@ -1,14 +1,12 @@
 package com.tasteshopping.statistics.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ProductStatisticsDto implements Comparable<ProductStatisticsDto>{
     private String big_category_name;
     private String small_category_name;

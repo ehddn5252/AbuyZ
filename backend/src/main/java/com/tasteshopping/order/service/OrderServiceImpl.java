@@ -6,6 +6,7 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
@@ -13,6 +14,7 @@ import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.inventory.entity.Inventories;
+import com.tasteshopping.product.service.ProductService;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import com.tasteshopping.common.service.UtilService;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderListRepository orderListRepository;
 
     private final CartService cartService;
+
+    private final ProductService productService;
 
     @Override
     @Transactional
@@ -84,8 +89,9 @@ public class OrderServiceImpl implements OrderService {
         totalPrice += price * orders.getCount();
         orderRepository.save(orders);
         cartRepository.delete(cart);
-        // 배송료 추가
-
+        
+        // 결제시 재고확인해서 상품 상태 확인
+        productService.checkStatus(cart.getInventory().getProduct().getUid());
         orderLists.setTotalPrice(totalPrice);
         return orderLists;
     }
@@ -149,6 +155,23 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(status);
         orderRepository.save(order);
         return new BaseRes(200, "주문 상태 변경 성공", null);
+    }
+
+    @Override
+    public BaseRes getStatus(String status) {
+        List<Orders> l = orderRepository.findByStatus(status);
+        List<OrderDto> newL = new ArrayList<>();
+        for(int i=0;i<l.size();++i){
+            newL.add(l.get(i).toDto());
+        }
+        return new BaseRes(200, "주문 상태 가져오기 성공", newL);
+    }
+
+    @Override
+    public BaseRes getStatusNum(String status) {
+        List<Orders> l = orderRepository.findByStatus(status);
+
+        return new BaseRes(200, "주문 상태 가져오기 성공", l.size());
     }
 
     @Override

@@ -37,6 +37,8 @@ public class OrderController {
     }
 
 
+
+
     @GetMapping("")
     public ResponseEntity<BaseRes> getOrderLists(@AuthenticationPrincipal String email) {
         List<OrderListDto> orderListDtos = orderListService.getOrderLists(email);
@@ -66,6 +68,18 @@ public class OrderController {
     public ResponseEntity<BaseRes> changeStatus(@AuthenticationPrincipal String email,
                                                 @RequestBody OrderUidReqDto orderUidReqDto){
         return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(orderUidReqDto.getOrder_uid(),orderUidReqDto.getStatus()));
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<BaseRes> getStatus(@AuthenticationPrincipal String email,
+                                                @RequestBody OrderUidReqDto orderUidReqDto){
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getStatus(orderUidReqDto.getStatus()));
+    }
+
+    @GetMapping("/status/num")
+    public ResponseEntity<BaseRes> getStatusNum(@AuthenticationPrincipal String email,
+                                             @RequestBody OrderUidReqDto orderUidReqDto){
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getStatusNum(orderUidReqDto.getStatus()));
     }
 
     @PostMapping("/cancel")

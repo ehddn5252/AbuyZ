@@ -60,7 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/coupon/list/**",
                         "/coupon/create","/event/{\\\\d+}","/event/create",
                         "/modify/{\\\\d+}","/faq/create","/faq/{\\\\d+}","/customer-center/search",
-                        "/customer-center/reply","/customer-center/reply/{\\\\d+}").hasAuthority("ADMIN")
+                        "/customer-center/reply","/customer-center/reply/{\\\\d+}",
+                        "/statistics/**").hasAuthority("ADMIN")
 
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/", "/**").permitAll()
