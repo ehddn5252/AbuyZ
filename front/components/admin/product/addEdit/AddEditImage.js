@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductImage() {
+export default function SaleProductImage(props) {
   const profileRef = useRef(null);
   const extraRef = useRef(null);
   const detailRef = useRef(null);
@@ -19,9 +19,6 @@ export default function SaleProductImage() {
 
   // 상세 이미지 정보
   const [detail, setDetail] = useState(null);
-
-  // 추가 이미지 미리보기
-  const [subImageFile, setSubImageFile] = useState([]);
 
   // 대표 이미지 등록
   const handleClickProfile = () => {
@@ -38,16 +35,19 @@ export default function SaleProductImage() {
     detailRef.current?.click();
   };
 
+  // 추가 이미지 미리보기
+  const [subImageFile, setSubImageFile] = useState([]);
+
   // 대표 이미지 등록 함수
   const uploadProfile = (e) => {
     const profileList = e.target.files[0];
-    console.log(profileList);
-    if (profileList && profileList[0]) {
-      const url = URL.createObjectURL(profileList[0]);
+    props.setMainImg(profileList);
+    if (profileList) {
+      const url = URL.createObjectURL(profileList);
       setProfile({
-        file: profileList[0],
+        file: profileList,
         thumbnail: url,
-        type: profileList[0].type.slice(0, 5),
+        type: profileList.type.slice(0, 5),
       });
     }
   };
@@ -55,8 +55,8 @@ export default function SaleProductImage() {
   // 추가 이미지 등록 함수
   const uploadExtraImage = (e) => {
     const extraList = e.target.files;
-    console.log(extraList);
     const target = Object.values(extraList);
+    props.setExtraImg(target);
     if (target !== []) {
       const a = [];
       for (let i = 0; i < target.length; i++) {
@@ -74,64 +74,17 @@ export default function SaleProductImage() {
 
   // 상세 이미지 등록 함수
   const uploadDetail = (e) => {
-    const profileList = e.target.files;
-    if (profileList && profileList[0]) {
-      const url = URL.createObjectURL(profileList[0]);
+    const profileList = e.target.files[0];
+    props.setDescImg(profileList);
+    if (profileList) {
+      const url = URL.createObjectURL(profileList);
       setDetail({
-        file: profileList[0],
+        file: profileList,
         thumbnail: url,
-        type: profileList[0].type.slice(0, 5),
+        type: profileList.type.slice(0, 5),
       });
     }
   };
-
-  // 대표 이미지 미리보기
-  const showProfile = useMemo(() => {
-    if (!profile && profile == null) {
-      return;
-    }
-    return (
-      <img
-        src={profile.thumbnail}
-        alt={profile.type}
-        onClick={handleClickProfile}
-        width="200px"
-        height="250px"
-      />
-    );
-  }, [profile]);
-
-  // 상세 이미지 미리보기
-  const showDetail = useMemo(() => {
-    if (!detail && detail == null) {
-      return;
-    }
-    return (
-      <img
-        src={detail.thumbnail}
-        alt={detail.type}
-        onClick={handleClickProfile}
-        width="200px"
-        height="250px"
-      />
-    );
-  }, [detail]);
-
-  // // 추가 이미지 미리보기
-  // const showExtra = useMemo(() => {
-  //   if (!subImageFile && subImageFile == null) {
-  //     return;
-  //   }
-  //   return (
-  //     <img
-  //       src={subImageFile.thumbnail}
-  //       alt={subImageFile.type}
-  //       onClick={handleClickExtraImage}
-  //       width="250px"
-  //       height="300px"
-  //     />
-  //   );
-  // }, [subImageFile]);
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>

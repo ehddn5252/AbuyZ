@@ -4,7 +4,7 @@ import styled from "styled-components";
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductInfo() {
+export default function SaleProductInfo(props) {
   // 상품명
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =
@@ -27,6 +27,7 @@ export default function SaleProductInfo() {
   // 상품명
   const nameChange = (event) => {
     setName(event.target.value);
+    props.setName(event.target.value);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -37,6 +38,7 @@ export default function SaleProductInfo() {
   // 할인율
   const saleChange = (event) => {
     setSale(event.target.value);
+    props.setDiscountRate(event.target.value);
   };
   const saleFocus = () => {
     setSalePlaceholder("");
@@ -47,6 +49,7 @@ export default function SaleProductInfo() {
   // 판매가
   const priceChange = (event) => {
     setPrice(event.target.value);
+    props.setPrice(event.target.value);
   };
   const priceFocus = () => {
     setPricePlaceholder("");
@@ -57,6 +60,7 @@ export default function SaleProductInfo() {
   // 배송비
   const feeChange = (event) => {
     setFee(event.target.value);
+    props.setDeliveryFee(event.target.value);
   };
   const feeFocus = () => {
     setFeePlaceholder("");
