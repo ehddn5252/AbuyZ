@@ -38,8 +38,6 @@ export default function ProductInfo() {
     const res = await productDetail(id);
     setProduct(res.data);
     setWish(res.data.wished);
-    const a = [];
-    console.log("ddddd", a.length);
   };
 
   const minus = () => {

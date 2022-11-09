@@ -13,7 +13,7 @@ import styled from "styled-components";
 
 export default function ProductReview() {
   return (
-    <Container>
+    <Container id="reviewView">
       <h1 style={{ fontSize: "3rem" }}>
         리뷰<span style={{ fontSize: "1.5rem" }}>(105)</span>
       </h1>
