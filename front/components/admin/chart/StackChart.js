@@ -1,5 +1,5 @@
 // React
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // StyledComponent
 import styled from "styled-components";
@@ -80,7 +80,17 @@ export const data = {
   ],
 };
 
-export default function CouponItem() {
+export default function StackChart({ stackChartData }) {
+  const [stackLabel, setStackLabel] = useState("");
+  const [data1, setData1] = useState("");
+  const [data2, setData2] = useState("");
+  const [data3, setData3] = useState("");
+  const [data4, setData4] = useState("");
+  const [data5, setData5] = useState("");
+
+  useEffect(() => {
+    console.log(stackChartData);
+  }, []);
   return (
     <Container>
       <Bar options={options} data={data} />

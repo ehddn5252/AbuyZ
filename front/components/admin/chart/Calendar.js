@@ -14,15 +14,22 @@ export default function Calendar({
   startDate,
   endDate,
 }) {
+  const [start, setStart] = useState(startDate);
+  const [end, setEnd] = useState(endDate);
+
+  const ChangeDate = () => {
+    setStartDate(start);
+    setEndDate(end);
+  };
   return (
     <Container>
       <StartDateDiv>
         <StartDateTitle>시작일</StartDateTitle>
         <MyDatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          selected={start}
+          onChange={(date) => setStart(date)}
           selectsStart
-          startDate={startDate}
+          startDate={start}
           dateFormat="yyyy/MM/dd"
         />
       </StartDateDiv>
@@ -30,16 +37,17 @@ export default function Calendar({
       <EndDateDiv>
         <EndDateTitle>종료일</EndDateTitle>
         <MyDatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
+          selected={end}
+          onChange={(date) => setEnd(date)}
           selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
+          startDate={start}
+          endDate={end}
+          minDate={start}
           style={{ width: "40%" }}
           dateFormat="yyyy/MM/dd"
         />
       </EndDateDiv>
+      <CalendarButton onClick={ChangeDate}>조회</CalendarButton>
     </Container>
   );
 }
@@ -244,4 +252,14 @@ const MyDatePicker = styled(DatePicker)`
     margin: 0 10px;
     color: #2b2b2b;
   }
+`;
+
+const CalendarButton = styled.button`
+  background-color: #57a9fb;
+  color: white;
+  border: 1px solid;
+  height: 2.5rem;
+  width: 4rem;
+  font-size: 1rem;
+  cursor: pointer;
 `;

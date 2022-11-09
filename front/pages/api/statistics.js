@@ -13,10 +13,10 @@ export async function getTotalsales(DateDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("총 매출 조회 완료", response);
+          // console.log("총 매출 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("총 매출 조회 실패", response);
+          // console.log("총 매출 조회 실패", response);
           resolve(response);
         }
       });
@@ -33,10 +33,10 @@ export async function getCartStatistics() {
   return new Promise((resolve) => {
     https.get("/statistics/cart").then((response) => {
       if (response.status === 200) {
-        console.log("장바구니 통계 조회 완료", response);
+        // console.log("장바구니 통계 조회 완료", response);
         resolve(response.data);
       } else {
-        console.log("장바구니 통계 조회 실패", response);
+        // console.log("장바구니 통계 조회 실패", response);
         resolve(response);
       }
     });
@@ -58,10 +58,10 @@ export async function getDailyStatistics(DateDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("요일별 조회 완료", response);
+          // console.log("요일별 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("요일별 조회 실패", response);
+          // console.log("요일별 조회 실패", response);
           resolve(response);
         }
       });
@@ -82,10 +82,10 @@ export async function getCategoryStatistics(DateDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("카테고리별 백분율 조회 완료", response);
+          // console.log("카테고리별 백분율 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("카테고리별 백분율 조회 실패", response);
+          // console.log("카테고리별 백분율 조회 실패", response);
           resolve(response);
         }
       });
@@ -106,10 +106,10 @@ export async function getProductStatistics(DateDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("제품별 통계 조회 완료", response);
+          // console.log("제품별 통계 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("제품별 통계 조회 실패", response);
+          // console.log("제품별 통계 조회 실패", response);
           resolve(response);
         }
       });
