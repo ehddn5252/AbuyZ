@@ -68,7 +68,14 @@ export default function ReviewStatus() {
     <div key={e.uid}>
       <div style={{ marginLeft: "2rem" }}>
         <p style={{ fontWeight: "bold" }}>{e.productName}</p>
-        <p>{e.reviewContent}</p>
+        {e.reviewContent.length > 30 ? (
+          <p style={{ margin: 0, marginBottom: "0.5rem" }}>
+            {e.reviewContent.slice(0, 30)}...
+          </p>
+        ) : (
+          <p style={{ margin: 0, marginBottom: "0.5rem" }}>{e.reviewContent}</p>
+        )}
+
         <Rating
           name="text-feedback"
           value={e.rating}
