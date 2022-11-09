@@ -38,3 +38,9 @@ export const filterName = atom({
   default: "최근 등록순",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const bigCategoryValue = atom({
+  key: "bigCategoryValue",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
