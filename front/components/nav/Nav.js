@@ -22,7 +22,7 @@ import Link from "@mui/material/Link";
 import { getMyInfo, logout, refresh } from "../../pages/api/user";
 
 // State
-import { searchName } from "../../states";
+import { searchName, filterName } from "../../states";
 import { useRecoilState } from "recoil";
 
 //  lodash
@@ -36,7 +36,7 @@ export default function Nav() {
   // 검색어
   const [keyword, setKeyword] = useState("");
   const [searchValue, setSearchValue] = useRecoilState(searchName);
-
+  const [filterValue, setFilterValue] = useRecoilState(filterName);
   // window 위치
   const [isNavOn, setIsNavOn] = useState(true);
 
@@ -130,6 +130,20 @@ export default function Nav() {
   const goSearch = () => {
     router.push("/search");
   };
+  const goSearch1 = () => {
+    setFilterValue("최근 등록순");
+    router.push("/search");
+  };
+
+  const goSearch2 = () => {
+    setFilterValue("평점 높은 순");
+    router.push("/search");
+  };
+
+  const goSearch3 = () => {
+    setFilterValue("가격 낮은 순");
+    router.push("/search");
+  };
 
   const goLogin = () => {
     router.push("/login");
@@ -168,7 +182,7 @@ export default function Nav() {
             </UserLink>
           </UserBox>
           <SearchBox>
-            <div onClick={goHome}>
+            <div onClick={goHome} style={{ cursor: "pointer" }}>
               <img src="/images/ABUYZ_LOGO.png" style={{ width: "8rem" }}></img>
             </div>
             <SearchPaper component="form">
@@ -276,13 +290,13 @@ export default function Nav() {
               </Menu>
             </CategoryTagBox>
             <TagBox>
-              <CategoryTitle onClick={goSearch}>신상품</CategoryTitle>
+              <CategoryTitle onClick={goSearch1}>신상품</CategoryTitle>
             </TagBox>
             <TagBox>
-              <CategoryTitle onClick={goSearch}>베스트</CategoryTitle>
+              <CategoryTitle onClick={goSearch2}>베스트</CategoryTitle>
             </TagBox>
             <TagBox>
-              <CategoryTitle onClick={goSearch}>알뜰 쇼핑</CategoryTitle>
+              <CategoryTitle onClick={goSearch3}>알뜰 쇼핑</CategoryTitle>
             </TagBox>
             <TagBox>
               <CategoryTitle onClick={goEvent}>특가/혜택</CategoryTitle>
@@ -299,17 +313,17 @@ export default function Nav() {
                 <ScrollCategoryTitle>카테고리</ScrollCategoryTitle>
               </ScrollCategoryTagBox>
               <ScrollTagBox>
-                <ScrollCategoryTitle onClick={goSearch}>
+                <ScrollCategoryTitle onClick={goSearch1}>
                   신상품
                 </ScrollCategoryTitle>
               </ScrollTagBox>
               <ScrollTagBox>
-                <ScrollCategoryTitle onClick={goSearch}>
+                <ScrollCategoryTitle onClick={goSearch2}>
                   베스트
                 </ScrollCategoryTitle>
               </ScrollTagBox>
               <ScrollTagBox>
-                <ScrollCategoryTitle onClick={goSearch}>
+                <ScrollCategoryTitle onClick={goSearch3}>
                   알뜰 쇼핑
                 </ScrollCategoryTitle>
               </ScrollTagBox>
