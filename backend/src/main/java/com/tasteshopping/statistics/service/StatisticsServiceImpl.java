@@ -24,72 +24,56 @@ import java.util.*;
 @Slf4j
 @AllArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
-    private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final OrderListRepository orderListRepository;
     private final OrderRepository orderRepository;
     @Override
-    public ResponseDto getSales(String email, DateDto dateDto) {
-        return getStatistics(email,dateDto,0);
+    public ResponseDto getSales(DateDto dateDto) {
+        return getStatistics(dateDto,0);
     }
 
     @Override
-    public ResponseDto getCart(String email) {
-        return getStatistics(email,null,1);
+    public ResponseDto getCart() {
+        return getStatistics(null,1);
     }
 
     @Override
-    public ResponseDto getProduct(String email, DateDto dateDto) {
-        return getStatistics(email,dateDto,2);
+    public ResponseDto getProduct(DateDto dateDto) {
+        return getStatistics(dateDto,2);
     }
 
     @Override
-    public ResponseDto getPercentage(String email, DateDto dateDto) {
-        return getStatistics(email,dateDto,3);
+    public ResponseDto getPercentage(DateDto dateDto) {
+        return getStatistics(dateDto,3);
     }
 
     @Override
-    public ResponseDto getDaily(String email, DateDto dateDto) {
-        return getStatistics(email,dateDto,4);
+    public ResponseDto getDaily(DateDto dateDto) {
+        return getStatistics(dateDto,4);
     }
 
-    public ResponseDto getStatistics(String email, DateDto dateDto, int menu){
-        Optional<Users> users = userRepository.findByEmail(email);
+    public ResponseDto getStatistics(DateDto dateDto, int menu){
         ResponseDto responseDto = new ResponseDto();
         List<OrderLists> orderLists;
-        if(!(users.isPresent() && users.get().getUserRoles() == Role.ADMIN)){
-            responseDto.setMessage("권한 없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
+        Date start_date=null,end_date =null;
         int total=0;
-        Date start_date=null;
-        Date end_date=null;
-        if(menu != 1){
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                start_date = formatter.parse(dateDto.getStart_date());
-                end_date = formatter.parse(dateDto.getEnd_date());
-            } catch (ParseException e) {
-                e.printStackTrace();
-                responseDto.setMessage("추가 실패 : 잘못된 날짜양식");
-                responseDto.setData(new ResultDto(false));
-                return responseDto;
-            }
+        if(menu!=1){
+            start_date=dateDto.getStart_date();
+            end_date=dateDto.getEnd_date();
         }
 
         switch (menu){
             case 0:
                 int total_count=0,total_sales=0;
                 orderLists = orderListRepository.findByDateBetween(start_date,end_date);
-                HashMap<String,Integer> result = new HashMap<>();
+                TreeMap<String,Integer> result = new TreeMap<>();
                 for(OrderLists orderList:orderLists){
                     total_sales+=orderList.getTotalPrice();
                     for(Orders order:orderList.getOrders()){
                         total_count+=order.getCount();
                     }
-                    result.put(orderList.getDate().toString(),
-                            result.getOrDefault(orderList.getDate().toString(),0)+orderList.getTotalPrice());
+                    String key = orderList.getDate().toString().split(" ")[0];
+                    result.put(key,result.getOrDefault(key,0)+orderList.getTotalPrice());
                 }
 
                 Map<String,Object>map = new HashMap<>();
@@ -110,14 +94,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
                     String small_category_name = cart.getInventory().getProduct().
                                                     getSmallCategory().getSmallCategoryName();
-
                     CartBigCategoryDto cartBigCategoryDto = cartStatisticsListDto.getBig_categories()
                             .getOrDefault(big_category_name,new CartBigCategoryDto(new TreeMap<>(),0));
 
                     cartBigCategoryDto.update(small_category_name,cart.getProductCount());
 
                     cartStatisticsListDto.update(big_category_name,cartBigCategoryDto);
-
                     total+=cart.getProductCount();
                 }
 
@@ -126,8 +108,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 2:case 3:
-                List<Orders>orders = orderRepository.findAllByDateBetween(start_date,end_date);
-                //상품별 통계 -> 정렬 X
+                List<Orders>orders = orderRepository.findAllByOrderList_DateBetween(start_date,end_date);
                 if(menu==2){
                     TreeMap<String,ProductStatisticsDto>productStatistics=new TreeMap<>();
                     for(Orders order:orders){
@@ -137,8 +118,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
                         productStatisticsDto.updateCount(order.getCount());
                         productStatisticsDto.updateSalesAmount(order.getPrice());
+                        productStatistics.put(order.getInventory().getProduct().getName(),productStatisticsDto);
                     }
                     responseDto.setData(productStatistics);
+                    responseDto.setMessage("조회 성공");
                 }
                 else{
                     PercentStatisticsListDto percentStatistics = new PercentStatisticsListDto(new TreeMap<>(),0);
@@ -159,7 +142,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                         SmallCategoryPercentDto smallCategoryPercentDto = bigCategoryPercentDto.getSmall_category()
                                 .getOrDefault(small_category_name,new SmallCategoryPercentDto(0,0));
                         smallCategoryPercentDto.updateTotalSales(order.getCount()*order.getPrice());
+
+                        percentStatistics.getBig_category().put(big_category_name,bigCategoryPercentDto);
+                        percentStatistics.getBig_category().get(big_category_name).getSmall_category().put(small_category_name,smallCategoryPercentDto);
                     }
+
                     for(String big_category_name :percentStatistics.getBig_category().keySet()){
                         BigCategoryPercentDto bigCategoryPercentDto = percentStatistics.getBig_category().get(big_category_name);
                         double percent = (double) bigCategoryPercentDto.getTotal_sales()
@@ -178,7 +165,6 @@ public class StatisticsServiceImpl implements StatisticsService {
                 }
                 responseDto.setMessage("조회 성공");
                 break;
-                //요일별 통계 -> 정렬 X
             default:
                 Map<String,Integer>dayStatistics = new HashMap<>();
                 orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);

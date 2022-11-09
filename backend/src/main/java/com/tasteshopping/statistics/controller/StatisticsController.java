@@ -17,27 +17,23 @@ import org.springframework.web.bind.annotation.*;
 public class StatisticsController {
     private final StatisticsServiceImpl statisticsService;
     @PostMapping("/sales")
-    public ResponseEntity<ResponseDto>getSales(@AuthenticationPrincipal String email,
-                                               @RequestBody DateDto dateDto){
-        return new ResponseEntity<>(statisticsService.getSales(email,dateDto), HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getSales(@RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getSales(dateDto), HttpStatus.OK);
     }
     @GetMapping("/cart")
-    public ResponseEntity<ResponseDto>getCart(@AuthenticationPrincipal String email){
-        return new ResponseEntity<>(statisticsService.getCart(email), HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getCart(){
+        return new ResponseEntity<>(statisticsService.getCart(), HttpStatus.OK);
     }
     @PostMapping("/daily")
-    public ResponseEntity<ResponseDto>getDaily(@AuthenticationPrincipal String email,
-                                               @RequestBody DateDto dateDto){
-        return new ResponseEntity<>(statisticsService.getDaily(email,dateDto), HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getDaily(@RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getDaily(dateDto), HttpStatus.OK);
     }
     @PostMapping("/category-percentage")
-    public ResponseEntity<ResponseDto>getPercentage(@AuthenticationPrincipal String email,
-                                                    @RequestBody DateDto dateDto){
-        return new ResponseEntity<>(statisticsService.getPercentage(email,dateDto), HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getPercentage(@RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getPercentage(dateDto), HttpStatus.OK);
     }
     @PostMapping("/product")
-    public ResponseEntity<ResponseDto>getProduct(@AuthenticationPrincipal String email,
-                                                    @RequestBody DateDto dateDto){
-        return new ResponseEntity<>(statisticsService.getProduct(email,dateDto), HttpStatus.OK);
+    public ResponseEntity<ResponseDto>getProduct(@RequestBody DateDto dateDto){
+        return new ResponseEntity<>(statisticsService.getProduct(dateDto), HttpStatus.OK);
     }
 }
