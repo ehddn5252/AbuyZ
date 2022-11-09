@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 export default function ExchangeReturn() {
   return (
-    <div style={{ padding: "1rem" }}>
+    <div id="changeView" style={{ padding: "1rem" }}>
       <h1>교환/반품 안내</h1>
       <Container>
         <p style={{ margin: 0 }}>위탁판매자정보</p>

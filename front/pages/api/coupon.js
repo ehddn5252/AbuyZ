@@ -51,6 +51,34 @@ export async function inquirecoupon() {
   });
 }
 
+// 관리자 쿠폰 수정
+export async function modifycoupon(couponDto, couponNum) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .put(`/coupon/modify/${couponNum}`, {
+        name: couponDto.name,
+        discount_price: couponDto.discount_price,
+        start_date: couponDto.start_date,
+        end_date: couponDto.end_date,
+        big_categories_uid: couponDto.big_categories_uid,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("쿠폰 수정 완료", response);
+          resolve(response.data);
+        } else {
+          console.log("쿠폰 수정 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}
+
 // 관리자 쿠폰 삭제
 export async function delcoupon(couponNum) {
   const accessToken = sessionStorage.getItem("access-token");
@@ -62,6 +90,7 @@ export async function delcoupon(couponNum) {
         if (response.status === 200) {
           console.log("쿠폰 삭제 완료", response);
           resolve(response.data);
+          location.reload();
         } else {
           console.log("쿠폰 삭제 실패", response);
           resolve(response);

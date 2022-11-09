@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
 
@@ -156,6 +156,10 @@ export default function CouponInquire() {
     setEndDate(new Date());
     setCouponArray([]);
   };
+
+  useEffect(() => {
+    getCoupon();
+  }, []);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>

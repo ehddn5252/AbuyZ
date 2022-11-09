@@ -17,17 +17,22 @@ import { useRouter } from "next/router";
 // API
 import { productDetail } from "../../pages/api/product";
 import { regiswish, delwish } from "../../pages/api/wish";
+import { regiscart } from "../../pages/api/cart";
 
+// State
+import { paymentNum } from "../../states";
+import { useRecoilState } from "recoil";
 export default function ProductInfo() {
   const router = useRouter();
 
   const [wish, setWish] = useState(false);
   const [productId, setProductId] = useState(0);
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState([]);
   const [count, setCount] = useState(1);
   const [option, setOption] = useState([]);
   const [option2, setOption2] = useState([]);
 
+  const [paymentValue, setPaymentValue] = useRecoilState(paymentNum);
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
@@ -42,15 +47,45 @@ export default function ProductInfo() {
   };
 
   // 장바구니 가기
-  const goBasket = () => {
+  const goBasket = async () => {
+    console.log(product.productOptionListDtoList.length);
+    let cartDto;
+    if (product.productOptionListDtoList.length !== 1) {
+      let optionValues = {};
+      optionValues[product.productOptionListDtoList[0].name] =
+        product.productOptionListDtoList[0].value;
+      cartDto = {
+        productsUid: product.products.uid,
+        productCount: count,
+      };
+      cartDto["optionValues"] = optionValues;
+    } else if (product.productOptionListDtoList.length === 1) {
+      cartDto = {
+        productsUid: product.products.uid,
+        productCount: count,
+        optionValues: {
+          x: "x",
+        },
+      };
+    }
+    await regiscart(cartDto);
     router.push("/basket");
   };
 
   // 바로 결제하기
   const goPayment = () => {
-    router.push("/payment");
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        setPaymentValue(productId);
+        router.push("/payment");
+      } else {
+        alert("로그인이 필요한 기능입니다.");
+        router.push("/login");
+      }
+    }
   };
-
+  // Load
   useEffect(() => {
     const pathname = window.location.pathname;
     const id = pathname.split("/")[2];
@@ -97,7 +132,7 @@ export default function ProductInfo() {
     }
   };
 
-  return product ? (
+  return product.length !== 0 ? (
     <Container>
       <ImgBox>
         <MajorImgBox>

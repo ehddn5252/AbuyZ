@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
+// 컴포넌트
 import InquireProduct from "../../../components/admin/product/inquire/InquireProduct";
 
 export default function Product() {
