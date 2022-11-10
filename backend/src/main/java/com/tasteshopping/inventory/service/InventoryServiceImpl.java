@@ -11,7 +11,6 @@ import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.product.entity.Products;
-import com.tasteshopping.inventory.exception.InventoryNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.repository.ProductOptionRepository;
@@ -117,7 +116,7 @@ public class InventoryServiceImpl implements InventoryService {
     public BaseRes checkBasicByInventory(String email, CartDto cartDto) {
         cartService.putCart(email,cartDto);
         Users user =  userRepository.findByEmail(email).get();
-        Carts cart= cartRepository.findByUserAndUid(user);
+        Carts cart= cartRepository.findByUserAndCurrentUid(user);
         Inventories inventory = cart.getInventory();
         
         int remainingStoke = inventory.getCount()-cart.getProductCount();

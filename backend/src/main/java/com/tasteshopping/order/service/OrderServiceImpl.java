@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
         // 장바구니 가져와서 orderList 만들기
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(Status.PROCESS.toString());
-        Carts cart = cartRepository.findByUserAndUid(user);
+        Carts cart = cartRepository.findByUserAndCurrentUid(user);
         orderLists = pay(cart,orderLists,user,0);
 
         // 아래는 배송료 추가하는 로직

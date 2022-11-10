@@ -53,4 +53,9 @@ public class CartController {
         List<CartResDto> cartDtoList  =cartService.getCart(email);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 조회 성공!",cartDtoList));
     }
+
+    @PutMapping()
+    public ResponseEntity<BaseRes> putCountCart(@AuthenticationPrincipal String email,@RequestBody CartPutDto cartPutDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "장바구니 조회 성공!",cartService.putCartByCount(email,cartPutDto.getCartUid(),cartPutDto.getProductCount())));
+    }
 }
