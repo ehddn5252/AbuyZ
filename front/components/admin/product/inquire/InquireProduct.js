@@ -56,6 +56,10 @@ export default function SaleProductSearch() {
   };
 
   // 상품 검색 키워드
+
+  // 상품 전체 목록
+  const [productInfo, setProductInfo] = useState([]);
+
   // 카테고리
   // 대분류
   const [bigCategory, setBigCategory] = useState("");
@@ -74,12 +78,10 @@ export default function SaleProductSearch() {
   const [keyword, setKeyword] = useState("");
 
   // 판매상태
-  // 전체 : 0, 판매중 : 1, 판매완료 : 2
+  // 전체 : 0, 판매중 : 1, 승인대기 : 2, 판매완료 : 3
   const [checkStatus, setCheckStatus] = useState(0);
 
   // 기간
-  // 기준기간
-  const [standDate, setStandDate] = useState(0);
 
   // 시작일
   const [startDate, setStartDate] = useState(new Date());
@@ -92,7 +94,67 @@ export default function SaleProductSearch() {
 
   const getProduct = async () => {
     const p = await inquireProduct();
-    console.log(p);
+    const tmp = [];
+    for (let i = 0; i < p.length; i++) {
+      // 대분류 카테고리
+      if (p[i].bigCategoryName === bigCategory || bigCategory === "") {
+        // 소분류 카테고리
+        if (p[i].smallCategoryName === smallCategory || smallCategory === "") {
+          // 상품명
+          if (p[i].name.includes(name) === true || name === "") {
+            // 브랜드명
+            if (
+              p[i].brandName.includes(brandName) === true ||
+              brandName === ""
+            ) {
+              // 키워드
+              if (
+                p[i].productKeywords.includes(keyword) === true ||
+                keyword === ""
+              ) {
+                // 날짜
+                if (
+                  moment(startDate).format().slice(0, 10) ==
+                    moment(endDate).format().slice(0, 10) ||
+                  (moment(startDate).format().slice(0, 10) <=
+                    p[i].date.slice(0, 10) &&
+                    p[i].date.slice(0, 10) <=
+                      moment(endDate).format().slice(0, 10))
+                ) {
+                  // 판매상태
+                  // 전체
+                  if (checkStatus === 0) {
+                    tmp.push(p[i]);
+                  }
+                  // 판매중
+                  else if (
+                    checkStatus === 1 &&
+                    p[i].status.toLowerCase() === "selling"
+                  ) {
+                    tmp.push(p[i]);
+                  }
+                  // 승인대기
+                  else if (
+                    checkStatus === 2 &&
+                    p[i].status.toLowerCase() === "getting_ready"
+                  ) {
+                    tmp.push(p[i]);
+                  }
+                  // 판매완료
+                  else if (
+                    checkStatus === 3 &&
+                    p[i].status.toLowerCase() === "sold_out"
+                  ) {
+                    tmp.push(p[i]);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    setProductInfo(tmp);
   };
 
   const getProductStatus = async () => {
@@ -100,13 +162,9 @@ export default function SaleProductSearch() {
     console.log(ps);
   };
 
-  // 상품 목록
-  const [productInfo, setProductInfo] = useState([]);
+  console.log(productInfo, "~~~~");
 
-  // console.log(bigCategory, smallCategory);
-  // console.log(name, brandName, keyword);
-  // console.log(checkStatus);
-  // console.log(standDate, startDate, endDate);
+  const [update, setUpdate] = useState(0);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -239,7 +297,6 @@ export default function SaleProductSearch() {
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         {/* 기간 */}
         <Period
-          setStandDate={setStandDate}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           reset={reset}
@@ -247,11 +304,17 @@ export default function SaleProductSearch() {
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
           <ResetButton onClick={() => setReset(reset + 1)}>초기화</ResetButton>
-          <SearchButton onClick={() => getProduct()}>검색</SearchButton>
+          <SearchButton
+            onClick={() => {
+              getProduct(), setUpdate(update + 1);
+            }}
+          >
+            검색
+          </SearchButton>
         </ButtonBox>
       </Grid2>
       {/* 상품 목록 */}
-      <InquireList />
+      <InquireList productInfo={productInfo} />
     </Grid2>
   );
 }
