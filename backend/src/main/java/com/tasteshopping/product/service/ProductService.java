@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductService {
 
@@ -24,7 +23,7 @@ public interface ProductService {
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
 
-    List<ProductDto> getRandom2();
+    List<ProductDto> getRandom();
 
     @Transactional
     void productStatusSetting();
@@ -67,4 +66,6 @@ public interface ProductService {
     void putStatus(int uid,String status );
 
     void checkStatus(int uid);
+
+    List<ProductBoDto> getBoAllProduct();
 }
