@@ -57,10 +57,10 @@ export async function searchReview(searchDto) {
       .post("/review/searchReview", searchDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("리뷰관리 - 조회 완료", response);
+          // console.log("리뷰관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("리뷰관리 - 조회 실패", response);
+          // console.log("리뷰관리 - 조회 실패", response);
           resolve(response);
         }
       })

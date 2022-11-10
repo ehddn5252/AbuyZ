@@ -26,20 +26,13 @@ export default function Review() {
   ]);
 
   const [searchDto, setSearchDto] = useState({
-    // bigCategoryUid: 1,
-    // smallCategoryUid: 1,
-    // productName: "에어",
-    // content: "",
-    // startDate: "2022-11-04",
-    // endDate: "2022-11-08",
-    // isAnswered: 0,
     isAnswered: 0,
-    startDate: "2022-11-04",
-    bigCategoryUid: 2,
-    smallCategoryUid: 8,
-    productName: "에어",
+    startDate: "",
+    bigCategoryUid: 0,
+    smallCategoryUid: 0,
+    productName: "",
     content: "",
-    endDate: "2022-11-08",
+    endDate: "",
   });
 
   const loadData = async (searchDto) => {
