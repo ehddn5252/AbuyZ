@@ -8,12 +8,14 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ProductStatisticsDto implements Comparable<ProductStatisticsDto>{
+    private String product_name;
     private String big_category_name;
     private String small_category_name;
     private int count;
     private int sales_amount;
 
-    public ProductStatisticsDto(String big_category_name,String small_category_name){
+    public ProductStatisticsDto(String product_name, String big_category_name,String small_category_name){
+        this.product_name = product_name;
         this.big_category_name = big_category_name;
         this.small_category_name = small_category_name;
     }
