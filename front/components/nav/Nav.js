@@ -34,7 +34,6 @@ export default function Nav() {
 
   // User data
   const [username, setUsername] = useState("");
-  const [atoken, setAToken] = useState("");
 
   // 검색어
   const [keyword, setKeyword] = useState("");
@@ -80,11 +79,13 @@ export default function Nav() {
     }
     router.push("/search");
   };
+
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
     setUsername(res.data.name);
   };
+
   let changtoken = setInterval(() => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -109,7 +110,11 @@ export default function Nav() {
     await logout();
     // 토큰 재발급 함수 삭제
     clearInterval(changtoken);
-    router.reload();
+    if (router.pathname === "/") {
+      router.reload();
+    } else {
+      router.push("/");
+    }
   };
 
   useEffect(() => {
@@ -119,7 +124,7 @@ export default function Nav() {
         getName();
       }
     }
-  }, [atoken]);
+  }, [router.pathname]);
 
   // 카테고리 값 가져오기
   const getCategory = async () => {
