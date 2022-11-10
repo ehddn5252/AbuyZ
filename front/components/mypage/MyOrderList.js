@@ -23,6 +23,7 @@ export default function MyOrderList() {
     const res = await getOrderList();
     res.data.sort((a, b) => b.uid - a.uid);
     setOrderBundle(res.data);
+    console.log(res.data);
   };
   useEffect(() => {
     bundle();

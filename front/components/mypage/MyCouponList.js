@@ -15,6 +15,7 @@ export default function MyCouponList() {
     const res = await couponlist();
     // res.data.result.sort((a,b) => a.used - b.used)
     setCouponList(res.data.result);
+    console.log(res.data.result);
   };
   useEffect(() => {
     ccoupon();
@@ -44,44 +45,35 @@ export default function MyCouponList() {
             >
               <div
                 style={
-                  // coupon.used === 0
-                  //   ? {
-                  //       backgroundImage: "url(/images/coupon.png)",
-                  //       resize: "cover",
-                  //       backgroundSize: "27rem",
-                  //       backgroundRepeat: "no-repeat",
-                  //       width: "100%",
-                  //       height: "14rem",
-                  //     }
-                  //   : coupon.used === 1
-                  //   ? {
-                  //       backgroundImage: "url(/images/coupon_completed.png)",
-                  //       resize: "cover",
-                  //       backgroundSize: "27rem",
-                  //       backgroundRepeat: "no-repeat",
-                  //       width: "100%",
-                  //       height: "14rem",
-                  //     }
-                  //   : {
-                  //       backgroundImage: "url(/images/coupon_expired.png)",
-                  //       resize: "cover",
-                  //       backgroundSize: "27rem",
-                  //       backgroundRepeat: "no-repeat",
-                  //       // backgroundColor: "black",
-                  //       width: "100%",
-                  //       height: "14rem",
-                  //     }
-                  {
-                    backgroundImage: "url(/images/coupon.png)",
-                    resize: "cover",
-                    backgroundSize: "27rem",
-                    backgroundRepeat: "no-repeat",
-                    width: "100%",
-                    height: "14rem",
-                  }
+                  coupon.status === "사용가능"
+                    ? {
+                        backgroundImage: "url(/images/coupon.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        width: "100%",
+                        height: "14rem",
+                      }
+                    : coupon.status === "사용"
+                    ? {
+                        backgroundImage: "url(/images/coupon_completed.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        width: "100%",
+                        height: "14rem",
+                      }
+                    : {
+                        backgroundImage: "url(/images/coupon_expired.png)",
+                        resize: "cover",
+                        backgroundSize: "27rem",
+                        backgroundRepeat: "no-repeat",
+                        // backgroundColor: "black",
+                        width: "100%",
+                        height: "14rem",
+                      }
                 }
               >
-                {/* {coupon.used === 0 ? ( */}
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <div
                     style={{
@@ -92,7 +84,7 @@ export default function MyCouponList() {
                     }}
                   >
                     <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
-                      {coupon.discount_price}원
+                      {coupon.discount_price.toLocaleString("ko-KR")}원
                     </span>
                     <br></br>
                     <p>{coupon.name}</p>
@@ -106,46 +98,38 @@ export default function MyCouponList() {
                       {coupon.end_date.slice(0, 10)}
                     </span>
                   </div>
-                  <div
-                    style={{
-                      flex: 4,
-                      marginTop: "4rem",
-                      textAlign: "center",
-                    }}
-                  >
-                    <span
+
+                  {coupon.status === "사용가능" ? (
+                    <div
                       style={{
-                        fontWeight: "bold",
-                        fontSize: "1.1rem",
-                        color: "white",
+                        flex: 4,
+                        marginTop: "4rem",
+                        textAlign: "center",
                       }}
                     >
-                      쿠폰으로
-                    </span>
-                    <br></br>
-                    <span style={{ color: "white" }}>쇼핑하기</span>
-                    <br></br>
-                    <br></br>
-                    <ArrowCircleRightOutlinedIcon
-                      sx={{ width: "2.5rem", height: "2.5rem", color: "white" }}
-                    />
-                  </div>
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                          color: "white",
+                        }}
+                      >
+                        쿠폰으로
+                      </span>
+                      <br></br>
+                      <span style={{ color: "white" }}>쇼핑하기</span>
+                      <br></br>
+                      <br></br>
+                      <ArrowCircleRightOutlinedIcon
+                        sx={{
+                          width: "2.5rem",
+                          height: "2.5rem",
+                          color: "white",
+                        }}
+                      />
+                    </div>
+                  ) : null}
                 </div>
-                {/* ) : (
-                  <div style={{ padding: "2rem", color: "#aaaaaa" }}>
-                    <span style={{ fontSize: "1.7rem", fontWeight: "bold" }}>
-                      {coupon.saleprice}
-                    </span>
-                    <br></br>
-                    <p>{coupon.couponName}</p>
-                    <br></br>
-                    <span>사용 카테고리: {coupon.category}</span>
-                    <br></br>
-                    <span style={{ color: "#aaaaaa" }}>
-                      {coupon.startPeriod} ~ {coupon.expirationPeriod}
-                    </span>
-                  </div>
-                )} */}
               </div>
             </Grid>
           ))}

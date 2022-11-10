@@ -14,9 +14,7 @@ export default function MyComplainList() {
   const [complainList, setComplainList] = useState([]);
   const ccomplain = async () => {
     const res = await mycenter();
-    // res.data.sort((a, b) => b.uid - a.uid);
-
-    console.log("넌뭐야", res.data);
+    res.data.sort((a, b) => b.uid - a.uid);
     setComplainList(res.data);
   };
   useEffect(() => {
@@ -26,26 +24,20 @@ export default function MyComplainList() {
   return (
     <MyComplainContainer>
       <MajorTitle>문의 내역</MajorTitle>
-      <hr
-        style={{
-          height: "0.3rem",
-          background: "#7895b2",
-          borderRadius: "1rem",
-        }}
-      />
+      <Hr />
+
       {complainList.length ? (
         <ComplainListBox>
-          <MyComplainItem complain={complainList[0]} />
-          <MyComplainItem complain={complainList[1]} />
+          {complainList.map((e) => (
+            <MyComplainItem complain={e} />
+          ))}
         </ComplainListBox>
       ) : (
         <BlankBox>
           <QuizOutlinedIcon
             sx={{ fontSize: "4rem", color: "rgb(86, 169, 241,0.7)" }}
           />
-          <p style={{ fontSize: "2rem", color: "rgb(86, 169, 241,0.7)" }}>
-            문의하신 내역이 없습니다
-          </p>
+          <NoComplain>문의하신 내역이 없습니다</NoComplain>
         </BlankBox>
       )}
     </MyComplainContainer>
@@ -77,4 +69,15 @@ const BlankBox = styled.div`
   font-size: 3rem;
   font-weight: bolder;
   color: #aaaaaa;
+`;
+
+const Hr = styled.hr`
+  height: 0.3rem;
+  background: #7895b2;
+  border-radius: 1rem;
+`;
+
+const NoComplain = styled.p`
+  font-size: 2rem;
+  color: rgb(86, 169, 241, 0.7);
 `;

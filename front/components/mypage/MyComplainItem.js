@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 export default function MyComplainItem({ complain }) {
   const [answerOpen, setAnswerOpen] = useState(false);
+
   const ansOpen = () => {
     setContentOpen(!contentOpen);
     setAnswerOpen(!answerOpen);
@@ -24,7 +25,8 @@ export default function MyComplainItem({ complain }) {
               [{complain.customerCenterCategory}] {complain.title}
               <br></br>
               <span style={{ color: "#aaaaaa" }}>
-                {complain.date.slice(0, 10)} {complain.date.slice(11, 16)}
+                {/* {complain.start_date.slice(0, 10)}{" "}
+                {complain.start_date.slice(11, 16)} */}
               </span>
             </ComplainTitle>
 

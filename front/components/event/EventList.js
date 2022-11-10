@@ -9,18 +9,18 @@ export default function EventList() {
   const eevent = async () => {
     const res = await inquireEvent();
     console.log(res.data);
-    // setEventList(res.data);
+    setEventList(res.data);
   };
   useEffect(() => {
     eevent();
   }, []);
   return (
     <div>
-      {eventList.length ? (
+      {eventList.length > 0 ? (
         <div>
-          {eventList.map((e) => {
-            <EventItem key={e.id} event={e} />;
-          })}
+          {eventList.map((e) => (
+            <EventItem key={e.id} event={e} />
+          ))}
         </div>
       ) : (
         <BlankBox>
