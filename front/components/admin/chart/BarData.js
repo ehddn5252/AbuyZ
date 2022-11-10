@@ -45,7 +45,9 @@ export default function BarData({ barChartData }) {
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#ffe27f" }}>
         <TitleText>최고 금액(원)</TitleText>
-        <ResultText style={{ color: "#fda700" }}>{maxValue / 1000}K</ResultText>
+        <ResultText style={{ color: "#fda700" }}>
+          {(maxValue / 1000).toLocaleString("ko-KR")}K
+        </ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
         <TitleText>제일 안 팔리는 요일</TitleText>
@@ -53,7 +55,9 @@ export default function BarData({ barChartData }) {
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#9ce6a9" }}>
         <TitleText>최저 금액(원)</TitleText>
-        <ResultText style={{ color: "#2daf43" }}>{minValue / 1000}K</ResultText>
+        <ResultText style={{ color: "#2daf43" }}>
+          {(minValue / 1000).toLocaleString("ko-KR")}K
+        </ResultText>
       </TotalDiv>
     </Container>
   );

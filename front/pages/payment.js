@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MyShippingInfo from "../components/payment/MyShippingInfo";
 import PaymentProcess from "../components/payment/PaymentProcess";
 import ProductSaleInfo from "../components/payment/ProductSaleInfo";
 import ProductSimpleInfo from "../components/payment/ProductSimpleInfo";
 import { Container } from "@mui/system";
+// State
+import { paymentProduct } from "../states/index";
+import { useRecoilState } from "recoil";
 export default function Payment() {
+  const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
+
+  useEffect(() => {
+    console.log(paymentValue);
+  }, []);
   return (
     <Container maxWidth="xl" sx={{ my: 10 }}>
       <Center>

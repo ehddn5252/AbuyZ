@@ -10,7 +10,7 @@ export default function LineData({ lineChartData, day }) {
       <TotalDiv style={{ backgroundColor: "#fff5d6" }}>
         <TitleText>총 매출액(원)</TitleText>
         <ResultText className="countNum" style={{ color: "#fda700" }}>
-          {lineChartData.total_sales / 1000}
+          {(lineChartData.total_sales / 1000).toLocaleString("ko-KR")}
           <span>K</span>
         </ResultText>
       </TotalDiv>

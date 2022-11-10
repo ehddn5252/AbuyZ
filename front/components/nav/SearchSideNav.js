@@ -70,8 +70,16 @@ export default function SearchSideNav({
           }}
         >
           <FormControlLabel value="0" control={<Radio />} label="무료" />
-          <FormControlLabel value="1" control={<Radio />} label="3000원 미만" />
-          <FormControlLabel value="2" control={<Radio />} label="3000원 이상" />
+          <FormControlLabel
+            value="1"
+            control={<Radio />}
+            label="3,000원 미만"
+          />
+          <FormControlLabel
+            value="2"
+            control={<Radio />}
+            label="3,000원 이상"
+          />
         </RadioGroup>
       </FormControl>
       <FormControl sx={{ marginTop: "1rem" }}>
