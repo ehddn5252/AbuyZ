@@ -41,9 +41,8 @@ public class CartController {
         }
     }
 
-    @DeleteMapping()
-    public ResponseEntity<BaseRes> deleteCart(@AuthenticationPrincipal String email, @RequestBody CartUidReqDto cartUidReqDto) {
-        int cartsUid = cartUidReqDto.getCarts_uid();
+    @DeleteMapping("/{cartsUid}")
+    public ResponseEntity<BaseRes> deleteCart(@AuthenticationPrincipal String email, @PathVariable int cartsUid) {
         BaseRes baseRes = cartService.deleteCart(email,cartsUid);
         return ResponseEntity.status(baseRes.getStatusCode()).body(baseRes);
     }
