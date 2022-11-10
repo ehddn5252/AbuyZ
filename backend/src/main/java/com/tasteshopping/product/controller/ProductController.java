@@ -27,10 +27,8 @@ public class ProductController {
     private final ProductKeywordService productKeywordService;
 
     @GetMapping("/random")
-    public ResponseEntity<BaseRes> getRandom(@AuthenticationPrincipal String email, @PathVariable int uid) {
-        productService.getRandom();
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", null));
-
+    public ResponseEntity<BaseRes> getRandom(@AuthenticationPrincipal String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", productService.getRandom2()));
     }
 
     @PutMapping("/status/setting/{uid}")
@@ -42,7 +40,7 @@ public class ProductController {
     @PutMapping("/status/setting")
     public ResponseEntity<BaseRes> settingStatus(@AuthenticationPrincipal String email) {
         productService.productStatusSetting();
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "모든 상품 상태 세팅 성공!",null ));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "모든 상품 상태 세팅 성공!", null));
     }
 
 

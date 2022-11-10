@@ -176,14 +176,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void getRandom() {
-//        List<Products> l = productRepository.findByRand();
+    public List<ProductDto> getRandom() {
+        List<Products> l = productRepository.findByRand();
+        List<ProductDto> new_l = new ArrayList<>();
+        for (int i = 0; i < l.size(); ++i) {
+            new_l.add(l.get(i).toDto());
+        }
+        return new_l;
+    }
+
+    @Override
+    public List<ProductDto> getRandom2() {
+        int[] r= {1,2,3};
+        int maxSize = 20;
+        List<Products> l = productRepository.findAllFetchJoin();
+        Collections.shuffle(l);
+        List<ProductDto> new_l = new ArrayList<>();
+        for (int i = 0; i <maxSize; ++i) {
+            new_l.add(l.get(i).toDto());
+        }
+        return new_l;
     }
 
     @Override
     @Transactional
     public void productStatusSetting() {
-        List<Products> productsList = productRepository.findAll();
+        List<Products> productsList = productRepository.findAllFetchJoin();
 
         for(int i=0;i<productsList.size();++i){
             Products product = productsList.get(i);
@@ -888,7 +906,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProduct() {
-        List<Products> l = productRepository.findAll();
+        List<Products> l = productRepository.findAllFetchJoin();
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());
