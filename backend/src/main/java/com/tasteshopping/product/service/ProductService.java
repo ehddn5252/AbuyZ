@@ -65,4 +65,6 @@ public interface ProductService {
     void putStatus(int uid,String status );
 
     void checkStatus(int uid);
+
+    void getRandom();
 }

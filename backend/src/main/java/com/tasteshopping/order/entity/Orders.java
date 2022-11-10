@@ -49,7 +49,7 @@ public class Orders {
     Coupons coupon;
 
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
-    @JoinColumn(name="orders_uid")
+    @JoinColumn(name="reviews_uid")
     private Reviews review;
 
     public OrderDto toDto() {

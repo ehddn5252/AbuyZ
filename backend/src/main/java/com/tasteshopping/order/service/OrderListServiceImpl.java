@@ -46,7 +46,7 @@ public class OrderListServiceImpl implements OrderListService {
 
     @Override
     public BaseRes getOrderFromOrderListsUid(String email, int order_lists_uid) {
-        Optional<OrderLists> ordersOptional = orderListRepository.findById(order_lists_uid);
+        Optional<OrderLists> ordersOptional = orderListRepository.findFetchJoinById(order_lists_uid);
         if (ordersOptional.isPresent()) {
             Users user = ordersOptional.get().getUser();
             Optional<Users> loginUser = userRepository.findByEmail(email);
@@ -59,7 +59,6 @@ public class OrderListServiceImpl implements OrderListService {
             List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
             for (int i = 0; i < ordersList.size(); ++i) {
                 OrderDto tmpOrdersList = ordersList.get(i).toDto();
-
                 Inventories inventories = ordersList.get(i).getInventory();
                 InventoryDto inventoryDto = inventories.toDto();
                 inventoryDto.setProductDto(inventories.getProduct().toDto());

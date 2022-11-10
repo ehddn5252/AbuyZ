@@ -24,6 +24,7 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
             "where ol.date between :#{#start_date} and :#{#end_date}")
     List<Orders> findAllByDateBetween(@Param("start_date")Date start_date, @Param("end_date")Date end_date);
 
+    @Query("select o from Orders o join fetch Reviews r on o.review=r.order where o.orderList=:orderList")
     List<Orders> findByOrderList(OrderLists orderList);
 
     List<Orders> findByStatus(String status);
