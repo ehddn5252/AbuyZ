@@ -3,6 +3,7 @@ package com.tasteshopping.product.dto;
 import com.tasteshopping.wish.dto.IsWished;
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -15,6 +16,7 @@ public class ProductDetailDto {
 
     ProductDto products;
     List<ProductPictureDto> productPictureDto;
-    List<ProductOptionListDto> productOptionListDtoList;
+    HashMap<String,List> productOptionListMap;
+//    List<ProductOptionListDto> productOptionListDtoList;
     private IsWished isWished;
 }
