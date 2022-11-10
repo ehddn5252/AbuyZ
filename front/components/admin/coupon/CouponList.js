@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Pagination from "./Pagination";
 
 // 컴포넌트
 import EditCouponModal from "./EditCouponModal";
@@ -11,7 +12,6 @@ import { delcoupon } from "../../../pages/api/coupon";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import "react-datepicker/dist/react-datepicker.css";
-import Pagination from "./Pagination";
 
 export default function CouponList(props) {
   // 체크된 아이템을 담을 배열
@@ -70,14 +70,17 @@ export default function CouponList(props) {
     }
   };
 
+  // 전체 삭제
   const handleDel = () => {
     checkItems.forEach((e) => delcoupon(e));
   };
 
+  // 수정사항 저장
   const handleSave = () => {
     window.location.reload();
   };
 
+  // 페이지네이션
   const [limit, setLimit] = useState(9);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
@@ -170,8 +173,6 @@ export default function CouponList(props) {
 }
 
 export const MyBox = styled(Box)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
   .MuiDataGrid-columnHeaders {
     width: 100%;
     background: #dadada;
@@ -215,18 +216,6 @@ const Td = styled.td`
   height: fit-content;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
-`;
-
-const Edit = styled.button`
-  width: fit-content;
-  background-color: #57a9fb;
-  font-size: 1rem;
-  color: white;
-  border: none;
-  padding: 0.6rem;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const DeleteButton = styled.button`

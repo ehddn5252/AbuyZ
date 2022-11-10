@@ -3,7 +3,7 @@ import https from "./https.js";
 // 모든 상품 정보 조회
 export async function inquireProduct() {
   return new Promise((resolve) => {
-    https.get("/product").then((response) => {
+    https.get("/product/bo").then((response) => {
       if (response.status === 200) {
         console.log("모든 상품 가져오기 성공", response);
         resolve(response.data.data);
