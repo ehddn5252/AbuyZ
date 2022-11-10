@@ -13,11 +13,10 @@ import styled from "styled-components";
 // API
 import { changeCart, delcart } from "../../pages/api/cart";
 
-export default function BasketItem({ basket }) {
+export default function BasketItem({ basket, setReload, reload }) {
   const [ccount, setCcount] = useState(basket.productCount);
   const [option, setOption] = useState([]);
   const [bp, setBp] = useState(basket.productDto.price);
-
   const minus = () => {
     if (ccount > 0) {
       setCcount(ccount - 1);
@@ -30,6 +29,11 @@ export default function BasketItem({ basket }) {
       productCount: ccount,
     };
     await changeCart(cartDto);
+    if (reload === true) {
+      setReload(false);
+    } else {
+      setReload(true);
+    }
   };
   useEffect(() => {
     setOption(basket.inventoryDto.productOptions);
@@ -38,6 +42,11 @@ export default function BasketItem({ basket }) {
   const deleteCart = async () => {
     const res = await delcart(basket.uid);
     console.log(res);
+    if (reload === true) {
+      setReload(false);
+    } else {
+      setReload(true);
+    }
   };
   useEffect(() => {
     changeCart1();

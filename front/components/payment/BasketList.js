@@ -14,18 +14,25 @@ import BasketItem from "./BasketItem";
 // API
 import { cartlist } from "../../pages/api/cart.js";
 
+// State
+import { basketProducts } from "../../states";
+import { useRecoilState } from "recoil";
+
 export default function BasketList() {
   const [basketList, setBasketList] = useState([]);
-
+  const [reload, setReload] = useState(false);
+  const [globalbasketList, setGlobalbasketList] =
+    useRecoilState(basketProducts);
   // 장바구니 조회
   const cartllist = async () => {
     const res = await cartlist();
     setBasketList(res.data);
+    setGlobalbasketList(res.data);
   };
 
   useEffect(() => {
     cartllist();
-  }, []);
+  }, [reload]);
 
   return (
     <Container>
@@ -36,7 +43,12 @@ export default function BasketList() {
             <p style={{ fontSize: "1.4rem" }}>전체 선택 (2/2)</p>
           </CheckDiv>
           {basketList.map((e, idx) => (
-            <BasketItem key={idx} basket={e} />
+            <BasketItem
+              key={idx}
+              basket={e}
+              setReload={setReload}
+              reload={reload}
+            />
           ))}
         </BasketBox>
       ) : (
