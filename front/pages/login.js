@@ -60,6 +60,7 @@ export default function Login() {
     event.preventDefault();
     Kakao.Auth.loginForm({
       success: (authObj) => {
+        console.log(authObj.access_token);
         https
           .post("/user/kakao-login", {
             access_token: authObj.access_token,

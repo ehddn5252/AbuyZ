@@ -48,20 +48,40 @@ export async function cartlist() {
 }
 
 // 장바구니에서 삭제하기
-export async function delcart(cartDto) {
+export async function delcart(cartUid) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
     https
-      .delete("/cart", {
-        carts_uid: cartDto.carts_uid,
-      })
+      .delete(`/cart/${cartUid}`)
       .then((response) => {
         if (response === 200) {
           console.log("장바구니에서 삭제 성공", response);
           resolve(response.data);
         } else {
           console.log("장바구니에서 삭제 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}
+
+// 장바구니에서 수량 변경하기
+export async function changeCart(cartDto) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .put("/cart", cartDto)
+      .then((response) => {
+        if (response === 200) {
+          console.log("장바구니에서 변경 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("장바구니에서 변경 실패", response);
           resolve(response);
         }
       })
