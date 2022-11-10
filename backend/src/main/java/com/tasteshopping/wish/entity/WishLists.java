@@ -38,6 +38,7 @@ public class WishLists {
                 .product_name(this.products.getName())
                 .product_uid(this.products.getUid())
                 .img_url(this.products.getRepImg())
+                .discountRate(this.products.getDiscountRate())
                 .price(price)
                 .build();
     }
