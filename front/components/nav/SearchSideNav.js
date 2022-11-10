@@ -9,9 +9,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+
 // StyledComponents
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
 export default function SearchSideNav({
   setFeeOption,
   setPriceOption,
@@ -19,6 +22,8 @@ export default function SearchSideNav({
   setStartPrice,
   setEndPrice,
 }) {
+  const router = useRouter();
+
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
 
@@ -29,6 +34,7 @@ export default function SearchSideNav({
     setCategoryOption(null);
     setStartPrice(null);
     setEndPrice(null);
+    router.reload();
   };
 
   // 시작 끝값 변경 적용
@@ -64,8 +70,16 @@ export default function SearchSideNav({
           }}
         >
           <FormControlLabel value="0" control={<Radio />} label="무료" />
-          <FormControlLabel value="1" control={<Radio />} label="3000원 미만" />
-          <FormControlLabel value="2" control={<Radio />} label="3000원 이상" />
+          <FormControlLabel
+            value="1"
+            control={<Radio />}
+            label="3,000원 미만"
+          />
+          <FormControlLabel
+            value="2"
+            control={<Radio />}
+            label="3,000원 이상"
+          />
         </RadioGroup>
       </FormControl>
       <FormControl sx={{ marginTop: "1rem" }}>

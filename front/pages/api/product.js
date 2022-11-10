@@ -110,10 +110,7 @@ export async function conditionSearch(detailDto) {
 export async function kwcdSearch(detailDto) {
   return new Promise((resolve) => {
     https
-      .post("/product/fo-search/keyword/detail", {
-        small_categories_uid: detailDto.small_categories_uid,
-        price_uid: detailDto.price_uid,
-      })
+      .post("/product/fo-search/keyword/detail", detailDto)
       .then((response) => {
         if (response.status === 200) {
           console.log("fo 조건 상품 조건 검색 성공", response);

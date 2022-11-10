@@ -197,7 +197,7 @@ export default function AdminSideNav() {
                 : null
             }
           >
-            - 이벤트등록
+            - 이벤트
           </LowLink>
         </LowerTag>
       </div>

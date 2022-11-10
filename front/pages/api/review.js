@@ -144,11 +144,11 @@ export async function delreplyreview(replydel) {
 
 // 해당 상품의 리뷰 조회
 // 해당 상품은 왜 주소가 review/1/1??
-export async function review(product_uid) {
+export async function review(product_uid, page) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.get(`/review/${product_uid}`).then((response) => {
+    https.get(`/review/${product_uid}/${page}`).then((response) => {
       if (response.status === 200) {
         console.log("리뷰 조회 성공", response);
         resolve(response.data);

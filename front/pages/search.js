@@ -4,14 +4,20 @@ import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
 // API
-import { keywordSearch, kwcdSearch, inquireProduct } from "./api/product";
+import {
+  keywordSearch,
+  kwcdSearch,
+  inquireProduct,
+  conditionSearch,
+} from "./api/product";
 
 import { useRecoilState } from "recoil";
 // State
-import { searchName } from "../states";
+import { searchName, bigCategoryValue } from "../states";
 
 export default function Search() {
   const [searchValue, setSearchValue] = useRecoilState(searchName);
+  const [bigCategory, setBigCategory] = useRecoilState(bigCategoryValue);
   const [productList, setProductList] = useState([]);
 
   // option (필터링)
@@ -21,10 +27,19 @@ export default function Search() {
   const [startPrice, setStartPrice] = useState(null);
   const [endPrice, setEndPrice] = useState(null);
   const getProductList = async () => {
+    console.log(searchValue);
+    console.log(bigCategory);
     let res;
     if (searchValue) {
       const temp = await keywordSearch(searchValue);
       res = temp.data;
+    } else if (bigCategory) {
+      const detailDto = {
+        big_categories_uid: bigCategory,
+      };
+      const temp1 = await conditionSearch(detailDto);
+      console.log(temp1);
+      res = temp1.data;
     } else {
       res = await inquireProduct();
     }
@@ -52,16 +67,14 @@ export default function Search() {
     const res = await kwcdSearch(detailDto);
     setProductList(res.data);
   };
-
-  // 초기 동작
-  useEffect(() => {
-    getProductList();
-  }, []);
-
   // 필터링 사용시 동작
   useEffect(() => {
     filterProductList();
   }, [feeOption, priceOption, categotyOption, startPrice, endPrice]);
+  // 초기 동작
+  useEffect(() => {
+    getProductList();
+  }, []);
 
   // 검색 값 변동시 동작
   useEffect(() => {

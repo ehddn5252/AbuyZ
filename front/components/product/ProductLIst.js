@@ -81,7 +81,7 @@ export default function ProductLIst({ productList }) {
 
   const change = () => {
     let data;
-    if (productList.length >= 2) {
+    if (productList.length >= 1) {
       if (value === "최근 등록 순") {
         data = productList;
       } else if (value === "가격 낮은 순") {
