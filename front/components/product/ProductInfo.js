@@ -107,6 +107,7 @@ export default function ProductInfo() {
     setProductId(id);
     getProduct(id);
   }, [productId]);
+
   // 옵션 만들기
   const MakeOption = (data) => {
     let temp = [];
