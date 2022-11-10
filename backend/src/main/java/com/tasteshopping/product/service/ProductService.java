@@ -24,6 +24,8 @@ public interface ProductService {
     void modifyProductRelated(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
     void modifyProduct(ProductCreateDto productCreateDto);
 
+    List<ProductDto> getRandom2();
+
     @Transactional
     void productStatusSetting();
 
@@ -65,6 +67,4 @@ public interface ProductService {
     void putStatus(int uid,String status );
 
     void checkStatus(int uid);
-
-    void getRandom();
 }
