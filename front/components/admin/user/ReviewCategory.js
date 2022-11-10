@@ -24,7 +24,11 @@ export default function ReviewCategory({
   setSearchDto,
   buttonClick,
 }) {
-  const [startDate, setStartDate] = useState(new Date());
+  var d = new Date();
+  var dayOfMonth = d.getDate();
+  d.setDate(dayOfMonth - 7);
+
+  const [startDate, setStartDate] = useState(d);
   const [endDate, setEndDate] = useState(new Date());
   const [bigCategoryUid, setBigCategoryUid] = useState(0);
   const [smallCategoryUid, setSmallCategoryUid] = useState(0);
@@ -36,13 +40,13 @@ export default function ReviewCategory({
   const [bigCategory, setbigCategory] = useState([
     {
       uid: 0,
-      categoryName: "",
+      categoryName: "전체",
     },
   ]);
   const [smallCategory, setSmallCategory] = useState([
     {
       uid: 0,
-      categoryName: "",
+      categoryName: "전체",
     },
   ]);
 
@@ -65,11 +69,13 @@ export default function ReviewCategory({
   }, [bigCategoryUid]);
 
   useEffect(() => {
-    setSearchDto((prevState) => ({
-      ...prevState,
-      bigCategoryUid: bigCategoryUid,
-      smallCategoryUid: smallCategoryUid,
-    }));
+    if ((bigCategoryUid !== 0) & (smallCategoryUid !== 0)) {
+      setSearchDto((prevState) => ({
+        ...prevState,
+        bigCategoryUid: bigCategoryUid,
+        smallCategoryUid: smallCategoryUid,
+      }));
+    }
   }, [smallCategoryUid]);
 
   const dateList = () => [{ label: "전체" }, { label: "리뷰작성일시" }];

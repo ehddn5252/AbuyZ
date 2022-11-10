@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // MUI
 import Table from "@mui/material/Table";
@@ -17,9 +17,14 @@ import styled from "styled-components";
 import ReviewItemModal from "./ReviewItemModal";
 
 export default function ReviewList({ reviews }) {
+  const modalRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setOpenUid(0);
+  };
+  const [openUid, setOpenUid] = useState(0);
 
   return (
     <TableContainer component={Paper} sx={{ paddingTop: "2rem" }}>
@@ -48,12 +53,15 @@ export default function ReviewList({ reviews }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {reviews.map((review) => (
-            <TableRow key={review.uid}>
+          {reviews.map((review, idx) => (
+            <TableRow key={idx}>
               <BodyTableCell align="center" component="th" scope="row">
                 {review.answered === false ? (
                   <SolvedButton
-                    onClick={handleOpen}
+                    onClick={(e) => {
+                      handleOpen();
+                      setOpenUid(review.uid);
+                    }}
                     style={{ backgroundColor: "#7A7A7A" }}
                   >
                     답변하기
@@ -97,12 +105,16 @@ export default function ReviewList({ reviews }) {
               <BodyTableCell align="center">{review.writer}</BodyTableCell>
 
               <Modal
-                open={open}
-                onClose={handleClose}
+                ref={modalRef}
+                open={openUid === review.uid}
+                // onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <ReviewItemModal review={review} />
+                <ReviewItemModal
+                  originalReview={review}
+                  handleClose={handleClose}
+                />
               </Modal>
             </TableRow>
           ))}

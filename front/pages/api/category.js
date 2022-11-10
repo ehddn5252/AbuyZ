@@ -72,9 +72,6 @@ export async function BigCategory() {
 
 // 특정 대분류의 소분류 조회
 export async function bigSmallCategory(bigcategory_num) {
-  console.log("====================================");
-  console.log("bigcategory_num", bigcategory_num);
-  console.log("====================================");
   return new Promise((resolve) => {
     https
       .get(`/category/big-category/${bigcategory_num}/small-category`)

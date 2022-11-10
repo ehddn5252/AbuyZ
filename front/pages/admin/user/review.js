@@ -27,12 +27,10 @@ export default function Review() {
 
   const [searchDto, setSearchDto] = useState({
     isAnswered: 0,
-    startDate: "",
-    bigCategoryUid: 0,
-    smallCategoryUid: 0,
+    // startDate: "",
     productName: "",
     content: "",
-    endDate: "",
+    // endDate: "",
   });
 
   const loadData = async (searchDto) => {

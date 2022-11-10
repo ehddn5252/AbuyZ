@@ -1,11 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 
 import styled from "styled-components";
-export default function ReviewItemModal({ review }) {
+
+// api
+import { detailReview } from "../../../pages/api/admin";
+import { writeReply } from "../../../pages/api/admin";
+
+export default function ReviewItemModal({ originalReview, handleClose }) {
+  const [review, setReview] = useState({
+    id: 0,
+    content: "",
+    Rating: 0,
+    email: "",
+    Date: "",
+    imgUrl: "",
+    options: [{ x: "x" }],
+  });
+  const [reply, setReply] = useState({
+    content: "",
+    review_uid: originalReview.uid,
+  });
+
+  const loadData = async () => {
+    if (originalReview.uid !== 0) {
+      const res = await detailReview(originalReview.uid);
+      setReview(res.data);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  /**
+   *
+   * reply
+   */
+
+  const handleChange = (e) => {
+    console.log("content", e.target.value);
+    setReply((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const writeClick = async () => {
+    const res = await writeReply(reply);
+    handleClose();
+  };
+
   return (
     <Container>
       <TitleDiv>상세 리뷰</TitleDiv>
@@ -13,12 +61,17 @@ export default function ReviewItemModal({ review }) {
         <TitleTag>리뷰</TitleTag>
         <ContentDiv>
           <ImageBox>
-            <img src="/images/cloth.png" />
+            <img src={review.imgUrl} />
           </ImageBox>
           <ContentBox>
             <TitleBox>
-              <ContentP style={{ fontSize: "2rem" }}>{review.product}</ContentP>
-              <ContentP>{review.createdDate}</ContentP>
+              <ContentP style={{ fontSize: "2rem" }}>
+                {originalReview.productName}
+              </ContentP>
+              <ContentP>
+                {originalReview.createdDate.slice(0, 10)}{" "}
+                {originalReview.createdDate.slice(11, 16)}
+              </ContentP>
             </TitleBox>
 
             <Rating
@@ -30,18 +83,28 @@ export default function ReviewItemModal({ review }) {
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            <ContentP>작성자 : {review.writer}</ContentP>
-            <ContentP>옵션 : 블랙/S size</ContentP>
-            <ContentP>{review.content}</ContentP>
+            <ContentP>작성자 : {originalReview.writer}</ContentP>
+            <ContentP>옵션 : {}</ContentP>
+            {review.options.map((option) => (
+              <ContentP>
+                {Object.keys(option)}: {Object.values(option)}
+              </ContentP>
+            ))}
+
+            <ContentP>{originalReview.content}</ContentP>
           </ContentBox>
         </ContentDiv>
       </ReviewBox>
       <AnswerBox>
         <TitleTag>답변</TitleTag>
-        <textarea style={{ width: "90%", height: "10rem" }}></textarea>
+        <textarea
+          name="content"
+          style={{ width: "90%", height: "10rem" }}
+          onChange={handleChange}
+        ></textarea>
       </AnswerBox>
 
-      {!review.answered ? (
+      {!originalReview.answered ? (
         <Box
           sx={{
             display: "flex",
@@ -49,8 +112,8 @@ export default function ReviewItemModal({ review }) {
             alignItems: "center",
           }}
         >
-          <RefusalButton>취소</RefusalButton>
-          <AcceptButton>작성</AcceptButton>
+          <RefusalButton onClick={handleClose}>취소</RefusalButton>
+          <AcceptButton onClick={writeClick}>작성</AcceptButton>
         </Box>
       ) : null}
     </Container>
