@@ -11,28 +11,17 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 export default function Period(props) {
-  // 기준기간
-  const [standard, setStandard] = useState("");
-
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
 
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
 
-  // 기준 기간
-  const standardChange = (e) => {
-    setStandard(e.target.value);
-    props.setStandDate(e.target.value);
-  };
-
   // 리셋 감지기
   // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
   useEffect(() => {
-    setStandard("");
     setStartDate(new Date());
     setEndDate(new Date());
-    props.setStandDate("");
     props.setStartDate(new Date());
     props.setEndDate(new Date());
   }, [props.reset]);
@@ -103,7 +92,7 @@ export default function Period(props) {
           alignContent: "center",
         }}
       >
-        <FormControl
+        {/* <FormControl
           sx={{
             marginLeft: "5rem",
             marginRight: "3rem",
@@ -134,7 +123,7 @@ export default function Period(props) {
             <MenuItem value={1}>상품등록일</MenuItem>
             <MenuItem value={2}>상품판매일</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <ButtonGroup>
           <Button onClick={oneDay}>1일</Button>
           <Button onClick={oneWeek}>1주일</Button>
@@ -178,7 +167,7 @@ export default function Period(props) {
 
 const ButtonGroup = styled.div`
   display: flex;
-  margin-left: 1rem;
+  margin-left: 5rem;
   height: 100%;
   align-items: center;
   justify-content: center;

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Pagination from "../../coupon/Pagination";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -16,7 +17,6 @@ const header = [
   "재고수량",
   "브랜드",
   "키워드",
-  "메타태그",
   "배송비",
 ];
 
@@ -37,7 +37,26 @@ const body = [
   },
 ];
 
-export default function InquireList() {
+export default function InquireList(props) {
+  // 조회한 상품 정보
+  // const [productInfo, setProductInfo] = useState(props.productInfo);
+  const productInfo = props.productInfo;
+
+  // 페이지네이션
+  const [limit, setLimit] = useState(9);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
+
+  // 조회 감지
+  // const [update, setUpdate] = useState(0);
+  // console.log(props.productInfo, "aaaaa");
+
+  // console.log(productInfo, "@@@@");
+  // useEffect(() => {
+  //   setProductInfo(props.productInfo);
+  //   console.log("1");
+  // }, [props.update]);
+
   return (
     <Grid2
       xs={12}
@@ -61,7 +80,7 @@ export default function InquireList() {
           margin: "auto",
           paddingBottom: "2rem",
           border: "1px solid black",
-          marginBottom: "3rem",
+          // marginBottom: "3rem",
         }}
       >
         <TableContainer>
@@ -79,8 +98,8 @@ export default function InquireList() {
             </TableRow>
           </thead>
           <tbody style={{ height: "50%" }}>
-            {body.map((e) => (
-              <TableRow key={e.id}>
+            {productInfo.slice(offset, offset + limit).map((e) => (
+              <TableRow key={e.uid}>
                 <Td>
                   <input
                     type="checkbox"
@@ -90,17 +109,24 @@ export default function InquireList() {
                 <Td>
                   <Edit>수정하기</Edit>
                 </Td>
-                <Td>{e.saleStatus}</Td>
-                <Td>{e.bigCategory}</Td>
-                <Td>{e.smallCategory}</Td>
-                <Td>{e.name}</Td>
-                <Td>{e.discount}</Td>
+                <Td>
+                  {e.status === "selling"
+                    ? "판매중"
+                    : e.status === "getting_ready"
+                    ? "승인 대기"
+                    : "판매 완료"}
+                </Td>
+                <Td>{e.bigCategoryName}</Td>
+                <Td>{e.smallCategoryName}</Td>
+                <Td>
+                  {e.name.length <= 15 ? e.name : e.name.slice(0, 16) + "..."}
+                </Td>
+                <Td>{e.discountRate}</Td>
                 <Td>{e.price}</Td>
-                <Td>{e.stock}</Td>
-                <Td>{e.brand}</Td>
-                <Td>{e.keyword}</Td>
-                <Td>{e.metaTag}</Td>
-                <Td>{e.delivery}</Td>
+                <Td>재고</Td>
+                <Td>{e.brandName}</Td>
+                <Td>{e.productKeywords}</Td>
+                <Td>{e.deliveryFee}</Td>
               </TableRow>
             ))}
           </tbody>
@@ -108,6 +134,14 @@ export default function InquireList() {
       </div>
       <ButtonBox>
         <DeleteButton>선택 삭제</DeleteButton>
+        {productInfo.length === 0 ? null : (
+          <Pagination
+            total={productInfo.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        )}
         <EditButton>수정 항목 저장</EditButton>
       </ButtonBox>
     </Grid2>
@@ -134,7 +168,7 @@ const TableContainer = styled.table`
   background-color: white;
   margin: 0;
   width: 100%;
-  height: 10rem;
+  height: fit-content;
   border-collapse: collapse;
   border-spacing: 0;
   border: 1px solid black;
@@ -157,23 +191,13 @@ const Td = styled.td`
   margin: 0;
   border: 1px solid black;
   text-align: center;
-  height: fit-content;
+  height: 1rem;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 `;
 
-// const CancelButton = styled.button`
-//   width: 10%;
-//   height: 2.5rem;
-//   border: 1px solid border;
-//   /* border-radius: 1rem; */
-//   font-size: 1rem;
-//   border: 0;
-// `;
-
 const Edit = styled.button`
   width: fit-content;
-  /* height: 2rem; */
   background-color: #57a9fb;
   font-size: 1rem;
   color: white;
@@ -186,7 +210,8 @@ const Edit = styled.button`
 
 const ButtonBox = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  margin-top: 1rem;
   padding-bottom: 2rem;
   background-color: white;
 `;
@@ -215,22 +240,3 @@ const EditButton = styled.button`
     cursor: pointer;
   }
 `;
-
-// const CancelButton = styled.button`
-//   width: 10%;
-//   height: 2.5rem;
-//   border: 1px solid border;
-//   /* border-radius: 1rem; */
-//   font-size: 1rem;
-//   border: 0;
-// `;
-
-// const SaveButton = styled.button`
-//   width: 10%;
-//   height: 2.5rem;
-//   /* border-radius: 1rem; */
-//   font-size: 1rem;
-//   background-color: #57a9fb;
-//   color: #fff;
-//   border: 0;
-// `;
