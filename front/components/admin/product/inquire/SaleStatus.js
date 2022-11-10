@@ -1,31 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { SearchContainer } from "./SearchWord";
-import { SearchTitle } from "./InquireProduct";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Checkbox from "@mui/material/Checkbox";
 
-export default function SaleStatus() {
-  // 전체
-  const [total, setTotal] = useState(false);
-  // 판매 중
-  const [sale, setSale] = useState(false);
-  // 판매완료
-  const [soldOut, setSoldOut] = useState(false);
-
-  const totalChange = (event) => {
-    setTotal(event.target.checked);
+export default function SaleStatus(props) {
+  // 옵션 체크
+  const checkOnlyOne = (checkThis) => {
+    const checkboxes = document.getElementsByName("saleStatusCheck");
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] !== checkThis) {
+        checkboxes[i].checked = false;
+      } else if (checkboxes[i] === checkThis) {
+        if (props.checkStatus === i) {
+          props.setCheckStatus(0);
+        } else {
+          props.setCheckStatus(i);
+        }
+      }
+    }
   };
 
-  const saleChange = (event) => {
-    setSale(event.target.checked);
-  };
-
-  const soldOutChange = (event) => {
-    setSoldOut(event.target.checked);
-  };
+  // 리셋 감지기
+  // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
+  useEffect(() => {
+    const checkboxes = document.getElementsByName("saleStatusCheck");
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+    props.setCheckStatus(0);
+  }, [props.reset]);
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -47,28 +51,37 @@ export default function SaleStatus() {
         xs={10}
         sx={{ padding: "1rem", paddingLeft: "1.5rem", display: "flex" }}
       >
-        <Checkbox
-          checked={total}
-          onChange={totalChange}
-          inputProps={{ "aria-label": "controlled" }}
-          style={{ marginLeft: "3rem" }}
-          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        <input
+          name="saleStatusCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{
+            width: "1.2rem",
+            height: "1.5rem",
+            marginLeft: "3.5rem",
+            marginRight: "0.5rem",
+          }}
         />
         <Name>전체</Name>
-        <Checkbox
-          checked={sale}
-          onChange={saleChange}
-          inputProps={{ "aria-label": "controlled" }}
-          style={{ marginLeft: "3rem" }}
-          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        <input
+          name="saleStatusCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
         <Name>판매중</Name>
-        <Checkbox
-          checked={soldOut}
-          onChange={soldOutChange}
-          inputProps={{ "aria-label": "controlled" }}
-          style={{ marginLeft: "3rem" }}
-          sx={{ "& .MuiSvgIcon-root": { fontSize: 20 } }}
+        <input
+          name="saleStatusCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
+        />
+        <Name>승인대기</Name>
+        <input
+          name="saleStatusCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
         <Name>판매완료</Name>
       </Grid2>
@@ -82,4 +95,5 @@ const Name = styled.p`
   margin: 0;
   display: flex;
   align-items: center;
+  margin-right: 1.5rem;
 `;

@@ -35,14 +35,14 @@ export async function inquireProductStatus() {
 }
 
 // 모든 상품 상태 개수로 조회
-export async function inquireProductStatusCount() {
+export async function inquireProductStatusCount(Status) {
   return new Promise((resolve) => {
-    https.get("/product/status/num/selling").then((response) => {
+    https.get(`/product/status/num/${Status}`).then((response) => {
       if (response.status === 200) {
-        console.log("모든 상품 상태 개수 가져오기 성공", response);
+        // console.log("모든 상품 상태 개수 가져오기 성공", response);
         resolve(response.data.data);
       } else {
-        console.log("모든 상품 상태 개수 가져오기 실패", response);
+        // console.log("모든 상품 상태 개수 가져오기 실패", response);
         resolve(response);
       }
     });

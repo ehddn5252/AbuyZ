@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { SearchTitle } from "./InquireProduct";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SearchWord() {
+export default function SearchWord(props) {
   // 상품명
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =
@@ -24,6 +23,7 @@ export default function SearchWord() {
   // 상품명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
+    props.setName(event.target.value);
   };
   const nameFocus = () => {
     setNamePlaceholder("");
@@ -35,6 +35,7 @@ export default function SearchWord() {
   // 브랜드 입력하면
   const brandChange = (event) => {
     setBrand(event.target.value);
+    props.setBrandName(event.target.value);
   };
   const brandFocus = () => {
     setBrandPlaceholder("");
@@ -46,6 +47,7 @@ export default function SearchWord() {
   // 키워드 입력하면
   const keyWordChange = (event) => {
     setKeyWord(event.target.value);
+    props.setKeyword(event.target.value);
   };
   const keyWordFocus = () => {
     setKeyWordPlaceholder("");
@@ -53,6 +55,17 @@ export default function SearchWord() {
   const keyWordBlur = () => {
     setKeyWordPlaceholder("키워드를 입력해주세요.");
   };
+
+  // 리셋 감지기
+  // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
+  useEffect(() => {
+    setName("");
+    setBrand("");
+    setKeyWord("");
+    props.setName("");
+    props.setBrandName("");
+    props.setKeyword("");
+  }, [props.reset]);
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -85,6 +98,7 @@ export default function SearchWord() {
             <Header>상품명</Header>
           </HeaderBox>
           <Input
+            value={name}
             placeholder={namePlaceholder}
             onChange={nameChange}
             onFocus={nameFocus}
@@ -94,6 +108,7 @@ export default function SearchWord() {
             <Header>브랜드명</Header>
           </HeaderBox>
           <Input
+            value={brand}
             placeholder={brandPlaceholder}
             onChange={brandChange}
             onFocus={brandFocus}
@@ -103,6 +118,7 @@ export default function SearchWord() {
             <Header>키워드</Header>
           </HeaderBox>
           <Input
+            value={keyWord}
             placeholder={keyWordPlaceholder}
             onChange={keyWordChange}
             onFocus={keyWordFocus}
@@ -116,11 +132,6 @@ export default function SearchWord() {
 export const SearchContainer = styled.div`
   display: flex;
   margin: 0;
-`;
-
-const BoxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 const SearchBox = styled.div`

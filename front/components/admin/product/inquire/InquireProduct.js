@@ -25,16 +25,70 @@ import ProductionQuantityLimitsOutlined from "@mui/icons-material/ProductionQuan
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductSearch() {
-  // 상품 목록
-  const [productInfo, setProductInfo] = useState([]);
+  // 상태값
+  // 전체
+  const [total, setTotal] = useState(0);
 
-  const status = [
-    [WidgetsOutlinedIcon, "전체", 3],
-    [ShoppingCartOutlinedIcon, "판매중", 2],
-    [HourglassBottomOutlined, "승인 대기", 4],
-    [ProductionQuantityLimitsOutlined, "교환/환불", 3],
-    [TaskAltOutlinedIcon, "판매완료", 1],
-  ];
+  // 판매 중
+  const [selling, setSelling] = useState(0);
+
+  // 승인 대기
+  const [ready, setReady] = useState(0);
+
+  // 판매완료
+  const [soldOut, setSoldOut] = useState(0);
+
+  // 상품 상태 값 들고오기
+  useEffect(() => {
+    getProductStatusCount();
+  }, []);
+
+  // 들고오는 함수
+  const getProductStatusCount = async () => {
+    const psc1 = await inquireProductStatusCount("selling");
+    const psc2 = await inquireProductStatusCount("getting_ready");
+    const psc3 = await inquireProductStatusCount("sold_out");
+
+    setTotal(psc1 + psc2 + psc3);
+    setSelling(psc1);
+    setReady(psc2);
+    setSoldOut(psc3);
+  };
+
+  // 상품 검색 키워드
+  // 카테고리
+  // 대분류
+  const [bigCategory, setBigCategory] = useState("");
+
+  // 소분류
+  const [smallCategory, setSmallCategory] = useState("");
+
+  // 검색어
+  // 상품명
+  const [name, setName] = useState("");
+
+  // 브랜드명
+  const [brandName, setBrandName] = useState("");
+
+  // 키워드
+  const [keyword, setKeyword] = useState("");
+
+  // 판매상태
+  // 전체 : 0, 판매중 : 1, 판매완료 : 2
+  const [checkStatus, setCheckStatus] = useState(0);
+
+  // 기간
+  // 기준기간
+  const [standDate, setStandDate] = useState(0);
+
+  // 시작일
+  const [startDate, setStartDate] = useState(new Date());
+
+  // 마감일
+  const [endDate, setEndDate] = useState(new Date());
+
+  // 리셋
+  const [reset, setReset] = useState(0);
 
   const getProduct = async () => {
     const p = await inquireProduct();
@@ -45,16 +99,21 @@ export default function SaleProductSearch() {
     const ps = await inquireProductStatus();
     console.log(ps);
   };
-  const getProductStatusCount = async () => {
-    const psc = await inquireProductStatusCount();
-    console.log(psc);
-  };
+
+  // 상품 목록
+  const [productInfo, setProductInfo] = useState([]);
+
+  // console.log(bigCategory, smallCategory);
+  // console.log(name, brandName, keyword);
+  // console.log(checkStatus);
+  // console.log(standDate, startDate, endDate);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
       <Grid2 xs={12} sx={{ padding: "0", margin: "0" }}>
         {/* 현재 상태 */}
         <StatusContainer>
+          {/* 전체 */}
           <StatusBox>
             <WidgetsOutlinedIcon
               sx={{
@@ -66,12 +125,14 @@ export default function SaleProductSearch() {
                 borderRadius: "50%",
                 padding: "0.5rem",
               }}
+              onClick={getProductStatus}
             />
             <Status>
-              <SearchTitle>{status[0][1]}</SearchTitle>
-              <StatusCount>{status[0][2]}건</StatusCount>
+              <SearchTitle>전체</SearchTitle>
+              <StatusCount>{total}건</StatusCount>
             </Status>
           </StatusBox>
+          {/* 판매중 */}
           <StatusBox>
             <ShoppingCartOutlinedIcon
               sx={{
@@ -85,10 +146,11 @@ export default function SaleProductSearch() {
               }}
             />
             <Status>
-              <SearchTitle>{status[1][1]}</SearchTitle>
-              <StatusCount>{status[1][2]}건</StatusCount>
+              <SearchTitle>판매중</SearchTitle>
+              <StatusCount>{selling}건</StatusCount>
             </Status>
           </StatusBox>
+          {/* 승인대기 */}
           <StatusBox>
             <HourglassBottomOutlined
               sx={{
@@ -102,11 +164,12 @@ export default function SaleProductSearch() {
               }}
             />
             <Status>
-              <SearchTitle>{status[2][1]}</SearchTitle>
-              <StatusCount>{status[2][2]}건</StatusCount>
+              <SearchTitle>승인대기</SearchTitle>
+              <StatusCount>{ready}건</StatusCount>
             </Status>
           </StatusBox>
-          <StatusBox>
+          {/* 교환/환불 */}
+          {/* <StatusBox>
             <ProductionQuantityLimitsOutlined
               sx={{
                 // margin: "2rem",
@@ -119,10 +182,11 @@ export default function SaleProductSearch() {
               }}
             />
             <Status>
-              <SearchTitle>{status[3][1]}</SearchTitle>
-              <StatusCount>{status[3][2]}건</StatusCount>
+              <SearchTitle>교환/환불</SearchTitle>
+              <StatusCount>0건</StatusCount>
             </Status>
-          </StatusBox>
+          </StatusBox> */}
+          {/* 판매완료 */}
           <StatusBox>
             <TaskAltOutlinedIcon
               sx={{
@@ -136,8 +200,8 @@ export default function SaleProductSearch() {
               }}
             />
             <Status>
-              <SearchTitle>{status[4][1]}</SearchTitle>
-              <StatusCount>{status[4][2]}건</StatusCount>
+              <SearchTitle>판매완료</SearchTitle>
+              <StatusCount>{soldOut}건</StatusCount>
             </Status>
           </StatusBox>
         </StatusContainer>
@@ -152,19 +216,37 @@ export default function SaleProductSearch() {
         }}
       >
         {/* 카테고리 */}
-        <Category />
+        <Category
+          setBigCategory={setBigCategory}
+          setSmallCategory={setSmallCategory}
+          reset={reset}
+        />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 검색어 */}
-        <SearchWord />
+        <SearchWord
+          setName={setName}
+          setBrandName={setBrandName}
+          setKeyword={setKeyword}
+          reset={reset}
+        />
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         {/* 판매상태 */}
-        <SaleStatus />
+        <SaleStatus
+          checkStatus={checkStatus}
+          setCheckStatus={setCheckStatus}
+          reset={reset}
+        />
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         {/* 기간 */}
-        <Period />
+        <Period
+          setStandDate={setStandDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          reset={reset}
+        />
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
-          <ResetButton onClick={() => getProductStatus()}>초기화</ResetButton>
+          <ResetButton onClick={() => setReset(reset + 1)}>초기화</ResetButton>
           <SearchButton onClick={() => getProduct()}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
