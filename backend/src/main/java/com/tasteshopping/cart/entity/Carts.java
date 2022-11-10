@@ -44,4 +44,7 @@ public class Carts {
         this.inventory=inventory;
     }
 
+    public void modifyCount(int productCount){
+        this.productCount=productCount;
+    }
 }

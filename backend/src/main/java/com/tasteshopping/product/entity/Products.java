@@ -3,6 +3,7 @@ package com.tasteshopping.product.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.categories.entity.SmallCategories;
+import com.tasteshopping.product.dto.ProductBoDto;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
@@ -82,6 +83,24 @@ public class Products {
     private List<ProductOptions> productOptions;
 
 
+    public ProductBoDto toBoDto(List<String> productKeywords) {
+
+        return ProductBoDto.builder()
+                .uid(uid)
+                .date(createdDate)
+                .productKeywords(productKeywords)
+                .name(name)
+                .status(status)
+                .discountRate(discountRate)
+                .deliveryFee(deliveryFee)
+                .descriptionImg(descriptionImg)
+                .smallCategoryName(smallCategory.getSmallCategoryName())
+                .brandName(brand.getName())
+                .price(price)
+                .bigCategoryUid(smallCategory.getBigCategory().getUid())
+                .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
+                .build();
+    }
     public ProductDto toDto() {
 
         return ProductDto.builder()

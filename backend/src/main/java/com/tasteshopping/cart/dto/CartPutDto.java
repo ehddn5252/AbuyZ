@@ -9,10 +9,7 @@ import java.util.LinkedHashMap;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartDto {
+public class CartPutDto {
     private Integer cartUid;
-    private Integer productsUid;
     private Integer productCount;
-    private LinkedHashMap<String,String> optionValues;
-    private Integer inventoriesUid;
 }

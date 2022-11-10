@@ -28,7 +28,7 @@ public class ProductController {
 
     @GetMapping("/random")
     public ResponseEntity<BaseRes> getRandom() {
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", productService.getRandom2()));
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", productService.getRandom()));
     }
 
     @PutMapping("/status/setting/{uid}")
@@ -158,6 +158,12 @@ public class ProductController {
     @GetMapping()
     public ResponseEntity<BaseRes> getAllProduct() {
         List<ProductDto> productDtoList = productService.getAllProduct();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
+    }
+
+    @GetMapping("/bo")
+    public ResponseEntity<BaseRes> getBoAllProduct() {
+        List<ProductBoDto> productDtoList = productService.getBoAllProduct();
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "전체 Products 가져오기 성공.", productDtoList));
     }
 
