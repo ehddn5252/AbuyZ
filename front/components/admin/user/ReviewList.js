@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import Table from "@mui/material/Table";
@@ -16,43 +16,11 @@ import styled from "styled-components";
 
 import ReviewItemModal from "./ReviewItemModal";
 
-export default function ReviewList() {
+export default function ReviewList({ reviews }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const rows = [
-    {
-      id: 0,
-      nickname: "dogeon123",
-      product: "Jeep 맨투맨",
-      content: "옷이 너무 이쁘네요.",
-      created_date: "2022.10.23 15:30",
-      updated_date: "-",
-      rating: "5",
-      solved: false,
-    },
-    {
-      id: 1,
-      nickname: "hello321",
-      product: "아몬드 빼빼로",
-      content: "빼빼로데이 이벤트 언제부터 진행하나요?",
-      created_date: "2022.10.23 16:30",
-      updated_date: "2022.10.26 15:30",
-      rating: "3",
-      solved: true,
-    },
-    {
-      id: 2,
-      nickname: "ssafy1010",
-      product: "강아지 사료",
-      content: "강아지 사료에서 머리카락이 나왔어요. 사진 첨부...",
-      created_date: "2022.10.23 17:30",
-      updated_date: "2022.10.25 15:30",
-      rating: "5",
-      solved: true,
-    },
-  ];
   return (
     <TableContainer component={Paper} sx={{ paddingTop: "2rem" }}>
       <Table
@@ -80,10 +48,10 @@ export default function ReviewList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {reviews.map((review) => (
+            <TableRow key={review.uid}>
               <BodyTableCell align="center" component="th" scope="row">
-                {row.solved === false ? (
+                {review.answered === false ? (
                   <SolvedButton
                     onClick={handleOpen}
                     style={{ backgroundColor: "#7A7A7A" }}
@@ -102,7 +70,7 @@ export default function ReviewList() {
               <BodyTableCell align="center">
                 <Rating
                   name="text-feedback"
-                  value={row.rating}
+                  value={review.rating}
                   readOnly
                   precision={0.5}
                   emptyIcon={
@@ -110,11 +78,23 @@ export default function ReviewList() {
                   }
                 />
               </BodyTableCell>
-              <BodyTableCell>{row.product}</BodyTableCell>
-              <BodyTableCell>{row.content}</BodyTableCell>
-              <BodyTableCell align="center">{row.created_date}</BodyTableCell>
-              <BodyTableCell align="center">{row.updated_date}</BodyTableCell>
-              <BodyTableCell align="center">{row.nickname}</BodyTableCell>
+              <BodyTableCell>{review.productName}</BodyTableCell>
+              <BodyTableCell>{review.content}</BodyTableCell>
+              <BodyTableCell align="center">
+                {review.createdDate.slice(0, 10)}{" "}
+                {review.createdDate.slice(11, 16)}
+              </BodyTableCell>
+              <BodyTableCell align="center">
+                {review.answerDate !== null ? (
+                  <div>
+                    {review.answerDate.slice(0, 10)}{" "}
+                    {review.answerDate.slice(11, 16)}
+                  </div>
+                ) : (
+                  <div> </div>
+                )}
+              </BodyTableCell>
+              <BodyTableCell align="center">{review.writer}</BodyTableCell>
 
               <Modal
                 open={open}
@@ -122,7 +102,7 @@ export default function ReviewList() {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <ReviewItemModal row={row} />
+                <ReviewItemModal review={review} />
               </Modal>
             </TableRow>
           ))}

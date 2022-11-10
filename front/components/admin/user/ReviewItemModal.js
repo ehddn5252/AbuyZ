@@ -5,10 +5,10 @@ import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 
 import styled from "styled-components";
-export default function ReviewItemModal({ row }) {
+export default function ReviewItemModal({ review }) {
   return (
     <Container>
-      <TitleDiv>상세 문의</TitleDiv>
+      <TitleDiv>상세 리뷰</TitleDiv>
       <ReviewBox>
         <TitleTag>리뷰</TitleTag>
         <ContentDiv>
@@ -17,8 +17,8 @@ export default function ReviewItemModal({ row }) {
           </ImageBox>
           <ContentBox>
             <TitleBox>
-              <ContentP style={{ fontSize: "2rem" }}>{row.product}</ContentP>
-              <ContentP>{row.report_date}</ContentP>
+              <ContentP style={{ fontSize: "2rem" }}>{review.product}</ContentP>
+              <ContentP>{review.createdDate}</ContentP>
             </TitleBox>
 
             <Rating
@@ -30,14 +30,9 @@ export default function ReviewItemModal({ row }) {
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            <ContentP>작성자 : {row.nickname}</ContentP>
+            <ContentP>작성자 : {review.writer}</ContentP>
             <ContentP>옵션 : 블랙/S size</ContentP>
-            <ContentP>
-              옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무
-              구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이
-              너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요.
-              옷이 너무 구려요.
-            </ContentP>
+            <ContentP>{review.content}</ContentP>
           </ContentBox>
         </ContentDiv>
       </ReviewBox>
@@ -46,7 +41,7 @@ export default function ReviewItemModal({ row }) {
         <textarea style={{ width: "90%", height: "10rem" }}></textarea>
       </AnswerBox>
 
-      {row.solved ? (
+      {!review.answered ? (
         <Box
           sx={{
             display: "flex",
@@ -54,8 +49,8 @@ export default function ReviewItemModal({ row }) {
             alignItems: "center",
           }}
         >
-          <RefusalButton>거절</RefusalButton>
-          <AcceptButton>승인</AcceptButton>
+          <RefusalButton>취소</RefusalButton>
+          <AcceptButton>작성</AcceptButton>
         </Box>
       ) : null}
     </Container>
