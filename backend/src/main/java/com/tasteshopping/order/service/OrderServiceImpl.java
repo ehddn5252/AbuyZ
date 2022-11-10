@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
         totalPrice += price * orders.getCount();
         orderRepository.save(orders);
         cartRepository.delete(cart);
-        
+
         // 결제시 재고확인해서 상품 상태 확인
         productService.checkStatus(cart.getInventory().getProduct().getUid());
         orderLists.setTotalPrice(totalPrice);

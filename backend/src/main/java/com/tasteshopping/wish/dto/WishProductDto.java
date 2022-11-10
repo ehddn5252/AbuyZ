@@ -13,4 +13,5 @@ public class WishProductDto {
     private Integer price;
     private Integer product_uid;
     private String product_name;
+    private Integer discountRate;
 }

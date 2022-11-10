@@ -8,16 +8,10 @@ import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.statistics.dto.*;
 import com.tasteshopping.user.dto.ResponseDto;
-import com.tasteshopping.user.dto.ResultDto;
-import com.tasteshopping.user.dto.Role;
-import com.tasteshopping.user.entity.Users;
-import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -108,37 +102,43 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 2:case 3:
-                List<Orders>orders = orderRepository.findAllByOrderList_DateBetween(start_date,end_date);
+                List<Orders>orders = orderRepository.findByOrderList_DateBetween(start_date,end_date);
                 if(menu==2){
-                    TreeMap<String,ProductStatisticsDto>productStatistics=new TreeMap<>();
+                    Map<String,ProductStatisticsDto>productStatistics=new HashMap<>();
+                    ProductStatisticsDtoComparator vc = new ProductStatisticsDtoComparator(productStatistics);
+                    Map<String,ProductStatisticsDto>sortedMap=new TreeMap<>(vc);
+
                     for(Orders order:orders){
-                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(order.getInventory().getProduct().getName(),
-                                new ProductStatisticsDto(order.getInventory().getProduct().getSmallCategory().getBigCategory().getCategoryName(),
-                                        order.getInventory().getProduct().getSmallCategory().getSmallCategoryName()));
+
+                        String product_name = order.getInventory().getProduct().getName();
+                        String big_category_name = order.getInventory().getProduct().getSmallCategory().getBigCategory().getCategoryName();
+                        String small_category_name = order.getInventory().getProduct().getSmallCategory().getSmallCategoryName();
+
+                        ProductStatisticsDto productStatisticsDto = productStatistics.getOrDefault(product_name,
+                                new ProductStatisticsDto(product_name,big_category_name,small_category_name));
 
                         productStatisticsDto.updateCount(order.getCount());
                         productStatisticsDto.updateSalesAmount(order.getPrice());
                         productStatistics.put(order.getInventory().getProduct().getName(),productStatisticsDto);
                     }
+                    sortedMap.putAll(productStatistics);
                     List<ProductSaleRankDto>productSaleRanks = new ArrayList<>();
-                    int count= 0;
-                    for(Map.Entry<String,ProductStatisticsDto> entry : productStatistics.entrySet()) {
-                        if(count++==5)break;
-                        String key = entry.getKey();
-                        ProductStatisticsDto value = entry.getValue();
+                    int count = 0;
+                    for(String key: sortedMap.keySet()) {
+                        if(count++>5)break;
+                        ProductStatisticsDto value = sortedMap.get(key);
+
                         ProductSaleRankDto productSaleRankDto = ProductSaleRankDto.builder()
                                                                 .big_category_name(value.getBig_category_name())
                                                                 .rank(count)
                                                                 .count(value.getCount())
-                                                                .product_name(key)
+                                                                .product_name(value.getProduct_name())
                                                                 .small_category_name(value.getSmall_category_name())
                                                                 .sales_amount(value.getSales_amount())
                                                                 .build();
                         productSaleRanks.add(productSaleRankDto);
                     }
-
                     responseDto.setData(productSaleRanks);
-                    responseDto.setMessage("조회 성공");
                 }
                 else{
                     PercentStatisticsListDto percentStatistics = new PercentStatisticsListDto(new TreeMap<>(),0);
@@ -195,4 +195,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         return responseDto;
     }
+}
+class ProductStatisticsDtoComparator implements Comparator<String> {
+
+    Map<String, ProductStatisticsDto> base;
+    public ProductStatisticsDtoComparator(Map<String, ProductStatisticsDto> base) {
+        this.base = base;
+    }
+    public int compare(String a, String b) {
+        return (base.get(a)).compareTo(base.get(b));
+    }
+
 }
