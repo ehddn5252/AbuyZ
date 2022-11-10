@@ -96,9 +96,7 @@ public class Products {
                 .descriptionImg(descriptionImg)
                 .smallCategoryName(smallCategory.getSmallCategoryName())
                 .brandName(brand.getName())
-                .repImg(repImg)
                 .price(price)
-                .reviewRate(reviewRate)
                 .bigCategoryUid(smallCategory.getBigCategory().getUid())
                 .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
                 .build();

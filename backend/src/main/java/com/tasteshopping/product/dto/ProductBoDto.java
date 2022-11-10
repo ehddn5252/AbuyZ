@@ -14,22 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductBoDto {
 
+    private Integer uid;
     private String name;
     private Integer price;
     private Integer discountRate;
-    private String repImg;
     private String descriptionImg;
-    private Float reviewRate;
-    private Integer uid;
-
     private Integer deliveryFee;
-
     private String smallCategoryName;
     private String bigCategoryName;
     private Integer bigCategoryUid;
-
     private String brandName;
-
     private Date date;
     private String status;
     private Integer reviewNum;
