@@ -8,7 +8,6 @@ import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.dto.InventoryDto;
-import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.product.entity.ProductOptions;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +74,14 @@ public class CartServiceImpl implements CartService {
             throw new NotCorrectProductException();
         }
         return new BaseRes(200, "장바구니 담기 성공", null);
+    }
+
+    @Override
+    @Transactional
+    public BaseRes putCartByCount(String email, int carts_uid, int count) {
+        Carts cart = cartRepository.findByUserEmailAndUid(email,carts_uid);
+        cart.modifyCount(count);
+        return new BaseRes(200, "수량 변경 성공.", null);
     }
 
     @Override

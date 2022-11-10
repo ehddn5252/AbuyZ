@@ -176,7 +176,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getRandom2() {
+    public List<ProductBoDto> getBoAllProduct() {
+        List<Products> l = productRepository.findAllFetchJoin();
+//        Collections.shuffle(l);
+        List<ProductBoDto> new_l = new ArrayList<>();
+        for (int i = 0; i <l.size(); ++i) {
+            List<ProductKeywords> productKeywords = l.get(i).getProductKeywords();
+            List<String> keywords = new ArrayList<>();
+            for(int j=0;j<productKeywords.size();++j) {
+                keywords.add(productKeywords.get(j).getName());
+            }
+            new_l.add(l.get(i).toBoDto(keywords));
+        }
+        return new_l;
+    }
+
+    @Override
+    public List<ProductDto> getRandom() {
         List<Products> l = productRepository.findByRand();
 //        Collections.shuffle(l);
         List<ProductDto> new_l = new ArrayList<>();

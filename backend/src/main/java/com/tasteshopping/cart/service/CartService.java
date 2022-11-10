@@ -9,6 +9,9 @@ import java.util.List;
 public interface CartService {
     BaseRes putCart(String email, CartDto cartsDto);
 
+
+    BaseRes putCartByCount(String email, int carts_uid, int count);
+
     BaseRes deleteCart(String email, int cartsUid);
 
     List<CartResDto> getCart(String email);
