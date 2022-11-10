@@ -177,6 +177,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void getRandom() {
+//        List<Products> l = productRepository.findByRand();
     }
 
     @Override
@@ -648,11 +649,32 @@ public class ProductServiceImpl implements ProductService {
             productDetailDto.setProducts(p.toDto());
             List<ProductPictures> productPicturesList = p.getProductPictures();
             List<ProductOptions> productOptionsList = p.getProductOptions();
-            List<ProductOptionListDto> productOptionListDtoList = new ArrayList<>();
 
+            /*
+            1. 이름에 맞는 list 에 추가한다.
+            2. 이름이 달라지면 hashMap 에 추가한다.
+            3. 맨 마지막에 hashMap 에 추가한다.
+             */
+
+            HashMap<String,List> hashMap = new HashMap<>();
+            String name = productOptionsList.get(0).getName();
+            ArrayList<String> l = new ArrayList();
             for (int i = 0; i < productOptionsList.size(); ++i) {
-                productOptionListDtoList.add(productOptionsList.get(i).toDto());
+                if(name.equals(productOptionsList.get(i).getName())){
+                    l.add(productOptionsList.get(i).getValue());
+                }
+                else{
+                    ArrayList newL = new ArrayList<>();
+                    newL.addAll(l);
+                    hashMap.put(name,newL);
+                    l.clear();
+                    l.add(productOptionsList.get(i).getValue());
+                    name=productOptionsList.get(i).getName();
+                }
             }
+            // 마지막에 한번 추가해줘야 한다.
+            hashMap.put(name,l);
+
             List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
             for (int i = 0; i < productPicturesList.size(); ++i) {
                 productPictureDtoList.add(productPicturesList.get(i).toDto());
@@ -664,7 +686,7 @@ public class ProductServiceImpl implements ProductService {
                 }
             }
 
-            productDetailDto.setProductOptionListDtoList(productOptionListDtoList);
+            productDetailDto.setProductOptionListMap(hashMap);
             productDetailDto.setProductPictureDto(productPictureDtoList);
             return productDetailDto;
         } else {
@@ -674,13 +696,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
 //    @Override
-//    public ProductDetailDto getDetailProduct(int productsUid) {
-//        Optional<Products> l = productRepository.findByProductsUid(productsUid);
-//        ProductDetailDto productDetailDto = new ProductDetailDto();
-//        System.out.println("=================");
-//        System.out.println(l);
-//        if (l.isPresent()) {
-//            Products p = l.get();
+//    public ProductDetailDto getDetailProduct(String email, int uid) {
+//        Optional<Products> productsOptional = productRepository.findById(uid);
+//        if (productsOptional.isPresent()) {
+//            Products p = productsOptional.get();
+//            ProductDetailDto productDetailDto = new ProductDetailDto();
 //            productDetailDto.setProducts(p.toDto());
 //            List<ProductPictures> productPicturesList = p.getProductPictures();
 //            List<ProductOptions> productOptionsList = p.getProductOptions();
@@ -693,11 +713,22 @@ public class ProductServiceImpl implements ProductService {
 //            for (int i = 0; i < productPicturesList.size(); ++i) {
 //                productPictureDtoList.add(productPicturesList.get(i).toDto());
 //            }
+//            if(email!=null){
+//                Optional<WishLists> wish = wishRepository.findByUser_EmailAndProducts_Uid(email,uid);
+//                if(wish.isPresent()){
+//                    productDetailDto.setIsWished(new IsWished(wish.get().getUid(),true));
+//                }
+//            }
+//
 //            productDetailDto.setProductOptionListDtoList(productOptionListDtoList);
 //            productDetailDto.setProductPictureDto(productPictureDtoList);
+//            return productDetailDto;
+//        } else {
+//            throw new ProductNotFoundException();
 //        }
-//        return productDetailDto;
+//
 //    }
+
 
     @Override
     public List<ProductDto> getProductBySmallCategoryAndPriceBetween(Integer smallCategoriesUid,
