@@ -19,7 +19,8 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     "inventory.product.smallCategory.bigCategory"})
     List<Orders> findByOrderList_DateBetween(Date start_date,Date end_date);
 
-    @Query("select o from Orders o join fetch Reviews r on o.review=r where o.orderList=:orderList")
+//    @Query("select o from Orders o join fetch Reviews r on o.review=r where o.orderList=:orderList")
+    @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
     List<Orders> findByOrderList(OrderLists orderList);
 
     List<Orders> findByStatus(String status);

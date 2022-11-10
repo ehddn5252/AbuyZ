@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
 
+    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
+    List<Products> findAllFetchJoin();
 
 //    @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
 //    Optional<Products> findProductDetailByProductsUid(int productsUid);
@@ -57,5 +60,15 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 
 
     List<Optional<Products>> findByStatus(String Status);
+
+
+    @Query(value = "select * " +
+            "from products p " +
+            "inner join brands b on p.brands_uid = b.uid " +
+            "inner join small_categories sc on p.small_categories_uid = sc.uid " +
+            "inner join big_categories bc on sc.big_categories_uid = bc.uid " +
+            "order by RAND() " +
+            "limit 20", nativeQuery = true)
+    List<Products> findByRand();
 
 }
