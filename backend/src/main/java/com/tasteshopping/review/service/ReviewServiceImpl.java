@@ -108,9 +108,9 @@ public class ReviewServiceImpl implements ReviewService {
         }
         // 이미 작성했는지 확인
         Reviews parent = reviewRepository.getReferenceById(dto.getReview_uid());
-        if (reviewRepository.existsByParentReview(parent)) {
-            return new BaseRes(204, "리뷰 답글 작성 실패 - 이미 답글 작성함", null);
-        }
+//        if (reviewRepository.existsByParentReview(parent)) {
+//            return new BaseRes(204, "리뷰 답글 작성 실패 - 이미 답글 작성함", null);
+//        }
         Reviews review = dto.toEntity(dto, findUser.get(), parent.getProduct(), parent);
         reviewRepository.save(review);
         return new BaseRes(200, "리뷰 답글 작성 성공", null);
