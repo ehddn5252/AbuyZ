@@ -27,7 +27,7 @@ public class ProductController {
     private final ProductKeywordService productKeywordService;
 
     @GetMapping("/random")
-    public ResponseEntity<BaseRes> getRandom(@AuthenticationPrincipal String email) {
+    public ResponseEntity<BaseRes> getRandom() {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", productService.getRandom2()));
     }
 

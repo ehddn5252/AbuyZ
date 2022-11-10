@@ -2,7 +2,6 @@ package com.tasteshopping.order.service;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.dto.InventoryDto;
-import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
@@ -46,16 +45,16 @@ public class OrderListServiceImpl implements OrderListService {
 
     @Override
     public BaseRes getOrderFromOrderListsUid(String email, int order_lists_uid) {
-        Optional<OrderLists> ordersOptional = orderListRepository.findFetchJoinById(order_lists_uid);
-        if (ordersOptional.isPresent()) {
-            Users user = ordersOptional.get().getUser();
+        Optional<OrderLists> orderListsOptional = orderListRepository.findFetchJoinById(order_lists_uid);
+        if (orderListsOptional.isPresent()) {
+            Users user = orderListsOptional.get().getUser();
             Optional<Users> loginUser = userRepository.findByEmail(email);
             if (loginUser.isPresent()) {
                 if (loginUser.get() != user) {
                     return new BaseRes(401, "no authorization", null);
                 }
             }
-            List<Orders> ordersList = orderRepository.findByOrderList(ordersOptional.get());
+            List<Orders> ordersList = orderRepository.findByOrderList(orderListsOptional.get());
             List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
             for (int i = 0; i < ordersList.size(); ++i) {
                 OrderDto tmpOrdersList = ordersList.get(i).toDto();
