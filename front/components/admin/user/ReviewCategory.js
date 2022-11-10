@@ -2,38 +2,109 @@
 import React, { useState, useEffect } from "react";
 
 // MUI
-
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import Checkbox from "@mui/material/Checkbox";
+
 // StyledComponent
 import styled from "styled-components";
 // Calender
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-export default function ReviewCategory({ setReviewSearch }) {
-  const [startDate, setStartDate] = useState(new Date());
+// API
+import { BigCategory } from "../../../pages/api/category";
+import { bigSmallCategory } from "../../../pages/api/category";
+
+export default function ReviewCategory({
+  setReviewSearch,
+  setSearchDto,
+  buttonClick,
+}) {
+  var d = new Date();
+  var dayOfMonth = d.getDate();
+  d.setDate(dayOfMonth - 7);
+
+  const [startDate, setStartDate] = useState(d);
   const [endDate, setEndDate] = useState(new Date());
-  const inquiryBigList = () => [
-    { label: "대분류" },
-    { label: "식품" },
-    { label: "이벤트 프로모션" },
-    { label: "주문, 결제" },
-  ];
-  const inquirySmallList = () => [
-    { label: "소분류" },
-    { label: "상품문의" },
-    { label: "이벤트 프로모션" },
-    { label: "주문, 결제" },
-  ];
-  const dateList = () => [{ label: "전체" }, { label: "문의일시" }];
+  const [bigCategoryUid, setBigCategoryUid] = useState(0);
+  const [smallCategoryUid, setSmallCategoryUid] = useState(0);
+
+  /**
+   * 카테고리
+   */
+
+  const [bigCategory, setbigCategory] = useState([
+    {
+      uid: 0,
+      categoryName: "전체",
+    },
+  ]);
+  const [smallCategory, setSmallCategory] = useState([
+    {
+      uid: 0,
+      categoryName: "전체",
+    },
+  ]);
+
+  const loadBigCategory = async () => {
+    const res = await BigCategory();
+    setbigCategory(res.data);
+  };
+
+  const loadSmallCategory = async () => {
+    const res = await bigSmallCategory(bigCategoryUid);
+    setSmallCategory(res.data);
+  };
+
+  useEffect(() => {
+    loadBigCategory();
+  }, []);
+
+  useEffect(() => {
+    loadSmallCategory();
+  }, [bigCategoryUid]);
+
+  useEffect(() => {
+    if ((bigCategoryUid !== 0) & (smallCategoryUid !== 0)) {
+      setSearchDto((prevState) => ({
+        ...prevState,
+        bigCategoryUid: bigCategoryUid,
+        smallCategoryUid: smallCategoryUid,
+      }));
+    }
+  }, [smallCategoryUid]);
+
+  const dateList = () => [{ label: "전체" }, { label: "리뷰작성일시" }];
 
   const searchButton = () => {
     setReviewSearch(true);
+    buttonClick();
   };
+
   const resetButton = () => {
     setReviewSearch(false);
   };
+
+  // searchdto 변경
+  const handleChange = (e) => {
+    setSearchDto((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  useEffect(() => {
+    setSearchDto((prevState) => ({
+      ...prevState,
+      startDate: startDate,
+      endDate: endDate,
+    }));
+  }, [startDate, endDate]);
+
   return (
     <Container>
       <SearchBox>
@@ -43,20 +114,30 @@ export default function ReviewCategory({ setReviewSearch }) {
           </TitleDiv>
           <CategoryDiv>
             <Autocomplete
+              name="bigCategoryUid"
               disablePortal
               size="small"
-              options={inquiryBigList()}
+              options={bigCategory}
+              getOptionLabel={(category) => category.categoryName}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="대분류"
+              defaultValue={Object.values(bigCategory)[0]}
+              onChange={(e, category) => {
+                setBigCategoryUid(category.uid);
+              }}
             />
             <Autocomplete
+              name="smallCategoryUid"
               disablePortal
               size="small"
-              options={inquirySmallList()}
+              options={smallCategory}
+              defaultValue={Object.values(smallCategory)[0]}
+              getOptionLabel={(category) => category.categoryName}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="소분류"
+              onChange={(e, category) => {
+                setSmallCategoryUid(category.uid);
+              }}
             />
           </CategoryDiv>
         </ColumnBox>
@@ -65,7 +146,12 @@ export default function ReviewCategory({ setReviewSearch }) {
             <p style={{ margin: 0 }}>제품명</p>
           </TitleDiv>
           <CategoryDiv>
-            <TextField size="small" sx={{ width: 400, paddingLeft: "2rem" }} />
+            <TextField
+              size="small"
+              sx={{ width: 400, paddingLeft: "2rem" }}
+              name="productName"
+              onChange={handleChange}
+            />
           </CategoryDiv>
         </ColumnBox>
         <ColumnBox>
@@ -87,14 +173,14 @@ export default function ReviewCategory({ setReviewSearch }) {
                 onChange={(date) => setStartDate(date)}
                 selectsStart
                 startDate={startDate}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="yyyy-MM-dd"
               />
               <MyDatePicker
                 selected={endDate}
-                onChange={(date) => setStartDate(date)}
+                onChange={(date) => setEndDate(date)}
                 selectsStart
                 startDate={endDate}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="yyyy-MM-dd"
               />
             </CalendarDiv>
           </DateDiv>
@@ -104,7 +190,12 @@ export default function ReviewCategory({ setReviewSearch }) {
             <p style={{ margin: 0 }}>리뷰 내용</p>
           </TitleDiv>
           <CategoryDiv>
-            <TextField size="small" sx={{ width: 400, paddingLeft: "2rem" }} />
+            <TextField
+              size="small"
+              sx={{ width: 400, paddingLeft: "2rem" }}
+              name="content"
+              onChange={handleChange}
+            />
           </CategoryDiv>
         </ColumnBox>
         <ColumnBox>
@@ -112,16 +203,21 @@ export default function ReviewCategory({ setReviewSearch }) {
             <p style={{ margin: 0 }}>답변유무</p>
           </TitleDiv>
           <CategoryDiv>
-            <Checkbox
-              defaultChecked
-              name="check"
-              sx={{ paddingLeft: "2rem" }}
-            />
-            <p style={{ paddingRight: "2rem" }}>전체</p>
-            <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>미답변</p>
-            <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>답변완료</p>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="0"
+              name="isAnswered"
+              onChange={handleChange}
+            >
+              <FormControlLabel value="0" control={<Radio />} label="전체" />
+              <FormControlLabel value="1" control={<Radio />} label="미답변" />
+              <FormControlLabel
+                value="2"
+                control={<Radio />}
+                label="답변완료"
+              />
+            </RadioGroup>
           </CategoryDiv>
         </ColumnBox>
         <ButtonDiv>
