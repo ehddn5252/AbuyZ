@@ -176,6 +176,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void getRandom() {
+    }
+
+    @Override
     @Transactional
     public void productStatusSetting() {
         List<Products> productsList = productRepository.findAll();

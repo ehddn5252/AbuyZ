@@ -26,6 +26,13 @@ public class ProductController {
 
     private final ProductKeywordService productKeywordService;
 
+    @GetMapping("/random")
+    public ResponseEntity<BaseRes> getRandom(@AuthenticationPrincipal String email, @PathVariable int uid) {
+        productService.getRandom();
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "random Str 성공!", null));
+
+    }
+
     @PutMapping("/status/setting/{uid}")
     public ResponseEntity<BaseRes> checkByStatus(@AuthenticationPrincipal String email, @PathVariable int uid) {
         productService.checkStatus(uid);
