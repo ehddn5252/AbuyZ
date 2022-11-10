@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // MUI
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
@@ -15,6 +15,7 @@ export default function BasketItem({ basket }) {
   console.log(basket);
   const bc = basket.productCount;
   const [ccount, setCcount] = useState(bc);
+  const [option, setOption] = useState([]);
   const bp = basket.productDto.price;
 
   const minus = () => {
@@ -22,7 +23,11 @@ export default function BasketItem({ basket }) {
       setCcount(ccount - 1);
     }
   };
-  return (
+  useEffect(() => {
+    setOption(basket.inventoryDto.productOptions);
+    console.log(basket.inventoryDto.productOptions);
+  }, []);
+  return basket ? (
     <Container>
       <CheckDiv>
         <CheckBox defaultChecked></CheckBox>
@@ -30,13 +35,20 @@ export default function BasketItem({ basket }) {
       <ImageDiv>
         <img
           src={basket.productDto.descriptionImg}
-          style={{ width: "6rem", height: "8rem", objectFit: "cover" }}
+          style={{ width: "6rem", height: "auto", objectFit: "cover" }}
         />
       </ImageDiv>
       <ContentDiv>
         <ContentBox>{basket.productDto.name}</ContentBox>
         {basket.option}
-        <ContentOption>[{basket.productDto.option}]</ContentOption>
+        <ContentOption>
+          {option.map((e, idx) => (
+            <p key={idx} style={{ margin: 0 }}>
+              <span>{Object.keys(e)} : </span>
+              <span>{Object.values(e)}</span>
+            </p>
+          ))}
+        </ContentOption>
       </ContentDiv>
       <CountDiv>
         <CountDiv2>
@@ -81,7 +93,7 @@ export default function BasketItem({ basket }) {
         </p>
       </PriceDiv>
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`

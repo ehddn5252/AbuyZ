@@ -16,6 +16,8 @@ import { cartlist } from "../../pages/api/cart.js";
 
 export default function BasketList() {
   const [basketList, setBasketList] = useState([]);
+
+  // 장바구니 조회
   const cartllist = async () => {
     const res = await cartlist();
     setBasketList(res.data);

@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // MUI
 import Rating from "@mui/material/Rating";
@@ -8,11 +8,33 @@ import Pagination from "@mui/material/Pagination";
 import FlagIcon from "@mui/icons-material/Flag";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
+
 // StyledComponents
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
+
+// API
+import { review } from "../../pages/api/review";
+
 export default function ProductReview() {
-  return (
+  const [productId, setProductId] = useState("");
+  const [page, setPage] = useState(1);
+  const [reviewList, setReviewlist] = useState("");
+  // 상품 데이터 가져오기
+  const getReview = async (id) => {
+    const res = await review(id, page);
+    console.log(res);
+    setReviewlist(res.data);
+  };
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    const id = pathname.split("/")[2];
+    setProductId(id);
+    getReview(id);
+  }, []);
+  return reviewList.length ? (
     <Container id="reviewView">
       <h1 style={{ fontSize: "3rem" }}>
         리뷰<span style={{ fontSize: "1.5rem" }}>(105)</span>
@@ -158,6 +180,12 @@ export default function ProductReview() {
         <Pagination count={23} size="large" />
       </ReviewList>
     </Container>
+  ) : (
+    <Container id="reviewView">
+      <BlankBox>
+        <p>상품 리뷰가 없습니다</p>
+      </BlankBox>
+    </Container>
   );
 }
 
@@ -246,4 +274,15 @@ const ReviewImg = styled.div`
 `;
 const IconBox = styled.div`
   display: flex;
+`;
+
+const BlankBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 30rem;
+  font-size: 3rem;
+  font-weight: bolder;
+  color: #aaaaaa;
 `;

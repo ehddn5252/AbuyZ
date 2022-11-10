@@ -27,6 +27,8 @@ export default function Search() {
   const [startPrice, setStartPrice] = useState(null);
   const [endPrice, setEndPrice] = useState(null);
   const getProductList = async () => {
+    console.log(searchValue);
+    console.log(bigCategory);
     let res;
     if (searchValue) {
       const temp = await keywordSearch(searchValue);

@@ -50,11 +50,17 @@ export default function ProductItem({ product }) {
             <DiscountP></DiscountP>
           )}
           <PriceP>
-            {product.price - product.discountRate * 0.01 * product.price} 원
+            {(
+              product.price -
+              product.discountRate * 0.01 * product.price
+            ).toLocaleString("ko-KR")}{" "}
+            원
           </PriceP>
         </div>
 
-        {product.discountRate ? <CancelP>{product.price} 원</CancelP> : null}
+        {product.discountRate ? (
+          <CancelP>{product.price.toLocaleString("ko-KR")} 원</CancelP>
+        ) : null}
       </ContentBox>
     </Container>
   );
