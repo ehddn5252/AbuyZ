@@ -244,7 +244,7 @@ export default function SaleProductOption(props) {
     }
   };
 
-  // 상품 등록 API ------------------------------------------
+  // 옵션 있는 상품 등록 API ------------------------------------------
   const handleAddProduct = () => {
     let formData = new FormData();
 
@@ -291,6 +291,52 @@ export default function SaleProductOption(props) {
       });
   };
 
+  // 옵션 없는 상품 등록 API ------------------------------------------
+  const handleNotOptionAddProduct = () => {
+    let formData = new FormData();
+
+    let data = {
+      smallCategoriesUid: smallCategoriesUid,
+      name: name,
+      discountRate: discountRate,
+      price: price,
+      deliveryFee: deliveryFee,
+      brandName: brandName,
+      keywords: keywords,
+      metaTag: metaTag,
+      count: stock,
+    };
+
+    formData.append(
+      "productCreateDto",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
+
+    formData.append("file", mainImg);
+    for (let i = 0; i < extraImg.length; i++) {
+      formData.append("file", extraImg[i]);
+    }
+    formData.append("descFile", descImg);
+
+    const accessToken = sessionStorage.getItem("access-token");
+    axios.defaults.headers.common["access_token"] = accessToken;
+
+    axios
+      .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res, "상품등록에 성공!");
+        alert("상품이 등록되었습니다.");
+        location.reload();
+      })
+      .catch((err) => {
+        console.log(err, "상품등록에 실패하였습니다.");
+      });
+  };
+
   // 총 옵션의 수
   const [optionTotal, setOptionTotal] = useState(0);
 
@@ -306,7 +352,6 @@ export default function SaleProductOption(props) {
     setStockList(stocks);
     const tmpPrice = [];
     const tmpStock = [];
-    console.log(optionTotal, "~~~~~~~~~");
     for (let i = 0; i < optionTotal; i++) {
       tmpPrice.push(i * 0);
       tmpStock.push(i * 0);
@@ -345,16 +390,8 @@ export default function SaleProductOption(props) {
     optionStock[idx1 + idx2 + idx3] = e.target.value;
   };
 
-  // console.log(optionTotal, "옵션 총합");
-
-  // console.log(stockList ? stockList : null, "재고리스트");
-
-  // console.log(optionPrice, optionStock, "옵션별 가격, 옵션별 재고");
-
   // 옵션 가격 및 수량 수정 API ------------------------------------------
   const handleChangeOption = () => {
-    let formData = new FormData();
-
     const data = stockList;
 
     const res = {};
@@ -372,6 +409,7 @@ export default function SaleProductOption(props) {
       })
       .then((res) => {
         console.log(res, "재고 수정에 성공!");
+        alert("상품이 등록되었습니다.");
         location.reload();
       })
       .catch((err) => {
@@ -425,8 +463,7 @@ export default function SaleProductOption(props) {
           <input
             name="optionCheckbox"
             type="checkbox"
-            value="1"
-            style={{ width: "1.5rem", height: "1.5rem", fontWeight: "600" }}
+            style={{ width: "1.5rem", height: "1.5rem" }}
             onChange={(e) => checkOnlyOne(e.target)}
           />
           <div
@@ -441,7 +478,6 @@ export default function SaleProductOption(props) {
           <input
             name="optionCheckbox"
             type="checkbox"
-            value="2"
             style={{ width: "1.5rem", height: "1.5rem" }}
             onChange={(e) => checkOnlyOne(e.target)}
           />
@@ -494,8 +530,10 @@ export default function SaleProductOption(props) {
               }}
             >
               <ButtonBox>
-                <CancelButton>취소</CancelButton>
-                <AddButton>등록</AddButton>
+                <CancelButton onClick={() => location.reload()}>
+                  초기화
+                </CancelButton>
+                <AddButton onClick={handleNotOptionAddProduct}>등록</AddButton>
               </ButtonBox>
             </Grid2>
           </Grid2>
@@ -721,7 +759,7 @@ export default function SaleProductOption(props) {
                   }}
                 >
                   <ButtonBox>
-                    <CancelButton onClick={() => getStockInventory(563)}>
+                    <CancelButton onClick={() => location.reload()}>
                       초기화
                     </CancelButton>
                     <AddButton onClick={handleChangeOption}>등록</AddButton>

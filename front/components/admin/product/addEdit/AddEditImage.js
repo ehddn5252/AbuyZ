@@ -56,19 +56,23 @@ export default function SaleProductImage(props) {
   const uploadExtraImage = (e) => {
     const extraList = e.target.files;
     const target = Object.values(extraList);
-    props.setExtraImg(target);
-    if (target !== []) {
-      const a = [];
-      for (let i = 0; i < target.length; i++) {
-        const subUrl = URL.createObjectURL(target[i]);
-        a.push({
-          file: target[i],
-          thumbnail: subUrl,
-          type: target[i].type.slice(0, 5),
-        });
+    if (target.length < 3) {
+      props.setExtraImg(target);
+      if (target !== []) {
+        const a = [];
+        for (let i = 0; i < target.length; i++) {
+          const subUrl = URL.createObjectURL(target[i]);
+          a.push({
+            file: target[i],
+            thumbnail: subUrl,
+            type: target[i].type.slice(0, 5),
+          });
+        }
+        setSubImageFile(a);
+        setImageFile(target);
       }
-      setSubImageFile(a);
-      setImageFile(target);
+    } else {
+      alert("최대 2개까지 등록 가능합니다.");
     }
   };
 
@@ -119,7 +123,7 @@ export default function SaleProductImage(props) {
         <ImageBox>
           <Title>대표이미지</Title>
           {profile ? (
-            <div>
+            <div style={{ display: "flex" }}>
               <img
                 src={profile.thumbnail}
                 alt={profile.type}
@@ -127,13 +131,28 @@ export default function SaleProductImage(props) {
                 width="210px"
                 height="240px"
               />
-              <input
-                type="file"
-                accept="image/jpg, image/jpeg, image/png"
-                ref={profileRef}
-                onChange={uploadProfile}
-                style={{ display: "none" }}
-              />
+              <Box
+                component="span"
+                sx={{
+                  p: "5rem",
+                  border: "1px dashed grey",
+                  marginLeft: "1rem",
+                }}
+              >
+                <input
+                  type="file"
+                  accept="image/jpg, image/jpeg, image/png"
+                  ref={profileRef}
+                  onChange={uploadProfile}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  sx={{ fontSize: "1.5rem" }}
+                  onClick={handleClickProfile}
+                >
+                  Save
+                </Button>
+              </Box>
             </div>
           ) : (
             <Box component="span" sx={{ p: "5rem", border: "1px dashed grey" }}>
@@ -194,7 +213,7 @@ export default function SaleProductImage(props) {
         <ImageBox>
           <Title>상세 이미지</Title>
           {detail ? (
-            <div>
+            <div style={{ display: "flex" }}>
               <img
                 src={detail.thumbnail}
                 alt={detail.type}
@@ -202,13 +221,28 @@ export default function SaleProductImage(props) {
                 width="210px"
                 height="240px"
               />
-              <input
-                type="file"
-                accept="image/jpg, image/jpeg, image/png"
-                ref={detailRef}
-                onChange={uploadDetail}
-                style={{ display: "none" }}
-              />
+              <Box
+                component="span"
+                sx={{
+                  p: "5rem",
+                  border: "1px dashed grey",
+                  marginLeft: "1rem",
+                }}
+              >
+                <input
+                  type="file"
+                  accept="image/jpg, image/jpeg, image/png"
+                  ref={detailRef}
+                  onChange={uploadDetail}
+                  style={{ display: "none" }}
+                />
+                <Button
+                  sx={{ fontSize: "1.5rem" }}
+                  onClick={handleClickDetailImage}
+                >
+                  Save
+                </Button>
+              </Box>
             </div>
           ) : (
             <Box component="span" sx={{ p: "5rem", border: "1px dashed grey" }}>

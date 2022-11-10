@@ -1,9 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-// 컴포넌트
-import { SearchContainer } from "./SearchWord";
-import { SearchTitle } from "./InquireProduct";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -12,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function Category() {
+export default function Category(props) {
   // 대분류
   const [bigCategory, setBigCategory] = useState("");
   // 소분류
@@ -22,18 +18,25 @@ export default function Category() {
   const handleChange = (event) => {
     setSmallCategory("");
     setBigCategory(event.target.value);
+    props.setBigCategory(event.target.value);
   };
 
   // 소분류 셀렉트 했을 때
   const smallHandleChange = (event) => {
     setSmallCategory(event.target.value);
+    props.setSmallCategory(event.target.value);
   };
 
   // 대분류에 맞는 소분류 객체
   const smallCategoryList = {
-    대분류: [],
-    식품: ["과일", "채소", "고기", "과자", "생수"],
-    "생활, 건강": ["의류", "언더웨어", "신발", "가방", "악세서리"],
+    식품: ["과일", "채소", "고기", "과자/디저트/아이스크림", "생수/음료/주류"],
+    "생활, 건강": [
+      "세제/방향/살충",
+      "세탁용품",
+      "청소용품",
+      "욕실용품",
+      "주방용품",
+    ],
     "가구, 인테리어": [
       "주방가구",
       "거실가구",
@@ -49,7 +52,31 @@ export default function Category() {
       "반려동물 용품",
     ],
     뷰티: ["스킨케어", "향수", "헤어/바디", "메이크업", "네일"],
+    유아동: [
+      "유아동 의류",
+      "유아동 신발",
+      "기저귀/물티슈",
+      "장난감/완구",
+      "유아동가구",
+    ],
+    가전: ["TV/영상가전", "생활가전", "주방가전", "계절가전"],
+    "스포츠, 레저, 자동차": [
+      "헬스/요가/수영",
+      "자전거/스키/레저",
+      "자동차/오토바이",
+      "등산/아웃도어",
+      "캠핑/낚시",
+    ],
   };
+
+  // 리셋 감지기
+  // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
+  useEffect(() => {
+    setSmallCategory("");
+    setBigCategory("");
+    props.setBigCategory("");
+    props.setSmallCategory("");
+  }, [props.reset]);
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -98,18 +125,20 @@ export default function Category() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
+                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value="대분류">
-                <em>대분류</em>
-              </MenuItem>
               <MenuItem value={"식품"}>식품</MenuItem>
               <MenuItem value={"생활, 건강"}>생활/건강</MenuItem>
               <MenuItem value={"가구, 인테리어"}>가구/인테리어</MenuItem>
               <MenuItem value={"반려, 도서, 취미"}>반려/도서/취미</MenuItem>
               <MenuItem value={"뷰티"}>뷰티</MenuItem>
+              <MenuItem value={"유아동"}>유아동</MenuItem>
+              <MenuItem value={"가전"}>가전</MenuItem>
+              <MenuItem value={"스포츠, 레저, 자동차"}>
+                스포츠/레저/자동차
+              </MenuItem>
             </Select>
           </FormControl>
         </CategoryBox>
@@ -132,13 +161,10 @@ export default function Category() {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
+                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value="소분류">
-                <em>소분류</em>
-              </MenuItem>
               {smallCategoryList[bigCategory]?.map((data, idx) => (
                 <MenuItem key={idx} value={data.replace(/\//g, ", ")}>
                   {data}
