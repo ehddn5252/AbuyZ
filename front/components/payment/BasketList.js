@@ -35,8 +35,8 @@ export default function BasketList() {
             <CheckBox defaultChecked />
             <p style={{ fontSize: "1.4rem" }}>전체 선택 (2/2)</p>
           </CheckDiv>
-          {basketList.map((e) => (
-            <BasketItem basket={e} />
+          {basketList.map((e, idx) => (
+            <BasketItem key={idx} basket={e} />
           ))}
         </BasketBox>
       ) : (

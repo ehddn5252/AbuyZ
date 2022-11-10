@@ -3,30 +3,46 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 import CheckBox from "@mui/material/Checkbox";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+
 // StyeldComponet
 import styled from "styled-components";
 
+// API
+import { changeCart, delcart } from "../../pages/api/cart";
+
 export default function BasketItem({ basket }) {
-  console.log(basket);
-  const bc = basket.productCount;
-  const [ccount, setCcount] = useState(bc);
+  const [ccount, setCcount] = useState(basket.productCount);
   const [option, setOption] = useState([]);
-  const bp = basket.productDto.price;
+  const [bp, setBp] = useState(basket.productDto.price);
 
   const minus = () => {
     if (ccount > 0) {
       setCcount(ccount - 1);
     }
   };
+
+  const changeCart1 = async () => {
+    const cartDto = {
+      cartUid: basket.uid,
+      productCount: ccount,
+    };
+    await changeCart(cartDto);
+  };
   useEffect(() => {
     setOption(basket.inventoryDto.productOptions);
-    console.log(basket.inventoryDto.productOptions);
   }, []);
+
+  const deleteCart = async () => {
+    const res = await delcart(basket.uid);
+    console.log(res);
+  };
+  useEffect(() => {
+    changeCart1();
+  }, [ccount]);
+
   return basket ? (
     <Container>
       <CheckDiv>
@@ -63,20 +79,20 @@ export default function BasketItem({ basket }) {
         </CountDiv2>
       </CountDiv>
       <PriceDiv>
-        <CloseDiv>
-          <CloseOutlinedIcon />
-        </CloseDiv>
-        <p
-          style={{
-            textDecoration: "line-through",
-            color: "#AAAAAA",
-            fontSize: "1rem",
-            margin: "0",
-            marginTop: "2.3rem",
-          }}
-        >
-          {(ccount * bp).toLocaleString("ko-KR")}원
-        </p>
+        {basket.productDto.discountRate !== 0 ? (
+          <p
+            style={{
+              textDecoration: "line-through",
+              color: "#AAAAAA",
+              fontSize: "1rem",
+              margin: "0",
+              marginTop: "2.3rem",
+            }}
+          >
+            {(ccount * bp).toLocaleString("ko-KR")}원
+          </p>
+        ) : null}
+
         <p
           style={{
             fontSize: "1.5rem",
@@ -92,6 +108,9 @@ export default function BasketItem({ basket }) {
           원
         </p>
       </PriceDiv>
+      <CloseDiv>
+        <CloseOutlinedIcon onClick={deleteCart} sx={{ cursor: "pointer" }} />
+      </CloseDiv>
     </Container>
   ) : null;
 }
@@ -126,13 +145,13 @@ const ContentDiv = styled.div`
   height: 100%;
 `;
 
-const ContentBox = styled.p`
+const ContentBox = styled.div`
   margin: 0;
   font-size: 1.3rem;
   font-weight: bold;
 `;
 
-const ContentOption = styled.p`
+const ContentOption = styled.div`
   margin: 0;
   font-size: 1rem;
   margin-top: 1rem;
@@ -167,14 +186,15 @@ const CountBox = styled.div`
 const PriceDiv = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  width: 25%;
+  width: 20%;
   margin-left: 3rem;
 `;
 
 const CloseDiv = styled.div`
   display: flex;
-  width: 100%;
+  width: 5%;
   justify-content: flex-end;
 `;

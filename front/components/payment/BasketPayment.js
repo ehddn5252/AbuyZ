@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 // StyeldComponet
 import styled from "styled-components";
-import DeliveryListModal from "./DeliveryListModal";
 
 export default function BasketPayment() {
   const [basketList, setBasketList] = useState([]);
@@ -41,9 +40,6 @@ export default function BasketPayment() {
             <p style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}>
               {address} {detailAddress}
             </p>
-            <AddressButton onClick={() => settAddressModalOpen(true)}>
-              배송지 변경하기
-            </AddressButton>
           </TopBox>
           <BottomBox>
             <PriceBox>
@@ -67,16 +63,6 @@ export default function BasketPayment() {
             </TotalPriceBox>
             <OrderButton>주문하기</OrderButton>
           </BottomBox>
-          {addressModalOpen ? (
-            <DeliveryListModal
-              settAddressModalOpen={settAddressModalOpen}
-              setPostcode={setPostcode}
-              setAddress={setAddress}
-              setDetailAddress={setDetailAddress}
-              setName={setName}
-              setPhone={setPhone}
-            ></DeliveryListModal>
-          ) : null}
         </ContainerDiv>
       ) : null}
     </Container>
