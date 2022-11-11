@@ -1,6 +1,7 @@
 package com.tasteshopping.inquiry.entity;
 
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
+import com.tasteshopping.inquiry.dto.Status;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -67,6 +68,7 @@ public class CustomerCenters {
     public void update(String content){
         this.end_date = new Date();
         this.reply = content;
+        this.status = Status.답변_완료.toString();
     }
 
 }
