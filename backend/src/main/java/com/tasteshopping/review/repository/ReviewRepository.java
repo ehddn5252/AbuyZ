@@ -54,11 +54,4 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
 //    @Query("select r from Reports r")
     List<Reports> findReportsByDetailInfo(String productName, Date startDate, Date endDate, int reasonId, Integer status);
 
-    @Query(value = "select rep from Reports rep " +
-            "join fetch Reviews r on rep.review=r " +
-            "join fetch  Products p on r.product=p " +
-            "where p.name like :productName " +
-            "and rep.processDate between :startDate and :endDate")
-//    @Query("select r from Reports r")
-    List<Reports> findReportsByDetailInfo2(String productName,Date startDate,Date endDate);
 }
