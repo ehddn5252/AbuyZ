@@ -66,7 +66,7 @@ public class CustomerCenters {
 
     public void update(String content){
         this.end_date = new Date();
-        this.content = content;
+        this.reply = content;
     }
 
 }
