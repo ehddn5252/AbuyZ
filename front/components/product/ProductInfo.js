@@ -20,24 +20,32 @@ import { regiswish, delwish } from "../../pages/api/wish";
 import { regiscart } from "../../pages/api/cart";
 
 // State
-import { paymentNum } from "../../states";
+import { paymentProduct } from "../../states";
 import { useRecoilState } from "recoil";
 export default function ProductInfo() {
   const router = useRouter();
 
   const [wish, setWish] = useState(false);
+  const [wishId, setWishId] = useState("");
   const [productId, setProductId] = useState(0);
   const [product, setProduct] = useState([]);
   const [count, setCount] = useState(1);
-  const [option, setOption] = useState([]);
-  const [option2, setOption2] = useState([]);
+  const [optionList, setOptionList] = useState([]);
+  const [optionValue, setOptionValue] = useState([]);
+  const [options, setOptions] = useState("");
+  const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
 
-  const [paymentValue, setPaymentValue] = useRecoilState(paymentNum);
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
     setProduct(res.data);
-    setWish(res.data.wished);
+    if (res.data.isWished) {
+      setWish(res.data.isWished.wished);
+      setWishId(res.data.isWished.uid);
+      console.log(res.data.isWished.uid);
+    }
+
+    MakeOption(res.data.productOptionListMap);
   };
 
   const minus = () => {
@@ -45,21 +53,24 @@ export default function ProductInfo() {
       setCount(count - 1);
     }
   };
-
+  // 옵션변경
+  const getOptionValue = (key, value) => {
+    let temp = optionValue;
+    const keylist = key.split("-");
+    temp[keylist[0]] = value;
+    setOptions(Object.values(temp));
+    setOptionValue(temp);
+  };
   // 장바구니 가기
   const goBasket = async () => {
-    console.log(product.productOptionListDtoList.length);
     let cartDto;
-    if (product.productOptionListDtoList.length !== 1) {
-      let optionValues = {};
-      optionValues[product.productOptionListDtoList[0].name] =
-        product.productOptionListDtoList[0].value;
+    if (product.productOptionListMap.length !== 1) {
       cartDto = {
         productsUid: product.products.uid,
         productCount: count,
+        optionValues: optionValue,
       };
-      cartDto["optionValues"] = optionValues;
-    } else if (product.productOptionListDtoList.length === 1) {
+    } else if (product.productOptionListMap.length === 1) {
       cartDto = {
         productsUid: product.products.uid,
         productCount: count,
@@ -77,7 +88,12 @@ export default function ProductInfo() {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
-        setPaymentValue(productId);
+        const productDto = {
+          productId: productId,
+          count: count,
+          optionValues: optionValue,
+        };
+        setPaymentValue(productDto);
         router.push("/payment");
       } else {
         alert("로그인이 필요한 기능입니다.");
@@ -91,36 +107,33 @@ export default function ProductInfo() {
     const id = pathname.split("/")[2];
     setProductId(id);
     getProduct(id);
-  }, [productId]);
+  }, [productId, wish]);
+
   // 옵션 만들기
-  const MakeOption = () => {
-    if (product.length < 4) {
-      let temp = [];
-      arr.forEach((e) => {
-        let tempItem = e;
-        tempItem["label"] = e.name;
-        console.log(tempItem);
-      });
-      setOption();
+  const MakeOption = (data) => {
+    let temp = [];
+    let defaulttemp = {};
+    let temp2 = [];
+    for (let [key, value] of Object.entries(data)) {
+      let tempDto = {};
+      if (!defaulttemp[key]) {
+        defaulttemp[key] = value[0];
+      }
+      temp2.push(value[0]);
+      tempDto[key] = value;
+      temp.push(tempDto);
     }
+    setOptions(temp2);
+    setOptionValue(defaulttemp);
+    setOptionList(temp);
   };
-  const colorList = () => [
-    { label: "화이트" },
-    { label: "블랙" },
-    { label: "레드" },
-  ];
-  const sizeList = () => [
-    { label: "XL" },
-    { label: "L" },
-    { label: "M" },
-    { label: "S" },
-  ];
+
   const changeWish = () => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
         if (wish) {
-          delwish(productId);
+          delwish(wishId);
           setWish(false);
         } else {
           regiswish(productId);
@@ -132,7 +145,7 @@ export default function ProductInfo() {
     }
   };
 
-  return product.length !== 0 ? (
+  return optionList.length !== 0 && product.length !== 0 ? (
     <Container>
       <ImgBox>
         <MajorImgBox>
@@ -172,8 +185,10 @@ export default function ProductInfo() {
               {product.products.discountRate}%
             </p>
             <p style={{ margin: 0 }}>
-              {product.products.price -
-                0.01 * product.products.discountRate * product.products.price}
+              {(
+                product.products.price -
+                0.01 * product.products.discountRate * product.products.price
+              ).toLocaleString("ko-KR")}
               원
             </p>
           </PriceTop>
@@ -185,35 +200,28 @@ export default function ProductInfo() {
                 textDecoration: "line-through",
               }}
             >
-              {product.products.price}원
+              {product.products.price.toLocaleString("ko-KR")}원
             </p>
           </PriceBottom>
         </PriceBox>
         <OptionBox>
-          <Option>
-            <p style={{ width: "20%" }}>색상</p>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={colorList()}
-              size="small"
-              fullWidth
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue="-"
-            />
-          </Option>
-          <Option>
-            <p style={{ width: "20%" }}>컬러</p>
-            <Autocomplete
-              disablePortal
-              fullWidth
-              id="combo-box-demo"
-              size="small"
-              options={sizeList()}
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue="-"
-            />
-          </Option>
+          {optionList.map((option) => (
+            <Option>
+              <p style={{ width: "20%" }}>{Object.keys(option)}</p>
+              <Autocomplete
+                disablePortal
+                id={Object.keys(option)}
+                options={Object.values(option)[0]}
+                size="small"
+                fullWidth
+                renderInput={(params) => <TextField {...params} />}
+                defaultValue={Object.values(option)[0][0]}
+                onChange={(e, newInputValue) => {
+                  getOptionValue(e.target.id, newInputValue);
+                }}
+              />
+            </Option>
+          ))}
           <Option>
             <p style={{ width: "20%" }}>수량</p>
             <MinusIcon onClick={minus}></MinusIcon>
@@ -222,17 +230,28 @@ export default function ProductInfo() {
             </CountDiv>
             <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
           </Option>
+
           <Option>
             <p style={{ width: "20%" }}>선택옵션</p>
-            {option.length ? <p>XL/블랙</p> : <p>기본</p>}
+            {options.length ? (
+              <p>
+                {options.map((data) => (
+                  <span>{data} </span>
+                ))}
+              </p>
+            ) : (
+              <p>기본</p>
+            )}
           </Option>
         </OptionBox>
         <ResultBox>
           <TitleTag>총 금액</TitleTag>
           <ContentTag>
-            {(product.products.price -
-              0.01 * product.products.discountRate * product.products.price) *
-              count}
+            {(
+              (product.products.price -
+                0.01 * product.products.discountRate * product.products.price) *
+              count
+            ).toLocaleString("ko-KR")}
             원
           </ContentTag>
         </ResultBox>

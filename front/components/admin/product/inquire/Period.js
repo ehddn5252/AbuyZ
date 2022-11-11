@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,18 +10,61 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function Period() {
-  // 기준기간
-  const [standard, setStandard] = useState("");
-
-  const standardChange = (e) => {
-    setStandard(e.target.value);
-  };
-
+export default function Period(props) {
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
+
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
+
+  // 리셋 감지기
+  // 부모 컴포넌트에서 숫자가 올라간 것을 감지해 리셋시킴
+  useEffect(() => {
+    setStartDate(new Date());
+    setEndDate(new Date());
+    props.setStartDate(new Date());
+    props.setEndDate(new Date());
+  }, [props.reset]);
+
+  // 1일 버튼
+  const oneDay = () => {
+    const today = new Date();
+    const day = new Date(today);
+
+    day.setDate(today.getDate() + 1);
+    setStartDate(new Date());
+    setEndDate(day);
+  };
+
+  // 1주 버튼
+  const oneWeek = () => {
+    const today = new Date();
+    const week = new Date(today);
+
+    week.setDate(today.getDate() + 7);
+    setStartDate(new Date());
+    setEndDate(week);
+  };
+
+  // 1달 버튼
+  const oneMonth = () => {
+    const today = new Date();
+    const month = new Date(today);
+
+    month.setDate(today.getDate() + 30);
+    setStartDate(new Date());
+    setEndDate(month);
+  };
+
+  // 1년 버튼
+  const oneYear = () => {
+    const today = new Date();
+    const year = new Date(today);
+
+    year.setDate(today.getDate() + 365);
+    setStartDate(new Date());
+    setEndDate(year);
+  };
 
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
@@ -49,7 +92,7 @@ export default function Period() {
           alignContent: "center",
         }}
       >
-        <FormControl
+        {/* <FormControl
           sx={{
             marginLeft: "5rem",
             marginRight: "3rem",
@@ -73,45 +116,47 @@ export default function Period() {
                 vertical: "top",
                 horizontal: "left",
               },
-              getContentAnchorEl: null,
+              // getContentAnchorEl: null,
             }}
             sx={{ border: 1, height: 50, borderRadius: 0 }}
           >
-            <MenuItem value={"상품등록일"}>상품등록일</MenuItem>
-            <MenuItem value={"상품판매일"}>상품판매일</MenuItem>
+            <MenuItem value={1}>상품등록일</MenuItem>
+            <MenuItem value={2}>상품판매일</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl> */}
         <ButtonGroup>
-          <Button>1일</Button>
-          <Button>1주일</Button>
-          <Button>1개월</Button>
-          <Button>1년</Button>
+          <Button onClick={oneDay}>1일</Button>
+          <Button onClick={oneWeek}>1주일</Button>
+          <Button onClick={oneMonth}>1개월</Button>
+          <Button onClick={oneYear}>1년</Button>
         </ButtonGroup>
         <div
           style={{
             width: "25rem",
             display: "flex",
             alignItems: "center",
-            marginLeft: "2rem",
+            marginLeft: "3rem",
           }}
         >
           <MyDatePicker
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date) => {
+              props.setStartDate(date), setStartDate(date);
+            }}
             selectsStart
             startDate={startDate}
-            // endDate={endDate}
             dateFormat="yyyy/MM/dd"
           />
           <WaveTag>~</WaveTag>
           <MyDatePicker
             selected={endDate}
-            onChange={(date) => setEndDate(date)}
+            onChange={(date) => {
+              props.setEndDate(date), setEndDate(date);
+            }}
             selectsEnd
             startDate={startDate}
             endDate={endDate}
             minDate={startDate}
-            style={{ width: "40%" }}
             dateFormat="yyyy/MM/dd"
           />
         </div>
@@ -122,21 +167,21 @@ export default function Period() {
 
 const ButtonGroup = styled.div`
   display: flex;
-  margin-left: 1rem;
+  margin-left: 5rem;
   height: 100%;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0; */
 `;
 
 const Button = styled.button`
-  background: #0b7ee9;
+  background: #dadada;
   font-size: 1rem;
   padding: 0.5rem;
-  color: white;
-  border-color: #0b7ee9;
+  color: black;
+  border-color: #eeeeee;
   width: 4rem;
   height: 70%;
+  box-shadow: 0;
   &:hover {
     cursor: pointer;
   }
@@ -144,12 +189,9 @@ const Button = styled.button`
 
 const WaveTag = styled.div`
   font-size: 2rem;
-  /* rotate: 90deg; */
 `;
 
 export const MyDatePicker = styled(DatePicker)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
   height: 3rem;
   font-size: 1rem;
   font-weight: bold;

@@ -69,6 +69,23 @@ export default function SaleProductInfo(props) {
     setFeePlaceholder("숫자만 입력해주세요. ex) 3000");
   };
 
+  // const [lst, setLst] = useState([]);
+
+  // const a = () => {
+  //   console.log("ssss");
+  //   const b = [];
+  //   for (let i = 0; i < 4; i++) {
+  //     b.push(i);
+  //   }
+  //   setLst(b);
+  // };
+
+  // const c = () => {
+  //   console.log("qqqq");
+  //   lst[1] = "dogoeon";
+  // };
+
+  // console.log(lst, "$$$");
   return (
     <Grid2 sx={{ padding: "0", display: "flex" }}>
       <Grid2
@@ -117,6 +134,7 @@ export default function SaleProductInfo(props) {
               placeholder={namePlaceholder}
               onChange={nameChange}
               onFocus={nameFocus}
+              // onFocus={a}
               onBlur={nameBlur}
               style={{ height: "3rem" }}
             />
@@ -128,6 +146,7 @@ export default function SaleProductInfo(props) {
               placeholder={salePlaceholder}
               onChange={saleChange}
               onFocus={saleFocus}
+              // onFocus={c}
               onBlur={saleBlur}
             />
           </InfoBox>

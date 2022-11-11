@@ -45,9 +45,7 @@ export default function Login() {
       email: email,
       password: password,
     };
-    console.log(LoginDto);
     const res = await login(LoginDto);
-    console.log(res);
     if (res.status === 200) {
       // 일정시간마다 토큰 재발급
       if (res.data.data.type == "[ADMIN]") {
@@ -56,13 +54,13 @@ export default function Login() {
         router.push("/");
       }
     }
-    console.log(res);
   };
 
   const socialLogin = (event) => {
     event.preventDefault();
     Kakao.Auth.loginForm({
       success: (authObj) => {
+        console.log(authObj.access_token);
         https
           .post("/user/kakao-login", {
             access_token: authObj.access_token,

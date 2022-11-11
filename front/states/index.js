@@ -27,8 +27,8 @@ export const mypageNum = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const paymentNum = atom({
-  key: "paymentNum",
+export const paymentProduct = atom({
+  key: "paymentProduct",
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
@@ -36,5 +36,17 @@ export const paymentNum = atom({
 export const filterName = atom({
   key: "filterName",
   default: "최근 등록순",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const bigCategoryValue = atom({
+  key: "bigCategoryValue",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const basketProducts = atom({
+  key: "basketProducts",
+  default: "",
   effects_UNSTABLE: [persistAtom],
 });

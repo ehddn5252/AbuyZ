@@ -26,10 +26,13 @@ import {
 } from "../api/statistics";
 
 export default function Chart() {
+  const now = new Date();
   // 차트 타입
   const [chartType, setChartType] = useState(0);
   // 날짜
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(
+    new Date(now.setDate(now.getDate() - 30))
+  );
   const [endDate, setEndDate] = useState(new Date());
   const [starttime, setStarttime] = useState("2022-10-01");
   const [endtime, setEndtime] = useState("2022-11-09");
