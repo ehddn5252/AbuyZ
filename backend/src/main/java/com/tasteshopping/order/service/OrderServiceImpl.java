@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
         orderLists.setDay(LocalDateTime.now().getDayOfWeek().toString());
-        Date date = UtilService.getToday();
+        Date date = UtilService.getTodayTime();
         orderLists.setDate(date);
         return orderListRepository.save(orderLists);
     }
