@@ -363,26 +363,30 @@ public class ReviewServiceImpl implements ReviewService {
         // 3. 안쪽에 있는 parent의 uid를 검사하여서 만약에 동일하다면 답변이 있는 review, 아니라면 답변이 없는 리뷰
 
         for (int i = 0; i < filteredReviews.size(); ++i) {
+            boolean isBreak = false;
             if (filteredReviews.get(i).getParentReview() == null) {
                 for (int j = 0; j < filteredReviews.size(); ++j) {
                     if (filteredReviews.get(j).getParentReview() != null) {
+                        // 답변
                         if (filteredReviews.get(i).getUid() == filteredReviews.get(j).getParentReview().getUid()) {
                             ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
                             reviewSearchDto.setAnswered(true);
                             reviewSearchDto.setAnswerDate(filteredReviews.get(j).getDate());
                             answerReviewDtos.add(reviewSearchDto);
                             allAnswerReviewDtos.add(reviewSearchDto);
+                            isBreak=true;
                             break;
                         }
                     }
                 }
-                ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
-                reviewSearchDto.setAnswered(false);
-                reviewSearchDto.setAnswerDate(null);
-                noAnswerReviewDtos.add(reviewSearchDto);
-                allAnswerReviewDtos.add(reviewSearchDto);
+                if(!isBreak) {
+                    ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
+                    reviewSearchDto.setAnswered(false);
+                    reviewSearchDto.setAnswerDate(null);
+                    noAnswerReviewDtos.add(reviewSearchDto);
+                    allAnswerReviewDtos.add(reviewSearchDto);
+                }
             }
-
         }
         if (isAnswered == 1) {
             return noAnswerReviewDtos;
