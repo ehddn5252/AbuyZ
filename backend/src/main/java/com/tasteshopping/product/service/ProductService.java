@@ -68,4 +68,6 @@ public interface ProductService {
     void checkStatus(int uid);
 
     List<ProductBoDto> getBoAllProduct();
+
+    BaseRes getProductCreateInfo(int products_uid);
 }

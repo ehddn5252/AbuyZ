@@ -21,7 +21,6 @@ public class Inventories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer uid;
 
-
     @Column(columnDefinition = "int default 0")
     Integer price;
     @Column(columnDefinition = "int default 0")

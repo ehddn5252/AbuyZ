@@ -93,6 +93,7 @@ public class OrderListServiceImpl implements OrderListService {
                     continue;
                 }
             }
+            orderListsList.get(i).getDate();
             List<Orders> ordersList = orderRepository.findByOrderList(orderListsList.get(i));
             for (int j = 0; j < ordersList.size(); ++j) {
                 if (ordersList.get(j).getReview() == null) {
