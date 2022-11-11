@@ -51,4 +51,8 @@ public class EventController {
             return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
         }
     }
+    @GetMapping("/all")
+    public ResponseEntity<ResponseDto>getAllEventList(){
+        return new ResponseEntity<>(eventService.getAllEventList(),HttpStatus.OK);
+    }
 }
