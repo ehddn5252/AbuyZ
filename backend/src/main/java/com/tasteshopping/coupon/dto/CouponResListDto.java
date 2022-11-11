@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouponResListDto {
-    private List<CouponResDto> result;
+    private List<UserCouponResDto> result;
     private int count;
 }

@@ -42,4 +42,13 @@ public class EventController {
                                                   @RequestPart(value = "eventDto") EventReqDto eventDto){
         return new ResponseEntity<>(eventService.modifyEvent(email,event_uid,thumbnail,content_img,eventDto),HttpStatus.OK);
     }
+    @GetMapping("/detail/{event_uid}")
+    public ResponseEntity<ResponseDto>getEventDetail(@PathVariable int event_uid){
+        try {
+            return new ResponseEntity<>(eventService.getEventDetail(event_uid),HttpStatus.OK);
+        }
+        catch (RuntimeException e){
+            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+        }
+    }
 }

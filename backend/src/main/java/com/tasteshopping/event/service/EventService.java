@@ -11,4 +11,6 @@ public interface EventService {
     ResponseDto deleteEvent(String email,int event_uid);
     ResponseDto modifyEvent(String email,int event_uid,MultipartFile thumbnail,
                             MultipartFile content_img, EventReqDto eventDto);
+
+    ResponseDto getEventDetail(int event_uid);
 }

@@ -4,6 +4,7 @@ import com.tasteshopping.common.service.ImageUploadService;
 import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.coupon.repository.CouponRepository;
 import com.tasteshopping.event.dto.EventReqDto;
+import com.tasteshopping.event.dto.EventResDetailDto;
 import com.tasteshopping.event.dto.EventResDto;
 import com.tasteshopping.event.entity.EventCouponLists;
 import com.tasteshopping.event.entity.Events;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -70,13 +72,12 @@ public class EventServiceImpl implements EventService{
         ResponseDto responseDto = new ResponseDto();
 
         List<Events>events = eventRepository.findAll();
-        List<EventResDto> result = new ArrayList<>();
-
-        for(Events event:events){
-            result.add(event.toDto());
-        }
-
+        List<EventResDto> result = events.stream()
+                                        .map(Events::toDto)
+                                        .collect(Collectors.toList());
+        
         responseDto.setData(result);
+        responseDto.setMessage("조회 성공");
         return responseDto;
     }
 
@@ -184,5 +185,16 @@ public class EventServiceImpl implements EventService{
     public boolean check(String email){
         Optional<Users> users = userRepository.findByEmail(email);
         return !users.isPresent() || users.get().getUserRoles() != Role.ADMIN;
+    }
+    public ResponseDto getEventDetail(int event_uid){
+        ResponseDto responseDto = new ResponseDto();
+        Optional<Events>findEvent = eventRepository.findByUid(event_uid);
+        if(!findEvent.isPresent()){
+            throw new RuntimeException();
+        }
+        EventResDetailDto eventResDetailDto= findEvent.get().toEventResDetailDto();
+        responseDto.setData(eventResDetailDto);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
     }
 }
