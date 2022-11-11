@@ -8,7 +8,7 @@ export default function MyReviewItem(product) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(product);
+  console.log(product.product);
   return (
     <ItemContainer>
       <span style={{ fontSize: "0.8rem", color: "#aaaaaa" }}>
@@ -23,6 +23,9 @@ export default function MyReviewItem(product) {
         <div style={{ flex: "7", marginLeft: "1rem" }}>
           <div style={{ paddingTop: "1.8rem" }}>
             <br></br>
+            <ProductName>
+              {product.product.inventoryDto.productDto.name}
+            </ProductName>
             <ProductName>
               {product.product.inventoryDto.productDto.name}
             </ProductName>

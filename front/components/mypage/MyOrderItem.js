@@ -15,7 +15,7 @@ import { eachGetOrderList } from "../../pages/api/order";
 import { regiscart } from "../../pages/api/cart";
 
 export default function MyOrderItem({ uid }) {
-  console.log(uid);
+  console.log("번호", uid);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -26,6 +26,7 @@ export default function MyOrderItem({ uid }) {
   const bundleItem = async () => {
     const rres = await eachGetOrderList(uid);
     console.log("갖고온거 보여줘", rres.data);
+    setOrderBundleItem(rres.data);
   };
 
   const handleClick = async (a, b) => {
@@ -35,6 +36,8 @@ export default function MyOrderItem({ uid }) {
       optionValues: b,
     };
     const res = await regiscart(cartDto);
+    console.log(res.data);
+    alert("장바구니에 담았습니다!");
   };
 
   useEffect(() => {

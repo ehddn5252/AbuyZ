@@ -34,7 +34,8 @@ export default function Detail() {
     }
   };
   const ClickCoupon = async () => {
-    const res = await getCoupon(couponList[0].uid);
+    const res = await getCoupon(eventList[idx].coupon_lists[0].uid);
+    console.log(res.data);
     alert("쿠폰 지급이 완료되었습니다! 쿠폰함을 확인해주세요👌");
   };
 

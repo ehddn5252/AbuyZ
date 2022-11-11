@@ -33,9 +33,9 @@ export default function MyCouponList() {
       {/* <MyCouponItem couponList={couponList}></MyCouponItem> */}
       {couponList.length ? (
         <Grid container spacing={1} style={{ width: "100%", height: "100%" }}>
-          {couponList.map((coupon) => (
+          {couponList.map((coupon, idx) => (
             <Grid
-              key={coupon.id}
+              key={idx}
               item
               xs={6}
               style={{

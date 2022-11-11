@@ -28,8 +28,8 @@ export default function MyComplainList() {
 
       {complainList.length ? (
         <ComplainListBox>
-          {complainList.map((e) => (
-            <MyComplainItem complain={e} />
+          {complainList.map((e, idx) => (
+            <MyComplainItem key={idx} complain={e} />
           ))}
         </ComplainListBox>
       ) : (

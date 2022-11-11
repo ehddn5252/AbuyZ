@@ -11,21 +11,27 @@ export default function Myinfo({ setTap, SetActiveTap }) {
   const [reviewCnt, setReviewCnt] = useState(0);
   const [couponCnt, setCouponCnt] = useState(0);
   const [couponL, setCouponL] = useState([]);
+
+  // 사용 가능한 쿠폰
   const ccoupon = async () => {
     const res = await couponlist();
+    setCouponL(res.data.result);
     var cnt = 0;
     for (var i = 0; i < couponL.length; i++) {
-      if (couponL.statue == "사용가능") {
+      if (couponL[i].status === "사용가능") {
         cnt += 1;
       }
     }
     setCouponCnt(cnt);
   };
   console.log(couponCnt);
+  // 아직 작성하지 않는 리뷰
   const rreviewYet = async () => {
     const res = await reviewYet();
     setReviewCnt(res.data.length);
   };
+
+  // 유저 이름
   const uuser = async () => {
     const res = await getMyInfo();
     setUserName(res.data.name);
@@ -65,7 +71,7 @@ export default function Myinfo({ setTap, SetActiveTap }) {
         <HistoryDiv onClick={tap3Change}>
           <HistoryTitle>사용 가능 쿠폰</HistoryTitle>
           <HistoryCount>
-            <Count>1</Count>개
+            <Count>{couponCnt}</Count>개
           </HistoryCount>
         </HistoryDiv>
         <HhistoryDiv onClick={tap6Change}>

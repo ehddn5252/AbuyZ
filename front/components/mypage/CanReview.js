@@ -37,8 +37,8 @@ export default function CanReview() {
       />
       {productList ? (
         <ProductListBox>
-          {productList.map((e) => (
-            <MyReviewItem product={e} />
+          {productList.map((e, idx) => (
+            <MyReviewItem key={idx} product={e} />
           ))}
         </ProductListBox>
       ) : (
