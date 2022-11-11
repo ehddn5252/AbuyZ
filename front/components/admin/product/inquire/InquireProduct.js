@@ -125,7 +125,7 @@ export default function SaleProductSearch() {
                   // 판매상태
                   // 전체
                   if (checkStatus === 0) {
-                    p[i].count = getInventory(p[i].uid);
+                    // p[i].count = getInventory(p[i].uid);
                     tmp.push(p[i]);
                   }
                   // 판매중
@@ -164,16 +164,6 @@ export default function SaleProductSearch() {
     const ps = await inquireProductStatus();
     console.log(ps);
   };
-
-  // // 재고 목록 가져오기
-  // const getInventory = async (productUid) => {
-  //   const il = await getStockInventory(productUid);
-  //   let count = 0;
-  //   for (let j = 0; j < il.length; j++) {
-  //     count += il[j].count;
-  //   }
-  //   setStockCount(count);
-  // };
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -313,7 +303,7 @@ export default function SaleProductSearch() {
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
           <ResetButton onClick={() => setReset(reset + 1)}>초기화</ResetButton>
-          <SearchButton>검색</SearchButton>
+          <SearchButton onClick={() => getProduct()}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       {/* 상품 목록 */}
