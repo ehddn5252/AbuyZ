@@ -1,18 +1,23 @@
 import React from "react";
-import Link from "next/link";
 
 import styled from "styled-components";
 
+// Next.js
+import { useRouter } from "next/router";
+
 export default function EventItem(event) {
+  const router = useRouter();
+  const goDetail = () => {
+    router.push(`/event/${event.event.uid}`);
+  };
   return (
     <CardDiv>
       {/* <image src={}></image> */}
-      <Link href="/event/detail">
-        <img
-          src={event.thumbnail}
-          style={{ height: "100%", width: "100%", objectFit: "cover" }}
-        />
-      </Link>
+      <img
+        onClick={goDetail}
+        src={event.event.thumbnail}
+        style={{ height: "15rem", width: "100%", objectFit: "cover" }}
+      />
     </CardDiv>
   );
 }

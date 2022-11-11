@@ -9,18 +9,22 @@ import styled from "styled-components";
 
 // 하위 Components
 import MyReviewItem from "./MyReviewItem";
+
+// api
 import { reviewYet } from "../../pages/api/review";
-export default function CanReview({ setReviewCnt }) {
+
+export default function CanReview() {
   const [productList, setProductList] = useState([]);
 
   const rreviewYet = async () => {
     const res = await reviewYet();
     setProductList(res.data);
-    setReviewCnt(productList.length);
   };
+
   useEffect(() => {
     rreviewYet();
   }, []);
+
   return (
     <MyOrderContainer>
       <MajorTitle>작성 가능한 리뷰</MajorTitle>
@@ -33,14 +37,14 @@ export default function CanReview({ setReviewCnt }) {
       />
       {productList ? (
         <ProductListBox>
-          {productList.map((e) => (
-            <MyReviewItem product={e} />
+          {productList.map((e, idx) => (
+            <MyReviewItem key={idx} product={e} />
           ))}
         </ProductListBox>
       ) : (
         <BlankBox>
           <FavoriteBorderOutlinedIcon sx={{ fontSize: "6rem" }} />
-          <p>찜한 상품이 없습니다</p>
+          <p>작성 가능한 리뷰가 없습니다.</p>
         </BlankBox>
       )}
     </MyOrderContainer>
