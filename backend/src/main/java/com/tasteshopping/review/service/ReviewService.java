@@ -20,4 +20,6 @@ public interface ReviewService {
     BaseRes productPhotosReview(int product_uid);
     BaseRes productReviewDetail(String email,int review_uid);
     List<ReviewSearchDto> searchByDetail(ReviewSearchReqDto reviewSearchReqDto);
+
+    BaseRes searchReport(ReportSearchReqDto reportSearchReqDto);
 }

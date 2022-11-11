@@ -112,4 +112,10 @@ public class ReviewController {
     public ResponseEntity<BaseRes> productReviewDetail(@AuthenticationPrincipal String email, @PathVariable int review_id) {
         return new ResponseEntity<>(reviewService.productReviewDetail(email, review_id), HttpStatus.OK);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<BaseRes> search(@AuthenticationPrincipal String email, @RequestBody ReportSearchReqDto reportSearchReqDto){
+        BaseRes baseRes = reviewService.searchReport(reportSearchReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
 }

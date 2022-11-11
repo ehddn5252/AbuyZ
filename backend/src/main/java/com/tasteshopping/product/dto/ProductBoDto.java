@@ -1,8 +1,8 @@
 package com.tasteshopping.product.dto;
 
+import com.tasteshopping.inventory.dto.InventoryResDto;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +27,8 @@ public class ProductBoDto {
     private Date date;
     private String status;
     private Integer reviewNum;
-    private Integer inventoryNum;
+    private Integer inventoryTotalNum;
     private List<String> productKeywords;
+    private List<InventoryResDto> inventoryResDtoList;
+
 }

@@ -1,6 +1,7 @@
 package com.tasteshopping.product.service;
 
 import com.tasteshopping.common.service.UtilService;
+import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -180,13 +181,24 @@ public class ProductServiceImpl implements ProductService {
         List<Products> l = productRepository.findAllFetchJoin();
 //        Collections.shuffle(l);
         List<ProductBoDto> new_l = new ArrayList<>();
-        for (int i = 0; i <l.size(); ++i) {
+        for (int i = 0; i <20; ++i) {
             List<ProductKeywords> productKeywords = l.get(i).getProductKeywords();
             List<String> keywords = new ArrayList<>();
+            // 키워드 설정
             for(int j=0;j<productKeywords.size();++j) {
                 keywords.add(productKeywords.get(j).getName());
             }
-            new_l.add(l.get(i).toBoDto(keywords));
+            ProductBoDto productBoDto= l.get(i).toBoDto(keywords);
+            List<Inventories> inventoryList = l.get(i).getInventories();
+            if(inventoryList.size()!=0) {
+                int count = 0;
+                for (int j = 0; j < inventoryList.size(); ++j) {
+                    Inventories inventories = inventoryList.get(j);
+                    count += inventories.getCount();
+                }
+                productBoDto.setInventoryTotalNum(count);
+            }
+            new_l.add(productBoDto);
         }
         return new_l;
     }
