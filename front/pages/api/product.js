@@ -176,3 +176,18 @@ export async function getStockInventory(productUid) {
     });
   });
 }
+
+// 재고 목록 가져오기
+export async function getRandomProducts() {
+  return new Promise((resolve) => {
+    https.get("/product/random").then((response) => {
+      if (response.status === 200) {
+        console.log("추천 상품 가져오기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("추천 상품 가져오기 성공", response);
+        resolve(response);
+      }
+    });
+  });
+}

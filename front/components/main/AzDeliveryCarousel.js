@@ -4,7 +4,16 @@ import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// API
+import { getRandomProducts } from "../../pages/api/product";
+
+// Next.js
+import { useRouter } from "next/router";
+
 export default function AzDeliveryCarousel() {
+  const router = useRouter();
+  const [products, setProducts] = useState([]);
+
   const settings = {
     // dots: true,
     infinite: true,
@@ -13,6 +22,7 @@ export default function AzDeliveryCarousel() {
     slidesToShow: 4,
     slidesToScroll: 4,
   };
+
   const array = [
     { name: "당근", price: 690, grade: 4.0, reviews: 100, discount: 20 },
     { name: "우유", price: 3500, grade: 4.4, reviews: 30 },
@@ -26,7 +36,19 @@ export default function AzDeliveryCarousel() {
     { name: "음료", price: 1000, grade: 4.9, reviews: 222 },
   ];
 
-  return (
+  const getProducts = async () => {
+    const res = await getRandomProducts();
+    setProducts(res.data);
+  };
+
+  const goDetail = (uid) => {
+    router.push(`/detail/${uid}`);
+  };
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  return products ? (
     <Container>
       <div
         style={{
@@ -51,11 +73,11 @@ export default function AzDeliveryCarousel() {
           내일 오전 배송 출발 🐱‍🏍
         </span>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
-          {array.map((e, idx) => (
-            <div style={{ cursor: "pointer" }} key={idx}>
+          {products.map((product, idx) => (
+            <div style={{ cursor: "pointer" }} key={idx} onClick={goDetail}>
               <CardImg
                 alt="추천상품"
-                src="/images/grape.png"
+                src={product.repImg}
                 style={{
                   width: "14rem",
                   height: "16rem",
@@ -72,7 +94,7 @@ export default function AzDeliveryCarousel() {
                   marginLeft: "1.5rem",
                 }}
               >
-                <CardName>{e.name}</CardName>
+                <CardName>{product.name}</CardName>
               </div>
               <div
                 style={{
@@ -83,7 +105,7 @@ export default function AzDeliveryCarousel() {
                   marginLeft: "1.5rem",
                 }}
               >
-                {e.discount != null ? (
+                {product.discount != null ? (
                   <div>
                     <div style={{ display: "flex", flexDirection: "row" }}>
                       <div
@@ -93,13 +115,13 @@ export default function AzDeliveryCarousel() {
                           flex: 2,
                         }}
                       >
-                        <CardDiscount>{e.discount}%</CardDiscount>
+                        <CardDiscount>{product.discountRate}%</CardDiscount>
                       </div>
                       <div style={{ flex: 5 }}>
                         <CardPrice>
                           {(
-                            e.price *
-                            ((100 - e.discount) / 100)
+                            product.price *
+                            ((100 - product.discountRate) / 100)
                           ).toLocaleString("ko-KR")}
                           원
                         </CardPrice>
@@ -107,13 +129,15 @@ export default function AzDeliveryCarousel() {
                     </div>
                     <div>
                       <CardPriceBD>
-                        {e.price.toLocaleString("ko-KR")}원
+                        {product.price.toLocaleString("ko-KR")}원
                       </CardPriceBD>
                     </div>
                   </div>
                 ) : (
                   <div>
-                    <CardPPrice>{e.price.toLocaleString("ko-KR")}원</CardPPrice>
+                    <CardPPrice>
+                      {product.price.toLocaleString("ko-KR")}원
+                    </CardPPrice>
                   </div>
                 )}
               </div>
@@ -122,7 +146,7 @@ export default function AzDeliveryCarousel() {
         </StyledSlider>
       </div>
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`

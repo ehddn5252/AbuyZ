@@ -3,10 +3,17 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { getMyInfo } from "../../pages/api/user";
 
+// API
+import { getMyInfo } from "../../pages/api/user";
+import { getRandomProducts } from "../../pages/api/product";
+
+// Next.js
+import { useRouter } from "next/router";
 export default function ProductCarousel() {
+  const router = useRouter();
   const [user, setUser] = useState("");
+  const [products, setProducts] = useState([]);
   const uuser = async () => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -24,22 +31,20 @@ export default function ProductCarousel() {
     slidesToShow: 4,
     slidesToScroll: 4,
   };
-  const array = [
-    { name: "당근", price: 690, grade: 4.0, reviews: 100, discount: 20 },
-    { name: "우유", price: 3500, grade: 4.4, reviews: 30 },
-    { name: "감자", price: 3900, grade: 3.5, reviews: 6 },
-    { name: "계란", price: 6990, grade: 5.0, reviews: 200 },
-    { name: "새우", price: 1060, grade: 4.0, reviews: 1000 },
-    { name: "데님 바지", price: 2390, grade: 2.5, reviews: 150 },
-    { name: "피지오겔 로션", price: 1090, grade: 3.7, reviews: 32 },
-    { name: "패드", price: 6090, grade: 4.5, reviews: 9 },
-    { name: "신발", price: 12399, grade: 4.8, reviews: 87 },
-    { name: "음료", price: 1000, grade: 4.9, reviews: 222 },
-  ];
+
+  const getProducts = async () => {
+    const res = await getRandomProducts();
+    setProducts(res.data);
+  };
+
+  const goDetail = (uid) => {
+    router.push(`/detail/${uid}`);
+  };
   useEffect(() => {
+    getProducts();
     uuser();
   }, []);
-  return (
+  return products ? (
     <div
       style={{
         height: "30rem",
@@ -74,11 +79,11 @@ export default function ProductCarousel() {
           추천 상품
         </span>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
-          {array.map((e, idx) => (
-            <div style={{ cursor: "pointer" }} key={idx}>
+          {products.map((product, idx) => (
+            <div style={{ cursor: "pointer" }} key={idx} onClick={goDetail}>
               <CardImg
                 alt="추천상품"
-                src="/images/grape.png"
+                src={product.repImg}
                 style={{
                   width: "14rem",
                   height: "16rem",
@@ -94,7 +99,7 @@ export default function ProductCarousel() {
                   marginLeft: "1.5rem",
                 }}
               >
-                <CardName>{e.name}</CardName>
+                <CardName>{product.name}</CardName>
               </div>
               <div
                 style={{
@@ -105,7 +110,7 @@ export default function ProductCarousel() {
                   marginLeft: "1.5rem",
                 }}
               >
-                {e.discount != null ? (
+                {product.discount != null ? (
                   <div>
                     <div style={{ display: "flex", flexDirection: "row" }}>
                       <div
@@ -115,13 +120,13 @@ export default function ProductCarousel() {
                           flex: 2,
                         }}
                       >
-                        <CardDiscount>{e.discount}%</CardDiscount>
+                        <CardDiscount>{product.discountRate}%</CardDiscount>
                       </div>
                       <div style={{ flex: 5 }}>
                         <CardPrice>
                           {(
-                            e.price *
-                            ((100 - e.discount) / 100)
+                            product.price *
+                            ((100 - product.discountRate) / 100)
                           ).toLocaleString("ko-KR")}
                           원
                         </CardPrice>
@@ -129,13 +134,15 @@ export default function ProductCarousel() {
                     </div>
                     <div>
                       <CardPriceBD>
-                        {e.price.toLocaleString("ko-KR")}원
+                        {product.price.toLocaleString("ko-KR")}원
                       </CardPriceBD>
                     </div>
                   </div>
                 ) : (
                   <div>
-                    <CardPPrice>{e.price.toLocaleString("ko-KR")}원</CardPPrice>
+                    <CardPPrice>
+                      {product.price.toLocaleString("ko-KR")}원
+                    </CardPPrice>
                   </div>
                 )}
               </div>
@@ -144,7 +151,7 @@ export default function ProductCarousel() {
         </StyledSlider>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 const CardImg = styled.img`
