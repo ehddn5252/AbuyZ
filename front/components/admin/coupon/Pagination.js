@@ -55,6 +55,7 @@ export default function Pagination({ total, limit, page, setPage }) {
               );
             }
           })}
+
         <Button
           onClick={() => {
             setPage(page + 1);

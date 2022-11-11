@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Pagination from "../../coupon/Pagination";
+import moment from "moment";
+
+// API
+import { delProduct } from "../../../../pages/api/product";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -18,6 +22,7 @@ const header = [
   "브랜드",
   "키워드",
   "배송비",
+  "상품 등록일",
 ];
 
 const body = [
@@ -39,23 +44,53 @@ const body = [
 
 export default function InquireList(props) {
   // 조회한 상품 정보
-  // const [productInfo, setProductInfo] = useState(props.productInfo);
   const productInfo = props.productInfo;
 
+  // 내림차순정렬
+  productInfo.sort(function (a, b) {
+    return b.uid - a.uid;
+  });
+
   // 페이지네이션
-  const [limit, setLimit] = useState(9);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
-  // 조회 감지
-  // const [update, setUpdate] = useState(0);
-  // console.log(props.productInfo, "aaaaa");
+  console.log(productInfo);
 
-  // console.log(productInfo, "@@@@");
-  // useEffect(() => {
-  //   setProductInfo(props.productInfo);
-  //   console.log("1");
-  // }, [props.update]);
+  // 체크된 아이템을 담을 배열
+  const [checkItems, setCheckItems] = useState([]);
+
+  // 체크박스 전체 선택
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
+      const idArray = [];
+      productInfo.forEach((el) => idArray.push(el.uid));
+      setCheckItems(idArray);
+    } else {
+      // 전체 선택 해제 시 checkItems 를 빈 배열로 상태 업데이트
+      setCheckItems([]);
+    }
+  };
+
+  // 체크박스 단일 선택
+  const handleSingleCheck = (checked, uid) => {
+    if (checked) {
+      // 단일 선택 시 체크된 아이템을 배열에 추가
+      setCheckItems((prev) => [...prev, uid]);
+    } else {
+      // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
+      setCheckItems(checkItems.filter((el) => el !== uid));
+    }
+  };
+
+  // 선택 삭제
+  const handleDel = () => {
+    checkItems.forEach((e) => delProduct(e));
+    alert("상품이 삭제되었습니다.");
+    location.reload();
+  };
 
   return (
     <Grid2
@@ -73,7 +108,7 @@ export default function InquireList(props) {
       />
       <div
         style={{
-          height: 500,
+          height: 539,
           width: "90%",
           display: "flex",
           justifyContent: "center",
@@ -90,6 +125,13 @@ export default function InquireList(props) {
                 <input
                   type="checkbox"
                   style={{ width: "1.5rem", height: "1.5rem" }}
+                  onChange={(e) => handleAllCheck(e.target.checked)}
+                  checked={
+                    checkItems.length !== productInfo.length ||
+                    checkItems.length === 0
+                      ? false
+                      : true
+                  }
                 />
               </Th>
               {header.map((e, idx) => (
@@ -104,6 +146,8 @@ export default function InquireList(props) {
                   <input
                     type="checkbox"
                     style={{ width: "1.5rem", height: "1.5rem" }}
+                    onChange={(v) => handleSingleCheck(v.target.checked, e.uid)}
+                    checked={checkItems.includes(e.uid) ? true : false}
                   />
                 </Td>
                 <Td>
@@ -127,13 +171,14 @@ export default function InquireList(props) {
                 <Td>{e.brandName}</Td>
                 <Td>{e.productKeywords}</Td>
                 <Td>{e.deliveryFee}</Td>
+                <Td>{moment(e.date).format().slice(0, 10)}</Td>
               </TableRow>
             ))}
           </tbody>
         </TableContainer>
       </div>
       <ButtonBox>
-        <DeleteButton>선택 삭제</DeleteButton>
+        <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
         {productInfo.length === 0 ? null : (
           <Pagination
             total={productInfo.length}
