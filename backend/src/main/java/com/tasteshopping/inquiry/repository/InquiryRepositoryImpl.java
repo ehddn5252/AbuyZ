@@ -38,7 +38,7 @@ public class InquiryRepositoryImpl {
             builder.and(customerCenters.customerCenterCategory.eq(searchCondition.getCustomerCenterCategory()));
         }
 
-        return factory.select(new QFilteredDto(customerCenters.status,customerCenters.customerCenterCategory,
+        return factory.select(new QFilteredDto(customerCenters.uid,customerCenters.status,customerCenters.customerCenterCategory,
                         customerCenters.title,customerCenters.content,customerCenters.start_date,customerCenters.end_date,
                         users.name))
                 .from(customerCenters)
