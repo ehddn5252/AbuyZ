@@ -31,6 +31,18 @@ export default function ReviewCategory({
   const [bigCategoryUid, setBigCategoryUid] = useState(0);
   const [smallCategoryUid, setSmallCategoryUid] = useState(0);
 
+  const [bigCategoryName, setBigCategoryName] = useState({
+    uid: 0,
+    categoryName: "대분류",
+  });
+  const [smallCategoryName, setSmallCategoryName] = useState({
+    uid: 0,
+    categoryName: "소분류",
+  });
+
+  const [productName, setProductName] = useState("");
+  const [reviewContent, setReviewContent] = useState("");
+
   /**
    * 카테고리
    */
@@ -38,13 +50,13 @@ export default function ReviewCategory({
   const [bigCategory, setbigCategory] = useState([
     {
       uid: 0,
-      categoryName: "전체",
+      categoryName: "대분류",
     },
   ]);
   const [smallCategory, setSmallCategory] = useState([
     {
       uid: 0,
-      categoryName: "전체",
+      categoryName: "소분류",
     },
   ]);
 
@@ -76,7 +88,7 @@ export default function ReviewCategory({
     }
   }, [smallCategoryUid]);
 
-  const dateList = () => [{ label: "전체" }, { label: "리뷰작성일시" }];
+  const dateList = () => [{ label: "리뷰작성일시" }];
 
   const searchButton = () => {
     setReviewSearch(true);
@@ -85,10 +97,47 @@ export default function ReviewCategory({
 
   const resetButton = () => {
     setReviewSearch(false);
+    setProductName("");
+    setReviewContent("");
+    setBigCategoryName((prevState) => ({
+      ...prevState,
+      categoryName: "대분류",
+    }));
+    setSmallCategoryName((prevState) => ({
+      ...prevState,
+      categoryName: "소분류",
+    }));
+    setStartDate(d);
+    setEndDate(new Date());
+  };
+
+  // 초기화용
+  const handleReset = (e, categoryName, name) => {
+    console.log("handleReset@@@@", name);
+    console.log("handleReset@@@@", categoryName);
+    if (name === "bigCategoryUid" && categoryName !== "대분류") {
+      setBigCategoryName((prevState) => ({
+        ...prevState,
+        categoryName: categoryName,
+      }));
+    }
+    if (name === "smallCategoryUid" && categoryName !== "소분류") {
+      setSmallCategoryName((prevState) => ({
+        ...prevState,
+        categoryName: categoryName,
+      }));
+    }
   };
 
   // searchdto 변경
   const handleChange = (e) => {
+    if (e.target.name === "productName") {
+      setProductName(e.target.value);
+    }
+    if (e.target.name === "content") {
+      setReviewContent(e.target.value);
+    }
+
     setSearchDto((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -120,8 +169,10 @@ export default function ReviewCategory({
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
               defaultValue={Object.values(bigCategory)[0]}
+              value={bigCategoryName}
               onChange={(e, category) => {
                 setBigCategoryUid(category.uid);
+                handleReset(e, category.categoryName, "bigCategoryUid");
               }}
             />
             <Autocomplete
@@ -133,8 +184,10 @@ export default function ReviewCategory({
               getOptionLabel={(category) => category.categoryName}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
+              value={smallCategoryName}
               onChange={(e, category) => {
                 setSmallCategoryUid(category.uid);
+                handleReset(e, category.categoryName, "smallCategoryUid");
               }}
             />
           </CategoryDiv>
@@ -149,6 +202,7 @@ export default function ReviewCategory({
               sx={{ width: 400, paddingLeft: "2rem" }}
               name="productName"
               onChange={handleChange}
+              value={productName}
             />
           </CategoryDiv>
         </ColumnBox>
@@ -163,7 +217,7 @@ export default function ReviewCategory({
               size="small"
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="전체"
+              defaultValue="리뷰작성일시"
             />
             <CalendarDiv>
               <MyDatePicker
@@ -193,6 +247,7 @@ export default function ReviewCategory({
               sx={{ width: 400, paddingLeft: "2rem" }}
               name="content"
               onChange={handleChange}
+              value={reviewContent}
             />
           </CategoryDiv>
         </ColumnBox>

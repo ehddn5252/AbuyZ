@@ -2,7 +2,7 @@ import https from "./https.js";
 
 // 문의관리 - 조회
 export async function searchCustomerCenter(searchDto) {
-  // console.log("searchCustomerCenter@@@@@@@", searchDto);
+  console.log("searchCustomerCenter@@@@@@@", searchDto);
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 

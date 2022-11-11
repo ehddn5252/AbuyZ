@@ -22,45 +22,19 @@ export default function ServiceCategory({
   var dayOfMonth = d.getDate();
   d.setDate(dayOfMonth - 7);
 
-  const timeConverter = (originalDate) => {
-    var a = new Date(originalDate * 1000);
-    var months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time =
-      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
-    return time;
-  };
-
   const [startDate, setStartDate] = useState(d);
   const [endDate, setEndDate] = useState(new Date());
   const [status, setStatus] = useState(null);
-  const [customerCenterCategory, setCustomerCenterCategory] = useState(null);
-  const inquiryList = () => [
+  const [customerCenterCategory, setCustomerCenterCategory] = useState("전체");
+  const [title, setTitle] = useState(" ");
+  const [inquiryList, setInquiryList] = useState([
     { label: "전체" },
     { label: "배송" },
     { label: "교환_환불" },
     { label: "상품" },
     { label: "주문결제" },
     { label: "이벤트" },
-  ];
+  ]);
 
   const dateList = () => [{ label: "문의일시" }];
 
@@ -71,10 +45,13 @@ export default function ServiceCategory({
 
   const resetButton = () => {
     setSearch(false);
+    setTitle("");
+    setCustomerCenterCategory("전체");
   };
 
   // searchdto 변경
   const handleChange = (e) => {
+    setTitle(e.target.value);
     if (e.target.name === "status" && e.target.value === 0) {
     } else {
       // console.log("handleChange@@@", e.target.value);
@@ -106,6 +83,15 @@ export default function ServiceCategory({
     }
   }, [status]);
 
+  useEffect(() => {
+    if (customerCenterCategory !== "전체") {
+      setSearchDto((prevState) => ({
+        ...prevState,
+        customerCenterCategory: customerCenterCategory,
+      }));
+    }
+  }, [customerCenterCategory]);
+
   return (
     <Container>
       <SearchBox>
@@ -117,12 +103,13 @@ export default function ServiceCategory({
             <Autocomplete
               disablePortal
               size="small"
-              options={inquiryList()}
+              options={inquiryList}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="전체"
+              defaultValue={customerCenterCategory}
+              value={customerCenterCategory}
               onChange={(e, category) => {
-                setCustomerCenterCategory(category);
+                setCustomerCenterCategory(category.label);
               }}
             />
           </CategoryDiv>
@@ -137,6 +124,7 @@ export default function ServiceCategory({
               sx={{ width: 400, paddingLeft: "2rem" }}
               name="title"
               onChange={handleChange}
+              value={title}
             />
           </CategoryDiv>
         </ColumnBox>
