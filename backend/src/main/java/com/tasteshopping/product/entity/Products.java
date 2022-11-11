@@ -5,6 +5,7 @@ import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.dto.ProductBoDto;
 import com.tasteshopping.product.dto.ProductCreateDto;
+import com.tasteshopping.product.dto.ProductCreateModifyDto;
 import com.tasteshopping.product.dto.ProductDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -82,8 +83,35 @@ public class Products {
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
 
+    /*
+        Integer productsUid; // product에서 가져옴
+    Integer smallCategoriesUid; // products 에서 가져옴
+    String name; // products 에서 가져옴
+    Integer discountRate; // products 에서 가져옴
+    Float reviewRate; // products 에서 가져옴
+    Integer price; // products 에서 가져옴
+    Integer deliveryFee; // products 에서 가져옴
+    String brandName; // products 에서 가져옴
+    String descriptionImg; // products 에서 가져옴
+    String repImg; // products 에서 가져옴
+     */
 
 
+    public ProductCreateModifyDto toCreateModifyDto(){
+        return ProductCreateModifyDto.builder()
+                .productsUid(uid)
+                .smallCategoriesUid(smallCategory.getUid())
+                .bigCategoriesUid(smallCategory.getBigCategory().getUid())
+                .name(name)
+                .discountRate(discountRate)
+                .reviewRate(reviewRate)
+                .price(price)
+                .deliveryFee(deliveryFee)
+                .brandName(brand.getName())
+                .descriptionImg(descriptionImg)
+                .repImg(repImg)
+                .build();
+    }
 
     public ProductBoDto toBoDto(List<String> productKeywords) {
         return ProductBoDto.builder()
@@ -119,6 +147,7 @@ public class Products {
                 .price(price)
                 .reviewRate(reviewRate)
                 .uid(uid)
+                .date(createdDate)
                 .bigCategoryUid(smallCategory.getBigCategory().getUid())
                 .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
                 .build();
