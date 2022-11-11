@@ -68,6 +68,23 @@ export async function delProduct(productUid) {
   });
 }
 
+// 상품 uid로 찾아서 상태변경하기
+export async function changeEdit(productUid) {
+  return new Promise((resolve) => {
+    https.put(`/product/status/${productUid}/sold_out`).then((response) => {
+      if (response.status === 200) {
+        console.log("상품 상태 변경 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("상품 상태 변경 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
 // FO 상품 키워드 검색
 export async function keywordSearch(keyword) {
   return new Promise((resolve) => {

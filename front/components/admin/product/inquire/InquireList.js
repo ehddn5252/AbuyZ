@@ -5,6 +5,7 @@ import moment from "moment";
 
 // API
 import { delProduct } from "../../../../pages/api/product";
+import { changeEdit } from "../../../../pages/api/product";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -153,13 +154,15 @@ export default function InquireList(props) {
                 <Td>
                   <Edit>수정하기</Edit>
                 </Td>
-                <Td>
-                  {e.status === "selling"
-                    ? "판매중"
-                    : e.status === "getting_ready"
-                    ? "승인 대기"
-                    : "판매 완료"}
-                </Td>
+                {e.status === "selling" ? (
+                  <Td>판매중</Td>
+                ) : e.status === "getting_ready" ? (
+                  <Td onClick={() => changeEdit(e.uid)}>
+                    <WaitButton>승인 대기</WaitButton>
+                  </Td>
+                ) : (
+                  <Td>판매 완료</Td>
+                )}
                 <Td>{e.bigCategoryName}</Td>
                 <Td>{e.smallCategoryName}</Td>
                 <Td>
@@ -281,6 +284,19 @@ const EditButton = styled.button`
   height: 3rem;
   width: fit-content;
   font-size: 1.3rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const WaitButton = styled.button`
+  background-color: #44a742;
+  color: white;
+  border: 1px solid;
+  border-radius: 1rem;
+  height: 2.5rem;
+  width: 5rem;
+  font-size: 1rem;
   &:hover {
     cursor: pointer;
   }
