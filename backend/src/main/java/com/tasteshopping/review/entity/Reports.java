@@ -1,5 +1,6 @@
 package com.tasteshopping.review.entity;
 
+import com.tasteshopping.review.dto.ReportSearchResDto;
 import com.tasteshopping.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,11 +26,11 @@ public class Reports {
     private Integer uid;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="users_uid")
+    @JoinColumn(name = "users_uid")
     private Users user;          //사용자 유아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="reviews_uid")
+    @JoinColumn(name = "reviews_uid")
     private Reviews review;        //리뷰 유아이디
 
     // 신고 해결 유무 ( 0:대기, 1:거절, 2:승인)
@@ -51,7 +52,38 @@ public class Reports {
     @Temporal(TemporalType.TIMESTAMP)
     private Date processDate;
 
-    public void update(int status){
+    public void update(int status) {
         this.status = status;
+    }
+
+    public ReportSearchResDto toSearchResDto() {
+        String statusName = "";
+//        " 0:대기, 1:거절, 2:승인"
+        if (status == 0) {
+            statusName = "대기";
+        } else if (status == 1) {
+            statusName = "거절";
+        } else if (status == 2) {
+            statusName = "승인";
+        }
+        //( 0:허위사실유포, 1:욕설)
+        String reasonName = "";
+        if (reason == 0) {
+            reasonName = "허위사실유포";
+        } else if (reason == 1) {
+            reasonName = "욕설";
+        }
+
+        return ReportSearchResDto.builder()
+                .uid(uid)
+                .reviewsUid(review.getUid())
+                .productName(review.getProduct().getName())
+                .status(statusName)
+                .reason(reasonName)
+                .reportDate(reportDate)
+                .processDate(processDate)
+                .reviewName(reasonName)
+                .writer(user.getName())
+                .build();
     }
 }

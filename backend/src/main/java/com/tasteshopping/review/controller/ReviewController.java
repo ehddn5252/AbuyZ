@@ -112,4 +112,22 @@ public class ReviewController {
     public ResponseEntity<BaseRes> productReviewDetail(@AuthenticationPrincipal String email, @PathVariable int review_id) {
         return new ResponseEntity<>(reviewService.productReviewDetail(email, review_id), HttpStatus.OK);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<BaseRes> search(@AuthenticationPrincipal String email, @RequestBody ReportSearchReqDto reportSearchReqDto){
+        BaseRes baseRes = reviewService.searchReport(reportSearchReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
+
+    @PostMapping("/report/detail")
+    public ResponseEntity<BaseRes> getReportedReview(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto reviewUIdDto){
+        BaseRes baseRes = reviewService.getReportedReview(reviewUIdDto.getReview_uid());
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
+
+    @PutMapping("/report/status")
+    public ResponseEntity<BaseRes> setReportStatus(@AuthenticationPrincipal String email, @RequestBody ReportStatusReqDto reportStatusReqDto){
+        BaseRes baseRes = reviewService.setStatus(reportStatusReqDto);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
 }

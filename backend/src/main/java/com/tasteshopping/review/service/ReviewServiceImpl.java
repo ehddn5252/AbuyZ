@@ -396,4 +396,60 @@ public class ReviewServiceImpl implements ReviewService {
             return allAnswerReviewDtos;
         }
     }
+
+    @Override
+    public BaseRes searchReport(ReportSearchReqDto reportSearchReqDto) {
+        String productName = reportSearchReqDto.getProductName();
+        Integer status = reportSearchReqDto.getStatus(); // 신고 해결 유무 ( 0:대기, 1:거절, 2:승인, 3:전체)
+        Integer reasonId = reportSearchReqDto.getReasonId(); // 신고 사유 ( 0:허위사실유포, 1:욕설)
+        Date startDate = reportSearchReqDto.getStartDate();
+        Date endDate = reportSearchReqDto.getEndDate();
+
+        // 여기에서 NULL 이면 NULL 처리를 못하게 해야 한다.
+        if (productName == null) {
+            productName = "%%";
+        } else {
+            productName = "%" + productName + "%";
+        }
+
+        if (endDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                endDate = format.parse("2300-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if (startDate == null) {
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                startDate = format.parse("1900-1-1");
+            } catch (Exception e) {
+            }
+        }
+        if(status==3){
+            status=null;
+        }
+        List<Reports> l = reviewRepository.findReportsBySearchCondition(productName,startDate,endDate,reasonId,status);
+
+        // reason이 null이면 collase
+//        List<Reports> l = reviewRepository.findReportsByDetailInfo2(productName,startDate,endDate);
+        List<ReportSearchResDto> newL = new ArrayList<>();
+        for(int i=0;i<l.size();++i){
+            newL.add(l.get(i).toSearchResDto());
+        }
+        return new BaseRes(200,"search 성공",newL);
+    }
+
+    @Override
+    public BaseRes getReportedReview(int review_uid) {
+        Reviews review = reviewRepository.findById(review_uid).get();
+        return new BaseRes(200,"리뷰 가져오기 성공",review.toDto());
+    }
+
+    @Override
+    public BaseRes setStatus(ReportStatusReqDto reportStatusReqDto) {
+        Reports reports = reportRepository.findById(reportStatusReqDto.getReportsUid()).get();
+        reports.update(reportStatusReqDto.getStatus());
+        return new BaseRes(200,"상태 변경 성공",null);
+    }
 }
