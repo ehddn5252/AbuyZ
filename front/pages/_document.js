@@ -39,6 +39,8 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta name="og:title" content="ABuyZ" />
+          <meta name="og:content" content="쇼핑몰 플랫폼" />
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
         <body className="min-h-screen bg-gray-800">
