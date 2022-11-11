@@ -1,5 +1,5 @@
 // React
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 // MUI
 import Modal from "@mui/material/Modal";
@@ -18,12 +18,18 @@ import { useRouter } from "next/router";
 
 export default function Faq() {
   const router = useRouter();
+  const modalRef = useRef(null);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setOpenUid(0);
+  };
   const [faqList, setFaqList] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [openUid, setOpenUid] = useState(0);
 
   const getfaqList = async () => {
     const res = await getFAQ();
@@ -78,7 +84,14 @@ export default function Faq() {
             {faqList.map((e) => (
               <TableRow key={e.id}>
                 <FaqTd style={{ width: "10%" }}>
-                  <EditButton onClick={handleOpen}>수정</EditButton>
+                  <EditButton
+                    onClick={() => {
+                      handleOpen();
+                      setOpenUid(e.uid);
+                    }}
+                  >
+                    수정
+                  </EditButton>
                 </FaqTd>
                 <FaqTd style={{ width: "30%" }}>{e.question}</FaqTd>
                 {e.answer.length < 80 ? (
@@ -90,12 +103,12 @@ export default function Faq() {
                 )}
 
                 <Modal
-                  open={open}
-                  onClose={handleClose}
+                  ref={modalRef}
+                  open={openUid === e.uid}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
                 >
-                  <FaqEditModal faq={e} />
+                  <FaqEditModal faq={e} onClose={handleClose} />
                 </Modal>
               </TableRow>
             ))}
