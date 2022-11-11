@@ -54,6 +54,7 @@ public class Orders {
 
     public OrderDto toDto() {
         OrderDto orderDto = new OrderDto();
+        orderDto.setCount(count);
         orderDto.setPrice(price);
         orderDto.setOrderUid(uid);
         orderDto.setStatus(status);
