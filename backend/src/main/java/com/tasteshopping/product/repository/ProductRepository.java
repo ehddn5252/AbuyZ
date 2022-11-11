@@ -13,8 +13,14 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Products, Integer> {
-    @Query(value = "select max(uid) from Products")
-    Optional<Integer> getMaxUid();
+
+
+//    @Query(value = "select p from Products p " +
+//            "join fetch SmallCategories sc on p.smallCategory = sc " +
+//            "join fetch BigCategories  bc on sc.bigCategory = bc " +
+//            "join fetch ProductOptions po on  = po " +
+//            "join fetch ProductPictures pp on p.productPictures = pp ")
+//    Optional<Integer> findByIdFetchJoin();
 
     @Query("select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories b on s.bigCategory=b where b.uid=:categoriesUid")
     List<Optional<Products>> findByBigCategory(int categoriesUid);

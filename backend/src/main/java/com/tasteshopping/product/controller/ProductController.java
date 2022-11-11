@@ -197,4 +197,14 @@ public class ProductController {
         productService.modifyProductRelated(productCreateDto, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "상품 변경 성공!"));
     }
+
+    @PostMapping("/input-product")
+    public ResponseEntity<BaseRes> getProductDetail(@RequestBody ProductUidReqDto productUidReqDto){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.getProductCreateInfo(productUidReqDto.getProducts_uid()));
+        }
+        catch (ProductNotFoundException p){
+            return p.baseResResponseEntity;
+        }
+    }
 }

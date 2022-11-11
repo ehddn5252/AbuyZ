@@ -1,7 +1,6 @@
 package com.tasteshopping.product.service;
 
 import com.tasteshopping.common.service.UtilService;
-import com.tasteshopping.inventory.dto.InventoryResDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.inventory.repository.InventoryRepository;
@@ -150,9 +149,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void putStatus(int uid,String status) {
+    public void putStatus(int uid, String status) {
         Optional<Products> productsOptional = productRepository.findById(uid);
-        if(productsOptional.isPresent()){
+        if (productsOptional.isPresent()) {
             productsOptional.get().setStatus(status);
         }
     }
@@ -164,14 +163,13 @@ public class ProductServiceImpl implements ProductService {
 
         List<Inventories> l = inventoryRepository.findByProduct(product);
         int count = 0;
-        for(int i=0;i<l.size();++i){
-            count+=l.get(i).getCount();
+        for (int i = 0; i < l.size(); ++i) {
+            count += l.get(i).getCount();
         }
         //SELLING, SOLD_OUT, GETTING_READY
-        if(count==0){
+        if (count == 0) {
             product.setStatus("SOLD_OUT");
-        }
-        else{
+        } else {
             product.setStatus("SELLING");
         }
     }
@@ -181,16 +179,16 @@ public class ProductServiceImpl implements ProductService {
         List<Products> l = productRepository.findAllFetchJoin();
 //        Collections.shuffle(l);
         List<ProductBoDto> new_l = new ArrayList<>();
-        for (int i = 0; i <l.size(); ++i) {
+        for (int i = 0; i < l.size(); ++i) {
             List<ProductKeywords> productKeywords = l.get(i).getProductKeywords();
             List<String> keywords = new ArrayList<>();
             // 키워드 설정
-            for(int j=0;j<productKeywords.size();++j) {
+            for (int j = 0; j < productKeywords.size(); ++j) {
                 keywords.add(productKeywords.get(j).getName());
             }
-            ProductBoDto productBoDto= l.get(i).toBoDto(keywords);
+            ProductBoDto productBoDto = l.get(i).toBoDto(keywords);
             List<Inventories> inventoryList = l.get(i).getInventories();
-            if(inventoryList.size()!=0) {
+            if (inventoryList.size() != 0) {
                 int count = 0;
                 for (int j = 0; j < inventoryList.size(); ++j) {
                     Inventories inventories = inventoryList.get(j);
@@ -204,11 +202,82 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public BaseRes getProductCreateInfo(int products_uid) {
+
+        Optional<Products> productsOptional = productRepository.findById(products_uid);
+
+        if(!productsOptional.isPresent()){
+            throw new ProductNotFoundException();
+        }
+        Products p=productsOptional.get();
+
+        /*
+
+            LinkedHashMap<String,String> imgs; // product_pictures 에서 가져옴 (hash map 으로 가져오기)
+            LinkedHashMap<String,String> options; // product_options 에서 가져옴 (여러 개로 분할된 것 붙여서 가져오기)
+            String keywords; // product_keywords 에서 가져옴 (여러 개로 분할된 것 붙여서 넣기
+            Integer count; // inventory에서 가져와야 함
+         */
+        ProductCreateModifyDto productCreateModifyDto = p.toCreateModifyDto();
+        // 이미지 가져오기, 옵션 가져오기
+
+        // 키워드 세팅
+        List<ProductKeywords> productKeywords = p.getProductKeywords();
+        String keywords = "";
+        for (int i = 0; i < productKeywords.size(); ++i) {
+            keywords += productKeywords.get(i).getName() + " ";
+        }
+        keywords = keywords.trim();
+        productCreateModifyDto.setKeywords(keywords);
+
+        // 이미지 세팅
+        List<Optional<ProductPictures>> productPictureList = productPictureRepository.findByProductUid(products_uid);
+        List<String> imgs = new ArrayList<>();
+        for (int i = 0; i < productPictureList.size(); ++i) {
+            imgs.add(productPictureList.get(i).get().getImgUrl());
+        }
+        productCreateModifyDto.setImgs(imgs);
+        List<ProductOptions> productOptionsList = p.getProductOptions();
+
+        // 옵션 세팅 
+        HashMap<String, String> hashMap = new HashMap<>();
+        String name = productOptionsList.get(0).getName();
+        ArrayList<String> l = new ArrayList();
+        for (int i = 0; i < productOptionsList.size(); ++i) {
+            if (name.equals(productOptionsList.get(i).getName())) {
+                l.add(productOptionsList.get(i).getValue());
+            } else {
+                ArrayList newL = new ArrayList<>();
+                newL.addAll(l);
+                String optionString = "";
+                for (int j = 0; j < l.size(); ++j) {
+                    optionString += l.get(j) + " ";
+                }
+                hashMap.put(name, optionString.trim());
+                l.clear();
+                l.add(productOptionsList.get(i).getValue());
+                name = productOptionsList.get(i).getName();
+            }
+        }
+        String optionString = "";
+
+        for (int i = 0; i < l.size(); ++i) {
+            optionString += l.get(i) + " ";
+        }
+        // 마지막에 한번 추가해줘야 한다.
+        hashMap.put(name, optionString.trim());
+        // 여기에서 옵션 형태를 갖다줘야 함.
+        //  HashMap <String,String> 구조
+        productCreateModifyDto.setOptions(hashMap);
+        return new BaseRes(200,"입력한 값 가져오기 성공",productCreateModifyDto);
+    }
+
+    @Override
     public List<ProductDto> getRandom() {
         List<Products> l = productRepository.findByRand();
 //        Collections.shuffle(l);
         List<ProductDto> new_l = new ArrayList<>();
-        for (int i = 0; i <l.size(); ++i) {
+        for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());
         }
         return new_l;
@@ -219,19 +288,18 @@ public class ProductServiceImpl implements ProductService {
     public void productStatusSetting() {
         List<Products> productsList = productRepository.findAllFetchJoin();
 
-        for(int i=0;i<productsList.size();++i){
+        for (int i = 0; i < productsList.size(); ++i) {
             Products product = productsList.get(i);
             List<Inventories> l = inventoryRepository.findByProduct(product);
 //            Integer count = inventoryRepository.sumCount(product);
             int count = 0;
-            for(int j=0;j<l.size();++j){
-                count+=l.get(j).getCount();
+            for (int j = 0; j < l.size(); ++j) {
+                count += l.get(j).getCount();
             }
             //SELLING, SOLD_OUT, GETTING_READY
-            if(count==0){
+            if (count == 0) {
                 product.setStatus("SOLD_OUT");
-            }
-            else{
+            } else {
                 product.setStatus("SELLING");
             }
         }
@@ -690,33 +758,32 @@ public class ProductServiceImpl implements ProductService {
             3. 맨 마지막에 hashMap 에 추가한다.
              */
 
-            HashMap<String,List> hashMap = new HashMap<>();
+            HashMap<String, List> hashMap = new HashMap<>();
             String name = productOptionsList.get(0).getName();
             ArrayList<String> l = new ArrayList();
             for (int i = 0; i < productOptionsList.size(); ++i) {
-                if(name.equals(productOptionsList.get(i).getName())){
+                if (name.equals(productOptionsList.get(i).getName())) {
                     l.add(productOptionsList.get(i).getValue());
-                }
-                else{
+                } else {
                     ArrayList newL = new ArrayList<>();
                     newL.addAll(l);
-                    hashMap.put(name,newL);
+                    hashMap.put(name, newL);
                     l.clear();
                     l.add(productOptionsList.get(i).getValue());
-                    name=productOptionsList.get(i).getName();
+                    name = productOptionsList.get(i).getName();
                 }
             }
             // 마지막에 한번 추가해줘야 한다.
-            hashMap.put(name,l);
+            hashMap.put(name, l);
 
             List<ProductPictureDto> productPictureDtoList = new ArrayList<>();
             for (int i = 0; i < productPicturesList.size(); ++i) {
                 productPictureDtoList.add(productPicturesList.get(i).toDto());
             }
-            if(email!=null){
-                Optional<WishLists> wish = wishRepository.findByUser_EmailAndProducts_Uid(email,uid);
-                if(wish.isPresent()){
-                    productDetailDto.setIsWished(new IsWished(wish.get().getUid(),true));
+            if (email != null) {
+                Optional<WishLists> wish = wishRepository.findByUser_EmailAndProducts_Uid(email, uid);
+                if (wish.isPresent()) {
+                    productDetailDto.setIsWished(new IsWished(wish.get().getUid(), true));
                 }
             }
 
