@@ -177,12 +177,12 @@ public class ProductController {
     }
 
 
-    @DeleteMapping()
+    @DeleteMapping("/{productsUid}")
     public ResponseEntity<BaseRes> delete(@AuthenticationPrincipal String email,
-                                          @RequestBody ProductUidReqDto productUidReqDto) {
-        Integer uid = productUidReqDto.getProducts_uid();
+                                          @PathVariable int productsUid) {
+//        Integer uid = productUidReqDto.getProducts_uid();
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(productService.deleteProduct(uid));
+            return ResponseEntity.status(HttpStatus.OK).body(productService.deleteProduct(productsUid));
         } catch (ProductNotFoundException e) {
             e.printStackTrace();
             return e.baseResResponseEntity;

@@ -28,7 +28,6 @@ public class ProductCreateDto {
     LinkedHashMap<String,String> imgs;
     LinkedHashMap<String,String> options;
     String keywords;
-    String metaTag;
     Integer productsUid;
     Integer count;
      public static ProductCreateDto reqToDto(ProductCreateReqDto p){
@@ -45,7 +44,6 @@ public class ProductCreateDto {
                  .repImg(p.rep_img)
                  .options(p.options)
                  .keywords(p.keywords)
-                 .metaTag(p.meta_tag)
                  .productsUid(p.products_uid)
                  .build();
      }
