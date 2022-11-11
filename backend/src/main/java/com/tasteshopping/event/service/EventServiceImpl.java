@@ -186,6 +186,7 @@ public class EventServiceImpl implements EventService{
         Optional<Users> users = userRepository.findByEmail(email);
         return !users.isPresent() || users.get().getUserRoles() != Role.ADMIN;
     }
+    @Override
     public ResponseDto getEventDetail(int event_uid){
         ResponseDto responseDto = new ResponseDto();
         Optional<Events>findEvent = eventRepository.findByUid(event_uid);
@@ -194,6 +195,16 @@ public class EventServiceImpl implements EventService{
         }
         EventResDetailDto eventResDetailDto= findEvent.get().toEventResDetailDto();
         responseDto.setData(eventResDetailDto);
+        responseDto.setMessage("조회 성공");
+        return responseDto;
+    }
+    @Override
+    public ResponseDto getAllEventList(){
+        ResponseDto responseDto = new ResponseDto();
+        List<EventResDetailDto>result = eventRepository.findAll().stream()
+                .map(Events::toEventResDetailDto)
+                .collect(Collectors.toList());
+        responseDto.setData(result);
         responseDto.setMessage("조회 성공");
         return responseDto;
     }

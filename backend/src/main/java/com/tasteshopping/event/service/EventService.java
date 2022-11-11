@@ -13,4 +13,5 @@ public interface EventService {
                             MultipartFile content_img, EventReqDto eventDto);
 
     ResponseDto getEventDetail(int event_uid);
+    ResponseDto getAllEventList();
 }
