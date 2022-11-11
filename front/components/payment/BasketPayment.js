@@ -13,12 +13,13 @@ import { getMyInfo } from "../../pages/api/user";
 import { useRouter } from "next/router";
 
 // State
-import { basketProducts } from "../../states";
+import { basketProducts, paymentProduct } from "../../states";
 import { useRecoilState } from "recoil";
 
 export default function BasketPayment() {
   const router = useRouter();
   const [basketList, setBasketList] = useRecoilState(basketProducts);
+  const [paymentValue, setpaymentValue] = useRecoilState(basketProducts);
   const [address, setAddress] = useState(
     "녹산 송정동 1627-5 그린코어 오피스텔"
   );
@@ -37,6 +38,7 @@ export default function BasketPayment() {
   };
 
   const goPayment = () => {
+    setpaymentValue("");
     router.push("/payment");
   };
   useEffect(() => {
