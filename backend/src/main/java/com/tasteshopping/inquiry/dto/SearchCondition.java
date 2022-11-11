@@ -13,9 +13,9 @@ import java.util.Date;
 public class SearchCondition {
     private String customerCenterCategory;
     private String title;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+9")
     private Date start_date;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+9")
     private Date end_date;
     private String status;
 }
