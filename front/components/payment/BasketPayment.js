@@ -124,6 +124,7 @@ const Container = styled.div`
   width: 25%;
   border: 1px solid #aaaaaa;
   border-radius: 1rem;
+  height: 34rem;
   overflow: hidden;
 `;
 
