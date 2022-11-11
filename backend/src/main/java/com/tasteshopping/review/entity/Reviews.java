@@ -38,7 +38,7 @@ public class Reviews {
     @Column(nullable = false)
     private Float rating;               //평점
 
-    @Column(name = "img_url", columnDefinition = "varchar(100)")
+    @Column(name = "img_url", columnDefinition = "varchar(3000)")
     private String imgUrl;             //첨부사진
 
     @ManyToOne(fetch = FetchType.LAZY)

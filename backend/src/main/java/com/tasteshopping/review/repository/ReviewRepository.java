@@ -1,6 +1,7 @@
 package com.tasteshopping.review.repository;
 
 import com.tasteshopping.product.entity.Products;
+import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.user.entity.Users;
 import org.springframework.data.domain.Page;
@@ -42,5 +43,15 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
 
     List<Reviews> findByParentReviewIsNotNull();
 
+
+    @Query(value = "select rep from Reports rep " +
+            "join fetch Reviews r on rep.review=r " +
+            "join fetch  Products p on r.product=p " +
+            "where p.name like :productName " +
+            "and rep.status = coalesce(:status,rep.status) " +
+            "and rep.reason = coalesce(:reasonId,rep.reason) " +
+            "and rep.processDate between :startDate and :endDate")
+//    @Query("select r from Reports r")
+    List<Reports> findReportsBySearchCondition(String productName, Date startDate, Date endDate, int reasonId, Integer status);
 
 }

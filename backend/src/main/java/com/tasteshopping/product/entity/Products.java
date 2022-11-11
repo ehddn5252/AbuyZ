@@ -83,8 +83,9 @@ public class Products {
     private List<ProductOptions> productOptions;
 
 
-    public ProductBoDto toBoDto(List<String> productKeywords) {
 
+
+    public ProductBoDto toBoDto(List<String> productKeywords) {
         return ProductBoDto.builder()
                 .uid(uid)
                 .date(createdDate)
@@ -101,6 +102,8 @@ public class Products {
                 .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
                 .build();
     }
+
+
     public ProductDto toDto() {
 
         return ProductDto.builder()
