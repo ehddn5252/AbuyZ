@@ -22,9 +22,9 @@ export default function ReviewList({ reviews }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setOpenUid(0);
+    setOpenUid(-1);
   };
-  const [openUid, setOpenUid] = useState(0);
+  const [openUid, setOpenUid] = useState(-1);
 
   return (
     <TableContainer component={Paper} sx={{ paddingTop: "2rem" }}>
@@ -106,7 +106,7 @@ export default function ReviewList({ reviews }) {
 
               <Modal
                 ref={modalRef}
-                open={openUid === review.uid}
+                open={openUid !== -1 && openUid === review.uid}
                 // onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"

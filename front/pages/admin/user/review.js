@@ -1,13 +1,15 @@
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // StyledComponents
 import styled from "styled-components";
 
 // 하위 Components
 import ReviewCategory from "../../../components/admin/user/ReviewCategory";
-import { searchReview } from "../../../pages/api/admin";
 import ReviewList from "../../../components/admin/user/ReviewList";
+
+// api
+import { searchReview } from "../../../pages/api/admin";
 
 export default function Review() {
   const [reviewSearch, setReviewSearch] = useState(false);
@@ -42,10 +44,6 @@ export default function Review() {
   const buttonClick = () => {
     loadData(searchDto);
   };
-
-  // useEffect(() => {
-  //   loadData(searchDto);
-  // }, []);
 
   return (
     <Container>
