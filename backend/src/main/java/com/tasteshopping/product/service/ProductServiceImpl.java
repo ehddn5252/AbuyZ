@@ -181,7 +181,7 @@ public class ProductServiceImpl implements ProductService {
         List<Products> l = productRepository.findAllFetchJoin();
 //        Collections.shuffle(l);
         List<ProductBoDto> new_l = new ArrayList<>();
-        for (int i = 0; i <20; ++i) {
+        for (int i = 0; i <l.size(); ++i) {
             List<ProductKeywords> productKeywords = l.get(i).getProductKeywords();
             List<String> keywords = new ArrayList<>();
             // 키워드 설정
