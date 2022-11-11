@@ -429,7 +429,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(status==3){
             status=null;
         }
-        List<Reports> l = reviewRepository.findReportsByDetailInfo(productName,startDate,endDate,reasonId,status);
+        List<Reports> l = reviewRepository.findReportsBySearchCondition(productName,startDate,endDate,reasonId,status);
 
         // reason이 null이면 collase
 //        List<Reports> l = reviewRepository.findReportsByDetailInfo2(productName,startDate,endDate);

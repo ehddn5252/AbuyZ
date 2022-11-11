@@ -52,6 +52,6 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
             "and rep.reason = coalesce(:reasonId,rep.reason) " +
             "and rep.processDate between :startDate and :endDate")
 //    @Query("select r from Reports r")
-    List<Reports> findReportsByDetailInfo(String productName, Date startDate, Date endDate, int reasonId, Integer status);
+    List<Reports> findReportsBySearchCondition(String productName, Date startDate, Date endDate, int reasonId, Integer status);
 
 }
