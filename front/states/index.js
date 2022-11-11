@@ -45,6 +45,12 @@ export const bigCategoryValue = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const smallCategoryValue = atom({
+  key: "smallCategoryValue",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
 export const basketProducts = atom({
   key: "basketProducts",
   default: "",
