@@ -20,6 +20,19 @@ public class UtilService {
         return date;
     }
 
+    public static Date getTodayTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh-mm");
+
+        Date date = new Date(System.currentTimeMillis());
+        String s = formatter.format(date).toString();
+        try {
+            date = formatter.parse(s);
+        } catch (ParseException pErr) {
+            System.out.println(pErr);
+        }
+        return date;
+    }
+
     public static Date getDateAfterDay(int day) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 

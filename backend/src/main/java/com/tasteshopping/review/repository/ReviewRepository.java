@@ -35,7 +35,7 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
             "and r.date between :startDate and :endDate")
     List<Reviews> findByDetailInfo(Integer bigCategoriesUid, Integer smallCategoriesUid, String productName, String content, Date startDate, Date endDate);
 
-    @Query("select r from Reviews r order by r.date desc")
+    @Query("select r from Reviews r where r.parentReview is null order by r.date desc")
     List<Reviews> findCurrent();
 
     List<Reviews> findByParentReviewIsNull();
