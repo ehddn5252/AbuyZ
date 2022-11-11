@@ -1,7 +1,8 @@
 package com.tasteshopping.coupon.entity;
 
-import com.tasteshopping.coupon.dto.CouponResDto;
+
 import com.tasteshopping.coupon.dto.CouponStatus;
+import com.tasteshopping.coupon.dto.UserCouponResDto;
 import com.tasteshopping.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class CouponLists {
         this.status=status;
     }
 
-    public CouponResDto toCouponsResDto(){
+    public UserCouponResDto toUserCouponResDto(){
         String status = "";
         switch (this.status){
             case 0:
@@ -50,8 +51,9 @@ public class CouponLists {
                 status = CouponStatus.만료.toString();
                 break;
         }
-        return CouponResDto.builder()
-                .uid(this.uid)
+        return UserCouponResDto.builder()
+                .coupon_list_uid(this.uid)
+                .coupon_uid(this.getCoupons().getUid())
                 .name(this.coupons.getName())
                 .status(status)
                 .discount_price(this.coupons.getDiscountPrice())

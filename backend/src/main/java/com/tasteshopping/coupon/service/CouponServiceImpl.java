@@ -89,7 +89,7 @@ public class CouponServiceImpl implements CouponService {
         CouponResListDto couponResListDto = new CouponResListDto(new ArrayList<>(),0);
 
         for(CouponLists couponLists:search_result){
-            couponResListDto.getResult().add(couponLists.toCouponsResDto());
+            couponResListDto.getResult().add(couponLists.toUserCouponResDto());
         }
         couponResListDto.setCount(search_result.size());
         responseDto.setData(couponResListDto);
