@@ -22,4 +22,8 @@ public interface ReviewService {
     List<ReviewSearchDto> searchByDetail(ReviewSearchReqDto reviewSearchReqDto);
 
     BaseRes searchReport(ReportSearchReqDto reportSearchReqDto);
+
+    BaseRes getReportedReview(int review_uid);
+
+    BaseRes setStatus(ReportStatusReqDto reportStatusReqDto);
 }

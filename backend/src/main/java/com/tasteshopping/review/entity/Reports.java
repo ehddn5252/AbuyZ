@@ -75,6 +75,8 @@ public class Reports {
         }
 
         return ReportSearchResDto.builder()
+                .uid(uid)
+                .reviewsUid(review.getUid())
                 .productName(review.getProduct().getName())
                 .status(statusName)
                 .reason(reasonName)

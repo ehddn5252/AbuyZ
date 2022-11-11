@@ -437,7 +437,19 @@ public class ReviewServiceImpl implements ReviewService {
         for(int i=0;i<l.size();++i){
             newL.add(l.get(i).toSearchResDto());
         }
-
         return new BaseRes(200,"search 성공",newL);
+    }
+
+    @Override
+    public BaseRes getReportedReview(int review_uid) {
+        Reviews review = reviewRepository.findById(review_uid).get();
+        return new BaseRes(200,"리뷰 가져오기 성공",review.toDto());
+    }
+
+    @Override
+    public BaseRes setStatus(ReportStatusReqDto reportStatusReqDto) {
+        Reports reports = reportRepository.findById(reportStatusReqDto.getReportsUid()).get();
+        reports.update(reportStatusReqDto.getStatus());
+        return new BaseRes(200,"상태 변경 성공",null);
     }
 }
