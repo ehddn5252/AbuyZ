@@ -42,6 +42,7 @@ export default function ProductInfo() {
     if (res.data.isWished) {
       setWish(res.data.isWished.wished);
       setWishId(res.data.isWished.uid);
+      console.log(res.data.isWished.uid);
     }
 
     MakeOption(res.data.productOptionListMap);
@@ -106,7 +107,7 @@ export default function ProductInfo() {
     const id = pathname.split("/")[2];
     setProductId(id);
     getProduct(id);
-  }, [productId]);
+  }, [productId, wish]);
 
   // 옵션 만들기
   const MakeOption = (data) => {

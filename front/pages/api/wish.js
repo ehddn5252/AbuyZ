@@ -40,24 +40,20 @@ export async function listwish() {
 }
 
 // 찜 삭제
-export async function delwish(productId) {
+export async function delwish(wishId) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
-    https
-      .delete("/wish", {
-        wish_uid: productId,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("찜 삭제 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("찜 삭제 실패", response);
-          resolve(response);
-        }
-      });
+    https.delete(`/wish/${wishId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("찜 삭제 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("찜 삭제 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
