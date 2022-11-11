@@ -8,7 +8,7 @@ export default function MyReviewItem(product) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log(product.product);
+  console.log("@@", product.product);
   return (
     <ItemContainer>
       <span style={{ fontSize: "0.8rem", color: "#aaaaaa" }}>
@@ -42,8 +42,8 @@ export default function MyReviewItem(product) {
             productName={product.product.inventoryDto.productDto.name}
             setOpen={setOpen}
             image={product.product.inventoryDto.productDto.descriptionImg}
-            uid={product.product.uid}
-            productuid={product.product.inventoryDto.productDto.uid}
+            orderUid={product.product.orderUid}
+            productUid={product.product.inventoryDto.productDto.uid}
             // productOptions={product.product.options}
           />
         )}
