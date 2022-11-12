@@ -82,7 +82,7 @@ public class Reports {
                 .reason(reasonName)
                 .reportDate(reportDate)
                 .processDate(processDate)
-                .reviewName(reasonName)
+                .reviewName(review.getContent())
                 .writer(user.getName())
                 .build();
     }
