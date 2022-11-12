@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MyShippingInfo from "../components/payment/MyShippingInfo";
 import PaymentProcess from "../components/payment/PaymentProcess";
@@ -8,11 +8,32 @@ import { Container } from "@mui/system";
 // State
 import { paymentProduct } from "../states/index";
 import { useRecoilState } from "recoil";
+
+// Next.js
+import { useRouter } from "next/router";
+import { cartlist } from "./api/cart";
 export default function Payment() {
+  const router = useRouter();
   const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
+  const [paymentList, setPaymentList] = useState([]);
+
+  const basketpay = async () => {
+    const res = await cartlist();
+    setPaymentList(res.data);
+  };
+  console.log("이게된거야", paymentList);
+  useEffect(() => {
+    setPaymentValue("");
+  }, [router.pathname]);
 
   useEffect(() => {
-    console.log(paymentValue);
+    if (!paymentValue) {
+      // null 이면 장바구니에서 결제 한거임
+      basketpay();
+    } else {
+      // 아니면 그냥 구매하기 누른거임
+      setPaymentList(paymentValue);
+    }
   }, []);
   return (
     <Container maxWidth="xl" sx={{ my: 10 }}>
@@ -20,7 +41,7 @@ export default function Payment() {
         <h1> 주문 / 결제</h1>
       </Center>
       <Card>
-        <ProductSimpleInfo />
+        <ProductSimpleInfo paymentList={paymentList} />
       </Card>
       <Card>
         <MyShippingInfo />

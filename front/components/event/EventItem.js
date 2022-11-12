@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 
 export default function EventItem(event) {
+  console.log(event.event.uid);
   const router = useRouter();
   const goDetail = () => {
     router.push(`/event/${event.event.uid}`);

@@ -18,6 +18,7 @@ export default function CanReview() {
 
   const rreviewYet = async () => {
     const res = await reviewYet();
+    res.data.sort((a, b) => b.orderUid - a.orderUid);
     setProductList(res.data);
   };
 

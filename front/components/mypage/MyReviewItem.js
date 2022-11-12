@@ -8,12 +8,8 @@ export default function MyReviewItem(product) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  console.log("@@", product.product);
   return (
     <ItemContainer>
-      <span style={{ fontSize: "0.8rem", color: "#aaaaaa" }}>
-        {product.product.inventoryDto.productDto.date}
-      </span>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ flex: "1" }}>
           <ProductImg
@@ -21,14 +17,18 @@ export default function MyReviewItem(product) {
           />
         </div>
         <div style={{ flex: "7", marginLeft: "1rem" }}>
-          <div style={{ paddingTop: "1.8rem" }}>
+          <div style={{ paddingTop: "1rem" }}>
             <br></br>
             <ProductName>
               {product.product.inventoryDto.productDto.name}
             </ProductName>
-            <ProductName>
-              {product.product.inventoryDto.productDto.name}
-            </ProductName>
+            <br></br>
+            <span>옵션 설명</span>
+            <br></br>
+            <span style={{ fontSize: "0.8rem", color: "#aaaaaa" }}>
+              주문 날짜:{" "}
+              {product.product.inventoryDto.productDto.date.slice(0, 10)}
+            </span>
             <br></br>
             {/* <ProductOptions>{product.product.inventoryDto.productOptionUidString}</ProductOptions> */}
           </div>
@@ -55,12 +55,14 @@ export default function MyReviewItem(product) {
 const ItemContainer = styled.div`
   margin-right: 0.3rem;
   height: 100%;
+  margin-top: 0.5rem;
 `;
 
 const ProductImg = styled.img`
   object-fit: cover;
   width: 7rem;
   height: 8rem;
+  border: 1px solid black;
 `;
 
 const ProductName = styled.span`
@@ -68,13 +70,9 @@ const ProductName = styled.span`
   font-weight: bold;
 `;
 
-const ProductOptions = styled.span`
-  font-size: 1.1rem;
-`;
-
 const ReviewButton = styled.button`
   margin-top: 3.5rem;
-  background-color: #56a9f1;
+  background-color: rgb(86, 166, 241, 0.7);
   border: none;
   height: 1.8rem;
   width: 7rem;

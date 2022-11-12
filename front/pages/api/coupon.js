@@ -133,7 +133,7 @@ export async function getCoupon(couponNumber) {
     https
       .get(`/coupon/${couponNumber}`)
       .then((response) => {
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           console.log("쿠폰 발급 요청 성공", response);
           resolve(response.data);
         } else {

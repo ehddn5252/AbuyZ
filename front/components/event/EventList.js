@@ -8,7 +8,6 @@ export default function EventList() {
   const [eventList, setEventList] = useState([]);
   const eevent = async () => {
     const res = await inquireEvent();
-    console.log(res.data);
     setEventList(res.data);
   };
   useEffect(() => {
@@ -18,8 +17,8 @@ export default function EventList() {
     <div>
       {eventList.length > 0 ? (
         <div>
-          {eventList.map((e) => (
-            <EventItem key={e.id} event={e} />
+          {eventList.map((e, idx) => (
+            <EventItem key={idx} event={e} />
           ))}
         </div>
       ) : (

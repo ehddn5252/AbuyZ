@@ -88,11 +88,22 @@ export default function ProductInfo() {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
-        const productDto = {
-          productId: productId,
-          count: count,
-          optionValues: optionValue,
-        };
+        const productDto = [
+          {
+            inventoryDto: {
+              productOptions: optionValue,
+            },
+            productDto: {
+              repImg: product.products.repImg,
+              name: product.products.name,
+              price: product.products.price,
+              deliveryFee: 3000,
+              discountRate: product.products.discountRate,
+            },
+            productCount: count,
+            uid: productId,
+          },
+        ];
         setPaymentValue(productDto);
         router.push("/payment");
       } else {
