@@ -35,6 +35,14 @@ public class ReviewController {
     private final AwsS3Service awsS3Service;
 
 
+    @GetMapping("/reported")
+    public ResponseEntity<BaseRes> getReportedList(@AuthenticationPrincipal String email) {
+        // 신고한 리뷰 전체 리스트를 받고 싶음
+        return ResponseEntity.status(HttpStatus.OK).body(reviewService.getAllReportedReview());
+
+    }
+
+
     @PostMapping("/searchReview")
     public ResponseEntity<BaseRes> searchReview(@AuthenticationPrincipal String email, @RequestBody ReviewSearchReqDto reviewSearchReqDto) {
         // 검색 조건에 맞는 리뷰 목록 가져오기
@@ -114,19 +122,19 @@ public class ReviewController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<BaseRes> search(@AuthenticationPrincipal String email, @RequestBody ReportSearchReqDto reportSearchReqDto){
+    public ResponseEntity<BaseRes> search(@AuthenticationPrincipal String email, @RequestBody ReportSearchReqDto reportSearchReqDto) {
         BaseRes baseRes = reviewService.searchReport(reportSearchReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
     @PostMapping("/report/detail")
-    public ResponseEntity<BaseRes> getReportedReview(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto reviewUIdDto){
+    public ResponseEntity<BaseRes> getReportedReview(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto reviewUIdDto) {
         BaseRes baseRes = reviewService.getReportedReview(reviewUIdDto.getReview_uid());
         return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
     @PutMapping("/report/status")
-    public ResponseEntity<BaseRes> setReportStatus(@AuthenticationPrincipal String email, @RequestBody ReportStatusReqDto reportStatusReqDto){
+    public ResponseEntity<BaseRes> setReportStatus(@AuthenticationPrincipal String email, @RequestBody ReportStatusReqDto reportStatusReqDto) {
         BaseRes baseRes = reviewService.setStatus(reportStatusReqDto);
         return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }

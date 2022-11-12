@@ -1,5 +1,6 @@
 package com.tasteshopping.review.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.review.dto.ReviewDto;
@@ -24,6 +25,7 @@ public class Reviews {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer uid;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviews_uid")
     private Reviews parentReview;        //구매자 리뷰 유아이디
