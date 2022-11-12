@@ -26,4 +26,6 @@ public interface ReviewService {
     BaseRes getReportedReview(int review_uid);
 
     BaseRes setStatus(ReportStatusReqDto reportStatusReqDto);
+
+    BaseRes getAllReportedReview();
 }
