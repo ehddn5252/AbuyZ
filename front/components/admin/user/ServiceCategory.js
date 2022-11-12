@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 // MUI
-import Checkbox from "@mui/material/Checkbox";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
@@ -10,22 +12,86 @@ import styled from "styled-components";
 // Calender
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-export default function ServiceCategory({ setSearch }) {
-  const [startDate, setStartDate] = useState(new Date());
+
+export default function ServiceCategory({
+  setSearch,
+  setSearchDto,
+  buttonClick,
+}) {
+  var d = new Date();
+  var dayOfMonth = d.getDate();
+  d.setDate(dayOfMonth - 7);
+
+  const [startDate, setStartDate] = useState(d);
   const [endDate, setEndDate] = useState(new Date());
-  const inquiryList = () => [
+  const [status, setStatus] = useState(null);
+  const [customerCenterCategory, setCustomerCenterCategory] = useState("전체");
+  const [title, setTitle] = useState(" ");
+  const [inquiryList, setInquiryList] = useState([
     { label: "전체" },
-    { label: "상품문의" },
-    { label: "이벤트 프로모션" },
-    { label: "주문, 결제" },
-  ];
-  const dateList = () => [{ label: "전체" }, { label: "문의일시" }];
+    { label: "배송" },
+    { label: "교환_환불" },
+    { label: "상품" },
+    { label: "주문결제" },
+    { label: "이벤트" },
+  ]);
+
+  const dateList = () => [{ label: "문의일시" }];
+
   const searchButton = () => {
     setSearch(true);
+    buttonClick();
   };
+
   const resetButton = () => {
     setSearch(false);
+    setTitle("");
+    setCustomerCenterCategory("전체");
   };
+
+  // searchdto 변경
+  const handleChange = (e) => {
+    setTitle(e.target.value);
+    if (e.target.name === "status" && e.target.value === 0) {
+    } else {
+      // console.log("handleChange@@@", e.target.value);
+      setSearchDto((prevState) => ({
+        ...prevState,
+        [e.target.name]: e.target.value,
+      }));
+    }
+  };
+
+  // 날짜바뀌면
+  useEffect(() => {
+    // console.log("start_date", startDate.setHours(0, 0, 0, 0));
+    // console.log("end_date", endDate);
+    setSearchDto((prevState) => ({
+      ...prevState,
+      start_date: startDate.setHours(0, 0, 0, 0),
+      end_date: endDate.setHours(23, 59, 59, 0),
+    }));
+  }, [startDate, endDate]);
+
+  // status바뀌면
+  useEffect(() => {
+    if (status !== "전체") {
+      setSearchDto((prevState) => ({
+        ...prevState,
+        status: status,
+      }));
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (customerCenterCategory !== "전체") {
+      setSearchDto((prevState) => ({
+        ...prevState,
+        customerCenterCategory: customerCenterCategory,
+      }));
+    }
+  }, [customerCenterCategory]);
+
   return (
     <Container>
       <SearchBox>
@@ -37,10 +103,14 @@ export default function ServiceCategory({ setSearch }) {
             <Autocomplete
               disablePortal
               size="small"
-              options={inquiryList()}
+              options={inquiryList}
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="전체"
+              defaultValue={customerCenterCategory}
+              value={customerCenterCategory}
+              onChange={(e, category) => {
+                setCustomerCenterCategory(category.label);
+              }}
             />
           </CategoryDiv>
         </ColumnBox>
@@ -49,7 +119,13 @@ export default function ServiceCategory({ setSearch }) {
             <p style={{ margin: 0 }}>문의명</p>
           </TitleDiv>
           <CategoryDiv>
-            <TextField size="small" sx={{ width: 400, paddingLeft: "2rem" }} />
+            <TextField
+              size="small"
+              sx={{ width: 400, paddingLeft: "2rem" }}
+              name="title"
+              onChange={handleChange}
+              value={title}
+            />
           </CategoryDiv>
         </ColumnBox>
         <ColumnBox>
@@ -63,7 +139,7 @@ export default function ServiceCategory({ setSearch }) {
               size="small"
               sx={{ width: 400, paddingLeft: "2rem" }}
               renderInput={(params) => <TextField {...params} />}
-              defaultValue="전체"
+              defaultValue="문의일시"
             />
             <CalendarDiv>
               <MyDatePicker
@@ -71,14 +147,14 @@ export default function ServiceCategory({ setSearch }) {
                 onChange={(date) => setStartDate(date)}
                 selectsStart
                 startDate={startDate}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="yyyy-MM-dd"
               />
               <MyDatePicker
                 selected={endDate}
-                onChange={(date) => setStartDate(date)}
+                onChange={(date) => setEndDate(date)}
                 selectsStart
                 startDate={endDate}
-                dateFormat="yyyy/MM/dd"
+                dateFormat="yyyy-MM-dd"
               />
             </CalendarDiv>
           </DateDiv>
@@ -88,16 +164,25 @@ export default function ServiceCategory({ setSearch }) {
             <p style={{ margin: 0 }}>답변유무</p>
           </TitleDiv>
           <CategoryDiv>
-            <Checkbox
-              defaultChecked
-              name="check"
-              sx={{ paddingLeft: "2rem" }}
-            />
-            <p style={{ paddingRight: "2rem" }}>전체</p>
-            <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>미답변</p>
-            <Checkbox name="check" />
-            <p style={{ paddingRight: "2rem" }}>답변완료</p>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="0"
+              name="status"
+              onChange={handleChange}
+            >
+              <FormControlLabel value="0" control={<Radio />} label="전체" />
+              <FormControlLabel
+                value="답변_완료"
+                control={<Radio />}
+                label="답변 완료"
+              />
+              <FormControlLabel
+                value="답변_미완료"
+                control={<Radio />}
+                label="답변 미완료"
+              />
+            </RadioGroup>
           </CategoryDiv>
         </ColumnBox>
         <ButtonDiv>

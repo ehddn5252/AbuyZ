@@ -8,7 +8,7 @@ import styled from "styled-components";
 
 // api
 import { detailReview } from "../../../pages/api/admin";
-import { writeReply } from "../../../pages/api/admin";
+import { writeReviewReply } from "../../../pages/api/admin";
 
 export default function ReviewItemModal({ originalReview, handleClose }) {
   const [review, setReview] = useState({
@@ -50,7 +50,7 @@ export default function ReviewItemModal({ originalReview, handleClose }) {
   };
 
   const writeClick = async () => {
-    const res = await writeReply(reply);
+    const res = await writeReviewReply(reply);
     handleClose();
   };
 
