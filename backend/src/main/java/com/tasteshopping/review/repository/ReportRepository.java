@@ -18,6 +18,14 @@ public interface ReportRepository extends JpaRepository<Reports, Integer> {
     Reports findByReviewAndUser(Reviews review, Users user);
     boolean existsByReviewAndUser(Reviews review, Users user);
 
+
+//    @Query(value = "select * from reviews r where r.uid in (select reviews_uid from reports rp)", nativeQuery = true)
+    @Query("select r from Reviews r " +
+            "join fetch Users u on r.user = u " +
+            "join fetch Products p on r.product = p " +
+            "where r in (select rp.review from Reports rp) ")
+    List<Reviews> findReportedReview();
+
 //    @Query("select a from reports a where a.creationDateTime <= :creationDateTime")
 //    List<Reports> findAllByDateAndReasonAndNameAndStatus();
     

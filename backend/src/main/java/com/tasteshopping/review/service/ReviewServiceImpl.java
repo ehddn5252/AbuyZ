@@ -452,4 +452,15 @@ public class ReviewServiceImpl implements ReviewService {
         reports.update(reportStatusReqDto.getStatus());
         return new BaseRes(200,"상태 변경 성공",null);
     }
+
+    @Override
+    public BaseRes getAllReportedReview() {
+        List<Reviews> l =  reportRepository.findReportedReview();
+        List<ReviewSearchDto> newL = new ArrayList<>();
+
+        for(int i=0;i<l.size();++i){
+            newL.add(l.get(i).toReviewSearchDto());
+        }
+        return new BaseRes(200,"신고한 리뷰 가져오기 성공",newL);
+    }
 }
