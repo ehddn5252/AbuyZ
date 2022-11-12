@@ -97,7 +97,21 @@ public class OrderListServiceImpl implements OrderListService {
             List<Orders> ordersList = orderRepository.findByOrderList(orderListsList.get(i));
             for (int j = 0; j < ordersList.size(); ++j) {
                 if (ordersList.get(j).getReview() == null) {
-                    orderDtoList.add(ordersList.get(j).toDto());
+                    OrderDto tmpOrdersList = ordersList.get(j).toDto();
+                    Inventories inventories = ordersList.get(j).getInventory();
+                    InventoryDto inventoryDto = inventories.toDto();
+                    inventoryDto.setProductDto(inventories.getProduct().toDto());
+                    String[] optionUidList = inventories.getProductOptionList().split(" ");
+                    List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
+                    for(int k=0;k<optionUidList.length;++k){
+                        ProductOptions productOptions = productOptionRepository.findById(Integer.parseInt(optionUidList[k].trim())).get();
+                        HashMap<String,String> hashMap = new HashMap<>();
+                        hashMap.put(productOptions.getName(),productOptions.getValue());
+                        retProductOptions.add(hashMap);
+                    }
+                    inventoryDto.setProductOptions(retProductOptions);
+                    tmpOrdersList.setInventoryDto(inventoryDto);
+                    orderDtoList.add(tmpOrdersList);
                 }
             }
         }
