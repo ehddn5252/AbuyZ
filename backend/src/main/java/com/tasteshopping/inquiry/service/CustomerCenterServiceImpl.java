@@ -50,7 +50,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Override
     public BaseRes getMyCustomerCenter(String email) {
-        List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmail(email);
+        List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmailAndNoReply(email);
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).get().toDto());

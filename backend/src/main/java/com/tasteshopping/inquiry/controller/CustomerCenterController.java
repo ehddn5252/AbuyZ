@@ -33,7 +33,12 @@ public class CustomerCenterController {
         if (email.equals("anonymousUser")){
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(customerCenterService.getMyCustomerCenter(email));
+        }
+        catch (NoInquiryException e){
+            return(e.baseResResponseEntity);
+        }
     }
 
     @GetMapping("/status/num/{status}")
