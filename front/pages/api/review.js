@@ -260,3 +260,96 @@ export async function reviewYet() {
     console.log(e);
   });
 }
+
+// 리뷰 신고 조회
+export async function SearchDeclaration(declarationDto) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .post("/review/search", {
+        reasonId: declarationDto.reasonId,
+        startDate: declarationDto.startDate,
+        endDate: declarationDto.endDate,
+        productName: declarationDto.productName,
+        status: declarationDto.status,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("신고 리뷰 조회", response);
+          resolve(response.data);
+        } else {
+          console.log("신고 리뷰 조회 실패", response);
+          resolve(response);
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 신고한 리뷰 가져오기
+export async function ReviewDeclaration() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.get("/review/reported").then((response) => {
+      if (response.status === 200) {
+        console.log("신고 리뷰 조회", response);
+        resolve(response.data);
+      } else {
+        console.log("신고 리뷰 조회 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 신고한 리뷰 가져오기
+export async function GetReviewDetail(reviewUid) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .post("/review/report/detail", {
+        review_uid: reviewUid,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("리뷰 디테일 조회", response.data);
+          resolve(response.data.data);
+        } else {
+          console.log("리뷰 디테일 조회 실패", response);
+          resolve(response);
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 신고 상태 변경
+export async function PutReviewStatus(reportsUid, status) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .put("/review/report/status", {
+        reportsUid: reportsUid,
+        status: status,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("신고 상태 변경 성공", response.data);
+          resolve(response.data.data);
+        } else {
+          console.log("신고 상태 변경 실패", response);
+          resolve(response);
+        }
+      });
+  }).catch((e) => {
+    console.log(e);
+  });
+}

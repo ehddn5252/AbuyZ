@@ -65,7 +65,7 @@ export async function inquireEvent() {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.get("/event").then((response) => {
+    https.get("/event/all").then((response) => {
       if (response.status === 200) {
         console.log("이벤트 조회 성공", response.data);
         resolve(response.data);
