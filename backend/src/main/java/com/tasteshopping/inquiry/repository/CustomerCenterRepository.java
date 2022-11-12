@@ -13,6 +13,10 @@ public interface CustomerCenterRepository extends JpaRepository<CustomerCenters,
     @Query(value="select c from CustomerCenters c where c.user.email=:email")
     List<Optional<CustomerCenters>> findByUserEmail(String email);
 
+    @Query(value="select c from CustomerCenters c where c.user.email=:email and c.reply is null")
+    List<Optional<CustomerCenters>> findByUserEmailAndNoReply(String email);
+
+
     List<CustomerCenters> findByStatus(String status);
 
     @Query(value = "select c from CustomerCenters c where c.reply =null Order by c.start_date desc  ")
