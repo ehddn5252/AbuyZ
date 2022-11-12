@@ -37,7 +37,7 @@ export async function inquireBigCategory(bigcategory_num) {
 }
 
 // 소분류 조회
-export async function smallCategory() {
+export async function getSmallCategory() {
   return new Promise((resolve) => {
     https.get("/category/small-category").then((response) => {
       if (response.status === 200) {
