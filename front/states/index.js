@@ -35,12 +35,18 @@ export const paymentProduct = atom({
 
 export const filterName = atom({
   key: "filterName",
-  default: "최근 등록순",
+  default: "최근 등록 순",
   effects_UNSTABLE: [persistAtom],
 });
 
 export const bigCategoryValue = atom({
   key: "bigCategoryValue",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const smallCategoryValue = atom({
+  key: "smallCategoryValue",
   default: "",
   effects_UNSTABLE: [persistAtom],
 });

@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import { getOrderList } from "../../pages/api/order";
+import ProductBundleItem from "./ProductBundleItem";
 export default function ProductSelectModal({
   setModalOpen,
   setDate,
@@ -18,6 +20,7 @@ export default function ProductSelectModal({
     setModalOpen(false);
   };
   const modalRef = useRef(null);
+  const [orderBundle, setOrderBundle] = useState([]);
 
   const productList = [
     {
@@ -39,7 +42,16 @@ export default function ProductSelectModal({
       date: "2022.10.27",
     },
   ];
+
+  const bundle = async () => {
+    const res = await getOrderList();
+    res.data.sort((a, b) => b.uid - a.uid);
+    console.log(res.data);
+    setOrderBundle(res.data);
+  };
+
   useEffect(() => {
+    bundle();
     // 이벤트 핸들러 함수
     const handler = () => {
       // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
@@ -57,7 +69,7 @@ export default function ProductSelectModal({
       document.removeEventListener("mousedown", handler);
       // document.removeEventListener('touchstart', handler); // 모바일 대응
     };
-  });
+  }, []);
 
   const selectfunction = () => {
     setDate(productList[selected].date);
@@ -81,6 +93,10 @@ export default function ProductSelectModal({
           {/* 7일전 ~ 오늘 날짜 */}
           2022.10.11 - 2022.10.18
         </Date>
+        {orderBundle.map((e, idx) => (
+          <ProductBundleItem uid={e.uid}></ProductBundleItem>
+        ))}
+
         {/* for문으로 돌리기 */}
         {productList.map((e) => (
           <Card

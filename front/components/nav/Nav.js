@@ -23,7 +23,12 @@ import { getMyInfo, logout, refresh } from "../../pages/api/user";
 import { BigCategory } from "../../pages/api/category";
 
 // State
-import { searchName, filterName, bigCategoryValue } from "../../states";
+import {
+  searchName,
+  filterName,
+  bigCategoryValue,
+  smallCategoryValue,
+} from "../../states";
 import { useRecoilState } from "recoil";
 
 //  lodash
@@ -40,6 +45,8 @@ export default function Nav() {
   const [searchValue, setSearchValue] = useRecoilState(searchName);
   const [filterValue, setFilterValue] = useRecoilState(filterName);
   const [categoryValue, setCategoryValue] = useRecoilState(bigCategoryValue);
+  const [smallCategoryId, setSmallCategoryId] =
+    useRecoilState(smallCategoryValue);
   // 카테고리
   const [bigCategory, setBigCategory] = useState([]);
 
@@ -71,6 +78,7 @@ export default function Nav() {
 
   // 검색시 동작
   const keywordSearch = () => {
+    setSmallCategoryId("");
     setCategoryValue("");
     setFilterValue("최근 등록 순");
     setSearchValue(keyword);
@@ -135,6 +143,7 @@ export default function Nav() {
     getCategory();
   }, []);
   const searchCategory = (uid) => {
+    setSmallCategoryId("");
     setCategoryValue(uid);
     setFilterValue("최근 등록 순");
     setSearchValue("");
@@ -165,6 +174,7 @@ export default function Nav() {
     setFilterValue("최근 등록 순");
     setCategoryValue("");
     setSearchValue("");
+    setSmallCategoryId("");
     if (router.pathname === "/search") {
       router.reload();
     }
@@ -174,6 +184,7 @@ export default function Nav() {
   const goSearch2 = () => {
     setFilterValue("평점 높은 순");
     setSearchValue("");
+    setSmallCategoryId("");
     setCategoryValue("");
     if (router.pathname === "/search") {
       router.reload();
@@ -184,6 +195,7 @@ export default function Nav() {
   const goSearch3 = () => {
     setFilterValue("가격 낮은 순");
     setSearchValue("");
+    setSmallCategoryId("");
     setCategoryValue("");
     if (router.pathname === "/search") {
       router.reload();

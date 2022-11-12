@@ -1,47 +1,17 @@
-// React
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-// MUI
-import Modal from "@mui/material/Modal";
-
-// StyledComponents
 import styled from "styled-components";
-
-// 하위 컴포넌트
-import ReviewAddModel from "./ReviewAddModel";
-
-// api
 import { eachGetOrderList } from "../../pages/api/order";
-import { regiscart } from "../../pages/api/cart";
 
-export default function MyOrderItem({ uid }) {
-  console.log("번호", uid);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const modalRef = useRef(null);
-
-  // 장바구니 내 모든 리스트
+export default function ProductBundleItem({ uid }) {
   const [orderBundleItem, setOrderBundleItem] = useState([]);
-  const bundleItem = async () => {
+  const bundleitem = async () => {
     const rres = await eachGetOrderList(uid);
-    console.log("갖고온거 보여줘", rres.data);
-    setOrderBundleItem(rres.data);
-  };
-
-  const handleClick = async (a, b) => {
-    const cartDto = {
-      productsUid: a,
-      productCount: 1,
-      optionValues: b,
-    };
-    const res = await regiscart(cartDto);
-    console.log(res.data);
-    alert("장바구니에 담았습니다!");
+    console.log(rres.data);
   };
 
   useEffect(() => {
-    bundleItem();
+    bundleitem();
   }, []);
 
   return (
@@ -70,36 +40,6 @@ export default function MyOrderItem({ uid }) {
             {/* <ProductIntro>{e.inventoryDto.productOptions.size}</ProductIntro> */}
             {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
           </InfoContainer>
-          <ButtonContainer>
-            {/* {product.reviewCheck === true ? (
-            <ReviewFinishButton>리뷰 작성 완료</ReviewFinishButton>
-          ) : (
-            <ReviewButton onClick={handleOpen}>리뷰 작성</ReviewButton>
-          )} */}
-            <CartButton
-              onClick={() =>
-                handleClick(
-                  e.inventoryDto.productDto.uid,
-                  e.inventoryDto.productOptions
-                )
-              }
-            >
-              장바구니 담기
-            </CartButton>
-            <Modal
-              ref={modalRef}
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <ReviewAddModel
-                productName={e.inventoryDto.productDto.name}
-                // productOptions={product.options}
-                setOpen={setOpen}
-              />
-            </Modal>
-          </ButtonContainer>
         </Container>
       ))}
     </ItemContainer>

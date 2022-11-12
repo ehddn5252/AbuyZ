@@ -4,23 +4,42 @@ import React from "react";
 // StyledComponents
 import styled from "styled-components";
 
+// next.js router
+import { useRouter } from "next/router";
+
+//mui
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+
 // api
 import { delwish } from "../../pages/api/wish";
 
 export default function MyWishItem(product) {
+  const router = useRouter();
+
   const deletezzim = async () => {
-    const wishDto = {
-      wish_uid: product.product.wish_uid,
-    };
-    const res = await delwish(wishDto);
+    const res = await delwish(product.product.wish_uid);
     console.log(res.data);
-    // router.reload();
+    router.reload();
+  };
+
+  const goDetail = () => {
+    router.push(`/detail/${product.product.product_uid}`);
   };
 
   return (
     <ItemContainer>
-      <ProductImg src={product.product.img_url} />
-      <button onClick={() => deletezzim()}>찜 삭제</button>
+      <ProductImg src={product.product.img_url} onClick={goDetail} />
+
+      <FavoriteRoundedIcon
+        style={{
+          color: "red",
+          position: "absolute",
+          bottom: "25%",
+          right: "14%",
+          fontSize: "3rem",
+        }}
+        onClick={() => deletezzim()}
+      ></FavoriteRoundedIcon>
 
       {product.product.product_name.length > 15 ? (
         <div>
@@ -102,12 +121,12 @@ const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 0.3rem;
-  position: "relative";
+  position: relative;
 `;
 
 const ProductImg = styled.img`
-  width: 14rem;
-  height: 16rem;
+  width: 12rem;
+  height: 14rem;
   object-fit: cover;
 `;
 
@@ -115,22 +134,6 @@ const ProductName = styled.span`
   margin-top: 1rem;
   font-size: 1rem;
   font-weight: bolder;
-`;
-
-const InfoText = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 1rem;
-`;
-const Discount = styled.p`
-  font-size: 1rem;
-  font-weight: bolder;
-  margin-right: 0rem;
-  margin-top: 0;
-  margin-bottom: 0;
-  color: #56a9f1;
-  text-align: end;
-  vertical-align: bottom;
 `;
 
 const CardPriceBD = styled.p`
@@ -143,12 +146,4 @@ const CardPriceBD = styled.p`
   text-decoration-color: #aaaaaa;
   color: #aaaaaa;
   margin-top: 0.5rem;
-`;
-
-const CardPrice = styled.p`
-  font-size: 1.5rem;
-  font-weight: bolder;
-  margin-right: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 0;
 `;

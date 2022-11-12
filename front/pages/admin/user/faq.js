@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 // MUI
 import Modal from "@mui/material/Modal";
@@ -10,59 +10,66 @@ import styled from "styled-components";
 // 하위 Components
 import FaqEditModal from "../../../components/admin/user/FaqEditModal";
 
+// API
+import { registFAQ, getFAQ } from "../../api/faq";
+
+// Next.js
+import { useRouter } from "next/router";
+
 export default function Faq() {
+  const router = useRouter();
+  const modalRef = useRef(null);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const faqDataList = [
-    {
-      id: 0,
-      title: "회원탈퇴는 어덯게 하나요?",
-      content:
-        "[마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증 진행/완료 후 가능하십니다. 답변이 충분하지 않으셨다면...",
-    },
-    {
-      id: 1,
-      title: "회원탈퇴는 어덯게 하나요?",
-      content:
-        "[마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증 진행/완료 후 가능하십니다. 답변이 충분하지 않으셨다면...",
-    },
-    {
-      id: 2,
-      title: "회원탈퇴는 어덯게 하나요?",
-      content:
-        "[마이롯데 > 회원 정보 관리 > 회원탈퇴 > ‘탈퇴’ 버튼 클릭 > 인증 진행/완료 후 가능하십니다. 답변이 충분하지 않으셨다면...",
-    },
-  ];
-  const faqList = faqDataList.map((e) => (
-    <TableRow key={e.id}>
-      <FaqTd style={{ width: "10%" }}>
-        <EditButton onClick={handleOpen}>수정</EditButton>
-      </FaqTd>
-      <FaqTd style={{ width: "30%" }}>{e.title}</FaqTd>
-      <FaqTd style={{ width: "70%" }}>{e.content}</FaqTd>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <FaqEditModal faq={e} />
-      </Modal>
-    </TableRow>
-  ));
+  const handleClose = () => {
+    setOpen(false);
+    setOpenUid(0);
+  };
+  const [faqList, setFaqList] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [openUid, setOpenUid] = useState(0);
+
+  const getfaqList = async () => {
+    const res = await getFAQ();
+    setFaqList(res.data);
+  };
+
+  const createFaq = async () => {
+    const faqDto = {
+      question: title,
+      answer: content,
+    };
+    await registFAQ(faqDto);
+    router.reload();
+  };
+  useEffect(() => {
+    getfaqList();
+    console.log("동작");
+  }, []);
   return (
     <Container>
       <AddBox>
         <TitleBox>
           <TitleTag>FAQ 명</TitleTag>
-          <TitleInput></TitleInput>
+          <TitleInput
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          ></TitleInput>
         </TitleBox>
         <ContentBox>
           <TitleTag>답변</TitleTag>
-          <ContentInput></ContentInput>
+          <ContentInput
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
+          ></ContentInput>
         </ContentBox>
-        <AddButton>등록</AddButton>
+        <AddButton onClick={createFaq}>등록</AddButton>
       </AddBox>
       <InquireBox>
         <TableBox>
@@ -73,7 +80,39 @@ export default function Faq() {
               <FaqTh style={{ width: "60%" }}>답변</FaqTh>
             </tr>
           </thead>
-          <tbody style={{ width: "100%" }}>{faqList}</tbody>
+          <tbody style={{ width: "100%" }}>
+            {faqList.map((e) => (
+              <TableRow key={e.id}>
+                <FaqTd style={{ width: "10%" }}>
+                  <EditButton
+                    onClick={() => {
+                      handleOpen();
+                      setOpenUid(e.uid);
+                    }}
+                  >
+                    수정
+                  </EditButton>
+                </FaqTd>
+                <FaqTd style={{ width: "30%" }}>{e.question}</FaqTd>
+                {e.answer.length < 80 ? (
+                  <FaqTd style={{ width: "70%" }}>{e.answer}</FaqTd>
+                ) : (
+                  <FaqTd style={{ width: "70%" }}>
+                    {e.answer.slice(0, 80)}...
+                  </FaqTd>
+                )}
+
+                <Modal
+                  ref={modalRef}
+                  open={openUid === e.uid}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <FaqEditModal faq={e} onClose={handleClose} />
+                </Modal>
+              </TableRow>
+            ))}
+          </tbody>
         </TableBox>
       </InquireBox>
     </Container>

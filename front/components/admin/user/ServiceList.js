@@ -15,33 +15,14 @@ import { Checkbox } from "@mui/material";
 
 import styled from "styled-components";
 
-export default function ServiceList() {
+export default function ServiceList({ inquirys }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const rows = [
-    {
-      id: 0,
-      nickname: "dogeon123",
-      title: "나이키 바지를 샀는데...",
-      content: "흰색이라고 해서 구매했는데 검은색이 왔어요. 교환해주...",
-      cause: "교환/환불",
-      solved: "해결",
-      request_date: "2022.10.23 13:00",
-      solved_date: "2022.10.25 15:00",
-    },
-    {
-      id: 1,
-      nickname: "hello321",
-      title: "빼빼로 데이 이벤트 문의입..",
-      content: "빼빼로데이 이벤트 언제부터 진행하나요?",
-      cause: "이벤트 프로모션",
-      solved: "미해결",
-      request_date: "2022.10.23 16:00",
-      solved_date: "-",
-    },
-  ];
+  const handleClose = () => {
+    setOpen(false);
+    setOpenUid(-1);
+  };
+  const [openUid, setOpenUid] = useState(-1);
 
   return (
     <TableContainer component={Paper}>
@@ -73,32 +54,54 @@ export default function ServiceList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {inquirys.map((inquiry) => (
+            <TableRow key={inquiry.uid}>
               <BodyTableCell component="th" scope="row">
                 <Checkbox />
               </BodyTableCell>
               <BodyTableCell align="center">
-                {row.solved === "해결" ? (
+                {inquiry.status === "답변_완료" ? (
                   <SolvedButton onClick={handleOpen}>답변완료</SolvedButton>
                 ) : (
-                  <NoButton onClick={handleOpen}>답변하기</NoButton>
+                  <NoButton
+                    onClick={(e) => {
+                      handleOpen();
+                      setOpenUid(inquiry.uid);
+                    }}
+                  >
+                    답변하기
+                  </NoButton>
                 )}
               </BodyTableCell>
-              <BodyTableCell align="center">{row.cause}</BodyTableCell>
-              <BodyTableCell>{row.title}</BodyTableCell>
-              <BodyTableCell>{row.content}</BodyTableCell>
-              <BodyTableCell align="center">{row.request_date}</BodyTableCell>
-              <BodyTableCell align="center">{row.solved_date}</BodyTableCell>
-              <BodyTableCell align="center">{row.nickname}</BodyTableCell>
+              <BodyTableCell align="center">
+                {inquiry.category_name}
+              </BodyTableCell>
+              <BodyTableCell>{inquiry.title}</BodyTableCell>
+              <BodyTableCell>{inquiry.content}</BodyTableCell>
+              <BodyTableCell align="center">
+                {inquiry.start_date.slice(0, 10)}{" "}
+                {inquiry.start_date.slice(11, 16)}
+              </BodyTableCell>
+              <BodyTableCell align="center">
+                {inquiry.end_date !== null ? (
+                  <div>
+                    {inquiry.end_date.slice(0, 10)}{" "}
+                    {inquiry.end_date.slice(11, 16)}
+                  </div>
+                ) : null}
+              </BodyTableCell>
+              <BodyTableCell align="center">{inquiry.writer}</BodyTableCell>
 
               <Modal
-                open={open}
-                onClose={handleClose}
+                open={openUid !== -1 && openUid === inquiry.uid}
+                // onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                <ServiceItemModal row={row} />
+                <ServiceItemModal
+                  originalInquiry={inquiry}
+                  handleClose={handleClose}
+                />
               </Modal>
             </TableRow>
           ))}

@@ -1,36 +1,64 @@
-import React from "react";
-import styled from "@emotion/styled";
-import { Container } from "@mui/system";
+import React, { useState, useEffect } from "react";
 
+// Styled Compoennt
+import styled from "styled-components";
+import { Container } from "@mui/material";
+
+// Next.js
+import { useRouter } from "next/router";
+
+// Recoil
+import {
+  smallCategoryValue,
+  searchName,
+  filterName,
+  bigCategoryValue,
+} from "../../states/index";
+import { useRecoilState } from "recoil";
 export default function MainCategory() {
+  const router = useRouter();
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+  const [filterValue, setFilterValue] = useRecoilState(filterName);
+  const [categoryValue, setCategoryValue] = useRecoilState(bigCategoryValue);
+  const [categoryId, setCategoryId] = useRecoilState(smallCategoryValue);
   // 나중에 array 지우면 될 듯
   const array = [
-    { img: "fruit", name: "과일" },
-    { img: "meat", name: "고기" },
-    { img: "water", name: "생수" },
-    { img: "hair", name: "헤어" },
-    { img: "sofa", name: "가구" },
-    { img: "shoes", name: "신발" },
+    { img: "/images/fruit.png", name: "과일", uid: 1 },
+    { img: "/images/meat.png", name: "고기", uid: 3 },
+    { img: "/images/water.png", name: "생수", uid: 5 },
+    { img: "/images/hair.png", name: "헤어", uid: 9 },
+    { img: "/images/sofa.png", name: "가구", uid: 11 },
+    { img: "/images/shoes.png", name: "신발", uid: 27 },
     {
-      img: "base",
-      name: "기초",
+      img: "/images/base.png",
+      name: "향수",
+      uid: 22,
     },
   ];
-  return (
+
+  const goSearch = (uid) => {
+    setCategoryValue("");
+    setFilterValue("최근 등록 순");
+    setSearchValue("");
+    setCategoryId(uid);
+    router.push("/search");
+  };
+  return array ? (
     <Container maxWidth="xl" sx={{ my: 10 }}>
       <CardContainer>
-        {array.map((data, idx) => {
-          const imgURL = "/images/" + data.img + ".png";
-          return (
-            <CardBox key={idx}>
-              <CardImg alt="카테고리 목록" src={imgURL} />
-              <CardText>{data.name}</CardText>
-            </CardBox>
-          );
-        })}
+        {array.map((data, idx) => (
+          <CardBox key={idx}>
+            <CardImg
+              onClick={(e) => goSearch(data.uid)}
+              alt="카테고리 목록"
+              src={data.img}
+            />
+            <CardText>{data.name}</CardText>
+          </CardBox>
+        ))}
       </CardContainer>
     </Container>
-  );
+  ) : null;
 }
 
 const CardContainer = styled.div`

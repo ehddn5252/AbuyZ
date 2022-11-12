@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import Grid from "@mui/material/Grid";
 
 // StyledComponents
 import styled from "styled-components";
@@ -12,14 +13,14 @@ import MyWishItem from "./MyWishItem";
 
 // api
 import { listwish } from "../../pages/api/wish";
+
 export default function MyWishList() {
   const [productList, setProductList] = useState([]);
   const llistwish = async () => {
     const res = await listwish();
     setProductList(res.data.products);
-    // setProductList(res.data);
   };
-  console.log(productList);
+
   useEffect(() => {
     llistwish();
   }, []);
@@ -27,18 +28,16 @@ export default function MyWishList() {
   return (
     <MyOrderContainer>
       <MajorTitle>찜한 상품</MajorTitle>
-      <hr
-        style={{
-          height: "0.3rem",
-          background: "#7895B2",
-          borderRadius: "1rem",
-        }}
-      />
+      <Hr />
       {productList ? (
         <ProductListBox>
-          {productList.map((e) => (
-            <MyWishItem product={e}></MyWishItem>
-          ))}
+          <Grid container>
+            {productList.map((e, idx) => (
+              <Grid key={idx} item xs={3} marginBottom={3}>
+                <MyWishItem product={e}></MyWishItem>
+              </Grid>
+            ))}
+          </Grid>
         </ProductListBox>
       ) : (
         <BlankBox>
@@ -50,7 +49,7 @@ export default function MyWishList() {
           </p>
         </BlankBox>
       )}
-      {productList.length < 4 ? null : (
+      {/* {productList.length < 4 ? null : (
         <ButtonDiv>
           <Button
             variant="contained"
@@ -61,7 +60,7 @@ export default function MyWishList() {
             더보기
           </Button>
         </ButtonDiv>
-      )}
+      )} */}
     </MyOrderContainer>
   );
 }
@@ -99,4 +98,10 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 2rem;
+`;
+
+const Hr = styled.hr`
+  height: 0.3rem;
+  background: #7895b2;
+  border-radius: 1rem;
 `;

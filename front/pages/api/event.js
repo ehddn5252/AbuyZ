@@ -101,3 +101,23 @@ export async function delEvent(eventnumber) {
       });
   });
 }
+
+// 이벤트 상세 조회
+export async function detailEvent(eventNum) {
+  return new Promise((resolve) => {
+    https
+      .get(`/event/detail/${eventNum}`)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("이벤트 상세 조회 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("이벤트 상세조회 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}

@@ -123,3 +123,26 @@ export async function couponlist() {
       });
   });
 }
+
+// 쿠폰 발급 요청
+export async function getCoupon(couponNumber) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+
+  return new Promise((resolve) => {
+    https
+      .get(`/coupon/${couponNumber}`)
+      .then((response) => {
+        if (response.data.status === 200) {
+          console.log("쿠폰 발급 요청 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("쿠폰 발급 요청 실패", response);
+          resolve(resolve);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}

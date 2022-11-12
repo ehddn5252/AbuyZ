@@ -7,6 +7,7 @@ import {
   inquireProduct,
   inquireProductStatus,
   inquireProductStatusCount,
+  getStockInventory,
 } from "../../../../pages/api/product";
 
 // 컴포넌트
@@ -124,6 +125,7 @@ export default function SaleProductSearch() {
                   // 판매상태
                   // 전체
                   if (checkStatus === 0) {
+                    // p[i].count = getInventory(p[i].uid);
                     tmp.push(p[i]);
                   }
                   // 판매중
@@ -157,14 +159,11 @@ export default function SaleProductSearch() {
     setProductInfo(tmp);
   };
 
+  // 모든 상품 상태 조회
   const getProductStatus = async () => {
     const ps = await inquireProductStatus();
     console.log(ps);
   };
-
-  console.log(productInfo, "~~~~");
-
-  const [update, setUpdate] = useState(0);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -304,13 +303,7 @@ export default function SaleProductSearch() {
         <hr style={{ background: "#ff9494", width: "100%", margin: "0" }} />
         <ButtonBox>
           <ResetButton onClick={() => setReset(reset + 1)}>초기화</ResetButton>
-          <SearchButton
-            onClick={() => {
-              getProduct(), setUpdate(update + 1);
-            }}
-          >
-            검색
-          </SearchButton>
+          <SearchButton onClick={() => getProduct()}>검색</SearchButton>
         </ButtonBox>
       </Grid2>
       {/* 상품 목록 */}

@@ -13,22 +13,22 @@ import {
 
 import { useRecoilState } from "recoil";
 // State
-import { searchName, bigCategoryValue } from "../states";
+import { searchName, bigCategoryValue, smallCategoryValue } from "../states";
 
 export default function Search() {
-  const [searchValue, setSearchValue] = useRecoilState(searchName);
-  const [bigCategory, setBigCategory] = useRecoilState(bigCategoryValue);
-  const [productList, setProductList] = useState([]);
-
   // option (필터링)
   const [feeOption, setFeeOption] = useState(null);
   const [priceOption, setPriceOption] = useState(null);
   const [categotyOption, setCategoryOption] = useState(null);
   const [startPrice, setStartPrice] = useState(null);
   const [endPrice, setEndPrice] = useState(null);
+
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+  const [bigCategory, setBigCategory] = useRecoilState(bigCategoryValue);
+  const [smallCategory, setSmallCategory] = useRecoilState(smallCategoryValue);
+  const [productList, setProductList] = useState([]);
+
   const getProductList = async () => {
-    console.log(searchValue);
-    console.log(bigCategory);
     let res;
     if (searchValue) {
       const temp = await keywordSearch(searchValue);
@@ -38,9 +38,14 @@ export default function Search() {
         big_categories_uid: bigCategory,
       };
       const temp1 = await conditionSearch(detailDto);
-      console.log(temp1);
       res = temp1.data;
-    } else {
+    } else if (smallCategory) {
+      const detailDto = {
+        small_categories_uid: smallCategory,
+      };
+      const temp1 = await conditionSearch(detailDto);
+      res = temp1.data;
+    } else if (!searchValue && !bigCategory && !smallCategory) {
       res = await inquireProduct();
     }
     setProductList(res);
@@ -49,6 +54,8 @@ export default function Search() {
   const filterProductList = async () => {
     const detailDto = {
       keyword: searchValue,
+      big_categories_uid: bigCategory,
+      small_categories_uid: smallCategory,
     };
     if (feeOption) {
       detailDto["delivery_fee_uid"] = feeOption;
@@ -63,14 +70,16 @@ export default function Search() {
       detailDto["start_price"] = startPrice;
       detailDto["end_price"] = endPrice;
     }
-
     const res = await kwcdSearch(detailDto);
     setProductList(res.data);
   };
   // 필터링 사용시 동작
   useEffect(() => {
-    filterProductList();
+    if (searchValue) {
+      filterProductList();
+    }
   }, [feeOption, priceOption, categotyOption, startPrice, endPrice]);
+
   // 초기 동작
   useEffect(() => {
     getProductList();
@@ -79,7 +88,7 @@ export default function Search() {
   // 검색 값 변동시 동작
   useEffect(() => {
     getProductList();
-  }, [searchValue]);
+  }, [searchValue, bigCategory, smallCategory]);
   return (
     <Container>
       <h1>검색 결과</h1>

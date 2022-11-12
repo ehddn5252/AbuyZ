@@ -52,21 +52,34 @@ export async function inquireProductStatusCount(Status) {
 }
 
 // 상품 삭제
-export async function delProduct(productDto) {
+export async function delProduct(productUid) {
   return new Promise((resolve) => {
-    https
-      .delete("/product", {
-        products_uid: productDto.products_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("상품 삭제 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("상품 삭제 실패", response);
-          resolve(response);
-        }
-      });
+    https.delete(`/product/${productUid}`).then((response) => {
+      if (response.status === 200) {
+        console.log("상품 삭제 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("상품 삭제 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 상품 uid로 찾아서 상태변경하기
+export async function changeEdit(productUid) {
+  return new Promise((resolve) => {
+    https.put(`/product/status/${productUid}/sold_out`).then((response) => {
+      if (response.status === 200) {
+        console.log("상품 상태 변경 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("상품 상태 변경 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
@@ -150,14 +163,29 @@ export async function productDetail(product_id) {
 }
 
 // 재고 목록 가져오기
-export async function getStockInventory(product_id) {
+export async function getStockInventory(productUid) {
   return new Promise((resolve) => {
-    https.get(`/inventory/${product_id}`).then((response) => {
+    https.get(`/inventory/${productUid}`).then((response) => {
       if (response.status === 200) {
         console.log("재고 목록 가져오기 성공", response);
         resolve(response.data.data);
       } else {
         console.log("재고 목록 가져오기 실패", response);
+        resolve(response);
+      }
+    });
+  });
+}
+
+// 재고 목록 가져오기
+export async function getRandomProducts() {
+  return new Promise((resolve) => {
+    https.get("/product/random").then((response) => {
+      if (response.status === 200) {
+        console.log("추천 상품 가져오기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("추천 상품 가져오기 성공", response);
         resolve(response);
       }
     });
