@@ -1,28 +1,10 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import styled from "styled-components";
-export default function ProductSimpleInfo() {
+export default function ProductSimpleInfo({ paymentList }) {
+  console.log("결제리스트", paymentList);
   const [productList, setProductList] = useState(false);
-  const cartList = [
-    {
-      id: 0,
-      name: "싱싱한 햇살 당근",
-      options: "당근당근",
-      count: 3,
-      price: 15000,
-      img: "/images/carrot.png",
-      discount: 30,
-    },
-    {
-      id: 1,
-      name: "싱싱한 뭐시기",
-      options: "샌드위치샌드위치",
-      count: 7,
-      price: 2000,
-      img: "/images/sandwich.png",
-      discount: 10,
-    },
-  ];
+
   return (
     <div>
       <ProductShow onClick={() => setProductList(!productList)}>
@@ -36,10 +18,10 @@ export default function ProductSimpleInfo() {
       <hr></hr>
       {productList ? (
         <div>
-          {cartList.map((e) => (
-            <InfoDiv key={e.id}>
+          {paymentList.map((e, idx) => (
+            <InfoDiv key={idx}>
               <ImgDiv>
-                <Img src={e.img}></Img>
+                <Img src={e.productDto.repImg}></Img>
               </ImgDiv>
               <TextDiv>
                 <div style={{ display: "flex", flexDirection: "row" }}>
@@ -76,8 +58,10 @@ export default function ProductSimpleInfo() {
         <div
           style={{ padding: "3rem", display: "flex", justifyContent: "center" }}
         >
-          <span style={{ fontWeight: "bold" }}>{cartList[0].name} </span>
-          <span> 외 {cartList.length}개의 상품을 주문했습니다.</span>
+          <span style={{ fontWeight: "bold" }}>
+            {/* {paymentList[0].productDto.name}{" "} */}
+          </span>
+          {/* <span> 외 {cartList.length}개의 상품을 주문했습니다.</span> */}
         </div>
       )}
       {/* for문 돌려서 */}

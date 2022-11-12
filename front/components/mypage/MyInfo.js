@@ -5,7 +5,7 @@ import { getMyInfo } from "../../pages/api/user";
 import styled from "styled-components";
 import { reviewYet } from "../../pages/api/review";
 import { couponlist } from "../../pages/api/coupon";
-
+import CanUseCoupon from "./CanUseCoupon";
 export default function Myinfo({ setTap, SetActiveTap }) {
   const [userName, setUserName] = useState("");
   const [reviewCnt, setReviewCnt] = useState(0);
@@ -16,15 +16,7 @@ export default function Myinfo({ setTap, SetActiveTap }) {
   const ccoupon = async () => {
     const res = await couponlist();
     setCouponL(res.data.result);
-    var cnt = 0;
-    for (var i = 0; i < couponL.length; i++) {
-      if (couponL[i].status === "사용가능") {
-        cnt += 1;
-      }
-    }
-    setCouponCnt(cnt);
   };
-  console.log(couponCnt);
   // 아직 작성하지 않는 리뷰
   const rreviewYet = async () => {
     const res = await reviewYet();
@@ -71,7 +63,11 @@ export default function Myinfo({ setTap, SetActiveTap }) {
         <HistoryDiv onClick={tap3Change}>
           <HistoryTitle>사용 가능 쿠폰</HistoryTitle>
           <HistoryCount>
-            <Count>{couponCnt}</Count>개
+            <CanUseCoupon
+              setCouponCnt={setCouponCnt}
+              couponL={couponL}
+              couponCnt={couponCnt}
+            ></CanUseCoupon>
           </HistoryCount>
         </HistoryDiv>
         <HhistoryDiv onClick={tap6Change}>
