@@ -35,7 +35,7 @@ export const paymentProduct = atom({
 
 export const filterName = atom({
   key: "filterName",
-  default: "최근 등록순",
+  default: "최근 등록 순",
   effects_UNSTABLE: [persistAtom],
 });
 

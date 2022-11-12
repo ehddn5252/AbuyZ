@@ -8,11 +8,18 @@ import { Container } from "@mui/material";
 import { useRouter } from "next/router";
 
 // Recoil
-import { smallCategoryValue } from "../../states/index";
+import {
+  smallCategoryValue,
+  searchName,
+  filterName,
+  bigCategoryValue,
+} from "../../states/index";
 import { useRecoilState } from "recoil";
 export default function MainCategory() {
   const router = useRouter();
-
+  const [searchValue, setSearchValue] = useRecoilState(searchName);
+  const [filterValue, setFilterValue] = useRecoilState(filterName);
+  const [categoryValue, setCategoryValue] = useRecoilState(bigCategoryValue);
   const [categoryId, setCategoryId] = useRecoilState(smallCategoryValue);
   // 나중에 array 지우면 될 듯
   const array = [
@@ -29,17 +36,20 @@ export default function MainCategory() {
     },
   ];
 
-  // const goSearch = (uid) => {
-  //   setCategoryId(uid);
-  //   router.push("/search");
-  // };
+  const goSearch = (uid) => {
+    setCategoryValue("");
+    setFilterValue("최근 등록 순");
+    setSearchValue("");
+    setCategoryId(uid);
+    router.push("/search");
+  };
   return array ? (
     <Container maxWidth="xl" sx={{ my: 10 }}>
       <CardContainer>
         {array.map((data, idx) => (
           <CardBox key={idx}>
             <CardImg
-              // onClick={goSearch(data.uid)}
+              onClick={(e) => goSearch(data.uid)}
               alt="카테고리 목록"
               src={data.img}
             />
