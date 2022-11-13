@@ -12,16 +12,13 @@ import { ServerStyleSheets } from "@mui/styles";
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
-    const materialSheets = new ServerStyleSheets();
     const originalRenderPage = ctx.renderPage;
 
     try {
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props, idx) =>
-            sheet.collectStyles(
-              materialSheets.collect(<App key={idx} {...props} />)
-            ),
+            sheet.collectStyles(<App key={idx} {...props} />),
         });
 
       const initialProps = await Document.getInitialProps(ctx);
