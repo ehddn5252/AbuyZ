@@ -46,7 +46,6 @@ export default function Faq() {
   };
   useEffect(() => {
     getfaqList();
-    console.log("동작");
   }, []);
   return (
     <Container>
@@ -193,9 +192,10 @@ const AddButton = styled.button`
 
 const InquireBox = styled.div`
   background-color: white;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  padding-bottom: 5rem;
   width: 100%;
-  height: 21.5rem;
-  border: 1px solid black;
 `;
 const TableBox = styled.table`
   background-color: white;
