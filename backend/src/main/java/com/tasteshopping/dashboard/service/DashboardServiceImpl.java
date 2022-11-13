@@ -44,6 +44,12 @@ public class DashboardServiceImpl implements DashboardService {
         analysisRepository.findByDateAndPageName(date, pageName).get(0).visit();
     }
 
+    @Transactional
+    @Override
+    public void cancelVisit(Date date, String pageName) {
+        analysisRepository.findByDateAndPageName(date, pageName).get(0).cancelVisit();
+    }
+
     @Override
     public AnalysisDataDto getVisit(Date date, String pageName) {
         List<AnalysisData> analysisData = analysisRepository.findByDateAndPageName(date, pageName);

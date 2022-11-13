@@ -16,6 +16,10 @@ public interface DashboardService {
    void createTodayRow(String pageName);
 
    void doVisit(Date date, String pageName);
+
+   @Transactional
+   void cancelVisit(Date date, String pageName);
+
    AnalysisDataDto getVisit(Date date, String pageName);
    HashMap<String, Object> getDaily();
 

@@ -90,6 +90,7 @@ public class WishServiceImpl implements WishService {
         }
         wishRepository.delete(wishLists.get());
         responseDto.setData(new ResultDto(true));
+        dashboardService.cancelVisit(UtilService.getToday(),"like");
         responseDto.setMessage("삭제 성공");
         return responseDto;
     }
