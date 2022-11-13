@@ -10,6 +10,7 @@ export default function DeliveryListModal({
   setDetailAddress,
   setName,
   setPhone,
+  addressList,
 }) {
   const closeModal = () => {
     settAddressModalOpen(false);
@@ -18,31 +19,12 @@ export default function DeliveryListModal({
 
   const modalRef = useRef(null);
 
-  const DeliveryList = [
-    {
-      id: 0,
-      name: "받는 사람 1",
-      postcode: "12345",
-      address: "주소 1",
-      detailaddress: "상세 주소 1",
-      phone: "01012345678",
-    },
-    {
-      id: 1,
-      name: "받는 사람 2",
-      postcode: "67890",
-      address: "주소 2",
-      detailaddress: "상세 주소 2",
-      phone: "01098765432",
-    },
-  ];
-
   const selectfunction = () => {
-    setPostcode(DeliveryList[selected].postcode);
-    setAddress(DeliveryList[selected].address);
-    setDetailAddress(DeliveryList[selected].detailaddress);
-    setName(DeliveryList[selected].name);
-    setPhone(DeliveryList[selected].phone);
+    setPostcode(addressList[selected].postalCode);
+    setAddress(addressList[selected].address);
+    setDetailAddress(addressList[selected].detailAddress);
+    setName(addressList[selected].recipient);
+    setPhone(addressList[selected].contact);
     settAddressModalOpen(false);
   };
 
@@ -89,15 +71,15 @@ export default function DeliveryListModal({
         </div>
       </div>
       {/* for문으로 돌리기 */}
-      {DeliveryList.map((e) => (
+      {addressList.map((e, idx) => (
         <Card
-          key={e.id}
+          key={idx}
           style={{ ...cardStyle, display: "flex", flexDirection: "row" }}
-          onClick={() => setSelected(e.id)}
+          onClick={() => setSelected(idx)}
         >
           <div style={{ flex: 2, display: "flex", justifyContent: "center" }}>
             <IconDiv>
-              {selected === e.id ? (
+              {selected === idx ? (
                 <ExpandCircleDownOutlinedIcon
                   sx={{ color: "#56a9f1" }}
                 ></ExpandCircleDownOutlinedIcon>
@@ -113,14 +95,14 @@ export default function DeliveryListModal({
           <div style={{ flex: 10 }}>
             <div>
               <TextDiv>
-                <span>[{e.postcode}]</span>
+                <span>[{e.postalCode}]</span>
                 <br></br>
                 <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-                  {e.address} {e.detailaddress}
+                  {e.address} {e.detailAddress}
                 </span>
                 <br></br>
                 <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
-                  {e.name} | {e.phone}
+                  {e.recipient} | {e.contact}
                 </span>
               </TextDiv>
               <br></br>

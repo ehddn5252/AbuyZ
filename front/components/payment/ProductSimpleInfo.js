@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import styled from "styled-components";
 export default function ProductSimpleInfo({ paymentList }) {
-  console.log("결제리스트", paymentList);
   const [productList, setProductList] = useState(false);
 
   return (
@@ -27,27 +26,57 @@ export default function ProductSimpleInfo({ paymentList }) {
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <NameOption>
                     <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
-                      {e.name}
+                      {e.productDto.name}
                     </span>
                     <br></br>
-                    <span>[{e.options}]</span>
+                    <div>
+                      {e.inventoryDto.productOptions.map((o) => (
+                        <div>
+                          {Object.keys(o) == "x" ? null : (
+                            <span style={{ color: "#aaaaaa" }}>
+                              [{Object.keys(o)} :
+                            </span>
+                          )}
+                          {o[Object.keys(o)] == "x" ? null : (
+                            <span style={{ color: "#aaaaaa" }}>
+                              {o[Object.keys(o)]}]
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </NameOption>
                   <Count>
-                    <span>{e.count}개</span>
+                    <span>{e.productCount}개</span>
                   </Count>
                   <PriceDiv>
-                    <span
-                      style={{
-                        textDecoration: "line-through",
-                        color: "#aaaaaa",
-                      }}
-                    >
-                      {e.price}원
-                    </span>
-                    <br></br>
-                    <span style={{ fontWeight: "bold", fontSize: "1.1REM" }}>
-                      {(e.price * (100 - e.discount)) / 100}원
-                    </span>
+                    {e.productDto.discountRate > 0 ? (
+                      <div>
+                        <span
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#aaaaaa",
+                          }}
+                        >
+                          {e.productDto.price.toLocaleString("ko-KR")}원
+                        </span>
+                        <br></br>
+                        <PriceSpan>
+                          {(
+                            (e.productDto.price *
+                              (100 - e.productDto.discountRate)) /
+                            100
+                          ).toLocaleString("ko-KR")}
+                          원
+                        </PriceSpan>
+                      </div>
+                    ) : (
+                      <div style={{ marginTop: "0.6rem" }}>
+                        <PriceSpan>
+                          {e.productDto.price.toLocaleString("ko-KR")}원
+                        </PriceSpan>
+                      </div>
+                    )}
                   </PriceDiv>
                 </div>
               </TextDiv>
@@ -58,13 +87,29 @@ export default function ProductSimpleInfo({ paymentList }) {
         <div
           style={{ padding: "3rem", display: "flex", justifyContent: "center" }}
         >
-          <span style={{ fontWeight: "bold" }}>
-            {/* {paymentList[0].productDto.name}{" "} */}
-          </span>
-          {/* <span> 외 {cartList.length}개의 상품을 주문했습니다.</span> */}
+          {paymentList.length > 0 ? (
+            <div>
+              {paymentList[0].productDto.name.length > 20 ? (
+                <span style={{ fontWeight: "bold" }}>
+                  {paymentList[0].productDto.name.slice(0, 20)} ...
+                </span>
+              ) : (
+                <span style={{ fontWeight: "bold" }}>
+                  {paymentList[0].productDto.name}
+                </span>
+              )}
+
+              {paymentList.length === 1 ? (
+                <span> 상품을 주문했습니다.</span>
+              ) : (
+                <span>
+                  외 {paymentList.length - 1}개의 상품을 주문했습니다.
+                </span>
+              )}
+            </div>
+          ) : null}
         </div>
       )}
-      {/* for문 돌려서 */}
     </div>
   );
 }
@@ -102,14 +147,21 @@ const TextDiv = styled.div`
 const NameOption = styled.div`
   flex: 7;
   margin-top: 1.5rem;
+  margin-left: 0.3rem;
 `;
 
 const Count = styled.div`
   flex: 3;
   margin-top: 2rem;
+  text-align: center;
 `;
 
 const PriceDiv = styled.div`
   flex: 2;
   margin-top: 1.5rem;
+`;
+
+const PriceSpan = styled.span`
+  font-weight: bold;
+  font-size: 1.1rem;
 `;

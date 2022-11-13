@@ -38,10 +38,6 @@ export default function BasketList() {
     <Container>
       {basketList.length ? (
         <BasketBox>
-          <CheckDiv>
-            <CheckBox defaultChecked />
-            <p style={{ fontSize: "1.4rem" }}>전체 선택 (2/2)</p>
-          </CheckDiv>
           {basketList.map((e, idx) => (
             <BasketItem
               key={idx}
@@ -69,13 +65,10 @@ const Container = styled.div`
 
 const BasketBox = styled.div`
   display: flex;
+  margin-top: 2rem;
   flex-direction: column;
   justify-content: center;
   width: 100%;
-`;
-
-const CheckDiv = styled.div`
-  display: flex;
 `;
 
 const BlankBox = styled.div`

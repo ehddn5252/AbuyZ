@@ -35,8 +35,10 @@ export default function ServiceCategory({
     { label: "주문결제" },
     { label: "이벤트" },
   ]);
-
-  const dateList = () => [{ label: "문의일시" }];
+  // 승인 유무
+  // 0:전체, 1:답변완료, 2:답변 미완료
+  const [approval, setApproval] = useState(3);
+  const dateList = () => [{ label: "문의일시" }, { label: "처리일시" }];
 
   const searchButton = () => {
     setSearch(true);
@@ -92,6 +94,23 @@ export default function ServiceCategory({
     }
   }, [customerCenterCategory]);
 
+  // 옵션 체크
+  const checkOnlyOne = (checkThis) => {
+    const checkboxes = document.getElementsByName("approvalCheck");
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] !== checkThis.target) {
+        checkboxes[i].checked = false;
+      } else if (checkboxes[i] === checkThis.target) {
+        if (i === 0) {
+          setApproval(2);
+        } else if (i === 1) {
+          setApproval(0);
+        } else if (i === 2) {
+          setApproval(1);
+        }
+      }
+    }
+  };
   return (
     <Container>
       <SearchBox>
@@ -128,6 +147,51 @@ export default function ServiceCategory({
             />
           </CategoryDiv>
         </ColumnBox>
+
+        <ColumnBox>
+          <TitleDiv>
+            <p style={{ margin: 0 }}>답변유무</p>
+          </TitleDiv>
+          <CategoryDiv>
+            <input
+              name="approvalCheck"
+              type="checkbox"
+              value="전체"
+              onChange={(e) => checkOnlyOne(e)}
+              style={{
+                width: "1.2rem",
+                height: "1.5rem",
+                marginLeft: "2rem",
+                marginRight: "0.5rem",
+              }}
+            />
+            <Name>전체</Name>
+            <input
+              name="approvalCheck"
+              type="checkbox"
+              value="답변 완료"
+              onChange={(e) => checkOnlyOne(e)}
+              style={{
+                width: "1.2rem",
+                height: "1.5rem",
+                marginRight: "0.5rem",
+              }}
+            />
+            <Name>답변 완료</Name>
+            <input
+              name="approvalCheck"
+              type="checkbox"
+              value="답변 미완료"
+              onChange={(e) => checkOnlyOne(e)}
+              style={{
+                width: "1.2rem",
+                height: "1.5rem",
+                marginRight: "0.5rem",
+              }}
+            />
+            <Name>답변 미완료</Name>
+          </CategoryDiv>
+        </ColumnBox>
         <ColumnBox>
           <TitleDiv>
             <p style={{ margin: 0 }}>기간</p>
@@ -158,32 +222,6 @@ export default function ServiceCategory({
               />
             </CalendarDiv>
           </DateDiv>
-        </ColumnBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>답변유무</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <RadioGroup
-              row
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="0"
-              name="status"
-              onChange={handleChange}
-            >
-              <FormControlLabel value="0" control={<Radio />} label="전체" />
-              <FormControlLabel
-                value="답변_완료"
-                control={<Radio />}
-                label="답변 완료"
-              />
-              <FormControlLabel
-                value="답변_미완료"
-                control={<Radio />}
-                label="답변 미완료"
-              />
-            </RadioGroup>
-          </CategoryDiv>
         </ColumnBox>
         <ButtonDiv>
           <ResetButton onClick={resetButton}>초기화</ResetButton>
@@ -223,7 +261,7 @@ const TitleDiv = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  width: 20%;
+  width: 16%;
   height: 4.2rem;
   background-color: #dadada;
   font-size: 1.3rem;
@@ -232,9 +270,10 @@ const TitleDiv = styled.div`
 const DateDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 84%;
   height: 100%;
   padding-top: 0.5rem;
+  padding-left: 4rem;
   padding-bottom: 0.5rem;
   background-color: white;
 `;
@@ -265,9 +304,10 @@ const MyDatePicker = styled(DatePicker)`
 const CategoryDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 84%;
   height: 100%;
   padding-top: 0.5rem;
+  padding-left: 4rem;
   padding-bottom: 0.5rem;
   background-color: white;
 `;
@@ -302,4 +342,12 @@ const SearchButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   color: white;
+`;
+const Name = styled.p`
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 1.5rem;
 `;

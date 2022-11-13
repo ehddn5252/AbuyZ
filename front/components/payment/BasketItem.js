@@ -40,8 +40,7 @@ export default function BasketItem({ basket, setReload, reload }) {
   }, []);
 
   const deleteCart = async () => {
-    const res = await delcart(basket.uid);
-    console.log(res);
+    await delcart(basket.uid);
     if (reload === true) {
       setReload(false);
     } else {
@@ -54,13 +53,10 @@ export default function BasketItem({ basket, setReload, reload }) {
 
   return basket ? (
     <Container>
-      <CheckDiv>
-        <CheckBox defaultChecked></CheckBox>
-      </CheckDiv>
       <ImageDiv>
         <img
           src={basket.productDto.descriptionImg}
-          style={{ width: "6rem", height: "auto", objectFit: "cover" }}
+          style={{ width: "8rem", height: "8rem", objectFit: "cover" }}
         />
       </ImageDiv>
       <ContentDiv>
@@ -142,7 +138,7 @@ const CheckDiv = styled.div`
 const ImageDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 15%;
+  width: 23%;
   height: 100%;
 `;
 

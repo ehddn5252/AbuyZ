@@ -26,7 +26,7 @@ export default function MyComplainList() {
       <MajorTitle>문의 내역</MajorTitle>
       <Hr />
 
-      {complainList.length ? (
+      {/* {complainList.length ? (
         <ComplainListBox>
           {complainList.map((e, idx) => (
             <MyComplainItem key={idx} complain={e} />
@@ -39,7 +39,7 @@ export default function MyComplainList() {
           />
           <NoComplain>문의하신 내역이 없습니다</NoComplain>
         </BlankBox>
-      )}
+      )} */}
     </MyComplainContainer>
   );
 }

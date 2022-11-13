@@ -23,7 +23,6 @@ export default function DeliveryAddressItem({ addressItem }) {
   const deleteClick = async () => {
     const res = await delAddress(addressItem.uid);
     alert("선택한 배송지를 삭제합니다.");
-    console.log(res.data);
     router.reload();
   };
 
