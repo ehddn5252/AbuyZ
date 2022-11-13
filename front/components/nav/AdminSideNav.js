@@ -212,7 +212,7 @@ export default function AdminSideNav() {
   );
 }
 
-const SideNavContainer = styled(Container)`
+const SideNavContainer = styled.div`
   display: flex;
   position: fixed;
   padding: 0;
@@ -246,7 +246,7 @@ const TitleTag = styled(Typography)`
   font-weight: 1000;
 `;
 
-const TagLink = styled(Link)`
+const TagLink = styled.a`
   text-decoration: none;
   color: #fff;
   margin-left: 0.5rem;
@@ -264,7 +264,7 @@ const LowerTag = styled(Typography)`
   padding: 0.5rem;
 `;
 
-const LowLink = styled(Link)`
+const LowLink = styled.a`
   text-decoration: none;
   color: #8e8e8e;
   margin-left: 2rem;
