@@ -32,7 +32,6 @@ export default function BasketPayment() {
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
-    console.log(res);
     setAddress(res.data.address);
     setDetailAddress(res.data.detailAddress);
   };

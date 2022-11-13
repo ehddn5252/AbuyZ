@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { getFAQ } from "../../pages/api/faq";
 export default function ServiceFAQ() {
   const [faq1, setFaq1] = useState(0);
   const [faq2, setFaq2] = useState(0);
@@ -34,6 +35,12 @@ export default function ServiceFAQ() {
     setFaq3(0);
     setFaq4(!faq4);
   };
+  const ffaq = async () => {
+    const res = await getFAQ();
+  };
+  useEffect(() => {
+    ffaq();
+  }, []);
   return (
     <Container>
       <MajorTitle>FAQ</MajorTitle>

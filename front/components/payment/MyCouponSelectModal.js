@@ -29,12 +29,10 @@ export default function MyCouponSelectModal({
 
   // 쿠폰 선택됐는지 확인
   const [selected, setSelected] = useState(-1);
-  // console.log(categoryList)
 
   // 카테고리 uid  중복 제거한 리스트
   const set = new Set(categoryList);
   const uniqueCate = [...set];
-  console.log(uniqueCate)
 
   // 모달 참조
   const modalRef = useRef(null);
@@ -44,10 +42,8 @@ export default function MyCouponSelectModal({
   const ccoupon = async () => {
     for (var i = 0; i < uniqueCate.length; i++) {
       const res = await cateCoupon(uniqueCate[i]);
-      console.log(res.data.result)
-      for (var j= 0; j < res.data.result.length; j ++ ) {
-        setCouponList([...couponList, res.data.result[j]])
-        console.log(res.data.result[j])
+      for (var j = 0; j < res.data.result.length; j++) {
+        setCouponList([...couponList, res.data.result[j]]);
       }
     }
   };
@@ -64,7 +60,7 @@ export default function MyCouponSelectModal({
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  },[]);
+  }, []);
 
   return (
     <div style={{ position: "relative" }}>
@@ -77,68 +73,61 @@ export default function MyCouponSelectModal({
         {couponList.length > 0 ? (
           <div>
             {couponList.map((e, idx) => (
-            <div>
-                  <CardStyle
-                    key={idx}
-                    onClick={() => setSelected(idx)}
+              <div>
+                <CardStyle key={idx} onClick={() => setSelected(idx)}>
+                  <div
+                    style={{
+                      flex: 2,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
                   >
-                    <div
-                      style={{
-                        flex: 2,
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <IconDiv>
-                        {selected === idx ? (
-                          <ExpandCircleDownOutlinedIcon
-                            sx={{ color: "#56a9f1" }}
-                          ></ExpandCircleDownOutlinedIcon>
-                        ) : (
-                          <div>
-                            <CircleOutlinedIcon
-                              sx={{ color: "rgb(128, 128, 128, 0.7)" }}
-                            ></CircleOutlinedIcon>
-                          </div>
-                        )}
-                      </IconDiv>
-                    </div>
-                    <div style={{ flex: 10 }}>
-                      <TextDiv>
+                    <IconDiv>
+                      {selected === idx ? (
+                        <ExpandCircleDownOutlinedIcon
+                          sx={{ color: "#56a9f1" }}
+                        ></ExpandCircleDownOutlinedIcon>
+                      ) : (
                         <div>
-                          <span style={{ fontWeight: "bold" }}>
-                            {e.name}
-                          </span>
+                          <CircleOutlinedIcon
+                            sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                          ></CircleOutlinedIcon>
                         </div>
-                        <br></br>
-                        <span
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: "1.5rem",
-                          }}
-                        >
-                          {e.discount_price}원
-                        </span>
-                        <span> 할인</span>
-                        <br></br>
-                        <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
-                          {e.available_categories_name} 카테고리 구매 시 사용 가능
-                        </span>
-                        <br></br>
-                        <span style={{ fontSize: "0.9rem", color: "pink" }}>
-                          {e.start_date.slice(0, 10)} ~ {e.end_date.slice(0, 10)}
-                        </span>
-                      </TextDiv>
+                      )}
+                    </IconDiv>
+                  </div>
+                  <div style={{ flex: 10 }}>
+                    <TextDiv>
+                      <div>
+                        <span style={{ fontWeight: "bold" }}>{e.name}</span>
+                      </div>
                       <br></br>
-                    </div>
-                  </CardStyle>
-                  
-                </div>)
-            
-            )}
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "1.5rem",
+                        }}
+                      >
+                        {e.discount_price}원
+                      </span>
+                      <span> 할인</span>
+                      <br></br>
+                      <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
+                        {e.available_categories_name} 카테고리 구매 시 사용 가능
+                      </span>
+                      <br></br>
+                      <span style={{ fontSize: "0.9rem", color: "pink" }}>
+                        {e.start_date.slice(0, 10)} ~ {e.end_date.slice(0, 10)}
+                      </span>
+                    </TextDiv>
+                    <br></br>
+                  </div>
+                </CardStyle>
+              </div>
+            ))}
             <ButtonDiv>
-                    <Button onClick={closeCheckModal}>선택완료</Button>
-                  </ButtonDiv>
+              <Button onClick={closeCheckModal}>선택완료</Button>
+            </ButtonDiv>
           </div>
         ) : (
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -179,15 +168,14 @@ const Card = styled.div`
 `;
 
 const CardStyle = styled.div`
-
-width: 100%;
+  width: 100%;
   height: 6rem;
   background: white;
   margin: 1rem;
   display: flex;
   flex-direction: row;
-  height: 100%; 
-`
+  height: 100%;
+`;
 
 const ButtonDiv = styled.div`
   display: flex;

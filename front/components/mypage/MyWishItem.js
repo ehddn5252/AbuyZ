@@ -33,7 +33,7 @@ export default function MyWishItem(product) {
         style={{
           color: "red",
           position: "absolute",
-          bottom: "25%",
+          bottom: "35%",
           right: "14%",
           fontSize: "3rem",
         }}
@@ -52,66 +52,40 @@ export default function MyWishItem(product) {
         <ProductName>{product.product.product_name}</ProductName>
       )}
 
-      <div>
-        {/* <InfoText>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "end",
-              flex: 2,
-            }}
-          >
-            <Discount>{product.product.discount}%</Discount> 
+      {product.product.discountRate === 0 ? (
+        <DiscountContainer>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Flextwo></Flextwo>
+            <Flexfive>
+              <CardPrice>
+                {product.product.price.toLocaleString("ko-KR")}원
+              </CardPrice>
+            </Flexfive>
           </div>
-          <div style={{ flex: 5 }}>
-            <CardPrice>
-              {(
-                product.product.price *
-                ((100 - product.product.discount) / 100)
-              ).toLocaleString("ko-KR")}
-              원
-            </CardPrice>
-          </div>
-        </InfoText> */}
-        <div style={{ marginTop: "1rem" }}>
-          <CardPriceBD>
-            {product.product.price.toLocaleString("ko-KR")}원
-          </CardPriceBD>
-        </div>
-      </div>
-      {/* {product.product.discount != null ? (
-        <div>
-          <InfoText>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "end",
-                flex: 2,
-              }}
-            >
-              <Discount>{product.product.discount}%</Discount>
-            </div>
-            <div style={{ flex: 5 }}>
+        </DiscountContainer>
+      ) : (
+        <DiscountContainer>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <Flextwo>
+              <Discount>{product.product.discountRate}%</Discount>
+            </Flextwo>
+            <Flexfive>
               <CardPrice>
                 {(
                   product.product.price *
-                  ((100 - product.product.discount) / 100)
+                  ((100 - product.product.discountRate) / 100)
                 ).toLocaleString("ko-KR")}
                 원
               </CardPrice>
-            </div>
-          </InfoText>
-          <div style={{ marginTop: "1rem" }}>
+            </Flexfive>
+          </div>
+          <DiscountContainer>
             <CardPriceBD>
               {product.product.price.toLocaleString("ko-KR")}원
             </CardPriceBD>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div>{product.product.price.toLocaleString("ko-KR")}원</div>
-        </div>
-      )} */}
+          </DiscountContainer>
+        </DiscountContainer>
+      )}
     </ItemContainer>
   );
 }
@@ -145,4 +119,41 @@ const CardPriceBD = styled.p`
   text-decoration-color: #aaaaaa;
   color: #aaaaaa;
   margin-top: 0.5rem;
+`;
+
+const Discount = styled.span`
+  font-size: 1rem;
+  font-weight: bolder;
+  margin-left: 1rem;
+  margin-right: 0rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #56a9f1;
+  text-align: end;
+  vertical-align: bottom;
+`;
+
+const CardPrice = styled.span`
+  font-size: 1.5rem;
+  font-weight: bolder;
+  margin-left: 0.5rem;
+  margin-right: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
+`;
+
+const DiscountContainer = styled.div`
+  margin-top: 1rem;
+`;
+
+const Flextwo = styled.div`
+  display: flex;
+  align-items: end;
+  flex: 2;
+`;
+
+const Flexfive = styled.div`
+  flex: 5;
+  display: flex;
+  align-items: flex-end;
 `;
