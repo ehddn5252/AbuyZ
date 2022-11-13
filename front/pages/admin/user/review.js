@@ -52,7 +52,11 @@ export default function Review() {
         setSearchDto={setSearchDto}
         buttonClick={buttonClick}
       />
-      {reviewSearch ? <ReviewList reviews={reviews} /> : null}
+      {reviewSearch ? (
+        <ItemList>
+          <ReviewList reviews={reviews} />
+        </ItemList>
+      ) : null}
     </Container>
   );
 }
@@ -64,4 +68,9 @@ const Container = styled.div`
   padding: 3rem;
   padding-left: 15rem;
   min-height: 89vh;
+`;
+
+const ItemList = styled.div`
+  background-color: white;
+  padding: 5rem;
 `;

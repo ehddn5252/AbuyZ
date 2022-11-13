@@ -50,7 +50,11 @@ export default function User() {
         setSearchDto={setSearchDto}
         buttonClick={buttonClick}
       />
-      {search ? <ServiceList inquirys={inquirys} /> : null}
+      {search ? (
+        <ItemList>
+          <ServiceList inquirys={inquirys} />
+        </ItemList>
+      ) : null}
     </Container>
   );
 }
@@ -62,4 +66,9 @@ const Container = styled.div`
   padding: 3rem;
   padding-left: 15rem;
   min-height: 89vh;
+`;
+
+const ItemList = styled.div`
+  background-color: white;
+  padding: 5rem;
 `;
