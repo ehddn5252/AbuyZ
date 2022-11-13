@@ -138,7 +138,30 @@ export async function getCoupon(couponNumber) {
           resolve(response.data);
         } else {
           console.log("쿠폰 발급 요청 실패", response);
-          resolve(resolve);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}
+
+// 현재 사용 가능한 쿠폰 (카테고리 uid에 맞춰)
+export async function cateCoupon(couponNumber) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+
+  return new Promise((resolve) => {
+    https
+      .get(`/coupon/available-coupons/${couponNumber}`)
+      .then((response) => {
+        if (response.data.status === 200) {
+          console.log("카테고리 쿠폰 조회 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("카테고리 쿠푼 조회 실패", response);
+          resolve(response);
         }
       })
       .catch((e) => {

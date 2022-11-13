@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import DeliveryListModal from "./DeliveryListModal";
+import { getAddress } from "../../pages/api/user";
 export default function MyShippingInfo() {
-  const [postcode, setPostcode] = useState("16892");
-  const [address, setAddress] = useState(
-    "녹산 송정동 1627-5 그린코어 오피스텔"
-  );
-  const [detailAddress, setDetailAddress] = useState("691호");
-  const [name, setName] = useState("최지은");
-  const [phone, setPhone] = useState("01096674657");
+  const [postcode, setPostcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [addressModalOpen, settAddressModalOpen] = useState(false);
-  // useEffect(() => {
-  //   if (cellphone.length === 10) {
-  //     setCellphone(cellphone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3"));
-  //   }
-  //   if (cellphone.length === 13) {
-  //     setCellphone(
-  //       cellphone.replace(/-/g, "").replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")
-  //     );
-  //   }
-  // }, [cellphone]);
+  const [addressList, setAddressList] = useState([]);
+
+  const myaddress = async () => {
+    const res = await getAddress();
+    setAddressList(res.data.data);
+    setPostcode(res.data.data[0].postalCode);
+    setAddress(res.data.data[0].address);
+    setDetailAddress(res.data.data[0].detailAddress);
+    setName(res.data.data[0].recipient);
+    setPhone(res.data.data[0].contact);
+  };
+
+  useEffect(() => {
+    myaddress();
+  }, []);
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -67,6 +71,7 @@ export default function MyShippingInfo() {
           setDetailAddress={setDetailAddress}
           setName={setName}
           setPhone={setPhone}
+          addressList={addressList}
         ></DeliveryListModal>
       ) : null}
     </div>

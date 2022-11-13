@@ -30,7 +30,6 @@ export default function DeliveryAddModal({ setAddOpen }) {
       contact: number,
     };
     const res = await addAddress(addressDto);
-    console.log(res.data);
     closeModal();
     alert("배송지 추가가 완료되었습니다");
     router.reload();

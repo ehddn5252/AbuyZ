@@ -1,63 +1,71 @@
+// react
 import React, { useState, useEffect, useRef } from "react";
+
+// styled
 import styled from "styled-components";
+
+// mui
 import CloseIcon from "@mui/icons-material/Close";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
+
+// api
+import { cateCoupon } from "../../pages/api/coupon";
+
 export default function MyCouponSelectModal({
   setModalOpen,
   setCouponDiscount,
   categoryList,
 }) {
+  // 모달 닫기
   const closeModal = () => {
     setModalOpen(false);
-    setCouponDiscount(CouponList[selected].discountprice);
-    CouponList[selected].isused = true;
-    console.log(CouponList);
   };
-  const [selected, setSelected] = useState(0);
 
+  const closeCheckModal = () => {
+    setModalOpen(false);
+    setCouponDiscount(couponList[selected].discount_price);
+  };
+
+  // 쿠폰 선택됐는지 확인
+  const [selected, setSelected] = useState(-1);
+  // console.log(categoryList)
+
+  // 카테고리 uid  중복 제거한 리스트
+  const set = new Set(categoryList);
+  const uniqueCate = [...set];
+  console.log(uniqueCate)
+
+  // 모달 참조
   const modalRef = useRef(null);
 
-  const CouponList = [
-    {
-      id: 0,
-      couponname: "abuyz 처음 구매 고객 3000원 쿠폰",
-      discountprice: "3000",
-      category: "의류",
-      startdate: "2022.10.28",
-      finishdate: "2022.10.31",
-      isused: false,
-    },
-    {
-      id: 1,
-      couponname: "abuyz 가구 첫 입점 축하 쿠폰",
-      discountprice: "5000",
-      category: "가구",
-      info: "중복 사용 불가",
-      startdate: "2022.10.28",
-      finishdate: "2022.10.31",
-      isused: false,
-    },
-  ];
+  // 쿠폰 리스트 만들기
+  const [couponList, setCouponList] = useState([]);
+  const ccoupon = async () => {
+    for (var i = 0; i < uniqueCate.length; i++) {
+      const res = await cateCoupon(uniqueCate[i]);
+      console.log(res.data.result)
+      for (var j= 0; j < res.data.result.length; j ++ ) {
+        setCouponList([...couponList, res.data.result[j]])
+        console.log(res.data.result[j])
+      }
+    }
+  };
+
   useEffect(() => {
+    ccoupon();
     // 이벤트 핸들러 함수
     const handler = () => {
-      // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setModalOpen(false);
       }
     };
-
-    // 이벤트 핸들러 등록
     document.addEventListener("mousedown", handler);
-    // document.addEventListener('touchstart', handler); // 모바일 대응
-
     return () => {
-      // 이벤트 핸들러 해제
       document.removeEventListener("mousedown", handler);
-      // document.removeEventListener('touchstart', handler); // 모바일 대응
     };
-  });
+  },[]);
+
   return (
     <div style={{ position: "relative" }}>
       <Container ref={modalRef}>
@@ -66,68 +74,77 @@ export default function MyCouponSelectModal({
         </CloseIconDiv>
         <h1>쿠폰 선택</h1>
         <br></br>
-        {CouponList.map((e) =>
-          categoryList.includes(e.category) && e.isused == false ? (
-            <Card
-              key={e.id}
-              style={{
-                ...cardStyle,
-                display: "flex",
-                flexDirection: "row",
-                height: "100%",
-              }}
-              onClick={() => setSelected(e.id)}
-            >
-              <div
-                style={{ flex: 2, display: "flex", justifyContent: "center" }}
-              >
-                <IconDiv>
-                  {selected === e.id ? (
-                    <ExpandCircleDownOutlinedIcon
-                      sx={{ color: "#56a9f1" }}
-                    ></ExpandCircleDownOutlinedIcon>
-                  ) : (
-                    <div>
-                      <CircleOutlinedIcon
-                        sx={{ color: "rgb(128, 128, 128, 0.7)" }}
-                      ></CircleOutlinedIcon>
-                    </div>
-                  )}
-                </IconDiv>
-              </div>
-              <div style={{ flex: 10 }}>
-                <TextDiv>
-                  <div>
-                    <span style={{ fontWeight: "bold" }}>{e.couponname}</span>
-                  </div>
-                  <br></br>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "1.5rem",
-                    }}
+        {couponList.length > 0 ? (
+          <div>
+            {couponList.map((e, idx) => (
+            <div>
+                  <CardStyle
+                    key={idx}
+                    onClick={() => setSelected(idx)}
                   >
-                    {e.discountprice}원
-                  </span>
-                  <span> 할인</span>
-                  <br></br>
-                  <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
-                    {e.category} 카테고리 구매 시 사용 가능
-                  </span>
-                  <br></br>
-                  <span style={{ fontSize: "0.9rem", color: "pink" }}>
-                    {e.startdate} ~ {e.finishdate}
-                  </span>
-                </TextDiv>
-                <br></br>
-              </div>
-            </Card>
-          ) : null
+                    <div
+                      style={{
+                        flex: 2,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <IconDiv>
+                        {selected === idx ? (
+                          <ExpandCircleDownOutlinedIcon
+                            sx={{ color: "#56a9f1" }}
+                          ></ExpandCircleDownOutlinedIcon>
+                        ) : (
+                          <div>
+                            <CircleOutlinedIcon
+                              sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                            ></CircleOutlinedIcon>
+                          </div>
+                        )}
+                      </IconDiv>
+                    </div>
+                    <div style={{ flex: 10 }}>
+                      <TextDiv>
+                        <div>
+                          <span style={{ fontWeight: "bold" }}>
+                            {e.name}
+                          </span>
+                        </div>
+                        <br></br>
+                        <span
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: "1.5rem",
+                          }}
+                        >
+                          {e.discount_price}원
+                        </span>
+                        <span> 할인</span>
+                        <br></br>
+                        <span style={{ fontSize: "0.9rem", color: "#aaaaaa" }}>
+                          {e.available_categories_name} 카테고리 구매 시 사용 가능
+                        </span>
+                        <br></br>
+                        <span style={{ fontSize: "0.9rem", color: "pink" }}>
+                          {e.start_date.slice(0, 10)} ~ {e.end_date.slice(0, 10)}
+                        </span>
+                      </TextDiv>
+                      <br></br>
+                    </div>
+                  </CardStyle>
+                  
+                </div>)
+            
+            )}
+            <ButtonDiv>
+                    <Button onClick={closeCheckModal}>선택완료</Button>
+                  </ButtonDiv>
+          </div>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <span>😢 사용가능한 쿠폰이 없습니다. 😢</span>
+          </div>
         )}
-
-        <ButtonDiv>
-          <Button onClick={closeModal}>선택완료</Button>
-        </ButtonDiv>
       </Container>
     </div>
   );
@@ -161,12 +178,16 @@ const Card = styled.div`
   flex-direction: row;
 `;
 
-const cardStyle = {
-  width: "100%",
-  height: "6rem",
-  background: "white",
-  margin: "1rem",
-};
+const CardStyle = styled.div`
+
+width: 100%;
+  height: 6rem;
+  background: white;
+  margin: 1rem;
+  display: flex;
+  flex-direction: row;
+  height: 100%; 
+`
 
 const ButtonDiv = styled.div`
   display: flex;

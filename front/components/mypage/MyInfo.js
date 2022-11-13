@@ -17,6 +17,7 @@ export default function Myinfo({ setTap, SetActiveTap }) {
     const res = await couponlist();
     setCouponL(res.data.result);
   };
+
   // 아직 작성하지 않는 리뷰
   const rreviewYet = async () => {
     const res = await reviewYet();

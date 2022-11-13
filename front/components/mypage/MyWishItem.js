@@ -18,7 +18,6 @@ export default function MyWishItem(product) {
 
   const deletezzim = async () => {
     const res = await delwish(product.product.wish_uid);
-    console.log(res.data);
     router.reload();
   };
 

@@ -15,7 +15,6 @@ export default function MyCouponList() {
     const res = await couponlist();
     // res.data.result.sort((a,b) => a.used - b.used)
     setCouponList(res.data.result);
-    console.log(res.data.result);
   };
   useEffect(() => {
     ccoupon();

@@ -15,7 +15,6 @@ import { eachGetOrderList } from "../../pages/api/order";
 import { regiscart } from "../../pages/api/cart";
 
 export default function MyOrderItem({ uid }) {
-  console.log("번호", uid);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -25,7 +24,6 @@ export default function MyOrderItem({ uid }) {
   const [orderBundleItem, setOrderBundleItem] = useState([]);
   const bundleItem = async () => {
     const rres = await eachGetOrderList(uid);
-    console.log("갖고온거 보여줘", rres.data);
     setOrderBundleItem(rres.data);
   };
 
@@ -36,7 +34,6 @@ export default function MyOrderItem({ uid }) {
       optionValues: b,
     };
     const res = await regiscart(cartDto);
-    console.log(res.data);
     alert("장바구니에 담았습니다!");
   };
 
@@ -71,11 +68,6 @@ export default function MyOrderItem({ uid }) {
             {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
           </InfoContainer>
           <ButtonContainer>
-            {/* {product.reviewCheck === true ? (
-            <ReviewFinishButton>리뷰 작성 완료</ReviewFinishButton>
-          ) : (
-            <ReviewButton onClick={handleOpen}>리뷰 작성</ReviewButton>
-          )} */}
             <CartButton
               onClick={() =>
                 handleClick(
