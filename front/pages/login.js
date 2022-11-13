@@ -87,7 +87,13 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+      }}
+    >
       <AllContainer>
         <div
           style={{
@@ -169,13 +175,13 @@ export default function Login() {
   );
 }
 
-const AllContainer = styled(Container)`
+const AllContainer = styled.div`
   margin-top: 5rem;
   display: flex;
   justify-content: center;
   width: 55%;
 `;
-const LoginContainer = styled(Container)`
+const LoginContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,7 +199,7 @@ const LoginBox = styled(Box)`
   border-radius: 1rem;
 `;
 
-const LoginLink = styled(Link)`
+const LoginLink = styled.a`
   color: #aaaaaa;
   text-decoration-line: none;
   font-size: 1rem;
@@ -203,6 +209,7 @@ const LoginLink = styled(Link)`
 const LoginButton = styled(Button)`
   height: 3rem;
   margin-top: 1rem;
+  margin-left: 1rem;
   font-size: 1rem;
   background-color: #56a9f1;
 `;
@@ -225,7 +232,7 @@ const KakaoButton = styled.button`
   cursor: pointer;
 `;
 
-const KakaoContainer = styled(Container)`
+const KakaoContainer = styled.div`
   margin-top: 2rem;
   display: flex;
   justify-content: center;
