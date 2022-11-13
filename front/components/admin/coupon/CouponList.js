@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import CustomerPagination from "../user/CustomerPagination";
 import Pagination from "./Pagination";
 
 // 컴포넌트
@@ -10,7 +11,6 @@ import { delcoupon } from "../../../pages/api/coupon";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Box from "@mui/material/Box";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function CouponList(props) {
@@ -159,7 +159,7 @@ export default function CouponList(props) {
       <ButtonBox>
         <DeleteButton onClick={handleDel}>선택 삭제</DeleteButton>
         {couponArr.length === 0 ? null : (
-          <Pagination
+          <CustomerPagination
             total={couponArr.length}
             limit={limit}
             page={page}
@@ -171,20 +171,6 @@ export default function CouponList(props) {
     </Grid2>
   );
 }
-
-export const MyBox = styled(Box)`
-  .MuiDataGrid-columnHeaders {
-    width: 100%;
-    background: #dadada;
-  }
-  .MuiDataGrid-columnHeaderDraggableContainer {
-    border: 1px;
-    border-color: #000;
-  }
-  .MuiDataGrid-columnHeaderTitleContainer {
-    background: #dadada;
-  }
-`;
 
 const TableContainer = styled.table`
   background-color: white;

@@ -83,7 +83,6 @@ export default function SaleProductSearch() {
   const [checkStatus, setCheckStatus] = useState(0);
 
   // 기간
-
   // 시작일
   const [startDate, setStartDate] = useState(new Date());
 

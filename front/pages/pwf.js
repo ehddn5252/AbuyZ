@@ -37,11 +37,18 @@ export default function PasswordFind() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <AllContainer>
         <div
           style={{
             display: "flex",
+            alignItems: "center",
             justifyContent: "center",
           }}
         >
@@ -97,13 +104,13 @@ export default function PasswordFind() {
     </div>
   );
 }
-const AllContainer = styled(Container)`
+const AllContainer = styled.div`
   margin-top: 5rem;
   display: flex;
   justify-content: center;
   width: 55%;
 `;
-const PwfContainer = styled(Container)`
+const PwfContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
