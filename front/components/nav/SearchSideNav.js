@@ -57,9 +57,11 @@ export default function SearchSideNav({
         </div>
       </Title>
 
-      <hr />
       <FormControl>
-        <FormLabel id="label" sx={{ fontSize: "1.6rem", fontWeight: "1000" }}>
+        <FormLabel
+          id="label"
+          sx={{ fontSize: "1.6rem", fontWeight: "1000", marginTop: "0.6rem" }}
+        >
           배송
         </FormLabel>
         <RadioGroup
@@ -129,7 +131,7 @@ export default function SearchSideNav({
   );
 }
 
-const NavContainer = styled(Container)`
+const NavContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -142,7 +144,7 @@ const Title = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   border-bottom: 1px solid black;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
 `;
 const InputBox = styled.div`
   display: flex;

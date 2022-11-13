@@ -127,7 +127,7 @@ export default function MypageSideNav({
   );
 }
 
-const NavContainer = styled(Container)`
+const NavContainer = styled.div`
   margin-top: 3.5rem;
   margin-right: 6rem;
   padding: 0;

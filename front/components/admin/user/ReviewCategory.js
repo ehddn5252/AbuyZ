@@ -206,6 +206,44 @@ export default function ReviewCategory({
             />
           </CategoryDiv>
         </ColumnBox>
+
+        <ColumnBox>
+          <TitleDiv>
+            <p style={{ margin: 0 }}>리뷰 내용</p>
+          </TitleDiv>
+          <CategoryDiv>
+            <TextField
+              size="small"
+              sx={{ width: 400, paddingLeft: "2rem" }}
+              name="content"
+              onChange={handleChange}
+              value={reviewContent}
+            />
+          </CategoryDiv>
+        </ColumnBox>
+        <ColumnBox>
+          <TitleDiv>
+            <p style={{ margin: 0 }}>답변유무</p>
+          </TitleDiv>
+          <CategoryDiv style={{ paddingLeft: "7rem" }}>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="0"
+              name="isAnswered"
+              onChange={handleChange}
+            >
+              <FormControlLabel value="0" control={<Radio />} label="전체" />
+              <FormControlLabel value="1" control={<Radio />} label="미답변" />
+              <FormControlLabel
+                value="2"
+                control={<Radio />}
+                label="답변완료"
+              />
+            </RadioGroup>
+          </CategoryDiv>
+        </ColumnBox>
+        {/* 기간 */}
         <ColumnBox>
           <TitleDiv>
             <p style={{ margin: 0 }}>기간</p>
@@ -236,42 +274,6 @@ export default function ReviewCategory({
               />
             </CalendarDiv>
           </DateDiv>
-        </ColumnBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>리뷰 내용</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <TextField
-              size="small"
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              name="content"
-              onChange={handleChange}
-              value={reviewContent}
-            />
-          </CategoryDiv>
-        </ColumnBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>답변유무</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <RadioGroup
-              row
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="0"
-              name="isAnswered"
-              onChange={handleChange}
-            >
-              <FormControlLabel value="0" control={<Radio />} label="전체" />
-              <FormControlLabel value="1" control={<Radio />} label="미답변" />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="답변완료"
-              />
-            </RadioGroup>
-          </CategoryDiv>
         </ColumnBox>
         <ButtonDiv>
           <ResetButton onClick={resetButton}>초기화</ResetButton>
@@ -311,7 +313,7 @@ const TitleDiv = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  width: 20%;
+  width: 16%;
   height: 4.2rem;
   background-color: #dadada;
   font-size: 1.3rem;
@@ -320,9 +322,10 @@ const TitleDiv = styled.div`
 const CategoryDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 84%;
   height: 100%;
   padding-top: 0.5rem;
+  padding-left: 5rem;
   padding-bottom: 0.5rem;
   background-color: white;
 `;
@@ -330,9 +333,10 @@ const CategoryDiv = styled.div`
 const DateDiv = styled.div`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 84%;
   height: 100%;
   padding-top: 0.5rem;
+  padding-left: 5rem;
   padding-bottom: 0.5rem;
   background-color: white;
 `;

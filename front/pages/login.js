@@ -86,6 +86,9 @@ export default function Login() {
     });
   };
 
+  const goSignup = () => {
+    router.push("/signup");
+  };
   return (
     <div
       style={{
@@ -155,7 +158,7 @@ export default function Login() {
           >
             로그인
           </LoginButton>
-          <SignupButton fullWidth href="/signup" variant="contained">
+          <SignupButton type="button" onClick={goSignup}>
             회원가입
           </SignupButton>
         </LoginBox>
@@ -206,27 +209,34 @@ const LoginLink = styled.a`
   margin-right: 0.5rem;
 `;
 
-const LoginButton = styled(Button)`
+const LoginButton = styled.button`
+  border: none;
   height: 3rem;
   margin-top: 1rem;
-  margin-left: 1rem;
+  margin-bottom: 1rem;
   font-size: 1rem;
+  font-weight: bolder;
+  color: white;
   background-color: #56a9f1;
+  cursor: pointer;
 `;
 
-const SignupButton = styled(Button)`
+const SignupButton = styled.button`
   height: 3rem;
   margin-top: 1rem;
   font-size: 1rem;
   background-color: white;
   color: #56a9f1;
+  font-weight: bolder;
   border: 1px solid #56a9f1;
+  cursor: pointer;
 `;
 const KakaoButton = styled.button`
   height: 3rem;
   width: 100%;
   background-color: #fee500;
   border: none;
+  font-weight: bolder;
   border-radius: 0.5rem;
   font-size: 1rem;
   cursor: pointer;

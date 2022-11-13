@@ -41,9 +41,6 @@ export default function ServiceList({ inquirys }) {
           }}
         >
           <TableRow>
-            <HeadTableCell>
-              <Checkbox />
-            </HeadTableCell>
             <HeadTableCell align="center">답변 유무</HeadTableCell>
             <HeadTableCell align="center">문의 사유</HeadTableCell>
             <HeadTableCell align="center">문의명</HeadTableCell>
@@ -56,9 +53,6 @@ export default function ServiceList({ inquirys }) {
         <TableBody>
           {inquirys.map((inquiry) => (
             <TableRow key={inquiry.uid}>
-              <BodyTableCell component="th" scope="row">
-                <Checkbox />
-              </BodyTableCell>
               <BodyTableCell align="center">
                 {inquiry.status === "답변_완료" ? (
                   <SolvedButton onClick={handleOpen}>답변완료</SolvedButton>
