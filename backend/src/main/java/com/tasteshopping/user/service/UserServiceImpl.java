@@ -1,6 +1,8 @@
 package com.tasteshopping.user.service;
 
 import com.tasteshopping.common.service.RedisService;
+import com.tasteshopping.common.service.UtilService;
+import com.tasteshopping.dashboard.service.DashboardService;
 import com.tasteshopping.user.dto.*;
 import com.tasteshopping.user.entity.UserAddresses;
 import com.tasteshopping.user.entity.Users;
@@ -37,6 +39,9 @@ public class UserServiceImpl implements UserService{
     private final JavaMailSenderImpl mailSender;
     private final UserAddressRepository userAddressRepository;
     private final RedisService redisService;
+
+    private final DashboardService dashboardService;
+
     @Override
     @Transactional
     public ResponseDto signUp(UserDto userDto, LoginType loginType) {
@@ -56,6 +61,8 @@ public class UserServiceImpl implements UserService{
                     .build();
             userAddressRepository.save(userAddresses);
         }
+
+        dashboardService.doVisit(UtilService.getToday(),"register");
 
         ResponseDto responseDto = new ResponseDto(new ResultDto(true),"회원가입 완료",200);
         return responseDto;

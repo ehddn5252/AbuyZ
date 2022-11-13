@@ -83,7 +83,5 @@ public class Reviews {
                 .rating(rating)
                 .answerDate(date)
                 .build();
-
-
     }
 }
