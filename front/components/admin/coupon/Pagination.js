@@ -16,6 +16,7 @@ export default function Pagination({ total, limit, page, setPage }) {
             setCurrPage(page - 2);
           }}
           disabled={page === 1}
+          style={{ color: "black" }}
         >
           &lt;
         </Button>
@@ -62,6 +63,7 @@ export default function Pagination({ total, limit, page, setPage }) {
             setCurrPage(page);
           }}
           disabled={page === numPages}
+          style={{ color: "black" }}
         >
           &gt;
         </Button>
@@ -83,26 +85,23 @@ const Button = styled.button`
   padding: 8px;
   margin: 0;
   background: white;
-  color: black;
+  color: #acb8ca;
   font-weight: 600;
   font-size: 1rem;
 
   &:hover {
-    /* background: #6c747c; */
     cursor: pointer;
     transform: translateY(-2px);
   }
 
   &[disabled] {
-    /* background: #a2a2a2; */
     cursor: revert;
     transform: revert;
   }
 
   &[aria-current] {
-    background: #acb8ca;
-    border-radius: 1rem;
-    font-weight: bold;
+    font-weight: 800;
+    color: black;
     cursor: revert;
     transform: revert;
   }

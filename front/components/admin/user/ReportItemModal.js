@@ -1,102 +1,207 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 
+// MUI
 import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import CloseIcon from "@mui/icons-material/Close";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
-import styled from "styled-components";
+// API
+import { GetReviewDetail } from "../../../pages/api/review";
+import { PutReviewStatus } from "../../../pages/api/review";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default function ReportItemModal({ row }) {
-  return (
-    <Container>
-      <TitleDiv>상세 문의</TitleDiv>
-      <ContentDiv>
-        <ImageBox>
-          <img src="/images/cloth.png" />
-        </ImageBox>
-        <ContentBox>
-          <TitleBox>
-            <ContentP style={{ fontSize: "2rem" }}>{row.product}</ContentP>
-            <ContentP>{row.report_date}</ContentP>
-          </TitleBox>
+  // 모달
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-          <Rating
-            name="text-feedback"
-            value={3}
-            readOnly
-            precision={0.5}
-            emptyIcon={
-              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-            }
-          />
-          <ContentP>작성자 : {row.nickname}</ContentP>
-          <ContentP>옵션 : 블랙/S size</ContentP>
-          <ContentP>
-            옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무
-            구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이
-            너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요. 옷이 너무 구려요.
-            옷이 너무 구려요.
-          </ContentP>
-        </ContentBox>
-      </ContentDiv>
-      {row.solved ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+  // 리뷰 데이터 불러오기 감지
+  const [upload, setUpload] = useState(0);
+
+  const [reviewInfo, setReviewInfo] = useState([]);
+
+  const getDetail = async () => {
+    const data = await GetReviewDetail(row.reviewsUid);
+    setReviewInfo(data);
+  };
+
+  useEffect(() => {
+    getDetail();
+  }, [upload]);
+
+  console.log(row);
+
+  return (
+    <div>
+      {row.status === "대기" ? (
+        <SolvedButton
+          onClick={() => {
+            handleOpen(), setUpload(upload + 1);
           }}
+          style={{ backgroundColor: "#7A7A7A" }}
         >
-          <RefusalButton>거절</RefusalButton>
-          <AcceptButton>승인</AcceptButton>
-        </Box>
+          대기
+        </SolvedButton>
+      ) : row.status === "거절" ? (
+        <SolvedButton
+          onClick={() => {
+            handleOpen(), setUpload(upload + 1);
+          }}
+          style={{ backgroundColor: "#FB5757" }}
+        >
+          거절
+        </SolvedButton>
+      ) : row.status === "승인" ? (
+        <SolvedButton
+          onClick={() => {
+            handleOpen(), setUpload(upload + 1);
+          }}
+          style={{ backgroundColor: "#57A9FB" }}
+        >
+          승인
+        </SolvedButton>
       ) : null}
-    </Container>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Grid2
+            container
+            spacing={2}
+            sx={{ padding: "0", margin: "0", background: "#fff" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                marginBottom: "2rem",
+              }}
+            >
+              <h2
+                style={{
+                  paddingLeft: "2rem",
+                  margin: "0",
+                  paddingTop: "2rem",
+                  paddingBottom: "1rem",
+                }}
+              >
+                상세 문의
+              </h2>
+              <CloseIcon
+                onClick={handleClose}
+                sx={{
+                  cursor: "pointer",
+                  marginRight: "2rem",
+                  marginTop: "2rem",
+                }}
+              />
+            </div>
+            <Grid2
+              xs={12}
+              sx={{
+                margin: "0",
+                padding: "0",
+                width: "100%",
+              }}
+            >
+              <hr style={{ background: "#000", margin: "0", padding: "0" }} />
+            </Grid2>
+            <Grid2
+              xs={4}
+              sx={{
+                marginTop: "1rem",
+              }}
+            >
+              {reviewInfo.repImg ? (
+                <img
+                  src={reviewInfo.repImg}
+                  alt={"이미지를 준비중입니다."}
+                  style={{ width: "18rem", height: "20rem" }}
+                />
+              ) : (
+                <img
+                  src="/images/ABUYZ_LOGO.png"
+                  alt={"이미지를 준비중입니다."}
+                  style={{ width: "18rem", height: "20rem" }}
+                />
+              )}
+            </Grid2>
+            <Grid2
+              xs={7}
+              sx={{
+                marginLeft: "3rem",
+              }}
+            >
+              <ContentP style={{ fontSize: "2rem" }}>{row.product}</ContentP>
+              <ContentP>{row.report_date}</ContentP>
+
+              <ContentP>작성자 : {reviewInfo.writer}</ContentP>
+              <ContentP>제품명 : {reviewInfo.productName}</ContentP>
+              <ContentP>
+                작성일 : {reviewInfo.date ? reviewInfo.date.slice(0, 10) : null}
+              </ContentP>
+              <Rating
+                name="text-feedback"
+                value={reviewInfo.rating}
+                precision={0.5}
+                style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                emptyIcon={
+                  <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+                }
+              />
+              <ContentP>제목 : {reviewInfo.title}</ContentP>
+              <ContentP>{reviewInfo.title}</ContentP>
+            </Grid2>
+            {row.status === "대기" ? (
+              <Grid2
+                xs={12}
+                sx={{
+                  marginTop: "1rem",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <RefusalButton
+                  onClick={() => {
+                    PutReviewStatus(row.uid, 1),
+                      alert("거절 처리 되었습니다."),
+                      location.reload();
+                  }}
+                >
+                  거절
+                </RefusalButton>
+                <AcceptButton
+                  onClick={() => {
+                    PutReviewStatus(row.uid, 2),
+                      alert("승인 처리 되었습니다."),
+                      location.reload();
+                  }}
+                >
+                  승인
+                </AcceptButton>
+              </Grid2>
+            ) : null}
+          </Grid2>
+        </Box>
+      </Modal>
+    </div>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  border: 2px solid #000;
-  background-color: #fff;
-  box-shadow: 24;
-`;
-
-const TitleDiv = styled.div`
-  border-bottom: 1px solid #c8c8c8;
-  width: 100%;
-  padding: 2rem;
-  font-size: 1.6rem;
-  font-weight: bold;
-`;
-
-const ContentDiv = styled.div`
-  display: flex;
-  padding: 2rem;
-`;
-
-const ImageBox = styled.div`
-  display: flex;
-  width: 40%;
-`;
-
-const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-`;
-
-const TitleBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-`;
 const ContentP = styled.p`
   margin: 0;
   padding: 0.5rem;
@@ -113,6 +218,9 @@ const AcceptButton = styled.button`
   border: none;
   margin-left: 2rem;
   margin-bottom: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const RefusalButton = styled.button`
@@ -125,4 +233,19 @@ const RefusalButton = styled.button`
   border: none;
   margin-right: 2rem;
   margin-bottom: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const SolvedButton = styled.button`
+  color: white;
+  background-color: #57a9fb;
+  font-weight: bold;
+  border: none;
+  width: 5rem;
+  padding: 0.5rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;

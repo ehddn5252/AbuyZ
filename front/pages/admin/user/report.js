@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React from "react";
 
 // StyledComponents
 import styled from "styled-components";
@@ -10,21 +10,18 @@ import ReportCategory from "../../../components/admin/user/ReportCategory";
 
 export default function Report() {
   // 유무확인
-  const [Reportsearch, setReportSearch] = useState(false);
+  // const [Reportsearch, setReportSearch] = useState(true);
 
   return (
-    <Container>
-      <ReportCategory setReportSearch={setReportSearch} />
-      {Reportsearch ? <ReportList /> : null}
-    </Container>
+    <ReportPage>
+      <ReportCategory />
+      {/* <ReportList /> */}
+    </ReportPage>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: #edf0f5;
+const ReportPage = styled.div`
+  background: #eeeeee;
   padding: 3rem;
   padding-left: 15rem;
-  min-height: 89vh;
 `;
