@@ -91,9 +91,10 @@ export default function ProductInfo() {
         const productDto = [
           {
             inventoryDto: {
-              productOptions: optionValue,
+              productOptions: [optionValue],
             },
             productDto: {
+              bigCategoryUid: product.products.bigCategoryUid,
               repImg: product.products.repImg,
               name: product.products.name,
               price: product.products.price,

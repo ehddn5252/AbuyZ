@@ -17,15 +17,38 @@ export default function MyReviewItem(product) {
           />
         </div>
         <div style={{ flex: "7", marginLeft: "1rem" }}>
-          <div style={{ paddingTop: "1rem" }}>
+          <div>
             <br></br>
             <ProductName>
               {product.product.inventoryDto.productDto.name}
             </ProductName>
             <br></br>
-            <span>옵션 설명</span>
-            <br></br>
-            <span style={{ fontSize: "0.8rem", color: "#aaaaaa" }}>
+            {product.product.inventoryDto.productOptions.length > 0 ? (
+              <div>
+                {product.product.inventoryDto.productOptions.map((e) => (
+                  <div>
+                    {Object.keys(e) == "x" ? (
+                      <div>
+                        <br></br>
+                        <br></br>
+                      </div>
+                    ) : (
+                      <span>{Object.keys(e)} :</span>
+                    )}
+                    {e[Object.keys(e)] == "x" ? null : (
+                      <span> {e[Object.keys(e)]} </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "#aaaaaa",
+                marginTop: "0.3rem",
+              }}
+            >
               주문 날짜:{" "}
               {product.product.inventoryDto.productDto.date.slice(0, 10)}
             </span>

@@ -17,7 +17,6 @@ export default function PasswordChangeModal({ setModalOpen, Pw }) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  console.log(Pw);
   const [defaultPwd, setDefaultPwd] = useState(false);
   const [passwordValid, setPassowrdValid] = useState(true);
   const validatePwd = (e) => {

@@ -48,7 +48,7 @@ export default function Payment() {
       </Card>
 
       <Card>
-        <ProductSaleInfo />
+        <ProductSaleInfo paymentList={paymentList} />
       </Card>
       <Card>
         <PaymentProcess />
