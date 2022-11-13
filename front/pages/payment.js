@@ -21,7 +21,7 @@ export default function Payment() {
     const res = await cartlist();
     setPaymentList(res.data);
   };
-  console.log("이게된거야", paymentList);
+  // console.log("이게된거야", paymentList);
   useEffect(() => {
     setPaymentValue("");
   }, [router.pathname]);

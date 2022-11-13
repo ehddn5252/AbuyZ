@@ -41,7 +41,6 @@ export default function BasketItem({ basket, setReload, reload }) {
 
   const deleteCart = async () => {
     const res = await delcart(basket.uid);
-    console.log(res);
     if (reload === true) {
       setReload(false);
     } else {

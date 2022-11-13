@@ -39,7 +39,6 @@ export default function ProductSimpleInfo({ paymentList }) {
                           )}
                           {o[Object.keys(o)] == "x" ? null : (
                             <span style={{ color: "#aaaaaa" }}>
-                              {" "}
                               {o[Object.keys(o)]}]
                             </span>
                           )}
@@ -104,7 +103,6 @@ export default function ProductSimpleInfo({ paymentList }) {
                 <span> 상품을 주문했습니다.</span>
               ) : (
                 <span>
-                  {" "}
                   외 {paymentList.length - 1}개의 상품을 주문했습니다.
                 </span>
               )}
