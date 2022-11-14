@@ -14,22 +14,20 @@ import java.util.Optional;
 
 @Repository
 public interface OrderListRepository extends JpaRepository<OrderLists, Integer> {
-    @Query(value = "select max(uid) from order_lists", nativeQuery = true)
-    Integer findMaxUid();
 
     @Query(value = "select ol from OrderLists ol join fetch Orders o on o.orderList= ol where ol.uid=:orderListsUid")
     Optional<OrderLists> findFetchJoinById(int orderListsUid);
     List<OrderLists> findByUser(Users user);
-
-    List<OrderLists> findAllByDateBetween(Date start_date, Date end_date);
 
     List<OrderLists> findByDate(Date date);
 
     Optional<OrderLists> findByOrders(Orders order);
 
     @EntityGraph(attributePaths = {"orders","orders.review"})
-    List<OrderLists>findByDateBetween(Date start_date,Date end_date);
+    List<OrderLists>findByDateBetweenAndOrders_StatusNotIn(Date start_date,Date end_date, List status);
 
+    @EntityGraph(attributePaths = {"orders","orders.review"})
+    List<OrderLists>findByDateBetween(Date start_date,Date end_date);
     List<OrderLists> findByUserAndDateBetween(Users user, Date startDay, Date today);
 }
 
