@@ -117,19 +117,17 @@ public class DashboardServiceImpl implements DashboardService {
 //        Date date = UtilService.getToday();
         Date startDate = UtilService.getToday();
         Date endDate = UtilService.getDateAfterDay(1);
-        System.out.println("================");
-        System.out.println(startDate);
-        System.out.println(endDate);
 
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
         Integer count = 0;
         for (int i = 0; i < orderLists.size(); ++i) {
             // 여기에서 오더가 아닌 것들 가져와야 함.
+            // JPA  조건문 변경
             List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
             for(int j=0;j< orders.size();++j){
                 String status = orders.get(j).getStatus();
-                if(status.equals(OrderStatus.PROCESS) ||status.equals(OrderStatus.SOLD)){
+                if(status.equals(OrderStatus.PROCESS.toString()) ||status.equals(OrderStatus.SOLD.toString())){
                     count+=1;
                     totalPrice+=orders.get(j).getPrice();
                 }

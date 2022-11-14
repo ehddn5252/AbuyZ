@@ -10,7 +10,6 @@ import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
-import com.tasteshopping.order.dto.Status;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.inventory.entity.Inventories;
@@ -49,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
         Users user = userRepository.findByEmail(email).get();
         List<Carts> cartList = cartRepository.findByUser(user);
         OrderLists orderLists = createOrderLists(user);
-        orderLists.setStatus(Status.PROCESS.toString());
+        orderLists.setStatus(OrderStatus.PROCESS.toString());
         for (int i = 0; i < cartList.size(); ++i) {
             orderLists = pay(cartList.get(i),orderLists,user,orderLists.getTotalPrice());
             // 여기에서
@@ -71,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = new Orders();
         orders.setOrderList(orderLists);
         orders.setCount(cart.getProductCount());
-        orders.setStatus(Status.PROCESS.toString());
+        orders.setStatus(OrderStatus.PROCESS.toString());
         Inventories inventory = cart.getInventory();
         // 상품 할인율 적용
         Integer price =(100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice()/100 + inventory.getPrice();
@@ -105,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
         Users user = userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
         OrderLists orderLists = createOrderLists(user);
-        orderLists.setStatus(Status.PROCESS.toString());
+        orderLists.setStatus(OrderStatus.PROCESS.toString());
         Carts cart = cartRepository.findByUserAndCurrentUid(user);
         orderLists = pay(cart,orderLists,user,0);
 
@@ -152,6 +151,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public BaseRes changeStatus(Integer orderUid, String status) {
         Orders order = orderRepository.findById(orderUid).get();
+        if(status.equals(OrderStatus.CANCEL.toString()) ||status.equals(OrderStatus.REFUND.toString())){
+            orderCancel(orderUid);
+        }
         order.setStatus(status);
         orderRepository.save(order);
         return new BaseRes(200, "주문 상태 변경 성공", null);
