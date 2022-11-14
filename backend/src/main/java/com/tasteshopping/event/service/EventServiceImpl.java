@@ -45,11 +45,7 @@ public class EventServiceImpl implements EventService{
     public ResponseDto create(String email, MultipartFile thumbnail,
                               MultipartFile content_img, EventReqDto eventDto) {
         ResponseDto responseDto = new ResponseDto();
-        if(check(email)){
-            responseDto.setMessage("추가 실패 : 권한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
+
         updateEventDto(thumbnail,content_img,eventDto,responseDto);
         if(responseDto.getMessage()!=null) return responseDto;
 
@@ -86,12 +82,6 @@ public class EventServiceImpl implements EventService{
     public ResponseDto deleteEvent(String email,int event_uid) {
         ResponseDto responseDto = new ResponseDto();
 
-        if(check(email)){
-            responseDto.setMessage("삭제 실패 : 권한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
-
         Events event = eventRepository.findById(event_uid).get();
         eventRepository.delete(event);
 
@@ -107,11 +97,6 @@ public class EventServiceImpl implements EventService{
                                    MultipartFile content_img, EventReqDto eventDto) {
         ResponseDto responseDto = new ResponseDto();
 
-        if(check(email)){
-            responseDto.setMessage("수정 실패 : 권한없음");
-            responseDto.setData(new ResultDto(false));
-            return responseDto;
-        }
         Optional<Events> events = eventRepository.findById(event_uid);
 
         if(!events.isPresent()){
@@ -170,7 +155,7 @@ public class EventServiceImpl implements EventService{
 
             if (start_date.after(now_date)) {
                 eventDto.setStatus(0);
-            } else if (now_date.after(start_date) && now_date.before(end_date)) {
+            } else if ((now_date.after(start_date) && now_date.before(end_date))||start_date.equals(now_date)||end_date.equals(now_date)) {
                 eventDto.setStatus(1);
             } else {
                 eventDto.setStatus(2);
@@ -181,10 +166,6 @@ public class EventServiceImpl implements EventService{
             responseDto.setMessage("수정 실패");
             responseDto.setData(new ResultDto(false));
         }
-    }
-    public boolean check(String email){
-        Optional<Users> users = userRepository.findByEmail(email);
-        return !users.isPresent() || users.get().getUserRoles() != Role.ADMIN;
     }
     @Override
     public ResponseDto getEventDetail(int event_uid){
