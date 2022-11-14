@@ -15,7 +15,7 @@ import { cateCoupon } from "../../pages/api/coupon";
 export default function MyCouponSelectModal({
   setModalOpen,
   setCouponDiscount,
-  categoryList,
+  uniqueCate,
 }) {
   // 모달 닫기
   const closeModal = () => {
@@ -30,22 +30,20 @@ export default function MyCouponSelectModal({
   // 쿠폰 선택됐는지 확인
   const [selected, setSelected] = useState(-1);
 
-  // 카테고리 uid  중복 제거한 리스트
-  const set = new Set(categoryList);
-  const uniqueCate = [...set];
-
   // 모달 참조
   const modalRef = useRef(null);
 
   // 쿠폰 리스트 만들기
   const [couponList, setCouponList] = useState([]);
   const ccoupon = async () => {
+    let couponlist = [];
     for (var i = 0; i < uniqueCate.length; i++) {
       const res = await cateCoupon(uniqueCate[i]);
       for (var j = 0; j < res.data.result.length; j++) {
-        setCouponList([...couponList, res.data.result[j]]);
+        couponlist.push(res.data.result[j]);
       }
     }
+    setCouponList(couponlist);
   };
   const nocoupon = () => {
     setCouponDiscount(0);
@@ -63,7 +61,7 @@ export default function MyCouponSelectModal({
     return () => {
       document.removeEventListener("mousedown", handler);
     };
-  }, []);
+  }, [uniqueCate]);
 
   return (
     <div style={{ position: "relative" }}>

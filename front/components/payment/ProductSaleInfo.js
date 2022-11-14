@@ -9,6 +9,8 @@ export default function ProductSaleInfo({ paymentList }) {
   for (var i = 0; i < paymentList.length; i++) {
     categoryList.push(paymentList[i].productDto.bigCategoryUid);
   }
+  const set = new Set(categoryList);
+  const uniqueCate = [...set];
 
   let priceadd = 0;
   for (var i = 0; i < paymentList.length; i++) {
@@ -131,7 +133,7 @@ export default function ProductSaleInfo({ paymentList }) {
         <MyCouponSelectModal
           setModalOpen={setModalOpen}
           setCouponDiscount={setCouponDiscount}
-          categoryList={categoryList}
+          uniqueCate={uniqueCate}
         ></MyCouponSelectModal>
       )}
     </div>
