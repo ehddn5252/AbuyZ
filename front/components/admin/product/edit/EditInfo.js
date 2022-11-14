@@ -4,39 +4,23 @@ import styled from "styled-components";
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductInfo(props) {
+export default function EditInfo(props) {
   // 상품명
-  const [name, setName] = useState("");
-  const [namePlaceholder, setNamePlaceholder] =
-    useState("상품명을 입력해주세요.");
+  const [name, setName] = useState(props.nameInfo);
 
   // 할인율
-  const [sale, setSale] = useState("");
-  const [salePlaceholder, setSalePlaceholder] =
-    useState("숫자만 입력해주세요. ex) 13");
+  const [sale, setSale] = useState(props.discountRateInfo);
 
   // 판매가
-  const [price, setPrice] = useState("");
-  const [pricePlaceholder, setPricePlaceholder] = useState(
-    "숫자만 입력해주세요. ex) 19000"
-  );
+  const [price, setPrice] = useState(props.priceInfo);
 
   // 배송비
-  const [fee, setFee] = useState("");
-  const [feePlaceholder, setFeePlaceholder] = useState(
-    "숫자만 입력해주세요. ex) 3000"
-  );
+  const [fee, setFee] = useState(props.deliveryFeeInfo);
 
   // 상품명
   const nameChange = (event) => {
     setName(event.target.value);
     props.setName(event.target.value);
-  };
-  const nameFocus = () => {
-    setNamePlaceholder("");
-  };
-  const nameBlur = () => {
-    setNamePlaceholder("상품명을 입력해주세요.");
   };
 
   // 할인율
@@ -44,35 +28,17 @@ export default function SaleProductInfo(props) {
     setSale(event.target.value);
     props.setDiscountRate(event.target.value);
   };
-  const saleFocus = () => {
-    setSalePlaceholder("");
-  };
-  const saleBlur = () => {
-    setSalePlaceholder("숫자만 입력해주세요. ex) 13");
-  };
 
   // 판매가
   const priceChange = (event) => {
     setPrice(event.target.value);
     props.setPrice(event.target.value);
   };
-  const priceFocus = () => {
-    setPricePlaceholder("");
-  };
-  const priceBlur = () => {
-    setPricePlaceholder("숫자만 입력해주세요. ex) 19000");
-  };
 
   // 배송비
   const feeChange = (event) => {
     setFee(event.target.value);
     props.setDeliveryFee(event.target.value);
-  };
-  const feeFocus = () => {
-    setFeePlaceholder("");
-  };
-  const feeBlur = () => {
-    setFeePlaceholder("숫자만 입력해주세요. ex) 3000");
   };
 
   return (
@@ -120,23 +86,15 @@ export default function SaleProductInfo(props) {
               <Title>상품명</Title>
             </TitleBox>
             <Input
-              placeholder={namePlaceholder}
+              value={name}
               onChange={nameChange}
-              onFocus={nameFocus}
-              onBlur={nameBlur}
-              style={{ height: "3rem" }}
+              style={{ height: "3rem", width: "20rem" }}
             />
-            <TitleBox>
+            <TitleBox style={{ width: "7rem" }}>
               <Title>할인</Title>
               <p style={{ margin: 0 }}>(%)</p>
             </TitleBox>
-            <Input
-              placeholder={salePlaceholder}
-              onChange={saleChange}
-              onFocus={saleFocus}
-              // onFocus={c}
-              onBlur={saleBlur}
-            />
+            <Input value={sale} onChange={saleChange} />
           </InfoBox>
         </Grid2>
         {/* 판매가, 배송비 */}
@@ -156,21 +114,15 @@ export default function SaleProductInfo(props) {
               <p style={{ margin: 0 }}>(원)</p>
             </TitleBox>
             <Input
-              placeholder={pricePlaceholder}
+              value={price}
               onChange={priceChange}
-              onFocus={priceFocus}
-              onBlur={priceBlur}
+              style={{ height: "3rem", width: "20rem" }}
             />
-            <TitleBox>
+            <TitleBox style={{ width: "7rem" }}>
               <Title>배송비</Title>
-              <p style={{ margin: 0 }}>(원)</p>
+              <p style={{ margin: 0, padding: 0 }}>(원)</p>
             </TitleBox>
-            <Input
-              placeholder={feePlaceholder}
-              onChange={feeChange}
-              onFocus={feeFocus}
-              onBlur={feeBlur}
-            />
+            <Input value={fee} onChange={feeChange} />
           </InfoBox>
         </Grid2>
       </Grid2>
@@ -187,8 +139,9 @@ const InfoBox = styled.div`
 const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
-  margin-left: 5.5rem;
-  width: 7rem;
+  margin-left: 2rem;
+  width: 9rem;
+  margin-right: 1rem;
 `;
 
 const Title = styled.div`
@@ -198,10 +151,11 @@ const Title = styled.div`
 
 const Input = styled.input`
   border: 0.1rem solid #000000;
-  width: 17rem;
+  width: 12rem;
   height: 3rem;
   font-size: 1.3rem;
   padding-left: 1rem;
+  padding-right: 1rem;
 
   &::placeholder {
     color: gray;

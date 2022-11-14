@@ -8,11 +8,14 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function AddEditCategory(props) {
+export default function EditCategory(props) {
   // 대분류
-  const [bigCategory, setBigCategory] = useState("");
+  const [bigCategory, setBigCategory] = useState(props.bigCategoryName);
+
   // 소분류
-  const [smallCategory, setSmallCategory] = useState("");
+  const [smallCategory, setSmallCategory] = useState(
+    props.smallCategoryName.replace(/, /g, "/")
+  );
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -22,8 +25,9 @@ export default function AddEditCategory(props) {
 
   // 소분류 셀렉트 했을 때
   const smallHandleChange = (event) => {
+    console.log(event.target.value);
     setSmallCategory(event.target.value);
-    props.setSmallCategoriesUid(event.target.value);
+    props.setSmallCategoriesUid(small_categories_uid[event.target.value]);
   };
 
   // 대분류에 맞는 소분류 객체
@@ -140,7 +144,7 @@ export default function AddEditCategory(props) {
       >
         <CategoryBox>
           <Title>대분류</Title>
-          <FormControl sx={{ minWidth: 200, width: 300 }}>
+          <FormControl sx={{ minWidth: 150, width: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
               대분류
             </InputLabel>
@@ -157,7 +161,6 @@ export default function AddEditCategory(props) {
                   vertical: "top",
                   horizontal: "left",
                 },
-                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
@@ -176,7 +179,7 @@ export default function AddEditCategory(props) {
         </CategoryBox>
         <CategoryBox>
           <Title>소분류</Title>
-          <FormControl sx={{ minWidth: 100, width: 300 }}>
+          <FormControl sx={{ minWidth: 150, width: 150 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
               소분류
             </InputLabel>
@@ -197,7 +200,7 @@ export default function AddEditCategory(props) {
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
               {smallCategoryList[bigCategory]?.map((data, idx) => (
-                <MenuItem key={idx} value={small_categories_uid[data]}>
+                <MenuItem key={idx} value={data}>
                   {data}
                 </MenuItem>
               ))}
@@ -212,7 +215,7 @@ export default function AddEditCategory(props) {
 const CategoryBox = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 5rem;
+  margin-left: 2rem;
 `;
 
 const Title = styled.p`
@@ -220,4 +223,5 @@ const Title = styled.p`
   font-weight: 800;
   margin-right: 3rem;
   padding: 0;
+  width: 4rem;
 `;

@@ -154,7 +154,7 @@ export default function InquireList(props) {
                 <Td>{e.price}</Td>
                 <Td>재고</Td>
                 <Td>{e.brandName}</Td>
-                <Td>{e.productKeywords}</Td>
+                <Td>{e.productKeywords.join(", ")}</Td>
                 <Td>{e.deliveryFee}</Td>
                 <Td>{moment(e.date).format().slice(0, 10)}</Td>
               </TableRow>
