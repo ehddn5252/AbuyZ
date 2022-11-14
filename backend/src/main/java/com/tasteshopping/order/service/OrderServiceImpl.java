@@ -151,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public BaseRes changeStatus(Integer orderUid, String status) {
         Orders order = orderRepository.findById(orderUid).get();
-        if(status.equals(OrderStatus.CANCEL.toString())){
+        if(status.equals(OrderStatus.CANCEL.toString()) ||status.equals(OrderStatus.REFUND.toString())){
             orderCancel(orderUid);
         }
         order.setStatus(status);

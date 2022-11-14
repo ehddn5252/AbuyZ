@@ -151,8 +151,8 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             Optional<Orders> ordersOptional =  orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
             if(ordersOptional.isPresent()) {
                 Orders order = ordersOptional.get();
-                if(customerCenterWriteReqDto.getCustomer_center_category().equals("교환_환불")){
-                    order.setStatus(OrderStatus.EXCHANGE_REQUEST.toString());
+                if(customerCenterWriteReqDto.getCustomer_center_category().equals("환불")){
+                    order.setStatus(OrderStatus.REFUND_REQUEST.toString());
                 }
                 customerCenter.setOrder(order);
             }

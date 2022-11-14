@@ -117,9 +117,6 @@ public class DashboardServiceImpl implements DashboardService {
 //        Date date = UtilService.getToday();
         Date startDate = UtilService.getToday();
         Date endDate = UtilService.getDateAfterDay(1);
-        System.out.println("================");
-        System.out.println(startDate);
-        System.out.println(endDate);
 
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
