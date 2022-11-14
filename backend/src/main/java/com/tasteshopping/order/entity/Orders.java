@@ -57,6 +57,10 @@ public class Orders {
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
     private Reviews review;
 
+    public void changeStatus(String status){
+        this.status=status;
+    }
+
     public OrderDto toDto() {
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(count);

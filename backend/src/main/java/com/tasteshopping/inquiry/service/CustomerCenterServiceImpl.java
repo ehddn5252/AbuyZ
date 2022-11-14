@@ -8,8 +8,10 @@ import com.tasteshopping.inquiry.dto.*;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.inquiry.repository.CustomerCenterRepository;
 import com.tasteshopping.inquiry.repository.InquiryRepositoryImpl;
+import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderRepository;
+import com.tasteshopping.order.service.OrderService;
 import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.repository.ReportRepository;
 import com.tasteshopping.review.service.AwsS3Service;
@@ -33,11 +35,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomerCenterServiceImpl implements CustomerCenterService {
 
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    CustomerCenterRepository customerCenterRepository;
+    private final UserRepository userRepository;
+
+    private final CustomerCenterRepository customerCenterRepository;
 
     private final ReportRepository reportRepository;
 
@@ -46,6 +47,8 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     private final OrderRepository orderRepository;
 
     private final AwsS3Service awsS3Service;
+
+    private final OrderService orderService;
 
     @Override
     public Integer getNoReplyNum(String status) {
@@ -126,6 +129,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     }
 
     @Override
+    @Transactional
     public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto, MultipartFile descriptionImg) {
         try {
             Optional<Users> usersOptional = userRepository.findByEmail(email);
@@ -133,9 +137,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
             String imagePath = null; //파일서버에업로드후 img_url 데려오기
             BaseRes res = null;
-            System.out.println("================");
-            System.out.println(descriptionImg);
-            System.out.println("================");
             if (descriptionImg != null) {
                 try {
                     imagePath = awsS3Service.uploadImgFile(descriptionImg);
@@ -147,10 +148,13 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
                 }
             }
 
-
-            Optional<Orders> order =  orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
-            if(order.isPresent()) {
-                customerCenter.setOrder(order.get());
+            Optional<Orders> ordersOptional =  orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
+            if(ordersOptional.isPresent()) {
+                Orders order = ordersOptional.get();
+                if(customerCenterWriteReqDto.getCustomer_center_category()=="교환_환불"){
+                    order.changeStatus(OrderStatus.EXCHANGE.toString());
+                }
+                customerCenter.setOrder(order);
             }
             customerCenter.setStart_date(UtilService.getTodayTime());
             customerCenter.setContent(customerCenterWriteReqDto.getContent());
