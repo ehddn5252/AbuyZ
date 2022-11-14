@@ -2,49 +2,82 @@ import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 import { eachGetOrderList } from "../../pages/api/order";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 
-export default function ProductBundleItem({ uid }) {
-  const [orderBundleItem, setOrderBundleItem] = useState([]);
+export default function ProductBundleItem({ orderuid }) {
+  console.log("dhej", orderuid);
+  const [selected, setSelected] = useState(0);
+
+  const [productList, setProductList] = useState([]);
   const bundleitem = async () => {
-    const rres = await eachGetOrderList(uid);
-    console.log(rres.data);
+    let productlist = [];
+    for (var j = 0; j < orderuid.length; j++) {
+      const res = await eachGetOrderList(orderuid[j]);
+      for (var k = 0; k < res.data.length; k++) {
+        productlist.push(res.data[k]);
+      }
+    }
+    setProductList(productlist);
   };
-
+  console.log(productList);
   useEffect(() => {
     bundleitem();
   }, []);
 
   return (
     <ItemContainer>
-      {orderBundleItem.map((e) => (
-        <Container>
-          <div style={{ flex: "1" }}>
-            <ProductImg src={e.inventoryDto.productDto.descriptionImg} />
-          </div>
-          <InfoContainer>
-            <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
-            {e.inventoryDto.productOptions.length > 0 ? (
-              <div>
-                {e.inventoryDto.productOptions.map((e) => (
+      {productList ? (
+        <div>
+          {productList.map((e, idx) => (
+            <Container key={idx} onClick={() => setSelected(idx)}>
+              <IconDiv>
+                {selected === idx ? (
+                  <ExpandCircleDownOutlinedIcon
+                    sx={{ color: "#56a9f1" }}
+                  ></ExpandCircleDownOutlinedIcon>
+                ) : (
                   <div>
-                    {Object.keys(e) == "x" ? null : (
-                      <span>[{Object.keys(e)} :</span>
-                    )}
-                    {e[Object.keys(e)] == "x" ? null : (
-                      <span> {e[Object.keys(e)]}]</span>
-                    )}
+                    <CircleOutlinedIcon
+                      sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                    ></CircleOutlinedIcon>
                   </div>
-                ))}
+                )}
+              </IconDiv>
+
+              <div style={{ flex: "1" }}>
+                <ProductImg src={e.inventoryDto.productDto.descriptionImg} />
               </div>
-            ) : null}
-            {/* <ProductIntro>{e.inventoryDto.productOptions.size}</ProductIntro> */}
-            {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
-          </InfoContainer>
-        </Container>
-      ))}
+              <InfoContainer>
+                <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
+                {e.inventoryDto.productOptions.length > 0 ? (
+                  <div>
+                    {e.inventoryDto.productOptions.map((e, idx) => (
+                      <div key={idx}>
+                        {Object.keys(e) == "x" ? null : (
+                          <span>[{Object.keys(e)} :</span>
+                        )}
+                        {e[Object.keys(e)] == "x" ? null : (
+                          <span> {e[Object.keys(e)]}]</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </InfoContainer>
+            </Container>
+          ))}
+        </div>
+      ) : null}
     </ItemContainer>
   );
 }
+
+const IconDiv = styled.div`
+  flex: 1;
+  margin-top: 3rem;
+  margin-left: 1rem;
+`;
 
 const ItemContainer = styled.div`
   display: flex;
@@ -58,9 +91,10 @@ const Container = styled.div`
 `;
 
 const ProductImg = styled.img`
-  width: 7rem;
-  height: 8rem;
+  width: 3rem;
+  height: 4rem;
   object-fit: cover;
+  border: 1px solid black;
 `;
 
 const InfoContainer = styled.div`

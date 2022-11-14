@@ -26,8 +26,8 @@ export default function ProductCarousel() {
   const settings = {
     // dots: true,
     infinite: true,
-    autoplay: true,
-    autoplayspeed: 300,
+    // autoplay: true,
+    // autoplayspeed: 300,
     slidesToShow: 4,
     slidesToScroll: 4,
   };
@@ -45,165 +45,165 @@ export default function ProductCarousel() {
     uuser();
   }, []);
   return products ? (
-    <div
-      style={{
-        height: "30rem",
-        width: "70rem",
-        marginLeft: "25rem",
-      }}
-    >
-      <div
-        style={{
-          // backgroundColor: "#ccf2f4",
-          height: "100%",
-          with: "100%",
-        }}
-      >
-        <span
-          style={{
-            marginLeft: "1.7rem",
-            fontSize: "1.5rem",
-            fontWeight: "bold",
-            color: "#56a9f1",
-          }}
-        >
-          {user}
-        </span>
-        <span>님을 위한</span>{" "}
-        <span
-          style={{
-            fontSize: "1.3rem",
-            color: "#56a9f1",
-          }}
-        >
-          추천 상품
-        </span>
+    <Container>
+      <BuContainer>
+        <RecSpan>{user}</RecSpan>
+        <span>님을 위한</span>
+        <RecbuSpan>추천 상품</RecbuSpan>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
           {products.map((product, idx) => (
             <div style={{ cursor: "pointer" }} key={idx} onClick={goDetail}>
-              <CardImg
-                alt="추천상품"
-                src={product.repImg}
-                style={{
-                  width: "14rem",
-                  height: "16rem",
-                  objectFit: "cover",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "0",
-                  marginBottom: "0",
-                  alignItems: "center",
-                  marginLeft: "1.5rem",
-                }}
-              >
-                <CardName>{product.name}</CardName>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: "0",
-                  marginBottom: "0",
-                  alignItems: "center",
-                  marginLeft: "1.5rem",
-                }}
-              >
-                {product.discount != null ? (
-                  <div>
-                    <div style={{ display: "flex", flexDirection: "row" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "end",
-                          flex: 2,
-                        }}
-                      >
-                        <CardDiscount>{product.discountRate}%</CardDiscount>
-                      </div>
-                      <div style={{ flex: 5 }}>
-                        <CardPrice>
-                          {(
-                            product.price *
-                            ((100 - product.discountRate) / 100)
-                          ).toLocaleString("ko-KR")}
-                          원
-                        </CardPrice>
-                      </div>
-                    </div>
-                    <div>
-                      <CardPriceBD>
-                        {product.price.toLocaleString("ko-KR")}원
-                      </CardPriceBD>
-                    </div>
+              <CardImg alt="추천상품" src={product.repImg} />
+              {product.name.length >= 30 ? (
+                <NameContainer>
+                  <CardName>{product.name.slice(0, 30)}...</CardName>
+                </NameContainer>
+              ) : (
+                <NameContainer>
+                  <CardName>{product.name}</CardName>
+                </NameContainer>
+              )}
+
+              {product.discountRate > 0 ? (
+                <DiscountContainer>
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <CardDiscountCont>
+                      <CardDiscount>{product.discountRate}%</CardDiscount>
+                    </CardDiscountCont>
+                    <Flexfive>
+                      <CardPrice>
+                        {(
+                          product.price *
+                          ((100 - product.discountRate) / 100)
+                        ).toLocaleString("ko-KR")}
+                        원
+                      </CardPrice>
+                    </Flexfive>
                   </div>
-                ) : (
                   <div>
-                    <CardPPrice>
+                    <CardPriceBD>
                       {product.price.toLocaleString("ko-KR")}원
-                    </CardPPrice>
+                    </CardPriceBD>
                   </div>
-                )}
-              </div>
+                </DiscountContainer>
+              ) : (
+                <NoDiscountContainer>
+                  <CardPPrice>
+                    {product.price.toLocaleString("ko-KR")}원
+                  </CardPPrice>
+                </NoDiscountContainer>
+              )}
             </div>
           ))}
         </StyledSlider>
-      </div>
-    </div>
+      </BuContainer>
+    </Container>
   ) : null;
 }
 
+const Flexfive = styled.div`
+  flex: 5;
+  display: flex;
+  align-items: flex-end;
+`;
+const Container = styled.div`
+  height: 30rem;
+  width: 70rem;
+  margin-left: 25rem;
+`;
+
+const Flextwo = styled.div`
+  display: flex;
+  align-items: end;
+  text-align: start;
+  flex: 1;
+`;
+
+const BuContainer = styled.div`
+  height: 100%;
+  width: 100%;
+`;
+
+const RecSpan = styled.span`
+  margin-left: 1.7rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #56a9f1;
+`;
+
+const RecbuSpan = styled.span`
+  margin-left: 0.3rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #56a9f1;
+`;
+
+const NameContainer = styled.div`
+  margin-left: 1.75rem;
+  width: 80%;
+  height: 3rem;
+  margin-top: 0.5rem;
+`;
 const CardImg = styled.img`
   width: 90%;
   height: 90%;
   margin: 0 auto;
+  width: 14rem;
+  height: 16rem;
+  object-fit: cover;
 `;
+
 const CardName = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-left: 1rem;
+`;
+
+const DiscountContainer = styled.div`
   margin-top: 1rem;
+  width: 100%;
+  margin-left: 1.75rem;
+`;
+
+const NoDiscountContainer = styled.div`
+  margin-top: 1rem;
+  width: 100%;
 `;
 const CardDiscount = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-left: 1rem;
-  margin-right: 0rem;
-  margin-top: 0;
   margin-bottom: 0;
   color: #56a9f1;
   text-align: end;
   vertical-align: bottom;
 `;
+
+const CardDiscountCont = styled.div`
+  display: flex;
+  align-items: end;
+  text-align: start;
+  flex: 1;
+`;
 const CardPrice = styled.span`
   font-size: 1.5rem;
   font-weight: bolder;
-  margin-left: 0.5rem;
   margin-right: 1.5rem;
-  margin-top: 0;
   margin-bottom: 0;
 `;
 const CardPriceBD = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-left: 1rem;
-  margin-right: 0.5rem;
-  margin-top: 0;
   margin-bottom: 0;
   text-decoration: line-through;
   text-decoration-color: #aaaaaa;
   color: #aaaaaa;
-  margin-top: 0.5rem;
 `;
 
 const CardPPrice = styled.span`
   font-size: 1.5rem;
   font-weight: bolder;
-  margin-left: 1rem;
   margin-right: 1.5rem;
-  margin-top: 0;
   margin-bottom: 0;
+  margin-left: 1.75rem;
 `;
 
 const StyledSlider = styled(Slider)`

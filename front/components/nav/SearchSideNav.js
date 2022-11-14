@@ -26,7 +26,7 @@ export default function SearchSideNav({
 
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
-
+  const [priceOpen, setPriceOpen] = useState(false);
   // reset 초기화
   const resetButton = () => {
     setFeeOption(null);
@@ -45,22 +45,22 @@ export default function SearchSideNav({
   return (
     <NavContainer>
       <Title>
-        <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
+        <p style={{ margin: 0, fontSize: "1.3rem", fontWeight: "1000" }}>
           필터
         </p>
         <div
           onClick={resetButton}
           style={{ display: "flex", alignItems: "flex-end", cursor: "pointer" }}
         >
-          <RestartAltIcon />
-          <p style={{ margin: 0 }}>초기화</p>
+          <RestartAltIcon style={{ fontSize: "medium" }} />
+          <p style={{ margin: 0, marginLeft: "0.3rem" }}>초기화</p>
         </div>
       </Title>
 
       <FormControl>
         <FormLabel
           id="label"
-          sx={{ fontSize: "1.6rem", fontWeight: "1000", marginTop: "0.6rem" }}
+          sx={{ fontSize: "1.3rem", fontWeight: "1000", marginTop: "0.6rem" }}
         >
           배송
         </FormLabel>
@@ -69,6 +69,11 @@ export default function SearchSideNav({
           name="radio-buttons-group"
           onChange={(e) => {
             setFeeOption(e.target.value);
+          }}
+          sx={{
+            marginTop: "0.5rem",
+            paddingBottom: "0.5rem",
+            borderBottom: "1px solid rgb(170, 170, 170, 0.5)",
           }}
         >
           <FormControlLabel value="0" control={<Radio />} label="무료" />
@@ -85,7 +90,7 @@ export default function SearchSideNav({
         </RadioGroup>
       </FormControl>
       <FormControl sx={{ marginTop: "1rem" }}>
-        <FormLabel id="label" sx={{ fontSize: "1.6rem", fontWeight: "1000" }}>
+        <FormLabel id="label" sx={{ fontSize: "1.3rem", fontWeight: "1000" }}>
           가격
         </FormLabel>
         <RadioGroup
@@ -93,6 +98,10 @@ export default function SearchSideNav({
           name="radio-buttons-group"
           onChange={(e) => {
             setPriceOption(e.target.value);
+          }}
+          sx={{
+            marginTop: "0.5rem",
+            paddingBottom: "0.5rem",
           }}
         >
           <FormControlLabel value="0" control={<Radio />} label="3만원 이하" />
@@ -109,24 +118,32 @@ export default function SearchSideNav({
           <FormControlLabel value="3" control={<Radio />} label="30만원이상" />
         </RadioGroup>
       </FormControl>
-      <InputBox>
-        <Input
-          name="start"
-          id="start"
-          onClick={(e) => {
-            setStart(e.target.value);
-          }}
-        ></Input>
-        <p style={{ margin: 0 }}>~</p>
-        <Input
-          name="end"
-          id="end"
-          onClick={(e) => {
-            setEnd(e.target.value);
-          }}
-        ></Input>
-      </InputBox>
-      <Button onClick={startendButton}>필터 적용하기</Button>
+      <PriceButton onClick={() => setPriceOpen(!priceOpen)}>
+        직접 가격 설정하기
+      </PriceButton>
+
+      {priceOpen ? (
+        <div>
+          <InputBox>
+            <Input
+              name="start"
+              id="start"
+              onClick={(e) => {
+                setStart(e.target.value);
+              }}
+            ></Input>
+            <p style={{ margin: 0 }}>~</p>
+            <Input
+              name="end"
+              id="end"
+              onClick={(e) => {
+                setEnd(e.target.value);
+              }}
+            ></Input>
+          </InputBox>
+          <Button onClick={startendButton}>필터 적용하기</Button>
+        </div>
+      ) : null}
     </NavContainer>
   );
 }
@@ -136,14 +153,14 @@ const NavContainer = styled.div`
   flex-direction: column;
   padding: 0;
   width: 100%;
-  height: 35rem;
+  min-height: 35rem;
 `;
 
 const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid rgb(170, 170, 170, 0.5);
   padding-bottom: 1rem;
 `;
 const InputBox = styled.div`
@@ -164,8 +181,18 @@ const Button = styled.button`
   height: 2rem;
   border: none;
   margin-top: 1rem;
-  border-radius: 1rem;
+  border-radius: 5px;
   color: white;
   background-color: #56a9f1;
+  cursor: pointer;
+`;
+
+const PriceButton = styled.button`
+  width: 100%;
+  height: 2rem;
+  border: 1px solid #56a9f1;
+  border-radius: 5px;
+  color: #56a9f1;
+  background-color: white;
   cursor: pointer;
 `;
