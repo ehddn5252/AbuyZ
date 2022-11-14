@@ -30,5 +30,6 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
     @EntityGraph(attributePaths = {"orders","orders.review"})
     List<OrderLists>findByDateBetween(Date start_date,Date end_date);
 
+    List<OrderLists> findByUserAndDateBetween(Users user, Date startDay, Date today);
 }
 

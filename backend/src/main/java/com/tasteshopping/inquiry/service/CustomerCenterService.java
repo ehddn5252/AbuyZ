@@ -8,6 +8,7 @@ import com.tasteshopping.inquiry.dto.CustomerCenterWriteReqDto;
 import com.tasteshopping.inquiry.dto.ReplyReqDto;
 import com.tasteshopping.inquiry.dto.SearchCondition;
 import com.tasteshopping.user.dto.ResponseDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,11 +23,12 @@ public interface CustomerCenterService {
     CustomerCenterDto getCustomerCenterByUid(Integer uid);
     BaseRes modifyCustomerCenterByUid(Integer uid, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
+    BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto, MultipartFile descriptionImg);
+
     BaseRes deleteCustomerCenterByUidSameEmail(Integer uid, String email);
 
 
     void deleteCustomerCenterByUid(Integer uid);
-    BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto);
 
 //    BaseRes writeReplyCustomerCenter(String email, int parentUid, String content);
     ResponseDto writeReplyCustomerCenter(ReplyReqDto replyReqDto);

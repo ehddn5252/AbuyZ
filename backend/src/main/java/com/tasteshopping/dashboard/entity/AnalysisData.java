@@ -38,6 +38,10 @@ public class AnalysisData {
         this.visitCount +=1;
     }
 
+    public void cancelVisit(){
+        this.visitCount -=1;
+    }
+
     public AnalysisDataDto toDto(){
         return AnalysisDataDto.builder()
                 .uid(uid)

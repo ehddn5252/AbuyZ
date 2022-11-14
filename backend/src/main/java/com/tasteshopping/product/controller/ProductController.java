@@ -3,6 +3,7 @@ package com.tasteshopping.product.controller;
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.exception.NoAuthorizationException;
+import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.product.service.*;
 import lombok.RequiredArgsConstructor;
@@ -151,6 +152,8 @@ public class ProductController {
             ProductDetailDto l = productService.getDetailProduct(email, productUidReqDto.getProducts_uid());
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "product dto 상세 검색 성공!", l));
         } catch (ProductNotFoundException e) {
+            return e.baseResResponseEntity;
+        } catch (OptionNotFoundException e){
             return e.baseResResponseEntity;
         }
     }

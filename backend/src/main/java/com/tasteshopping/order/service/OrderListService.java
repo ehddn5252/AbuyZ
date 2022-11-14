@@ -13,4 +13,6 @@ public interface OrderListService {
     BaseRes getNoReviewOrder(String email);
 
     BaseRes getOrdersGroupByDate(String email);
+
+    List<OrderListDto> getOrderListsWeek(String email);
 }

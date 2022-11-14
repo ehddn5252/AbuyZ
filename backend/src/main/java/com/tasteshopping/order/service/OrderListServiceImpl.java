@@ -1,6 +1,7 @@
 package com.tasteshopping.order.service;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.inventory.dto.InventoryDto;
 import com.tasteshopping.inventory.entity.Inventories;
 import com.tasteshopping.order.dto.OrderDto;
@@ -16,10 +17,7 @@ import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -145,5 +143,19 @@ public class OrderListServiceImpl implements OrderListService {
         } else {
             return new BaseRes(204, "product not found", orderDtoList);
         }
+    }
+
+    @Override
+    public List<OrderListDto> getOrderListsWeek(String email) {
+        Users user = userRepository.findByEmail(email).get();
+        Date startDay = UtilService.getDateAfterDay(-7);
+        Date today = UtilService.getDateAfterDay(0);
+        List<OrderLists> orderLists = orderListRepository.findByUserAndDateBetween(user, startDay, today);
+        List<OrderListDto> orderListDtos = new ArrayList<>();
+        for (int i = 0; i < orderLists.size(); ++i) {
+            OrderListDto orderListDto = orderLists.get(i).toDto();
+            orderListDtos.add(orderListDto);
+        }
+        return orderListDtos;
     }
 }
