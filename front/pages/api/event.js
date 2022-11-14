@@ -60,7 +60,7 @@ export async function modifyEvent(eventDto, eventnumber) {
   });
 }
 
-// 이벤트 조회
+// 이벤트 조회(관리자)
 export async function inquireEvent() {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
@@ -119,5 +119,24 @@ export async function detailEvent(eventNum) {
       .catch((e) => {
         console.log(e);
       });
+  });
+}
+
+// 이벤트 조회(fO)
+export async function inquireallEvent() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.get("/event").then((response) => {
+      if (response.status === 200) {
+        console.log("이벤트 조회 성공", response.data);
+        resolve(response.data);
+      } else {
+        console.log("이벤트 조회 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
   });
 }

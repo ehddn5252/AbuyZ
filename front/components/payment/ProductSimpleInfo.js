@@ -58,14 +58,18 @@ export default function ProductSimpleInfo({ paymentList }) {
                             color: "#aaaaaa",
                           }}
                         >
-                          {e.productDto.price.toLocaleString("ko-KR")}원
+                          {(e.productDto.price * e.productCount).toLocaleString(
+                            "ko-KR"
+                          )}
+                          원
                         </span>
                         <br></br>
                         <PriceSpan>
                           {(
-                            (e.productDto.price *
+                            ((e.productDto.price *
                               (100 - e.productDto.discountRate)) /
-                            100
+                              100) *
+                            e.productCount
                           ).toLocaleString("ko-KR")}
                           원
                         </PriceSpan>
@@ -73,7 +77,10 @@ export default function ProductSimpleInfo({ paymentList }) {
                     ) : (
                       <div style={{ marginTop: "0.6rem" }}>
                         <PriceSpan>
-                          {e.productDto.price.toLocaleString("ko-KR")}원
+                          {(e.productDto.price * e.productCount).toLocaleString(
+                            "ko-KR"
+                          )}
+                          원
                         </PriceSpan>
                       </div>
                     )}

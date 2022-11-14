@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import EventItem from "./EventItem";
 import styled from "styled-components";
-import { inquireEvent } from "../../pages/api/event";
+import { inquireallEvent } from "../../pages/api/event";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 
 export default function EventList() {
   const [eventList, setEventList] = useState([]);
   const eevent = async () => {
-    const res = await inquireEvent();
+    const res = await inquireallEvent();
     setEventList(res.data);
   };
   useEffect(() => {
