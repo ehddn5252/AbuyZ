@@ -4,7 +4,7 @@ import styled from "styled-components";
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductInfo(props) {
+export default function AddEditInfo(props) {
   // 상품명
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =

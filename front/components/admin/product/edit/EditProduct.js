@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
+// API
+import { productDetail } from "../../../../pages/api/product";
+
 // mui
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -11,6 +14,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditCategory from "./EditCategory";
 import EditInfo from "./EditInfo";
 import EditMarketing from "./EditMarketing";
+import EditImage from "./EditImage";
+import EditOption from "./EditOption";
 
 const style = {
   position: "absolute",
@@ -21,6 +26,8 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  height: "80%",
+  overflowY: "scroll",
 };
 
 const small_categories_uid = {
@@ -86,13 +93,15 @@ export default function EditProduct({ productInfo }) {
   const [price, setPrice] = useState(productInfo.price);
 
   // 배송비
-  const [deliveryFee, setDeliveryFee] = useState(0);
+  const [deliveryFee, setDeliveryFee] = useState(productInfo.deliveryFee);
 
   // 브랜드명
-  const [brandName, setBrandName] = useState("");
+  const [brandName, setBrandName] = useState(productInfo.brandName);
 
   // 키워드
-  const [keywords, setKeywords] = useState("");
+  const [keywords, setKeywords] = useState(
+    productInfo.productKeywords.join(", ")
+  );
 
   // 대표 이미지
   const [mainImg, setMainImg] = useState(null);
@@ -103,11 +112,31 @@ export default function EditProduct({ productInfo }) {
   // 상세 이미지
   const [descImg, setDescImg] = useState(null);
 
-  console.log(smallCategoriesUid);
+  // 옵션
+  const [optionDetail, setOptionDetail] = useState(null);
+
+  const getDetail = async () => {
+    const tmp = await productDetail(productInfo.uid);
+    console.log(tmp.data, "~~~~");
+    setMainImg(tmp.data.products.repImg);
+    setExtraImg(tmp.data.productPictureDto);
+    setDescImg(tmp.data.products.descriptionImg);
+    setOptionDetail(tmp.data.productOptionListMap);
+  };
+
+  useEffect(() => {
+    getDetail();
+  }, []);
 
   return (
     <div style={{ width: "100%" }}>
-      <EditButton onClick={handleOpen}>수정하기</EditButton>
+      <EditButton
+        onClick={() => {
+          handleOpen(), getDetail();
+        }}
+      >
+        수정하기
+      </EditButton>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Grid2
@@ -194,10 +223,31 @@ export default function EditProduct({ productInfo }) {
                 style={{ background: "#ff9494", margin: "0", padding: "0" }}
               />
               {/* 상품 이미지 */}
+              <EditImage
+                setMainImg={setMainImg}
+                setExtraImg={setExtraImg}
+                setDescImg={setDescImg}
+                mainImg={mainImg}
+                extraImg={extraImg}
+                descImg={descImg}
+              />
               <hr
                 style={{ background: "#ff9494", margin: "0", padding: "0" }}
               />
               {/* 옵션 */}
+              <EditOption
+                smallCategoriesUid={smallCategoriesUid}
+                name={name}
+                discountRate={discountRate}
+                price={price}
+                deliveryFee={deliveryFee}
+                brandName={brandName}
+                keywords={keywords}
+                mainImg={mainImg}
+                extraImg={extraImg}
+                descImg={descImg}
+                optionDetail={optionDetail}
+              />
               <hr
                 style={{ background: "#ff9494", margin: "0", padding: "0" }}
               />

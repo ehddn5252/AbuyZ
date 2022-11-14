@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 // mui
@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductImage(props) {
+export default function AddEditImage(props) {
   const profileRef = useRef(null);
   const extraRef = useRef(null);
   const detailRef = useRef(null);
