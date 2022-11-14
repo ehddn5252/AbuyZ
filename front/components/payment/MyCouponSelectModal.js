@@ -47,7 +47,10 @@ export default function MyCouponSelectModal({
       }
     }
   };
-
+  const nocoupon = () => {
+    setCouponDiscount(0);
+    setModalOpen(false);
+  };
   useEffect(() => {
     ccoupon();
     // 이벤트 핸들러 함수
@@ -126,6 +129,7 @@ export default function MyCouponSelectModal({
               </div>
             ))}
             <ButtonDiv>
+              <NoButton onClick={nocoupon}>쿠폰 사용 안함</NoButton>
               <Button onClick={closeCheckModal}>선택완료</Button>
             </ButtonDiv>
           </div>
@@ -179,7 +183,7 @@ const CardStyle = styled.div`
 
 const ButtonDiv = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   margin-top: 2rem;
   margin-bottom: 1rem;
 `;
@@ -189,8 +193,19 @@ const Button = styled.button`
   border: none;
   border-radius: 5px;
   height: 3rem;
-  width: 7rem;
+  width: 9rem;
   font-size: 1.2rem;
+`;
+
+const NoButton = styled.button`
+  background-color: white;
+  color: white;
+  border: 1px solid #56a9f1;
+  border-radius: 5px;
+  height: 3rem;
+  width: 9rem;
+  font-size: 1.2rem;
+  color: #56a9f1;
 `;
 
 const TextDiv = styled.div`

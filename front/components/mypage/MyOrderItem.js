@@ -67,9 +67,9 @@ export default function MyOrderItem({ uid }) {
             {/* <ProductIntro>{e.inventoryDto.productOptions.size}</ProductIntro> */}
             {/* <ProductoptionsInfo>{e.inventoryDto.productDto.options}</ProductoptionsInfo> */}
           </InfoContainer>
-          <div style={{ flex: 3 }}>
+          <div style={{ flex: 3, marginTop: "2.5rem" }}>
             <span style={{ color: "#aaaaaa" }}>
-              {e.count}개 | {e.price.toLocaleString("ko-KR")}원
+              {e.price.toLocaleString("ko-KR")}원 | {e.count}개
             </span>
           </div>
           <ButtonContainer>

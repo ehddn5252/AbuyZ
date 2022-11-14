@@ -28,6 +28,15 @@ export default function ServiceConsulting() {
     setCategory(event.target.value);
   };
 
+  // 고객문의 등록 API
+  // const regisCS = (e) => {
+  //   e.preventDefault();
+  //   let formData = new FormData();
+
+  //   let customerCenterWriteReqDto = {
+
+  //   }
+  // }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
