@@ -5,66 +5,88 @@ import { eachGetOrderList } from "../../pages/api/order";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 
-export default function ProductBundleItem({ orderuid }) {
-  console.log("dhej", orderuid);
-  const [selected, setSelected] = useState(0);
-
-  const [productList, setProductList] = useState([]);
+export default function ProductBundleItem({
+  orderuid,
+  productList,
+  setProductList,
+  setIdxSelected,
+  idxSelected,
+}) {
   const bundleitem = async () => {
     let productlist = [];
     for (var j = 0; j < orderuid.length; j++) {
       const res = await eachGetOrderList(orderuid[j]);
       for (var k = 0; k < res.data.length; k++) {
+        console.log(res.data[k]);
         productlist.push(res.data[k]);
       }
     }
+    productlist.sort((a, b) => b.orderUid - a.orderUid);
     setProductList(productlist);
   };
   console.log(productList);
+
   useEffect(() => {
     bundleitem();
-  }, []);
+  }, [orderuid]);
 
   return (
     <ItemContainer>
       {productList ? (
         <div>
           {productList.map((e, idx) => (
-            <Container key={idx} onClick={() => setSelected(idx)}>
+            <Container key={idx} onClick={() => setIdxSelected(idx)}>
               <IconDiv>
-                {selected === idx ? (
+                {idxSelected === idx ? (
                   <ExpandCircleDownOutlinedIcon
-                    sx={{ color: "#56a9f1" }}
+                    sx={{ color: "#56a9f1", fontSize: "medium" }}
                   ></ExpandCircleDownOutlinedIcon>
                 ) : (
                   <div>
                     <CircleOutlinedIcon
-                      sx={{ color: "rgb(128, 128, 128, 0.7)" }}
+                      sx={{
+                        color: "rgb(128, 128, 128, 0.7)",
+                        fontSize: "medium",
+                      }}
                     ></CircleOutlinedIcon>
                   </div>
                 )}
               </IconDiv>
 
-              <div style={{ flex: "1" }}>
+              <div style={{ flex: "1", marginTop: "0.5rem" }}>
                 <ProductImg src={e.inventoryDto.productDto.descriptionImg} />
               </div>
-              <InfoContainer>
-                <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
-                {e.inventoryDto.productOptions.length > 0 ? (
-                  <div>
-                    {e.inventoryDto.productOptions.map((e, idx) => (
-                      <div key={idx}>
-                        {Object.keys(e) == "x" ? null : (
-                          <span>[{Object.keys(e)} :</span>
-                        )}
-                        {e[Object.keys(e)] == "x" ? null : (
-                          <span> {e[Object.keys(e)]}]</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-              </InfoContainer>
+
+              {Object.keys(e.inventoryDto.productOptions[0])[0] !== "x" ? (
+                <InfoContainer>
+                  <span style={{ color: "#aaaaaa", fontSize: "0.7rem" }}>
+                    {e.inventoryDto.productDto.date.slice(0, 10)}
+                  </span>
+                  <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
+                  {e.inventoryDto.productOptions.map((e, idx) => (
+                    <div key={idx}>
+                      {Object.keys(e) == "x" ? null : (
+                        <span>[{Object.keys(e)} :</span>
+                      )}
+                      {e[Object.keys(e)] == "x" ? null : (
+                        <span> {e[Object.keys(e)]}]</span>
+                      )}
+                    </div>
+                  ))}
+                </InfoContainer>
+              ) : (
+                <InfoNoOptionContainer>
+                  <span style={{ color: "#aaaaaa", fontSize: "0.7rem" }}>
+                    {e.inventoryDto.productDto.date.slice(0, 10)}
+                  </span>
+                  <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
+                </InfoNoOptionContainer>
+              )}
+              <div style={{ flex: 3, marginTop: "2rem" }}>
+                <span style={{ color: "#aaaaaa" }}>
+                  {e.count}개 | {e.price}원
+                </span>
+              </div>
             </Container>
           ))}
         </div>
@@ -75,7 +97,7 @@ export default function ProductBundleItem({ orderuid }) {
 
 const IconDiv = styled.div`
   flex: 1;
-  margin-top: 3rem;
+  margin-top: 1.9rem;
   margin-left: 1rem;
 `;
 
@@ -88,19 +110,24 @@ const ItemContainer = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 1rem;
 `;
 
 const ProductImg = styled.img`
-  width: 3rem;
-  height: 4rem;
+  width: 4rem;
+  height: 5rem;
   object-fit: cover;
-  border: 1px solid black;
 `;
 
 const InfoContainer = styled.div`
-  flex: 7;
+  flex: 5;
   margin-left: 2rem;
-  margin-top: 1rem;
+`;
+
+const InfoNoOptionContainer = styled.div`
+  flex: 5;
+  margin-left: 2rem;
+  margin-top: 0.8rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -117,9 +144,8 @@ const ProductoptionsInfo = styled.span`
 const ProductIntro = styled.p`
   padding: 0;
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: bolder;
-  padding-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
 `;
 
 const ReviewFinishButton = styled.button`

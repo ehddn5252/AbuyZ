@@ -19,6 +19,7 @@ export default function ProductSelectModal({
   const closeModal = () => {
     setModalOpen(false);
   };
+  const [idxSelected, setIdxSelected] = useState(0);
   const modalRef = useRef(null);
   const [productList, setProductList] = useState([]);
 
@@ -53,12 +54,13 @@ export default function ProductSelectModal({
   }, []);
 
   const selectfunction = () => {
-    setDate(productList[selected].date);
-    setImg(productList[selected].img);
-    setName(productList[selected].name);
-    setOptions(productList[selected].options);
-    setPrice(productList[selected].price);
-    setCount(productList[selected].count);
+    setDate(productList[idxSelected].inventoryDto.productDto.date);
+    setImg(productList[idxSelected].inventoryDto.productDto.repImg);
+    setName(productList[idxSelected].inventoryDto.productDto.name);
+    // setOptions(productList[idxSelected].inventoryDto.productOptions);
+    setPrice(productList[idxSelected].price);
+    setCount(productList[idxSelected].count);
+    setOrderUid(productList[idxSelected].orderUid);
     setModalOpen(false);
   };
   return (
@@ -74,56 +76,13 @@ export default function ProductSelectModal({
           {/* 7일전 ~ 오늘 날짜 */}
           2022.10.11 - 2022.10.18
         </Date>
-        <ProductBundleItem orderuid={orderuid}></ProductBundleItem>
-
-        {/* for문으로 돌리기 */}
-        {productList.map((e) => (
-          <Card
-            key={e.id}
-            style={{
-              ...cardStyle,
-              display: "flex",
-              flexDirection: "row",
-            }}
-            onClick={() => setSelected(e.id)}
-          >
-            <div style={{ flex: 1 }}>
-              <IconDiv>
-                {selected === e.id ? (
-                  <ExpandCircleDownOutlinedIcon
-                    sx={{ color: "#56a9f1" }}
-                  ></ExpandCircleDownOutlinedIcon>
-                ) : (
-                  <div>
-                    <CircleOutlinedIcon
-                      sx={{ color: "rgb(128, 128, 128, 0.7)" }}
-                    ></CircleOutlinedIcon>
-                  </div>
-                )}
-              </IconDiv>
-            </div>
-            <div style={{ flex: 11 }}>
-              <RowDiv>
-                <div style={{ flex: 2 }}>
-                  <ImageStyle src={e.img}></ImageStyle>
-                </div>
-                <div style={{ flex: 9 }}>
-                  {/* 상품 이름 */}
-                  <TextDiv>
-                    <span style={{ fontWeight: "bold" }}>{e.name}</span>
-                    <br></br>
-                    <br></br>
-                    {/* 가격 | 수량 */}
-                    <span>
-                      {e.price}원 | {e.count}개
-                    </span>
-                  </TextDiv>
-                  <br></br>
-                </div>
-              </RowDiv>
-            </div>
-          </Card>
-        ))}
+        <ProductBundleItem
+          orderuid={orderuid}
+          productList={productList}
+          setProductList={setProductList}
+          setIdxSelected={setIdxSelected}
+          idxSelected={idxSelected}
+        ></ProductBundleItem>
 
         <ButtonDiv>
           <Button onClick={selectfunction}>선택완료</Button>
