@@ -138,7 +138,7 @@ public class ReviewServiceImpl implements ReviewService {
         List<Reviews> reviewList = reviewPage.getContent();
         List<ReviewResDto> dtoList = new LinkedList<>();
         Optional<Users> findUser = userRepository.findByEmail(email); // 만약 로그인한사람이 존재하지 않는다면 좋아요 여부를 전부 false로
-        boolean like = false;
+        boolean like;
         boolean reply;
         int likeCount = 0;
         if (findUser.isPresent()) {
@@ -160,7 +160,7 @@ public class ReviewServiceImpl implements ReviewService {
                         return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                     }
                 }
-
+                like = false;
                 reply = false;
                 // 좋아요 여부, 좋아요 개수
                 if (likeRepository.existsByReviewAndUser(reviews, findUser.get())) like = true;
@@ -189,7 +189,7 @@ public class ReviewServiceImpl implements ReviewService {
                         return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                     }
                 }
-
+                like = false;
                 reply = false;
                 // 좋아요 여부-> false, 좋아요 개수
                 likeCount = likeRepository.countByReview(reviews);
@@ -251,7 +251,7 @@ public class ReviewServiceImpl implements ReviewService {
     public BaseRes productReviewDetail(String email, int review_uid) {
         Optional<Users> findUser = userRepository.findByEmail(email); // 만약 로그인한사람이 존재하지 않는다면 좋아요 여부를 전부 false로
         Reviews review = reviewRepository.getReferenceById(review_uid);
-        boolean like = false;
+        boolean like;
         boolean reply;
         int likeCount = 0;
         ReviewResDto dto;
@@ -273,6 +273,7 @@ public class ReviewServiceImpl implements ReviewService {
                     return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                 }
             }
+            like = false;
             reply = false;
             // 좋아요 여부, 좋아요 개수
             if (likeRepository.existsByReviewAndUser(review, findUser.get())) like = true;
@@ -300,6 +301,7 @@ public class ReviewServiceImpl implements ReviewService {
                     return new BaseRes(200, "상품 리뷰 조회 실패 - 옵션이 없음", null);
                 }
             }
+            like = false;
             reply = false;
             // 좋아요 여부-> false, 좋아요 개수
             likeCount = likeRepository.countByReview(review);
