@@ -82,6 +82,8 @@ public class UserServiceImpl implements UserService{
         redisService.setData(loginDto.getEmail(),refreshToken);
 
         TokenDto tokenDto = new TokenDto(accessToken,refreshToken,authentication.getAuthorities().toString());
+
+        dashboardService.doVisit(UtilService.getToday(),"login");
         ResponseDto responseDto = new ResponseDto(tokenDto,"로그인 성공",200);
 
         return responseDto;

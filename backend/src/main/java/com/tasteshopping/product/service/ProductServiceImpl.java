@@ -8,6 +8,7 @@ import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;
 import com.tasteshopping.product.exception.NoAuthorizationException;
+import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
@@ -759,6 +760,10 @@ public class ProductServiceImpl implements ProductService {
              */
 
             HashMap<String, List> hashMap = new HashMap<>();
+
+            if(productOptionsList.isEmpty()){
+                throw new OptionNotFoundException();
+            }
             String name = productOptionsList.get(0).getName();
             ArrayList<String> l = new ArrayList();
             for (int i = 0; i < productOptionsList.size(); ++i) {
