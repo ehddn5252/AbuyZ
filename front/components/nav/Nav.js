@@ -116,6 +116,7 @@ export default function Nav() {
 
   const Logout = async () => {
     await logout();
+    setUsername("");
     // 토큰 재발급 함수 삭제
     clearInterval(changtoken);
     if (router.pathname === "/") {

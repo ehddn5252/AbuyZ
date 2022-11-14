@@ -27,69 +27,57 @@ export async function regisreview(reviewDto) {
 }
 
 // 리뷰 삭제
-export async function delreview(review) {
+export async function delreview(reviewId) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .delete("/review", {
-        review_uid: review.review_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 삭제 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 삭제 실패", response);
-          resolve(response);
-        }
-      });
+    https.delete(`/review/${reviewId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 삭제 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 삭제 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
 }
 
 // 리뷰 좋아요
-export async function likereview(reviewlike) {
+export async function likereview(reviewDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .post("/review/like", {
-        review_uid: reviewlike.review_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 좋아요 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 좋아요 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/review/like", reviewDto).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 좋아요 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 좋아요 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
 }
 
 // 리뷰 좋아요 삭제
-export async function dellikereview(reviewlikedel) {
+export async function dellikereview(reviewId) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .delete("/review/like", {
-        review_uid: reviewlikedel.review_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 좋아요 삭제 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 좋아요 삭제 실패", response);
-          resolve(response);
-        }
-      });
+    https.delete(`/review/like/${reviewId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 좋아요 삭제 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 좋아요 삭제 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
@@ -120,23 +108,19 @@ export async function replyreview(replyDto) {
 }
 
 // 리뷰 답글 삭제
-export async function delreplyreview(replydel) {
+export async function delreplyreview(reviewId) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .delete("/review/reply", {
-        review_uid: replydel.review_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 삭제 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 삭제 실패", response);
-          resolve(response);
-        }
-      });
+    https.delete(`/review/reply/${reviewId}`).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 삭제 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 삭제 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
@@ -163,23 +147,19 @@ export async function review(product_uid, page) {
 }
 
 // 리뷰 신고
-export async function reportreview(review) {
+export async function reportreview(reviewDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .post("/review/report", {
-        review_uid: review.review_uid,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("리뷰 신고 완료", response);
-          resolve(response.data);
-        } else {
-          console.log("리뷰 신고 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/review/report", reviewDto).then((response) => {
+      if (response.status === 200) {
+        console.log("리뷰 신고 완료", response);
+        resolve(response.data);
+      } else {
+        console.log("리뷰 신고 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
