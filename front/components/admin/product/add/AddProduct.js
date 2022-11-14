@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 
 // 컴포넌트
 import AddEditCategory from "./AddEditCategory";
@@ -10,8 +9,6 @@ import AddEditMarketing from "./AddEditMarketing";
 
 // mui
 import Grid2 from "@mui/material/Unstable_Grid2";
-
-import { regisProduct } from "../../../../pages/api/product";
 
 export default function AddProduct() {
   // 소분류 uid
@@ -34,9 +31,6 @@ export default function AddProduct() {
 
   // 키워드
   const [keywords, setKeywords] = useState("");
-
-  // 메타태그
-  const [metaTag, setMetaTag] = useState("");
 
   // 대표 이미지
   const [mainImg, setMainImg] = useState(null);
@@ -65,7 +59,6 @@ export default function AddProduct() {
         <AddEditMarketing
           setBrandName={setBrandName}
           setKeywords={setKeywords}
-          setMetaTag={setMetaTag}
         />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         {/* 이미지 */}
@@ -84,7 +77,6 @@ export default function AddProduct() {
           deliveryFee={deliveryFee}
           brandName={brandName}
           keywords={keywords}
-          metaTag={metaTag}
           mainImg={mainImg}
           extraImg={extraImg}
           descImg={descImg}

@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import AddProduct from "../../../components/admin/product/addEdit/AddProduct";
+import AddProduct from "../../../components/admin/product/add/AddProduct";
 
 export default function Add() {
   return (
     <ProductPage>
-      <AddProduct></AddProduct>
+      <AddProduct />
     </ProductPage>
   );
 }

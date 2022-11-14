@@ -35,9 +35,6 @@ export default function SaleProductOption(props) {
   // 키워드
   const [keywords, setKeywords] = useState(props.keywords);
 
-  // 메타태그
-  const [metaTag, setMetaTag] = useState(props.metaTag);
-
   // 대표 이미지
   const [mainImg, setMainImg] = useState(props.mainImg);
 
@@ -81,11 +78,6 @@ export default function SaleProductOption(props) {
   useEffect(() => {
     setKeywords(props.keywords);
   }, [props.keywords]);
-
-  // 메타태그 실시간 불러오기
-  useEffect(() => {
-    setMetaTag(props.metaTag);
-  }, [props.metaTag]);
 
   // 대표 이미지 실시간 불러오기
   useEffect(() => {
@@ -257,7 +249,6 @@ export default function SaleProductOption(props) {
       brandName: brandName,
       options: options,
       keywords: keywords,
-      metaTag: metaTag,
     };
 
     formData.append(
@@ -303,7 +294,6 @@ export default function SaleProductOption(props) {
       deliveryFee: deliveryFee,
       brandName: brandName,
       keywords: keywords,
-      metaTag: metaTag,
       count: stock,
     };
 
