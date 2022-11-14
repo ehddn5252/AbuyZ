@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import Pagination from "../../coupon/Pagination";
 import moment from "moment";
+
+// 컴포넌트
+import Pagination from "../../coupon/Pagination";
+import EditProduct from "../edit/EditProduct";
 
 // API
 import { delProduct } from "../../../../pages/api/product";
@@ -9,7 +12,6 @@ import { changeEdit } from "../../../../pages/api/product";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
-import Box from "@mui/material/Box";
 
 const header = [
   "수정",
@@ -26,23 +28,6 @@ const header = [
   "상품 등록일",
 ];
 
-const body = [
-  {
-    id: 0,
-    saleStatus: "판매중",
-    bigCategory: "생활/건강",
-    smallCategory: "의류",
-    name: "나이키 청바지",
-    discount: 15,
-    price: 50000,
-    stock: 50,
-    brand: "나이키",
-    keyword: "가성비, 청바지, 바지",
-    metaTag: "나이키, 바지",
-    delivery: 300,
-  },
-];
-
 export default function InquireList(props) {
   // 조회한 상품 정보
   const productInfo = props.productInfo;
@@ -56,8 +41,6 @@ export default function InquireList(props) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
-  console.log(productInfo);
 
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
@@ -109,14 +92,13 @@ export default function InquireList(props) {
       />
       <div
         style={{
-          height: 539,
+          height: 531,
           width: "90%",
           display: "flex",
           justifyContent: "center",
           margin: "auto",
           paddingBottom: "2rem",
           border: "1px solid black",
-          // marginBottom: "3rem",
         }}
       >
         <TableContainer>
@@ -152,7 +134,7 @@ export default function InquireList(props) {
                   />
                 </Td>
                 <Td>
-                  <Edit>수정하기</Edit>
+                  <EditProduct productInfo={e}>수정하기</EditProduct>
                 </Td>
                 {e.status === "selling" ? (
                   <Td>판매중</Td>
@@ -196,22 +178,6 @@ export default function InquireList(props) {
   );
 }
 
-export const MyBox = styled(Box)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
-  .MuiDataGrid-columnHeaders {
-    width: 100%;
-    background: #dadada;
-  }
-  .MuiDataGrid-columnHeaderDraggableContainer {
-    border: 1px;
-    border-color: #000;
-  }
-  .MuiDataGrid-columnHeaderTitleContainer {
-    background: #dadada;
-  }
-`;
-
 const TableContainer = styled.table`
   background-color: white;
   margin: 0;
@@ -242,18 +208,6 @@ const Td = styled.td`
   height: 1rem;
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
-`;
-
-const Edit = styled.button`
-  width: fit-content;
-  background-color: #57a9fb;
-  font-size: 1rem;
-  color: white;
-  border: none;
-  padding: 0.6rem;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 const ButtonBox = styled.div`
