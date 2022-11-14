@@ -25,7 +25,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  //   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -171,7 +170,6 @@ export default function AddEventModal(props) {
                 alignItems: "center",
                 fontSize: "1.5rem",
                 fontWeight: "600",
-                // paddingLeft: "80%",
               }}
             >
               <CloseIcon onClick={handleClose} style={{ cursor: "pointer" }} />
@@ -304,7 +302,6 @@ export default function AddEventModal(props) {
                       vertical: "top",
                       horizontal: "left",
                     },
-                    // getContentAnchorEl: null,
                   }}
                   sx={{ border: 1, height: 50, borderRadius: 0 }}
                 >
@@ -358,7 +355,7 @@ export default function AddEventModal(props) {
               {profileImg ? (
                 <Description>{profileImg.name}</Description>
               ) : (
-                <Description>권장 크기 : 600px X 200px</Description>
+                <Description>권장 크기 : 1000px X 240px</Description>
               )}
             </Grid2>
             {/* 상세 이미지 */}
@@ -402,7 +399,7 @@ export default function AddEventModal(props) {
               {detailImg ? (
                 <Description>{detailImg.name}</Description>
               ) : (
-                <Description>권장 크기 : 600px X 200px</Description>
+                <Description>권장 크기 : 1000px X 240px</Description>
               )}
             </Grid2>
             <Grid2
@@ -411,7 +408,6 @@ export default function AddEventModal(props) {
                 display: "flex",
                 justifyContent: "center",
                 padding: "1rem",
-                // paddingLeft: "1.5rem",
               }}
             >
               <AddButton
@@ -454,15 +450,12 @@ const WaveTag = styled.div`
 `;
 
 export const MyDatePicker = styled(DatePicker)`
-  /* width: 15rem; */
-  /* background-color: transparent; */
   height: 3rem;
   font-size: 1rem;
   font-weight: bold;
   color: black;
   border: 1px solid;
   width: 80%;
-
   .react-datepicker-wrapper {
     width: 10rem;
   }
