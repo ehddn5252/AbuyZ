@@ -5,9 +5,7 @@ import moment from "moment";
 // API
 import {
   inquireProduct,
-  inquireProductStatus,
   inquireProductStatusCount,
-  getStockInventory,
 } from "../../../../pages/api/product";
 
 // 컴포넌트
@@ -22,7 +20,6 @@ import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
 import HourglassBottomOutlined from "@mui/icons-material/HourglassBottomOutlined";
-import ProductionQuantityLimitsOutlined from "@mui/icons-material/ProductionQuantityLimitsOutlined";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductSearch() {
@@ -158,11 +155,9 @@ export default function SaleProductSearch() {
     setProductInfo(tmp);
   };
 
-  // 모든 상품 상태 조회
-  const getProductStatus = async () => {
-    const ps = await inquireProductStatus();
-    console.log(ps);
-  };
+  useEffect(() => {
+    getProduct();
+  }, []);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
@@ -181,7 +176,6 @@ export default function SaleProductSearch() {
                 borderRadius: "50%",
                 padding: "0.5rem",
               }}
-              onClick={getProductStatus}
             />
             <Status>
               <SearchTitle>전체</SearchTitle>
@@ -224,24 +218,6 @@ export default function SaleProductSearch() {
               <StatusCount>{ready}건</StatusCount>
             </Status>
           </StatusBox>
-          {/* 교환/환불 */}
-          {/* <StatusBox>
-            <ProductionQuantityLimitsOutlined
-              sx={{
-                // margin: "2rem",
-                marginRight: "1rem",
-                fontSize: "3.5rem",
-                color: "#ffffff",
-                background: "#3B7CBE",
-                borderRadius: "50%",
-                padding: "0.5rem",
-              }}
-            />
-            <Status>
-              <SearchTitle>교환/환불</SearchTitle>
-              <StatusCount>0건</StatusCount>
-            </Status>
-          </StatusBox> */}
           {/* 판매완료 */}
           <StatusBox>
             <TaskAltOutlinedIcon
@@ -333,7 +309,6 @@ const Status = styled.div`
 export const SearchTitle = styled.p`
   font-size: 1.5rem;
   font-weight: 800;
-  /* margin-bottom: 1rem; */
   margin-bottom: 0;
 `;
 
@@ -342,7 +317,6 @@ const StatusCount = styled.p`
   font-weight: 1000;
   margin-top: 0;
   margin-bottom: 1rem;
-  /* padding-left: 1.5rem; */
 `;
 
 const ButtonBox = styled.div`
@@ -356,7 +330,6 @@ const ResetButton = styled.button`
   background-color: #ffffff;
   color: black;
   border: 1px solid;
-  /* border-radius: 0.8rem; */
   height: 3rem;
   width: 6rem;
   font-size: 1.3rem;
@@ -369,7 +342,6 @@ const SearchButton = styled.button`
   background-color: #57a9fb;
   color: white;
   border: 1px solid;
-  /* border-radius: 0.8rem; */
   margin-left: 1rem;
   height: 3rem;
   width: 7rem;

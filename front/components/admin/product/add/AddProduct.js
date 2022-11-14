@@ -90,43 +90,7 @@ export default function AddProduct() {
           descImg={descImg}
         />
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-        {/* <ButtonBox>
-          <CancelButton>취소</CancelButton>
-          <AddButton>등록</AddButton>
-        </ButtonBox> */}
       </Grid2>
     </Grid2>
   );
 }
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
-`;
-
-const CancelButton = styled.button`
-  background-color: #fff;
-  color: black;
-  border: 1px solid;
-  margin: 1rem;
-  height: 3rem;
-  width: 10rem;
-  font-size: 1rem;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const AddButton = styled.button`
-  background-color: #57a9fb;
-  color: white;
-  border: 1px solid;
-  margin: 1rem;
-  height: 3rem;
-  width: 15rem;
-  font-size: 1rem;
-  &:hover {
-    cursor: pointer;
-  }
-`;

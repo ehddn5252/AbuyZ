@@ -196,7 +196,6 @@ export default function EditCouponModal(props) {
                         vertical: "top",
                         horizontal: "left",
                       },
-                      // getContentAnchorEl: null,
                     }}
                     sx={{ border: 1, height: 50, borderRadius: 0 }}
                   >
@@ -384,7 +383,6 @@ export default function EditCouponModal(props) {
                 padding: "0",
                 width: "100%",
                 background: "white",
-                // height: "5rem",
               }}
             >
               <ButtonBox>
