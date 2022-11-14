@@ -30,11 +30,14 @@ public class ReviewResDto {
     private String replyContent; //답글내용
     private Date replyDate; //답글시간
 
+    private String nickName;
 
     public static ReviewResDto from(Reviews reviews, boolean like, int likeCount, boolean reply, Reviews replyReview, List<HashMap<String,String>> options){
         if(reply){
             return ReviewResDto.builder()
                     .id(reviews.getUid())
+                    .email(reviews.getUser().getEmail())
+                    .nickName(reviews.getUser().getNickname())
                     .email(reviews.getUser().getEmail())
                     .content(reviews.getContent())
                     .rating(reviews.getRating())
@@ -51,6 +54,7 @@ public class ReviewResDto {
             return ReviewResDto.builder()
                     .id(reviews.getUid())
                     .email(reviews.getUser().getEmail())
+                    .nickName(reviews.getUser().getNickname())
                     .content(reviews.getContent())
                     .rating(reviews.getRating())
                     .date(reviews.getDate())
