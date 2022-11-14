@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import MyCouponSelectModal from "./MyCouponSelectModal";
-
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 export default function ProductSaleInfo({ paymentList }) {
   const [modalOpen, setModalOpen] = useState(false);
+  console.log(paymentList);
   let categoryList = [];
   for (var i = 0; i < paymentList.length; i++) {
     categoryList.push(paymentList[i].productDto.bigCategoryUid);
@@ -21,10 +22,22 @@ export default function ProductSaleInfo({ paymentList }) {
       (paymentList[j].productDto.discountRate / 100) *
       paymentList[j].productCount;
   }
+
+  let deliveryFee = 0;
+  let brandlist = [];
+  for (var k = 0; k < paymentList.length; k++) {
+    if (!brandlist.includes(paymentList[k].productDto.brandName)) {
+      brandlist.push(paymentList[k].productDto.brandName);
+      deliveryFee += paymentList[k].productDto.deliveryFee;
+    }
+  }
   const showModal = () => {
     setModalOpen(true);
   };
 
+  const deletecoupon = () => {
+    setCouponDiscount(0);
+  };
   const [couponDiscount, setCouponDiscount] = useState(-1);
   return (
     <div>
@@ -72,9 +85,10 @@ export default function ProductSaleInfo({ paymentList }) {
         <RightDiv>
           {couponDiscount > 0 ? (
             <div>
-              <ElementTitle>-{couponDiscount.toLocaleString("ko-KR")}원 </ElementTitle>
+              <ElementTitle>
+                -{couponDiscount.toLocaleString("ko-KR")}원{" "}
+              </ElementTitle>
               <SelectButton onClick={showModal}>쿠폰변경</SelectButton>
-              <SelectButton onClick={showModal}>쿠폰삭제</SelectButton>
             </div>
           ) : (
             <SelectButton onClick={showModal}>쿠폰사용</SelectButton>
@@ -86,9 +100,7 @@ export default function ProductSaleInfo({ paymentList }) {
           <ElementTitle>배송비</ElementTitle>
         </LeftDiv>
         <RightDiv>
-          <ElementTitle>
-            {/* {deliveryFee.toLocaleString("ko-KR")}원 */}
-          </ElementTitle>
+          <ElementTitle>{deliveryFee.toLocaleString("ko-KR")}원</ElementTitle>
         </RightDiv>
       </AllDiv>
       <hr></hr>
@@ -97,7 +109,7 @@ export default function ProductSaleInfo({ paymentList }) {
           <Title>최종 결제 금액</Title>
         </LastLeftDiv>
         <RightDiv>
-          {/* {couponDiscount === -1 ? (
+          {(couponDiscount === -1) | (couponDiscount === 0) ? (
             <span style={{ fontWeight: "bold", fontSize: "1.9rem" }}>
               {(priceadd - discountprice + deliveryFee).toLocaleString("ko-KR")}
               원
@@ -112,7 +124,7 @@ export default function ProductSaleInfo({ paymentList }) {
               ).toLocaleString("ko-KR")}
               원
             </span>
-          )} */}
+          )}
         </RightDiv>
       </AllDiv>
       {modalOpen && (

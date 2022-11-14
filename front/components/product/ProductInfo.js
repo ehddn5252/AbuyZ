@@ -94,6 +94,7 @@ export default function ProductInfo() {
               productOptions: [optionValue],
             },
             productDto: {
+              brandName: product.products.brandName,
               bigCategoryUid: product.products.bigCategoryUid,
               repImg: product.products.repImg,
               name: product.products.name,
