@@ -30,9 +30,6 @@ export default function SaleProductSearch() {
   // 판매 중
   const [selling, setSelling] = useState(0);
 
-  // 승인 대기
-  const [ready, setReady] = useState(0);
-
   // 판매완료
   const [soldOut, setSoldOut] = useState(0);
 
@@ -44,17 +41,14 @@ export default function SaleProductSearch() {
   // 들고오는 함수
   const getProductStatusCount = async () => {
     const psc1 = await inquireProductStatusCount("selling");
-    const psc2 = await inquireProductStatusCount("getting_ready");
-    const psc3 = await inquireProductStatusCount("sold_out");
+    const psc2 = await inquireProductStatusCount("sold_out");
 
-    setTotal(psc1 + psc2 + psc3);
+    setTotal(psc1 + psc2);
     setSelling(psc1);
-    setReady(psc2);
-    setSoldOut(psc3);
+    setSoldOut(psc2);
   };
 
   // 상품 검색 키워드
-
   // 상품 전체 목록
   const [productInfo, setProductInfo] = useState([]);
 
@@ -198,24 +192,6 @@ export default function SaleProductSearch() {
             <Status>
               <SearchTitle>판매중</SearchTitle>
               <StatusCount>{selling}건</StatusCount>
-            </Status>
-          </StatusBox>
-          {/* 승인대기 */}
-          <StatusBox>
-            <HourglassBottomOutlined
-              sx={{
-                // margin: "2rem",
-                marginRight: "1rem",
-                fontSize: "3.5rem",
-                color: "#ffffff",
-                background: "#3B7CBE",
-                borderRadius: "50%",
-                padding: "0.5rem",
-              }}
-            />
-            <Status>
-              <SearchTitle>승인대기</SearchTitle>
-              <StatusCount>{ready}건</StatusCount>
             </Status>
           </StatusBox>
           {/* 판매완료 */}

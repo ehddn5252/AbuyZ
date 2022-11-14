@@ -150,7 +150,6 @@ export async function productDetail(product_id) {
       .then((response) => {
         if (response.status === 200) {
           console.log("상품 상세 페이지 성공", response);
-
           resolve(response.data);
         } else {
           console.log("상품 상세 페이지 실패", response);

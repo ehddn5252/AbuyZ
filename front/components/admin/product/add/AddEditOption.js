@@ -10,7 +10,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-export default function SaleProductOption(props) {
+export default function AddEditOption(props) {
   // 부모 상속 --------------------------------------------
   // 소분류 uid
   const [smallCategoriesUid, setSmallCategoriesUid] = useState(
