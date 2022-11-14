@@ -67,9 +67,8 @@ public class ReviewController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @DeleteMapping()
-    public ResponseEntity<BaseRes> reviewDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto) {
-        int review_uid = dto.getReview_uid();
+    @DeleteMapping("/{review_uid}")
+    public ResponseEntity<BaseRes> reviewDelete(@AuthenticationPrincipal String email, @PathVariable int review_uid) {
         return new ResponseEntity<>(reviewService.reviewDelete(email, review_uid), HttpStatus.OK);
     }
 
@@ -79,9 +78,8 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.reviewLike(email, review_uid), HttpStatus.OK);
     }
 
-    @DeleteMapping("/like")
-    public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto) {
-        int review_uid = dto.getReview_uid();
+    @DeleteMapping("/like/{review_uid}")
+    public ResponseEntity<BaseRes> reviewLikeDelete(@AuthenticationPrincipal String email, @PathVariable int review_uid) {
         return new ResponseEntity<>(reviewService.reviewLikeDelete(email, review_uid), HttpStatus.OK);
     }
 
@@ -90,9 +88,8 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.reviewReply(email, dto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/reply")
-    public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email, @RequestBody ReviewUIdDto dto) {
-        int review_uid = dto.getReview_uid();
+    @DeleteMapping("/reply/{review_uid}")
+    public ResponseEntity<BaseRes> reviewReplyDelete(@AuthenticationPrincipal String email, @PathVariable int review_uid) {
         return new ResponseEntity<>(reviewService.reviewReplyDelete(email, review_uid), HttpStatus.OK);
     }
 
