@@ -21,7 +21,7 @@ public class UtilService {
     }
 
     public static Date getTodayTime() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh-mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
 
         Date date = new Date(System.currentTimeMillis());
         String s = formatter.format(date).toString();

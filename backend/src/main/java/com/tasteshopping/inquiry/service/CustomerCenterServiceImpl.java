@@ -1,29 +1,30 @@
 package com.tasteshopping.inquiry.service;
 
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.inquiry.Exception.NoInquiryException;
 import com.tasteshopping.inquiry.Exception.NotCorrectUserException;
 import com.tasteshopping.inquiry.dto.*;
 import com.tasteshopping.inquiry.entity.CustomerCenters;
 import com.tasteshopping.inquiry.repository.CustomerCenterRepository;
 import com.tasteshopping.inquiry.repository.InquiryRepositoryImpl;
-import com.tasteshopping.product.exception.NoAuthorizationException;
+import com.tasteshopping.order.entity.Orders;
+import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.review.entity.Reports;
 import com.tasteshopping.review.repository.ReportRepository;
+import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.ResponseDto;
 import com.tasteshopping.user.dto.ResultDto;
-import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,10 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     private final ReportRepository reportRepository;
 
     private final InquiryRepositoryImpl inquiryRepository;
+
+    private final OrderRepository orderRepository;
+
+    private final AwsS3Service awsS3Service;
 
     @Override
     public Integer getNoReplyNum(String status) {
@@ -121,24 +126,36 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
     }
 
     @Override
-    public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto) {
+    public BaseRes createCustomerCenterByUid(String email, CustomerCenterWriteReqDto customerCenterWriteReqDto, MultipartFile descriptionImg) {
         try {
             Optional<Users> usersOptional = userRepository.findByEmail(email);
             CustomerCenters customerCenter = new CustomerCenters();
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date(System.currentTimeMillis());
-            String s = formatter.format(date).toString();
-            try {
-                date = formatter.parse(s);
-            } catch (ParseException pErr) {
-                System.out.println(pErr);
+            String imagePath = null; //파일서버에업로드후 img_url 데려오기
+            BaseRes res = null;
+            System.out.println("================");
+            System.out.println(descriptionImg);
+            System.out.println("================");
+            if (descriptionImg != null) {
+                try {
+                    imagePath = awsS3Service.uploadImgFile(descriptionImg);
+                    customerCenter.setImgUrl(imagePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    res = new BaseRes(202, "파일 업로드 에러", null);
+                    return res;
+                }
             }
-            customerCenter.setStart_date(date);
+
+
+            Optional<Orders> order =  orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
+            if(order.isPresent()) {
+                customerCenter.setOrder(order.get());
+            }
+            customerCenter.setStart_date(UtilService.getTodayTime());
             customerCenter.setContent(customerCenterWriteReqDto.getContent());
             customerCenter.setStatus(Status.답변_미완료.toString());
             customerCenter.setTitle(customerCenterWriteReqDto.getTitle());
-            customerCenter.setImgUrl(customerCenterWriteReqDto.getImg_url());
             customerCenter.setCustomerCenterCategory(customerCenterWriteReqDto.getCustomer_center_category());
             customerCenter.setUser(usersOptional.get());
             customerCenterRepository.save(customerCenter);
