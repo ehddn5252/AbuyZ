@@ -54,6 +54,7 @@ export default function EditCouponModal(props) {
   const [startDate, setStartDate] = useState(
     new Date(props.couponInfo.start_date)
   );
+
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date(props.couponInfo.end_date));
 
@@ -84,6 +85,7 @@ export default function EditCouponModal(props) {
     setSalePlaceholder(props.couponInfo.discount_price);
   };
 
+  // 쿠폰수정 API
   const modiCoupon = () => {
     const couponDto = {
       name: name,

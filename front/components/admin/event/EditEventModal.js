@@ -52,7 +52,9 @@ export default function EditEventModal(props) {
 
   // 적용 쿠폰
   const [selectCoupon, setSelectCoupon] = useState(
-    props.eventInfo.coupon_lists[0].uid
+    props.eventInfo.coupon_lists[0]
+      ? props.eventInfo.coupon_lists[0].uid
+      : "쿠폰"
   );
 
   // 쿠폰명 셀렉트 했을 때
@@ -315,7 +317,11 @@ export default function EditEventModal(props) {
               }}
             >
               <FormControl sx={{ minWidth: 200, width: 300 }}>
-                <InputLabel>{props.eventInfo.coupon_lists[0].name}</InputLabel>
+                <InputLabel>
+                  {props.eventInfo.coupon_lists[0]
+                    ? props.eventInfo.coupon_lists[0].name
+                    : "쿠폰"}
+                </InputLabel>
                 <Select
                   value={selectCoupon}
                   onChange={handleChange}
