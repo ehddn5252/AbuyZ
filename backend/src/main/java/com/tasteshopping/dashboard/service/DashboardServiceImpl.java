@@ -5,7 +5,9 @@ import com.tasteshopping.dashboard.dto.AnalysisDataDto;
 import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.dashboard.entity.AnalysisData;
 import com.tasteshopping.dashboard.repository.AnalysisDataRepository;
+import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.review.dto.ReviewDto;
@@ -113,15 +115,25 @@ public class DashboardServiceImpl implements DashboardService {
 
     public SummaryDto addDailyOrder(SummaryDto summaryDto) {
 //        Date date = UtilService.getToday();
-        Date startDate = UtilService.getDateAfterDay(0);
+        Date startDate = UtilService.getToday();
         Date endDate = UtilService.getDateAfterDay(1);
+        System.out.println("================");
+        System.out.println(startDate);
+        System.out.println(endDate);
 
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
         Integer count = 0;
         for (int i = 0; i < orderLists.size(); ++i) {
-            count += orderRepository.findByOrderList(orderLists.get(i)).size();
-            totalPrice += orderLists.get(i).getTotalPrice();
+            // 여기에서 오더가 아닌 것들 가져와야 함.
+            List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
+            for(int j=0;j< orders.size();++j){
+                String status = orders.get(j).getStatus();
+                if(status.equals(OrderStatus.PROCESS) ||status.equals(OrderStatus.SOLD)){
+                    count+=1;
+                    totalPrice+=orders.get(j).getPrice();
+                }
+            }
         }
         summaryDto.setOrderNum(count);
         summaryDto.setTotalPrice(count);
