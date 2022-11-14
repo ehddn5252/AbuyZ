@@ -152,6 +152,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public BaseRes changeStatus(Integer orderUid, String status) {
         Orders order = orderRepository.findById(orderUid).get();
+        if(status.equals(OrderStatus.CANCEL.toString())){
+            orderCancel(orderUid);
+        }
         order.setStatus(status);
         orderRepository.save(order);
         return new BaseRes(200, "주문 상태 변경 성공", null);
