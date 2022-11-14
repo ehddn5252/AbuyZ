@@ -56,3 +56,9 @@ export const basketProducts = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const kakaoUid = atom({
+  key: "kakaoUid",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});

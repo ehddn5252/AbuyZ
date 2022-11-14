@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/globals.css";
 import "../styles/base.css";
+
+// 하위 컴포넌트
 import Nav from "../components/nav/Nav.js";
 import AdminNav from "../components/nav/AdminNav.js";
 import AdminSideNav from "../components/nav/AdminSideNav.js";
 import Footer from "../components/nav/Footer.js";
 import styled from "@emotion/styled";
 
+// api 요청
+import axios from "axios";
+import https from "./api/https";
 // recoil
 import { RecoilRoot } from "recoil";
 import { useRouter } from "next/router";
@@ -36,7 +41,27 @@ function MyApp({ Component, pageProps }) {
     if (!Kakao.isInitialized()) {
       Kakao.init("204f7abed9a6558eb3411fabf8202302");
     }
+    // IP 가져오기
+    // getIp();
   }, []);
+
+  // IP 가져오기
+  // const getIp = async () => {
+  //   try {
+  //     const response = await axios.get("https://api.ipify.org?format=json");
+  //     const ip = response.data.ip;
+
+  //     https
+  //       .post("/dashboard/visit-IP", {
+  //         userIp: ip,
+  //       })
+  //       .then((response) => {
+  //         console.log(response);
+  //       });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <RecoilRoot>
       <MainContainer>

@@ -15,7 +15,7 @@ export default function ProductItem({ product }) {
   const goDetail = () => {
     router.push(`/detail/${product.uid}`);
   };
-  return (
+  return product ? (
     <Container>
       <ImgBox>
         <img
@@ -40,7 +40,7 @@ export default function ProductItem({ product }) {
           )}
         </div>
 
-        {product.name.length > 35 ? (
+        {product.name?.length > 35 ? (
           <p style={{ height: "2rem" }}>{product.name.slice(0, 35)}...</p>
         ) : (
           <p style={{ height: "2rem" }}>{product.name}</p>
@@ -83,7 +83,7 @@ export default function ProductItem({ product }) {
         ) : null} */}
       </ContentBox>
     </Container>
-  );
+  ) : null;
 }
 
 const DiscountContainer = styled.div``;

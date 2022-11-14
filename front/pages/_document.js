@@ -8,6 +8,7 @@ import Document, {
   NextScript,
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
+
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
@@ -40,6 +41,7 @@ export default class MyDocument extends Document {
         <Head>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
+
         <body className="min-h-screen bg-gray-800">
           <Main />
           <NextScript />
