@@ -1,5 +1,7 @@
 package com.tasteshopping.wish.service;
 
+import com.tasteshopping.common.service.UtilService;
+import com.tasteshopping.dashboard.service.DashboardService;
 import com.tasteshopping.product.entity.Products;
 import com.tasteshopping.product.repository.ProductRepository;
 import com.tasteshopping.user.dto.ResponseDto;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -26,6 +29,9 @@ public class WishServiceImpl implements WishService {
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
     private final ProductRepository productRepository;
+
+    private final DashboardService dashboardService;
+
     @Override
     public ResponseDto getWishList(String email, Pageable pageable) {
         ResponseDto responseDto = new ResponseDto();
@@ -64,6 +70,9 @@ public class WishServiceImpl implements WishService {
                             .products(products)
                             .build();
         wishRepository.save(wishLists);
+
+        // 찜하기시 찜 추가
+        dashboardService.doVisit(UtilService.getToday(),"like");
         responseDto.setMessage("추가 완료");
         responseDto.setData(new ResultDto(true));
         return responseDto;
@@ -81,6 +90,7 @@ public class WishServiceImpl implements WishService {
         }
         wishRepository.delete(wishLists.get());
         responseDto.setData(new ResultDto(true));
+        dashboardService.cancelVisit(UtilService.getToday(),"like");
         responseDto.setMessage("삭제 성공");
         return responseDto;
     }

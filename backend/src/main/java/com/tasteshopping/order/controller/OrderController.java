@@ -45,6 +45,12 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",orderListDtos));
     }
 
+    @GetMapping("/from-before-week")
+    public ResponseEntity<BaseRes> getOrderListsWeek(@AuthenticationPrincipal String email) {
+        List<OrderListDto> orderListDtos = orderListService.getOrderListsWeek(email);
+        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "server test 성공!",orderListDtos));
+    }
+
     @GetMapping("/{order_lists_uid}")
     public ResponseEntity<BaseRes> getOrdersFromOrderList(@AuthenticationPrincipal String email,
                                                           @PathVariable Integer order_lists_uid) {

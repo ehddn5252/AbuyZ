@@ -85,44 +85,35 @@ public class CustomerCenterController {
         if (email.equals("anonymousUser")) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
         }
-        String imagePath = null; //파일서버에업로드후 img_url 데려오기
-        BaseRes res = null;
-        try {
-            imagePath = awsS3Service.uploadImgFile(multipartFile);
-            customerCenterWriteReqDto.setImg_url(imagePath);
-            res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto);
-        } catch (IOException e) {
-            e.printStackTrace();
-            res = new BaseRes(202, "파일 업로드 에러", null);
-        }
-
+        BaseRes res;
+        res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto, multipartFile);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    @PostMapping("/list")
-    public ResponseEntity<BaseRes> writeInquiryList(@AuthenticationPrincipal String email,
-                                                    @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
-                                                    @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
-        if (email.equals("anonymousUser")) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
-        }
-        String imagePath = null; //파일서버에업로드후 img_url 데려오기
-        BaseRes res = null;
-        if (multipartFiles != null) {
-            try {
-                for (int i = 0; i < multipartFiles.length; ++i) {
-                    imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
-                    customerCenterWriteReqDto.setImg_url(imagePath);
-                    res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                res = new BaseRes(202, "파일 업로드 에러", null);
-            }
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(res);
-    }
+//    @PostMapping("/list")
+//    public ResponseEntity<BaseRes> writeInquiryList(@AuthenticationPrincipal String email,
+//                                                    @RequestPart CustomerCenterWriteReqDto customerCenterWriteReqDto,
+//                                                    @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles) {
+//        if (email.equals("anonymousUser")) {
+//            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(403, "로그인을 해주세요"));
+//        }
+//        String imagePath = null; //파일서버에업로드후 img_url 데려오기
+//        BaseRes res = null;
+//        if (multipartFiles != null) {
+//            try {
+//                for (int i = 0; i < multipartFiles.length; ++i) {
+//                    imagePath = awsS3Service.uploadImgFile(multipartFiles[i]);
+//                    customerCenterWriteReqDto.setImg_url(imagePath);
+//                    res = customerCenterService.createCustomerCenterByUid(email, customerCenterWriteReqDto);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                res = new BaseRes(202, "파일 업로드 에러", null);
+//            }
+//        }
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(res);
+//    }
 
 
     @DeleteMapping("/{uid}")

@@ -2,12 +2,14 @@ package com.tasteshopping.inquiry.entity;
 
 import com.tasteshopping.inquiry.dto.CustomerCenterDto;
 import com.tasteshopping.inquiry.dto.Status;
+import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.user.entity.Users;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,7 +31,7 @@ public class CustomerCenters {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name ="img_url")
+    @Column(name = "img_url")
     private String imgUrl;
 
     @CreatedDate
@@ -41,14 +43,19 @@ public class CustomerCenters {
 
     String customerCenterCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY )
-    @JoinColumn(name="users_uid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_uid")
     private Users user;
 
     @Column
     private String reply;
 
-    public CustomerCenterDto toDto(){
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orders_uid")
+    private Orders order;
+
+    public CustomerCenterDto toDto() {
 
         CustomerCenterDto customerCenterDto = new CustomerCenterDto();
         customerCenterDto.setCustomerCenterCategory(customerCenterCategory);
@@ -65,7 +72,7 @@ public class CustomerCenters {
 
     }
 
-    public void update(String content){
+    public void update(String content) {
         this.end_date = new Date();
         this.reply = content;
         this.status = Status.답변_완료.toString();
