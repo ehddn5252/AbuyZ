@@ -1,5 +1,6 @@
 package com.tasteshopping.dashboard.scheduler;
 
+import com.tasteshopping.common.service.RedisService;
 import com.tasteshopping.dashboard.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +16,8 @@ public class AnalysisDataScheduler {
 
     private final DashboardService dashboardService;
 
+    private final RedisService redisService;
+
     @Scheduled(cron = "0 0 0 * * ?")// 매 00:00 실행
     @Transactional
     public void dailyAnalysisDataUpdate() {
@@ -28,5 +31,11 @@ public class AnalysisDataScheduler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")// 매 00:00 실행
+    @Transactional
+    public void dailyVisitorUpdate() {
+        redisService.createSetDataForm("userIp", "127.0.0.1", 3600 * 23 + 3597L);
     }
 }
