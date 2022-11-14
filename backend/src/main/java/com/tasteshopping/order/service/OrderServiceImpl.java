@@ -50,13 +50,13 @@ public class OrderServiceImpl implements OrderService {
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(OrderStatus.PROCESS.toString());
         for (int i = 0; i < cartList.size(); ++i) {
-            orderLists = pay(cartList.get(i),orderLists,user,orderLists.getTotalPrice());
+            orderLists = pay(cartList.get(i), orderLists, user, orderLists.getTotalPrice());
             // 여기에서
         }
         orderListRepository.save(orderLists);
     }
 
-    public OrderLists createOrderLists(Users user){
+    public OrderLists createOrderLists(Users user) {
         OrderLists orderLists = new OrderLists();
         orderLists.setUser(user);
         orderLists.setTotalPrice(0);
@@ -66,14 +66,14 @@ public class OrderServiceImpl implements OrderService {
         return orderListRepository.save(orderLists);
     }
 
-    public OrderLists pay(Carts cart, OrderLists orderLists, Users user,int totalPrice){
+    public OrderLists pay(Carts cart, OrderLists orderLists, Users user, int totalPrice) {
         Orders orders = new Orders();
         orders.setOrderList(orderLists);
         orders.setCount(cart.getProductCount());
         orders.setStatus(OrderStatus.PROCESS.toString());
         Inventories inventory = cart.getInventory();
         // 상품 할인율 적용
-        Integer price =(100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice()/100 + inventory.getPrice();
+        Integer price = (100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice() / 100 + inventory.getPrice();
         if (orders.getCoupon() != null) {
             price = price - orders.getCoupon().getDiscountPrice();
         }
@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(OrderStatus.PROCESS.toString());
         Carts cart = cartRepository.findByUserAndCurrentUid(user);
-        orderLists = pay(cart,orderLists,user,0);
+        orderLists = pay(cart, orderLists, user, 0);
 
         // 아래는 배송료 추가하는 로직
 //        orderLists.setTotalPrice(orderLists.getOrders().get(0).getInventory().getProduct().getDeliveryFee()+orderLists.getTotalPrice());
@@ -117,19 +117,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public BaseRes orderCancel(Integer orderUid) {
-        // 고객이 취소 요청한 것을 응함
+        // 고객이 취소하거나 환불 요청한 것을 응함
         Orders order = orderRepository.findById(orderUid).get();
         OrderLists orderLists = orderListRepository.findById(order.getOrderList().getUid()).get();
-        if (order.getStatus().equals(OrderStatus.CANCEL_REQUEST.toString())) {
+        if (order.getStatus().equals(OrderStatus.CANCEL_REQUEST.toString()) || order.getStatus().equals(OrderStatus.REFUND_REQUEST.toString())) {
             order.setStatus(OrderStatus.CANCEL.toString());
             order.getInventory().setCount(order.getInventory().getCount() + order.getCount());
             orderLists.setTotalPrice(orderLists.getTotalPrice() - (order.getPrice() * order.getCount()));
             // 재고 다시 돌려 놓음
             orderListRepository.save(orderLists);
             orderRepository.save(order);
-            return new BaseRes(200, "취소 성공", null);
+            return new BaseRes(200, "취소 or 환불 성공", null);
         } else {
-            return new BaseRes(202, "취소할 수 없는 상품입니다.", null);
+            return new BaseRes(202, "취소 or 환불 할 수 없는 상품입니다.", null);
         }
     }
 
@@ -149,9 +149,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public BaseRes changeStatus(Integer orderUid, String status) {
         Orders order = orderRepository.findById(orderUid).get();
-        if(status.equals(OrderStatus.CANCEL.toString()) ||status.equals(OrderStatus.REFUND.toString())){
+        // 상태 변경하는 것이 CANCEL 이나 REFUND 면 주문 취소와 같은 로직을 태운다.
+        if (status.equals(OrderStatus.CANCEL.toString()) || status.equals(OrderStatus.REFUND.toString())) {
             orderCancel(orderUid);
         }
         order.setStatus(status);
@@ -163,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
     public BaseRes getStatus(String status) {
         List<Orders> l = orderRepository.findByStatus(status);
         List<OrderDto> newL = new ArrayList<>();
-        for(int i=0;i<l.size();++i){
+        for (int i = 0; i < l.size(); ++i) {
             newL.add(l.get(i).toDto());
         }
         return new BaseRes(200, "주문 상태 가져오기 성공", newL);
@@ -179,7 +181,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer getNumByStatus(String status) {
         List<Orders> orders = orderRepository.findByStatus(status);
-        if(orders.size()!=0){
+        if (orders.size() != 0) {
             return orders.size();
         }
         return 0;
