@@ -61,12 +61,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmail(email);
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
-            CustomerCenters customerCenters = l.get(i).get();
-            CustomerCenterDto customerCenterDto = customerCenters.toDto();
-            if(customerCenters.getOrder()!=null) {
-                customerCenterDto.setProductsUid(customerCenters.getOrder().getInventory().getProduct().getUid());
-            }
-            new_l.add(customerCenterDto);
+            new_l.add(l.get(i).get().toDto());
         }
         if (new_l.size() == 0) {
             throw new NoInquiryException();
@@ -79,10 +74,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         List<CustomerCenters> l = customerCenterRepository.findAllFetchJoin();
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
-            CustomerCenters customerCenters = l.get(i);
-            CustomerCenterDto customerCenterDto = customerCenters.toDto();
-            customerCenterDto.setProductsUid(customerCenters.getOrder().getInventory().getProduct().getUid());
-            new_l.add(customerCenterDto);
+            new_l.add(l.get(i).toDto());
         }
         return new_l;
     }

@@ -67,6 +67,11 @@ public class CustomerCenters {
         customerCenterDto.setUid(uid);
         customerCenterDto.setImgUrl(imgUrl);
         customerCenterDto.setReply(this.reply);
+        
+        if(order!=null){
+            customerCenterDto.setProductsUid(order.getInventory().getProduct().getUid());
+        }
+
         return customerCenterDto;
 
     }
