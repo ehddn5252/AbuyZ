@@ -1,5 +1,6 @@
 package com.tasteshopping.dashboard.service;
 
+import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.dashboard.dto.AnalysisDataDto;
 import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.review.dto.ReviewDto;
@@ -29,4 +30,6 @@ public interface DashboardService {
    Integer getReportNum();
 
    int getNoReplyNum();
+
+    BaseRes doVisitWithIp(String userIp);
 }
