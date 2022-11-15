@@ -52,7 +52,7 @@ public class Orders {
     String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupones_uid")
+    @JoinColumn(name = "coupons_uid")
     Coupons coupon;
 
     @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)

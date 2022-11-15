@@ -15,4 +15,6 @@ public class CartDto {
     private Integer productCount;
     private LinkedHashMap<String,String> optionValues;
     private Integer inventoriesUid;
+    private Integer couponsUid;
+
 }

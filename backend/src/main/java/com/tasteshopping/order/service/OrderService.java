@@ -6,7 +6,7 @@ import com.tasteshopping.common.dto.BaseRes;
 import java.util.List;
 
 public interface OrderService {
-    void cartPay(String email);
+    void cartPay(String email, List<Integer> coupons);
 
 //    void basicPay(String email, CartDto cartDto);
     void basicPay(String email, CartDto cartDto);

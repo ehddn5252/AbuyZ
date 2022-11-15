@@ -18,12 +18,15 @@ public class CartReqDto {
     private Integer users_uid;
     private Integer inventories_uid;
 
+    private Integer coupons_uid;
+
     public CartDto toDto(){
         CartDto cartsDto = new CartDto();
         cartsDto.setProductsUid(products_uid);
         cartsDto.setProductCount(product_count);
         cartsDto.setOptionValues(option_values);
         cartsDto.setInventoriesUid(inventories_uid);
+        cartsDto.setCouponsUid(coupons_uid);
         return cartsDto;
     }
 }
