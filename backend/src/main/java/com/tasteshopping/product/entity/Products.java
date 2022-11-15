@@ -7,6 +7,7 @@ import com.tasteshopping.product.dto.ProductBoDto;
 import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductCreateModifyDto;
 import com.tasteshopping.product.dto.ProductDto;
+import com.tasteshopping.review.entity.Reviews;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -82,6 +83,9 @@ public class Products {
 
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Reviews> reviews;
 
     /*
         Integer productsUid; // product에서 가져옴
