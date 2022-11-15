@@ -73,7 +73,9 @@ export default function ProductItem({ product }) {
             </DiscountContainer>
           ) : (
             <div>
-              <NoDiscount>{product.price.toLocaleString("ko-KR")}원</NoDiscount>
+              <NoDiscount>
+                {product.price?.toLocaleString("ko-KR")}원
+              </NoDiscount>
             </div>
           )}
         </div>
