@@ -19,7 +19,7 @@ import { useRecoilState } from "recoil";
 export default function BasketPayment() {
   const router = useRouter();
   const [basketList, setBasketList] = useRecoilState(basketProducts);
-  const [paymentValue, setpaymentValue] = useRecoilState(basketProducts);
+  const [paymentValue, setpaymentValue] = useRecoilState(paymentProduct);
   const [address, setAddress] = useState(
     "녹산 송정동 1627-5 그린코어 오피스텔"
   );

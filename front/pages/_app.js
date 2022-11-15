@@ -50,7 +50,6 @@ function MyApp({ Component, pageProps }) {
     try {
       const response = await axios.get("https://api.ipify.org?format=json");
       const ip = response.data.ip;
-      console.log(ip);
       https.post(
         "/dashboard/visit-IP",
         {

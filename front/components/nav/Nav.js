@@ -99,8 +99,6 @@ export default function Nav() {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
         refresh();
-      } else {
-        console.log("토큰없음");
       }
     }
   }, 1000 * 60 * 20);

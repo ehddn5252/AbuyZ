@@ -22,20 +22,18 @@ export async function payBasket(cartDto) {
 export async function payProduct(productDto) {
   // Header에 토큰 집어넣기
   const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["Content-Type"] = "application/json";
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https
-      .post("/order/basic", productDto)
-      // .post("/user/signup", signup) // 보낼때 형식이 동일하다면 바로 써도 됨
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("상품 결제 성공", response);
-          resolve(response.data);
-        } else {
-          console.log("상품 결제 실패", response);
-          resolve(response);
-        }
-      });
+    https.post("/order/basic", productDto).then((response) => {
+      if (response.status === 200) {
+        console.log("상품 결제 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("상품 결제 실패", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
