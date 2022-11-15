@@ -76,8 +76,6 @@ export default function InquireList(props) {
     location.reload();
   };
 
-  console.log(productInfo, "###");
-
   return (
     <Grid2
       xs={12}

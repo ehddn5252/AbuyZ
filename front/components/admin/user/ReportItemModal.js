@@ -44,8 +44,6 @@ export default function ReportItemModal({ row }) {
     getDetail();
   }, [upload]);
 
-  console.log(row);
-
   return (
     <div>
       {row.status === "대기" ? (
