@@ -76,6 +76,8 @@ export default function InquireList(props) {
     location.reload();
   };
 
+  console.log(productInfo, "###");
+
   return (
     <Grid2
       xs={12}
@@ -136,12 +138,8 @@ export default function InquireList(props) {
                 <Td>
                   <EditProduct productInfo={e}>수정하기</EditProduct>
                 </Td>
-                {e.status === "selling" ? (
+                {e.status.toLowerCase() === "selling" ? (
                   <Td>판매중</Td>
-                ) : e.status === "getting_ready" ? (
-                  <Td onClick={() => changeEdit(e.uid)}>
-                    <WaitButton>승인 대기</WaitButton>
-                  </Td>
                 ) : (
                   <Td>판매 완료</Td>
                 )}
@@ -152,7 +150,7 @@ export default function InquireList(props) {
                 </Td>
                 <Td>{e.discountRate}</Td>
                 <Td>{e.price}</Td>
-                <Td>재고</Td>
+                <Td>{e.inventoryTotalNum}</Td>
                 <Td>{e.brandName}</Td>
                 <Td>{e.productKeywords.join(", ")}</Td>
                 <Td>{e.deliveryFee}</Td>

@@ -93,7 +93,7 @@ const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
   margin-left: 2rem;
-  width: 7rem;
+  width: 5rem;
 `;
 
 const Title = styled.div`

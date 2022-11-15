@@ -161,7 +161,7 @@ export async function productDetail(product_id) {
   });
 }
 
-// 재고 목록 가져오기
+// 상품 번호로 재고 리스트 가져오기
 export async function getStockInventory(productUid) {
   return new Promise((resolve) => {
     https.get(`/inventory/${productUid}`).then((response) => {
@@ -180,6 +180,21 @@ export async function getStockInventory(productUid) {
 export async function getRandomProducts() {
   return new Promise((resolve) => {
     https.get("/product/random").then((response) => {
+      if (response.status === 200) {
+        console.log("추천 상품 가져오기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("추천 상품 가져오기 성공", response);
+        resolve(response);
+      }
+    });
+  });
+}
+
+// 상품 번호로 재고 리스트 가져오기
+export async function getStockProductsUid(productUid) {
+  return new Promise((resolve) => {
+    https.get(`/inventory/${productUid}`).then((response) => {
       if (response.status === 200) {
         console.log("추천 상품 가져오기 성공", response);
         resolve(response.data);
