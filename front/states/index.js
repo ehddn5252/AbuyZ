@@ -62,3 +62,9 @@ export const kakaoUid = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const submitNum = atom({
+  key: "submitNum",
+  default: 0,
+  effects_UNSTABLE: [persistAtom],
+});

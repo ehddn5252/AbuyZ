@@ -10,6 +10,9 @@ import { TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { submitNum } from "../../states";
+import { useRecoilState } from "recoil";
+
 // styled
 import styled from "@emotion/styled";
 
@@ -24,6 +27,8 @@ import { customercenter } from "../../pages/api/customercenter";
 import axios from "axios";
 
 export default function ServiceConsulting() {
+  const [pageNum, setPageNum] = useRecoilState(submitNum);
+
   const router = useRouter();
   // 드롭다운 이름 변경할 변수
   const [categoryname, setCategoryname] = useState("");
@@ -31,7 +36,7 @@ export default function ServiceConsulting() {
   const [date, setDate] = useState("");
   const [img, setImg] = useState("");
   const [name, setName] = useState("");
-  const [options, setOptions] = useState("");
+  const [options, setOptions] = useState([]);
   const [price, setPrice] = useState(0);
   const [count, setCount] = useState(0);
 
@@ -94,6 +99,7 @@ export default function ServiceConsulting() {
       .then((res) => {
         console.log(res, "문의등록 성공!");
         alert("문의를 등록하였습니다.");
+        setPageNum(2);
         router.push("/mypage");
       })
       .catch((err) => {
@@ -142,14 +148,12 @@ export default function ServiceConsulting() {
       setImgData(target);
       if (target !== []) {
         const a = [];
-        for (let i = 0; i < target.length; i++) {
-          const subUrl = URL.createObjectURL(target[i]);
-          a.push({
-            file: target[i],
-            thumbnail: subUrl,
-            type: target[i].type.slice(0, 5),
-          });
-        }
+        const subUrl = URL.createObjectURL(target[0]);
+        a.push({
+          file: target[0],
+          thumbnail: subUrl,
+          type: target[0].type.slice(0, 5),
+        });
         setImgPreview(a);
       }
     } else {
@@ -222,21 +226,25 @@ export default function ServiceConsulting() {
               <div>
                 <div style={{ display: "flex", flexDirection: "row" }}>
                   <div style={{ flex: "2" }}>
-                    <img
-                      src={img}
-                      style={{
-                        width: "6rem",
-                        height: "8rem",
-                        objectFit: "cover",
-                      }}
-                    ></img>{" "}
+                    <Img src={img}></Img>
                   </div>
                   <div style={{ flex: "8", marginTop: "1.7rem" }}>
                     <span style={{ fontWeight: "bold" }}>{name}</span>
                     <br></br>
-                    <span>옵샨</span>
-                    {/* <span>[{options}]</span> */}
-                    <br></br>
+                    {Object.keys(options[0])[0] === "x" ? null : (
+                      <div>
+                        {options.map((e, idx) => (
+                          <div key={idx}>
+                            {Object.keys(e) == "x" ? null : (
+                              <span>{Object.keys(e)} :</span>
+                            )}
+                            {e[Object.keys(e)] == "x" ? null : (
+                              <span> {e[Object.keys(e)]}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <span style={{ color: "#aaaaaa" }}>
                       {price.toLocaleString("ko-KR")}원 | {count}개
                     </span>
@@ -245,19 +253,12 @@ export default function ServiceConsulting() {
                       주문일시: {date.slice(0, 10)}
                     </span>
                   </div>
-                  <div
-                    style={{
-                      flex: "2",
-                      display: "flex",
-                      justifyContent: "end",
-                      marginTop: "0.7rem",
-                    }}
-                  >
+                  <IconDiv>
                     <CloseIcon
                       onClick={deleteSelect}
                       sx={{ color: "#56a9f1" }}
                     ></CloseIcon>
-                  </div>
+                  </IconDiv>
                 </div>
               </div>
             ) : (
@@ -290,6 +291,7 @@ export default function ServiceConsulting() {
         <ElementContent>
           <TextField
             placeholder="문의 제목을 입력해주세요."
+            required
             fullWidth
             onChange={(event) => setTitle(event.currentTarget.value)}
           ></TextField>
@@ -302,6 +304,7 @@ export default function ServiceConsulting() {
         <ElementContent>
           <TextField
             placeholder="문의 내용을 입력해주세요."
+            required
             fullWidth
             onChange={(event) => setContent(event.currentTarget.value)}
           ></TextField>
@@ -318,36 +321,23 @@ export default function ServiceConsulting() {
             type="file"
             accept="image/jpg, image/jpeg, image/png"
             onChange={uploadImage}
-            multiple="multiple"
             style={{ marginLeft: "1rem" }}
           />
         </ElementContent>
         <div style={{ display: "flex" }}>
           {imgPreview.map((e, idx) => (
             <div key={idx} style={{ marginRight: "1rem" }}>
-              <img
-                src={e.thumbnail}
-                alt={e.type}
-                onClick={uploadImage}
-                width="110px"
-                height="140px"
-              />
+              <Img src={e.thumbnail} alt={e.type} onClick={uploadImage} />
             </div>
           ))}
         </div>
       </AllDiv>
 
-      <div
-        style={{
-          marginTop: "3rem",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <ButtonCont>
         <YesButton type="submit" onClick={handleSubmit}>
           등록
         </YesButton>
-      </div>
+      </ButtonCont>
     </Container>
   );
 }
@@ -399,4 +389,23 @@ const SelectButton = styled.button`
 
 const MajorTitle = styled.span`
   font-size: 2rem;
+`;
+
+const Img = styled.img`
+  width: 6rem;
+  height: 8rem;
+  object-fit: cover;
+`;
+
+const IconDiv = styled.div`
+  flex: 2;
+  display: flex;
+  justify-content: end;
+  margin-top: 0.7rem;
+`;
+
+const ButtonCont = styled.div`
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
 `;
