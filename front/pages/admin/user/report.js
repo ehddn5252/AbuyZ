@@ -4,6 +4,7 @@ import React from "react";
 // StyledComponents
 import styled from "styled-components";
 
+// 컴포넌트
 import ReportCategory from "../../../components/admin/user/ReportCategory";
 
 export default function Report() {

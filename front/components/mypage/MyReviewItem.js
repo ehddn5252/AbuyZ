@@ -85,7 +85,6 @@ const ProductImg = styled.img`
   object-fit: cover;
   width: 7rem;
   height: 8rem;
-  border: 1px solid black;
 `;
 
 const ProductName = styled.span`

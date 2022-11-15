@@ -15,7 +15,7 @@ export async function mycenter() {
       }
     });
   }).catch((e) => {
-    console.log(e);
+    console.log(e, "@@");
   });
 }
 
@@ -62,7 +62,7 @@ export async function delnumbercenter(centernumber) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.delete(`/customer-center/detail/${centernumber}`).then((response) => {
+    https.delete(`/customer-center/${centernumber}`).then((response) => {
       if (response.status === 200) {
         console.log("특정 문의 내역 삭제 성공", response);
         resolve(response.data);

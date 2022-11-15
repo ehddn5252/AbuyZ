@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 // API
 import { productDetail } from "../../../../pages/api/product";
+import { getStockInventory } from "../../../../pages/api/product";
 
 // mui
 import Box from "@mui/material/Box";
@@ -14,7 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditCategory from "./EditCategory";
 import EditInfo from "./EditInfo";
 import EditMarketing from "./EditMarketing";
-import EditImage from "./EditImage";
 import EditOption from "./EditOption";
 
 const style = {
@@ -115,17 +115,37 @@ export default function EditProduct({ productInfo }) {
   // 옵션
   const [optionDetail, setOptionDetail] = useState(null);
 
+  // 옵션 없는 상품 총 재고
+  const [totalCount, setTotalCount] = useState(0);
+
+  // 옵션 없는 상품 uid
+  const [noOptionUid, setNoOptionUid] = useState(0);
+
   const getDetail = async () => {
     const tmp = await productDetail(productInfo.uid);
-    console.log(tmp.data, "~~~~");
+    // console.log(tmp, "@@@");
     setMainImg(tmp.data.products.repImg);
     setExtraImg(tmp.data.productPictureDto);
     setDescImg(tmp.data.products.descriptionImg);
     setOptionDetail(tmp.data.productOptionListMap);
   };
 
+  const getStock = async () => {
+    const sub = await getStockInventory(productInfo.uid);
+    let sub_c = 0;
+    if (Object.keys(sub[0].productOptions[0]).includes("x")) {
+      setNoOptionUid(sub[0].productOptionUidString);
+      console.log(sub[0].productOptionUidString, "옵션 선택 안했음");
+    }
+    for (let i = 0; i < sub.length; i++) {
+      sub_c += sub[i].count;
+    }
+    setTotalCount(sub_c);
+  };
+
   useEffect(() => {
     getDetail();
+    getStock();
   }, []);
 
   return (
@@ -222,18 +242,6 @@ export default function EditProduct({ productInfo }) {
               <hr
                 style={{ background: "#ff9494", margin: "0", padding: "0" }}
               />
-              {/* 상품 이미지 */}
-              <EditImage
-                setMainImg={setMainImg}
-                setExtraImg={setExtraImg}
-                setDescImg={setDescImg}
-                mainImg={mainImg}
-                extraImg={extraImg}
-                descImg={descImg}
-              />
-              <hr
-                style={{ background: "#ff9494", margin: "0", padding: "0" }}
-              />
               {/* 옵션 */}
               <EditOption
                 smallCategoriesUid={smallCategoriesUid}
@@ -243,13 +251,11 @@ export default function EditProduct({ productInfo }) {
                 deliveryFee={deliveryFee}
                 brandName={brandName}
                 keywords={keywords}
-                mainImg={mainImg}
-                extraImg={extraImg}
-                descImg={descImg}
                 optionDetail={optionDetail}
-              />
-              <hr
-                style={{ background: "#ff9494", margin: "0", padding: "0" }}
+                totalCount={totalCount}
+                setOpen={setOpen}
+                noOptionUid={noOptionUid}
+                productUid={productInfo.uid}
               />
             </Grid2>
           </Grid2>

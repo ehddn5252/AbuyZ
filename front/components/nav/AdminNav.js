@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 
 // MUI
-import Link from "@mui/material/Link";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 // StyledComponents
@@ -30,7 +29,7 @@ export default function AdminNav() {
       setLocation("상품관리 - 상품등록");
     else if (pathname === "/admin/product/edit")
       setLocation("상품관리 - 상품수정");
-    else if (pathname === "/admin/user") setLocation("고객관리 - 문의");
+    else if (pathname === "/admin/user/ask") setLocation("고객관리 - 문의");
     else if (pathname === "/admin/user/faq") setLocation("고객관리 - FAQ");
     else if (pathname === "/admin/user/report") setLocation("고객관리 - 신고");
     else if (pathname === "/admin/user/review") setLocation("고객관리 - 리뷰");

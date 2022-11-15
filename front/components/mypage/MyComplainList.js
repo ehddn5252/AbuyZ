@@ -18,6 +18,15 @@ export default function MyComplainList() {
     console.log(res.data);
     setComplainList(res.data);
   };
+  const [selected, setSelected] = useState(-1);
+
+  const handleClick = (idx) => {
+    if (selected === idx) {
+      setSelected(-1);
+    } else {
+      setSelected(idx);
+    }
+  };
   useEffect(() => {
     ccomplain();
   }, []);
@@ -27,10 +36,18 @@ export default function MyComplainList() {
       <MajorTitle>문의 내역</MajorTitle>
       <Hr />
 
-      {/* {complainList.length ? (
+      {complainList ? (
         <ComplainListBox>
           {complainList.map((e, idx) => (
-            <MyComplainItem key={idx} complain={e} />
+            <div onClick={() => handleClick(idx)}>
+              <MyComplainItem
+                key={idx}
+                complain={e}
+                idx={idx}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            </div>
           ))}
         </ComplainListBox>
       ) : (
@@ -40,7 +57,7 @@ export default function MyComplainList() {
           />
           <NoComplain>문의하신 내역이 없습니다</NoComplain>
         </BlankBox>
-      )} */}
+      )}
     </MyComplainContainer>
   );
 }
@@ -48,7 +65,7 @@ export default function MyComplainList() {
 const MyComplainContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  height: 50rem;
+  min-height: 80vh;
   width: 56rem;
 `;
 
