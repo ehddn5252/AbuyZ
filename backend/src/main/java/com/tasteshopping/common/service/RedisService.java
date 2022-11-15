@@ -1,15 +1,15 @@
 package com.tasteshopping.common.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +37,24 @@ public class RedisService {
         ValueOperations<String,String> valueOperations = redisTemplate.opsForValue();
         valueOperations.set(key, value);
     }
+
+    public void addData(String key, String value){
+        SetOperations<String, String> stringStringSetOperations = redisTemplate.opsForSet();
+        stringStringSetOperations.add(key,value);
+    }
+
+    public List<String> getSetData(String key){
+        Long size = redisTemplateObject.opsForSet().size(key);
+        List<String> result = redisTemplateObject.opsForSet().members(key).stream().map(Object::toString).collect(Collectors.toList());
+        return result;
+    }
+
+    public void createSetDataForm(String key,String value, Long duration){
+        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
+        setOperations.add(key,value);
+        redisTemplate.expire(key, duration, TimeUnit.SECONDS);
+    }
+
     // 유효 기간 설정
     public void setDataExpire(String key, String value, long duration){
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();

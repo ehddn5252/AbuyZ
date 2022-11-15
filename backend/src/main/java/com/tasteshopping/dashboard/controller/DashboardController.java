@@ -3,7 +3,9 @@ package com.tasteshopping.dashboard.controller;
 import com.tasteshopping.common.dto.BaseRes;
 
 import com.tasteshopping.common.service.UtilService;
+import com.tasteshopping.dashboard.dto.IpDto;
 import com.tasteshopping.dashboard.service.DashboardService;
+import com.tasteshopping.inquiry.Exception.AreadyAccessException;
 import com.tasteshopping.inquiry.service.CustomerCenterService;
 import com.tasteshopping.inventory.service.InventoryService;
 import com.tasteshopping.order.service.OrderService;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
-
+//
 @RestController
 @Slf4j
 @RequestMapping("/dashboard")
@@ -35,6 +37,16 @@ public class DashboardController {
         System.out.println(pageName);
         System.out.println(pageName);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "order 상태에 맞는 order 개수 가져오기 성공!", dashboardService.getVisit(date, pageName)));
+    }
+
+    @PostMapping("/visit-IP")
+    public ResponseEntity<BaseRes> visitWithIp( @RequestBody IpDto userIp){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "조회수 추가 성공", dashboardService.doVisitWithIp(userIp.getUserIp())));
+        }
+        catch (AreadyAccessException e ){
+            return e.baseResResponseEntity;
+        }
     }
 
     @PutMapping("/visit/{pageName}")

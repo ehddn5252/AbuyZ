@@ -1,10 +1,13 @@
 package com.tasteshopping.dashboard.service;
 
+import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.common.service.RedisService;
 import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.dashboard.dto.AnalysisDataDto;
 import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.dashboard.entity.AnalysisData;
 import com.tasteshopping.dashboard.repository.AnalysisDataRepository;
+import com.tasteshopping.inquiry.Exception.AreadyAccessException;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
@@ -16,6 +19,9 @@ import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.review.repository.ReportRepository;
 import com.tasteshopping.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.resource.beans.internal.FallbackBeanInstanceProducer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,6 +37,8 @@ public class DashboardServiceImpl implements DashboardService {
     private final OrderRepository orderRepository;
     private final OrderListRepository orderListRepository;
 
+    private final RedisService redisService;
+
     @Transactional
     @Override
     public void createTodayRow(String pageName) {
@@ -43,6 +51,8 @@ public class DashboardServiceImpl implements DashboardService {
     @Transactional
     @Override
     public void doVisit(Date date, String pageName) {
+        System.out.println(date);
+        System.out.println(pageName);
         analysisRepository.findByDateAndPageName(date, pageName).get(0).visit();
     }
 
@@ -97,16 +107,16 @@ public class DashboardServiceImpl implements DashboardService {
         List<String> pages = Arrays.asList(new String[]{"main", "login", "cart", "like", "register"});
         // 날짜별 주문 수, 매출액, 가입자 수, 방문자 수, 찜 수, 장바구니 수
         int CURRENT_SUMMARIZE_SIZE = 5;
-        ArrayList<SummaryDto> l = new  ArrayList<>();
-        for(int i=0;i<CURRENT_SUMMARIZE_SIZE;++i){
+        ArrayList<SummaryDto> l = new ArrayList<>();
+        for (int i = 0; i < CURRENT_SUMMARIZE_SIZE; ++i) {
             SummaryDto summaryDto = new SummaryDto();
             Date date = UtilService.getDateAfterDay(-i);
             summaryDto.setDate(date);
-            summaryDto.setVisitMainNum(getVisit(date,"main").getVisitCount());
-            summaryDto.setLoginNum(getVisit(date,"login").getVisitCount());
-            summaryDto.setClickLikeNum(getVisit(date,"like").getVisitCount());
-            summaryDto.setPutCartNum(getVisit(date,"cart").getVisitCount());
-            summaryDto.setRegisterNum(getVisit(date,"register").getVisitCount());
+            summaryDto.setVisitMainNum(getVisit(date, "main").getVisitCount());
+            summaryDto.setLoginNum(getVisit(date, "login").getVisitCount());
+            summaryDto.setClickLikeNum(getVisit(date, "like").getVisitCount());
+            summaryDto.setPutCartNum(getVisit(date, "cart").getVisitCount());
+            summaryDto.setRegisterNum(getVisit(date, "register").getVisitCount());
             summaryDto = addDailyOrder(summaryDto);
             l.add(summaryDto);
         }
@@ -125,11 +135,11 @@ public class DashboardServiceImpl implements DashboardService {
             // 여기에서 오더가 아닌 것들 가져와야 함.
             // JPA  조건문 변경
             List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
-            for(int j=0;j< orders.size();++j){
+            for (int j = 0; j < orders.size(); ++j) {
                 String status = orders.get(j).getStatus();
-                if(status.equals(OrderStatus.PROCESS.toString()) ||status.equals(OrderStatus.SOLD.toString())){
-                    count+=1;
-                    totalPrice+=orders.get(j).getPrice();
+                if (status.equals(OrderStatus.PROCESS.toString()) || status.equals(OrderStatus.SOLD.toString())) {
+                    count += 1;
+                    totalPrice += orders.get(j).getPrice();
                 }
             }
         }
@@ -174,5 +184,25 @@ public class DashboardServiceImpl implements DashboardService {
             }
         }
         return noReplyCount;
+    }
+
+    @Override
+    @Transactional
+    public BaseRes doVisitWithIp(String userIp) {
+        List<String> l = redisService.getSetData("userIp");
+        boolean isNotChecked = true;
+        for (String s : l) {
+            if (s.equals(userIp)) {
+                isNotChecked = false;
+            }
+        }
+        if (isNotChecked) {
+            System.out.println("is not checked");
+            redisService.addData("userIp", userIp);
+            doVisit(UtilService.getToday(), "main");
+            return new BaseRes(200, "조회수 증가 성공", null);
+        } else {
+            throw new AreadyAccessException();
+        }
     }
 }
