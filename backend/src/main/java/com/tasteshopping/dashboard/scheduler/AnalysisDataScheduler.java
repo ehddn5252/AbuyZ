@@ -36,6 +36,7 @@ public class AnalysisDataScheduler {
     @Scheduled(cron = "0 0 0 * * ?")// 매 00:00 실행
     @Transactional
     public void dailyVisitorUpdate() {
-        redisService.createSetDataForm("userIp", "127.0.0.1", 3600 * 23 + 3597L);
+        redisService.deleteData("userIp");
+        redisService.createSetDataForm("userIp", "127.0.0.1", 3600 * 23 + 3600L);
     }
 }

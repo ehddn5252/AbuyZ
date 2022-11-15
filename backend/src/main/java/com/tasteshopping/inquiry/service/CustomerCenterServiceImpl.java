@@ -20,7 +20,6 @@ import com.tasteshopping.user.dto.ResultDto;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,7 +71,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Override
     public List<CustomerCenterDto> getCustomerCenter() {
-        List<CustomerCenters> l = customerCenterRepository.findAll();
+        List<CustomerCenters> l = customerCenterRepository.findAllFetchJoin();
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).toDto());
