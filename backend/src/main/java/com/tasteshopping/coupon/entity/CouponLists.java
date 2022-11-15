@@ -63,4 +63,12 @@ public class CouponLists {
                 .available_categories_name(this.coupons.getBigCategories().getCategoryName())
                 .build();
     }
+
+    public void use(){
+        this.status=CouponStatus.사용.ordinal();
+    }
+
+    public void rollBack(){
+        this.status=CouponStatus.사용가능.ordinal();
+    }
 }
