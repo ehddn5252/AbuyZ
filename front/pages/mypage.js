@@ -45,6 +45,7 @@ export default function Mypage() {
           setTap={setTap}
           SetActiveTap={SetActiveTap}
           reviewCnt={reviewCnt}
+          setMypageN={setMypageN}
         />
       </div>
       <Container

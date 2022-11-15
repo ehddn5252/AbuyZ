@@ -6,7 +6,7 @@ import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 
 export default function ProductBundleItem({
-  orderuid,
+  orderuidList,
   productList,
   setProductList,
   setIdxSelected,
@@ -14,8 +14,8 @@ export default function ProductBundleItem({
 }) {
   const bundleitem = async () => {
     let productlist = [];
-    for (var j = 0; j < orderuid.length; j++) {
-      const res = await eachGetOrderList(orderuid[j]);
+    for (var j = 0; j < orderuidList.length; j++) {
+      const res = await eachGetOrderList(orderuidList[j]);
       for (var k = 0; k < res.data.length; k++) {
         console.log(res.data[k]);
         productlist.push(res.data[k]);
@@ -28,7 +28,7 @@ export default function ProductBundleItem({
 
   useEffect(() => {
     bundleitem();
-  }, [orderuid]);
+  }, [orderuidList]);
 
   return (
     <ItemContainer>
@@ -84,7 +84,7 @@ export default function ProductBundleItem({
               )}
               <div style={{ flex: 3, marginTop: "2rem" }}>
                 <span style={{ color: "#aaaaaa" }}>
-                  {e.count}개 | {e.price}원
+                  {e.count}개 | {e.price.toLocaleString("ko-KR")}원
                 </span>
               </div>
             </Container>

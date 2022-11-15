@@ -5,12 +5,15 @@ import { getMyInfo } from "../../pages/api/user";
 import styled from "styled-components";
 import { reviewYet } from "../../pages/api/review";
 import { couponlist } from "../../pages/api/coupon";
+import { mycenter } from "../../pages/api/customercenter";
 import CanUseCoupon from "./CanUseCoupon";
+import IncompleteAnswer from "./IncompleteAnswer";
 export default function Myinfo({ setTap, SetActiveTap }) {
   const [userName, setUserName] = useState("");
   const [reviewCnt, setReviewCnt] = useState(0);
   const [couponCnt, setCouponCnt] = useState(0);
   const [couponL, setCouponL] = useState([]);
+  const [complainList, setComplainList] = useState([]);
 
   // 사용 가능한 쿠폰
   const ccoupon = async () => {
@@ -18,6 +21,10 @@ export default function Myinfo({ setTap, SetActiveTap }) {
     setCouponL(res.data.result);
   };
 
+  const complain = async () => {
+    const rres = await mycenter();
+    setComplainList(rres.data);
+  };
   // 아직 작성하지 않는 리뷰
   const rreviewYet = async () => {
     const res = await reviewYet();
@@ -33,22 +40,26 @@ export default function Myinfo({ setTap, SetActiveTap }) {
   const tap6Change = () => {
     SetActiveTap(7);
     setTap(6);
+    setMypageN(6);
   };
 
   const tap3Change = () => {
     SetActiveTap(3);
     setTap(3);
+    setMypageN(3);
   };
 
   const tap2Change = () => {
     SetActiveTap(2);
     setTap(2);
+    setMypageN(2);
   };
 
   useEffect(() => {
     uuser();
     rreviewYet();
     ccoupon();
+    complain();
   }, []);
 
   return (
@@ -56,9 +67,9 @@ export default function Myinfo({ setTap, SetActiveTap }) {
       <MainBox>
         <MyName>{userName}님</MyName>
         <HistoryDiv>
-          <HistoryTitle onClick={tap2Change}>문의 내역</HistoryTitle>
+          <HistoryTitle onClick={tap2Change}>처리 중인 문의</HistoryTitle>
           <HistoryCount>
-            <Count>1</Count>건
+            <IncompleteAnswer complainList={complainList}></IncompleteAnswer>
           </HistoryCount>
         </HistoryDiv>
         <HistoryDiv onClick={tap3Change}>

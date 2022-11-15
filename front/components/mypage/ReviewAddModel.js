@@ -62,6 +62,7 @@ export default function ReviewAddModel({
     for (let i = 0; i < imgData.length; i++) {
       formData.append("file", imgData[i]);
     }
+    console.log(formData);
 
     const accessToken = sessionStorage.getItem("access-token");
     axios.defaults.headers.common["access_token"] = accessToken;

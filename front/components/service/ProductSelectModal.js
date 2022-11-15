@@ -6,6 +6,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { getOrderList, weekorder } from "../../pages/api/order";
 import ProductBundleItem from "./ProductBundleItem";
 export default function ProductSelectModal({
+  setOrderUid,
+  setIdxSelected,
   setModalOpen,
   setDate,
   setImg,
@@ -13,27 +15,24 @@ export default function ProductSelectModal({
   setOptions,
   setPrice,
   setCount,
-  setSelected,
-  selected,
+  idxSelected,
 }) {
   const closeModal = () => {
     setModalOpen(false);
   };
-  const [idxSelected, setIdxSelected] = useState(0);
   const modalRef = useRef(null);
   const [productList, setProductList] = useState([]);
 
-  const [orderuid, setOrderUid] = useState([]);
+  const [orderuidList, setOrderUidList] = useState([]);
   const weekOrder = async () => {
     const res = await weekorder();
     let orderuid = [];
     for (var i = 0; i < res.data.length; i++) {
       orderuid.push(res.data[i].uid);
     }
-    setOrderUid(orderuid);
+    setOrderUidList(orderuid);
   };
 
-  console.log(orderuid);
   useEffect(() => {
     weekOrder();
     // 이벤트 핸들러 함수
@@ -55,7 +54,7 @@ export default function ProductSelectModal({
 
   const selectfunction = () => {
     setDate(productList[idxSelected].inventoryDto.productDto.date);
-    setImg(productList[idxSelected].inventoryDto.productDto.repImg);
+    setImg(productList[idxSelected].inventoryDto.productDto.descriptionImg);
     setName(productList[idxSelected].inventoryDto.productDto.name);
     // setOptions(productList[idxSelected].inventoryDto.productOptions);
     setPrice(productList[idxSelected].price);
@@ -69,7 +68,7 @@ export default function ProductSelectModal({
         <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
       </CloseIconDiv>
       <div>
-        <span style={{ marginLeft: "3rem" }}>주문상품 선택</span>
+        <h1 style={{ marginLeft: "3rem" }}>주문상품 선택</h1>
         <hr></hr>
         <Caution>1주일 이내 주문 내역만 노출됩니다.</Caution>
         <Date>
@@ -77,7 +76,7 @@ export default function ProductSelectModal({
           2022.10.11 - 2022.10.18
         </Date>
         <ProductBundleItem
-          orderuid={orderuid}
+          orderuidList={orderuidList}
           productList={productList}
           setProductList={setProductList}
           setIdxSelected={setIdxSelected}
@@ -106,7 +105,7 @@ const Container = styled.div`
 `;
 const Caution = styled.p`
   margin-left: 3rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
 `;
 
 const Date = styled.p`
@@ -169,4 +168,5 @@ const CloseIconDiv = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
+  padding: 1rem;
 `;

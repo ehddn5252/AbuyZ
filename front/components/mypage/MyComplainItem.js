@@ -3,14 +3,28 @@ import React, { useState } from "react";
 
 // StyledCopmoent
 import styled from "styled-components";
-
-export default function MyComplainItem({ complain }) {
-  const [answerOpen, setAnswerOpen] = useState(false);
-
+import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { delnumbercenter } from "../../pages/api/customercenter";
+import { useRouter } from "next/router";
+export default function MyComplainItem({
+  complain,
+  idx,
+  selected,
+  setSelected,
+}) {
+  const router = useRouter();
   const ansOpen = () => {
     setContentOpen(!contentOpen);
-    setAnswerOpen(!answerOpen);
   };
+
+  const deletecomplain = async () => {
+    const res = await delnumbercenter(complain.uid);
+    alert("문의 내역이 삭제 되었습니다");
+    router.reload();
+  };
+
   const [contentOpen, setContentOpen] = useState(false);
 
   return (
@@ -24,39 +38,114 @@ export default function MyComplainItem({ complain }) {
             <ComplainTitle>
               [{complain.customerCenterCategory}] {complain.title}
               <br></br>
+              <br></br>
               <span style={{ color: "#aaaaaa" }}>
-                {/* {complain.start_date.slice(0, 10)}{" "}
-                {complain.start_date.slice(11, 16)} */}
+                문의 일시: {complain.start_date.slice(0, 10)}{" "}
+                {complain.start_date.slice(11, 16)}
               </span>
             </ComplainTitle>
 
-            {contentOpen ? (
-              <ComplainContent>
-                <span>{complain.content}</span>
-              </ComplainContent>
+            {selected === idx ? (
+              <div style={{ position: "relative" }}>
+                <div style={{ position: "absolute", top: "5%", right: "5%" }}>
+                  <DeleteForeverIcon
+                    style={{ fontSize: "xx-large", color: "red" }}
+                    onClick={deletecomplain}
+                  ></DeleteForeverIcon>
+                </div>
+                {complain.customerCenterCategory === "교환_환불" ? (
+                  <span>상품이 놓일 자리</span>
+                ) : null}
+                {complain.imgUrl !== null ? (
+                  <div style={{ display: "flex", flexDirection: "row" }}>
+                    <div style={{ flex: 2 }}>
+                      <br></br>
+                      <img
+                        src={complain.imgUrl}
+                        style={{
+                          width: "5rem",
+                          height: "7rem",
+                          objectFit: "cover",
+                        }}
+                      ></img>
+                    </div>
+                    <div style={{ flex: 10 }}>
+                      <ComplainContent>
+                        <span>{complain.content}</span>
+                      </ComplainContent>
+                    </div>
+                  </div>
+                ) : (
+                  <ComplainContent>
+                    <span>{complain.content}</span>
+                  </ComplainContent>
+                )}
+
+                <ContentDiv>
+                  {complain.reply !== null ? (
+                    <div style={{ padding: "2rem" }}>
+                      <SubdirectoryArrowRightIcon
+                        style={{ color: "#56a9f1" }}
+                      ></SubdirectoryArrowRightIcon>
+                      <span
+                        style={{
+                          fontSize: "1.3rem",
+                          fontWeight: "bold",
+                          color: "#56a9f1",
+                        }}
+                      >
+                        AbuyZ
+                      </span>
+                      <br></br>
+                      <div style={{ padding: "2rem" }}>
+                        <span>{complain.reply}</span>
+                        <br></br>
+                        <br></br>
+                        <span style={{ color: "#aaaaaa" }}>
+                          {complain.end_date.slice(0, 10)}{" "}
+                          {complain.end_date.slice(11, 16)}
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "2rem",
+                      }}
+                    >
+                      <HourglassBottomIcon></HourglassBottomIcon>
+                      <span>
+                        현재 문의 내역을 처리중입니다. 곧 답변 드리겠습니다.
+                      </span>
+                    </div>
+                  )}
+                </ContentDiv>
+              </div>
             ) : null}
           </div>
         </div>
         <div style={{ flex: "2" }}>
-          {complain.state ? (
+          {complain.reply !== null ? (
             <CompleteDiv onClick={ansOpen}>
               <p>답변 완료</p>
             </CompleteDiv>
           ) : (
             <InCompleteDiv>
-              <p>처리중</p>
+              <p>처리 중</p>
             </InCompleteDiv>
           )}
         </div>
       </div>
 
-      {answerOpen ? (
+      {/* {answerOpen ? (
         <ContentDiv>
           <div style={{ padding: "2rem" }}>
-            <span>{complain.content}</span>
+            <span>{complain.reply}</span>
           </div>
         </ContentDiv>
-      ) : null}
+      ) : null} */}
     </Container>
   );
 }
@@ -107,10 +196,10 @@ const ContentDiv = styled.div`
 
 const ComplainContent = styled.div`
   width: 100%;
-  background-color: rgba(128, 128, 128, 0.1);
   margin-top: 1rem;
   border-radius: 5px;
-  padding: 2rem;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
 `;
 
 const ComplainTitle = styled.span`
