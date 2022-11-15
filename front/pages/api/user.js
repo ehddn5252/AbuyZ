@@ -77,10 +77,10 @@ export async function getMyInfo() {
 
     https.get("/user").then((response) => {
       if (response.status === 200) {
-        console.log("내 정보 조회 성공", response);
+        // console.log("내 정보 조회 성공", response);
         resolve(response.data);
       } else {
-        console.log("내 정보 조회 실패", response);
+        // console.log("내 정보 조회 실패", response);
         resolve(response);
       }
     });

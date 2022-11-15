@@ -48,7 +48,14 @@ export default function Search() {
     } else if (!searchValue && !bigCategory && !smallCategory) {
       res = await inquireProduct();
     }
-    setProductList(res);
+    console.log(res);
+    let temp = [];
+    for (let i = 0; i < res.length; i++) {
+      if (res[i].status !== "SOLD_OUT") {
+        temp.push(res[i]);
+      }
+    }
+    setProductList(temp);
   };
 
   const filterProductList = async () => {
@@ -71,7 +78,13 @@ export default function Search() {
       detailDto["end_price"] = endPrice;
     }
     const res = await kwcdSearch(detailDto);
-    setProductList(res.data);
+    let temp = [];
+    for (let i = 0; i < res.data.length; i++) {
+      if (res.data[i].status !== "SOLD_OUT") {
+        temp.push(res.data[i]);
+      }
+    }
+    setProductList(temp);
   };
   // 필터링 사용시 동작
   useEffect(() => {

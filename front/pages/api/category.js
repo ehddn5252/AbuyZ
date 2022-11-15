@@ -24,10 +24,10 @@ export async function inquireBigCategory(bigcategory_num) {
   return new Promise((resolve) => {
     https.get(`/category/big-category/${bigcategory_num}`).then((response) => {
       if (response.status === 200) {
-        console.log("대분류 조회 성공", response);
+        // console.log("대분류 조회 성공", response);
         resolve(response.data);
       } else {
-        console.log("대분류 조회 실패", response);
+        // console.log("대분류 조회 실패", response);
         resolve(response);
       }
     });
@@ -58,7 +58,7 @@ export async function BigCategory() {
   return new Promise((resolve) => {
     https.get("/category/big-category").then((response) => {
       if (response.status === 200) {
-        console.log("대분류 조회 성공", response);
+        // console.log("대분류 조회 성공", response);
         resolve(response.data);
       } else {
         console.log("대분류 조회 실패", response);

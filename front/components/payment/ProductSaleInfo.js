@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import MyCouponSelectModal from "./MyCouponSelectModal";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 export default function ProductSaleInfo({ paymentList }) {
   const [modalOpen, setModalOpen] = useState(false);
-  console.log(paymentList);
   let categoryList = [];
   for (var i = 0; i < paymentList.length; i++) {
     categoryList.push(paymentList[i].productDto.bigCategoryUid);
