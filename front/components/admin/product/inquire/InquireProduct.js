@@ -19,7 +19,6 @@ import Period from "./Period";
 import WidgetsOutlinedIcon from "@mui/icons-material/WidgetsOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import TaskAltOutlinedIcon from "@mui/icons-material/TaskAltOutlined";
-import HourglassBottomOutlined from "@mui/icons-material/HourglassBottomOutlined";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 export default function SaleProductSearch() {

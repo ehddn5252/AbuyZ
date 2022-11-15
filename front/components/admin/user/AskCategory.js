@@ -1,9 +1,8 @@
-// React
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 
 // API
-import { SearchDeclaration } from "../../../pages/api/review";
+import { getAsk } from "../../../pages/api/admin";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -12,29 +11,23 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-// Calender
-import "react-datepicker/dist/react-datepicker.css";
-
 // StyledComponent
 import styled from "styled-components";
 
 // 컴포넌트
-import ReportList from "./ReportList";
-import ReportPeriod from "./ReportPeriod";
+import AskPeriod from "./AskPeriod";
+import AskList from "./AskList";
 
-export default function ReportCategory() {
-  // 신고 데이터
-  const [declaration, setDeclaration] = useState([]);
-
-  // 신고 사유(0:허위사실유포, 1:욕설, 2:전체)
+export default function AskCategory() {
+  // 문의 사유(전체, 상품, 환불, 이벤트, 사이트, 주문결제)
   const [reason, setReason] = useState("");
 
-  // 제품명
+  // 문의명
   const [name, setName] = useState("");
 
-  // 승인 유무
-  // 0:대기, 1:거절, 2:승인, 3:전체
-  const [approval, setApproval] = useState(3);
+  // 답변 유무
+  // 전체, 답변_완료, 답변_미완료
+  const [approval, setApproval] = useState("");
 
   // 기간 기준
   const [stand, setStand] = useState(0);
@@ -48,12 +41,15 @@ export default function ReportCategory() {
   // 리셋 감지기
   const [reset, setReset] = useState(0);
 
-  // 신고 사유 셀렉트 했을 때
+  // 문의 리스트
+  const [askList, setAskList] = useState([]);
+
+  // 문의 사유 셀렉트 했을 때
   const handleChange = (event) => {
     setReason(event.target.value);
   };
 
-  // 제품명 입력하면
+  // 문의명 입력하면
   const nameChange = (event) => {
     setName(event.target.value);
   };
@@ -66,57 +62,14 @@ export default function ReportCategory() {
         checkboxes[i].checked = false;
       } else if (checkboxes[i] === checkThis) {
         if (i === 0) {
-          setApproval(3);
+          setApproval("");
         } else if (i === 1) {
-          setApproval(0);
+          setApproval("답변_완료");
         } else if (i === 2) {
-          setApproval(1);
-        } else if (i === 3) {
-          setApproval(2);
+          setApproval("답변_미완료");
         }
       }
     }
-  };
-
-  // 리뷰 신고 조회
-  const getSearch = async () => {
-    const declarationDto = {
-      reasonId: reason,
-      startDate: startDate,
-      endDate: endDate,
-      productName: name,
-      status: approval,
-    };
-    if (reason === "2") {
-      declarationDto.reasonId = "";
-    }
-
-    const decList = await SearchDeclaration(declarationDto);
-    let tmp = [];
-    for (let i = 0; i < decList.data.length; i++) {
-      if (stand === 1 || stand === 0) {
-        tmp.push(decList.data[i]);
-      } else if (stand === 2) {
-        if (
-          moment(startDate).format().slice(0, 10) <=
-            moment(decList.data[i].reportDate).format().slice(0, 10) ||
-          moment(decList.data[i].reportDate).format().slice(0, 10) >=
-            moment(endDate).format().slice(0, 10)
-        ) {
-          tmp.push(decList.data[i]);
-        }
-      } else if (stand === 3) {
-        if (
-          moment(startDate).format().slice(0, 10) <=
-            moment(decList.data[i].processDate).format().slice(0, 10) ||
-          moment(decList.data[i].reportDate).format().slice(0, 10) >=
-            moment(endDate).format().slice(0, 10)
-        ) {
-          tmp.push(decList.data[i]);
-        }
-      }
-    }
-    setDeclaration(tmp);
   };
 
   // 초기화
@@ -131,12 +84,21 @@ export default function ReportCategory() {
     for (let i = 0; i < checkboxes.length; i++) {
       checkboxes[i].checked = false;
     }
-    setApproval(3);
+    setApproval(0);
+  };
+
+  // 조건에 맞는 검색하기 (전체 문의 내역 불러오기)
+  const handleSearch = async () => {
+    const tmp = await getAsk();
+    tmp.data.sort(function (a, b) {
+      return b.uid - a.uid;
+    });
+    setAskList(tmp.data);
   };
 
   // 렌더링 시 리뷰 신고 조회
   useEffect(() => {
-    getSearch();
+    handleSearch();
   }, []);
 
   return (
@@ -145,7 +107,7 @@ export default function ReportCategory() {
       spacing={2}
       sx={{ padding: "0", margin: "0", background: "white" }}
     >
-      {/* 신고 사유 */}
+      {/* 문의 사유 */}
       <Grid2
         xs={2}
         sx={{
@@ -160,7 +122,7 @@ export default function ReportCategory() {
           fontWeight: "600",
         }}
       >
-        신고 사유
+        문의 사유
       </Grid2>
       <Grid2
         xs={10}
@@ -176,12 +138,12 @@ export default function ReportCategory() {
         <CategoryBox>
           <FormControl sx={{ minWidth: 200, width: 300 }}>
             <InputLabel id="demo-simple-select-autowidth-label">
-              신고 사유
+              문의 사유
             </InputLabel>
             <Select
               value={reason}
               onChange={handleChange}
-              label="대분류"
+              label="문의 사유"
               MenuProps={{
                 anchorOrigin: {
                   vertical: "bottom",
@@ -194,24 +156,25 @@ export default function ReportCategory() {
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <MenuItem value={"2"}>전체</MenuItem>
-              <MenuItem value={"0"}>허위사실유포</MenuItem>
-              <MenuItem value={"1"}>욕설</MenuItem>
+              <MenuItem value={"전체"}>전체</MenuItem>
+              <MenuItem value={"상품"}>상품</MenuItem>
+              <MenuItem value={"환불"}>환불</MenuItem>
+              <MenuItem value={"이벤트"}>이벤트</MenuItem>
+              <MenuItem value={"사이트"}>사이트</MenuItem>
+              <MenuItem value={"주문결제"}>주문결제</MenuItem>
             </Select>
           </FormControl>
         </CategoryBox>
       </Grid2>
-      <Grid2
-        xs={12}
-        sx={{
+      <hr
+        style={{
+          background: "#ff9494",
           margin: "0",
           padding: "0",
           width: "100%",
         }}
-      >
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-      </Grid2>
-      {/* 제품명 */}
+      />
+      {/* 문의명 */}
       <Grid2
         xs={2}
         sx={{
@@ -226,7 +189,7 @@ export default function ReportCategory() {
           fontWeight: "600",
         }}
       >
-        제품명
+        문의명
       </Grid2>
       <Grid2
         xs={10}
@@ -245,17 +208,15 @@ export default function ReportCategory() {
           onChange={nameChange}
         />
       </Grid2>
-      <Grid2
-        xs={12}
-        sx={{
+      <hr
+        style={{
+          background: "#ff9494",
           margin: "0",
           padding: "0",
           width: "100%",
         }}
-      >
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-      </Grid2>
-      {/* 승인 유무 */}
+      />
+      {/* 답변 유무 */}
       <Grid2
         xs={2}
         sx={{
@@ -270,7 +231,7 @@ export default function ReportCategory() {
           fontWeight: "600",
         }}
       >
-        승인 유무
+        답변 유무
       </Grid2>
       <Grid2
         xs={10}
@@ -281,6 +242,7 @@ export default function ReportCategory() {
           display: "flex",
           zIndex: "0",
           background: "white",
+          alignItems: "center",
         }}
       >
         <input
@@ -301,32 +263,23 @@ export default function ReportCategory() {
           onChange={(e) => checkOnlyOne(e.target)}
           style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
-        <Name>대기</Name>
+        <Name>완료답변</Name>
         <input
           name="approvalCheck"
           type="checkbox"
           onChange={(e) => checkOnlyOne(e.target)}
           style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
-        <Name>거절</Name>
-        <input
-          name="approvalCheck"
-          type="checkbox"
-          onChange={(e) => checkOnlyOne(e.target)}
-          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
-        />
-        <Name>승인</Name>
+        <Name>미답변</Name>
       </Grid2>
-      <Grid2
-        xs={12}
-        sx={{
+      <hr
+        style={{
+          background: "#ff9494",
           margin: "0",
           padding: "0",
           width: "100%",
         }}
-      >
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
-      </Grid2>
+      />
       {/* 기간 */}
       <Grid2
         xs={2}
@@ -355,13 +308,21 @@ export default function ReportCategory() {
           background: "white",
         }}
       >
-        <ReportPeriod
+        <AskPeriod
           reset={reset}
           setStand={setStand}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
         />
       </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
       <Grid2
         xs={12}
         sx={{
@@ -370,13 +331,12 @@ export default function ReportCategory() {
           width: "100%",
         }}
       >
-        <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
         <ButtonDiv>
           <ResetButton onClick={handleReset}>초기화</ResetButton>
-          <SearchButton onClick={getSearch}>검색</SearchButton>
+          <SearchButton onClick={handleSearch}>검색</SearchButton>
         </ButtonDiv>
         <TableContainer>
-          <ReportList declaration={declaration} />
+          <AskList askList={askList} />
         </TableContainer>
       </Grid2>
     </Grid2>

@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 // MUI
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
 import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
@@ -34,7 +32,7 @@ export default function AdminSideNav() {
       setLocation("상품관리 - 상품등록");
     else if (pathname === "/admin/product/edit")
       setLocation("상품관리 - 상품수정");
-    else if (pathname === "/admin/user") setLocation("고객관리 - 문의");
+    else if (pathname === "/admin/user/ask") setLocation("고객관리 - 문의");
     else if (pathname === "/admin/user/faq") setLocation("고객관리 - FAQ");
     else if (pathname === "/admin/user/report") setLocation("고객관리 - 신고");
     else if (pathname === "/admin/user/review") setLocation("고객관리 - 리뷰");
@@ -117,7 +115,7 @@ export default function AdminSideNav() {
       <div>
         <LowerTag>
           <LowLink
-            href="/admin/user"
+            href="/admin/user/ask"
             style={
               location === "고객관리 - 문의"
                 ? { color: "#fff", fontWeight: "1000" }
