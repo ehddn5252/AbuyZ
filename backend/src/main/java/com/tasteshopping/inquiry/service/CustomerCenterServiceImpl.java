@@ -20,7 +20,6 @@ import com.tasteshopping.user.dto.ResultDto;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,7 +64,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             CustomerCenters customerCenters = l.get(i).get();
             CustomerCenterDto customerCenterDto = customerCenters.toDto();
             if(customerCenters.getOrder()!=null) {
-                customerCenterDto.setProducts_uid(customerCenters.getOrder().getInventory().getProduct().getUid());
+                customerCenterDto.setProductsUid(customerCenters.getOrder().getInventory().getProduct().getUid());
             }
             new_l.add(customerCenterDto);
         }
@@ -82,7 +81,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         for (int i = 0; i < l.size(); ++i) {
             CustomerCenters customerCenters = l.get(i);
             CustomerCenterDto customerCenterDto = customerCenters.toDto();
-            customerCenterDto.setProducts_uid(customerCenters.getOrder().getInventory().getProduct().getUid());
+            customerCenterDto.setProductsUid(customerCenters.getOrder().getInventory().getProduct().getUid());
             new_l.add(customerCenterDto);
         }
         return new_l;
