@@ -42,26 +42,31 @@ function MyApp({ Component, pageProps }) {
       Kakao.init("204f7abed9a6558eb3411fabf8202302");
     }
     // IP 가져오기
-    // getIp();
+    getIp();
   }, []);
 
   // IP 가져오기
-  // const getIp = async () => {
-  //   try {
-  //     const response = await axios.get("https://api.ipify.org?format=json");
-  //     const ip = response.data.ip;
-
-  //     https
-  //       .post("/dashboard/visit-IP", {
-  //         userIp: ip,
-  //       })
-  //       .then((response) => {
-  //         console.log(response);
-  //       });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const getIp = async () => {
+    try {
+      const response = await axios.get("https://api.ipify.org?format=json");
+      const ip = response.data.ip;
+      console.log(ip);
+      https.post(
+        "/dashboard/visit-IP",
+        {
+          userIp: ip,
+        },
+        {
+          validateStatus: function (status) {
+            // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
+            return status < 500;
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <RecoilRoot>
       <MainContainer>
