@@ -1,6 +1,8 @@
 package com.tasteshopping.coupon.repository;
 
 import com.tasteshopping.coupon.entity.CouponLists;
+import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,4 +23,6 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     Optional<CouponLists> findByCouponsUidAndUserEmail(int id,String email);
     @EntityGraph(attributePaths = {"user","coupons"})
     List<CouponLists> findByCoupons_EndDateAndStatus(Date yesterday,int status);
+
+    CouponLists findByCouponsAndUser(Coupons coupons, Users user);
 }

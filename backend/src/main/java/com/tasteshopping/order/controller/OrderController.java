@@ -4,6 +4,7 @@ import com.tasteshopping.cart.exception.OutOfStockException;
 import com.tasteshopping.cart.dto.CartDto;
 import com.tasteshopping.cart.dto.CartReqDto;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.order.Exception.CartNotFoundException;
 import com.tasteshopping.order.dto.*;
 import com.tasteshopping.order.service.OrderListService;
 import com.tasteshopping.order.service.OrderService;
@@ -104,11 +105,15 @@ public class OrderController {
     }
 
     @PostMapping("/cart")
-    public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email){
+    public ResponseEntity<BaseRes> cartPay(@AuthenticationPrincipal String email, @RequestBody CouponListDto couponsDto){
         try{
-            orderService.cartPay(email);
+            orderService.cartPay(email, couponsDto.getCoupons());
         }
         catch (OutOfStockException e){
+            e.printStackTrace();
+            return e.baseResResponseEntity;
+        }
+        catch (CartNotFoundException e){
             e.printStackTrace();
             return e.baseResResponseEntity;
         }
@@ -118,6 +123,7 @@ public class OrderController {
     @PostMapping("/basic")
     public ResponseEntity<BaseRes> basicPay(@AuthenticationPrincipal String email,
                                             @RequestBody CartReqDto cartReqDto){
+
         CartDto cartDto = cartReqDto.toDto();
         orderService.basicPay(email,cartDto);
         return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "결제하기 성공!"));

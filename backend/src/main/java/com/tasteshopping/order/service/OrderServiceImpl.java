@@ -6,6 +6,12 @@ import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
 import com.tasteshopping.cart.service.CartService;
 import com.tasteshopping.common.dto.BaseRes;
+import com.tasteshopping.coupon.entity.CouponLists;
+import com.tasteshopping.coupon.entity.Coupons;
+import com.tasteshopping.coupon.repository.CouponListsRepository;
+import com.tasteshopping.coupon.repository.CouponRepository;
+import com.tasteshopping.coupon.service.CouponService;
+import com.tasteshopping.order.Exception.CartNotFoundException;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
@@ -25,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,15 +49,24 @@ public class OrderServiceImpl implements OrderService {
 
     private final ProductService productService;
 
+    private final CouponRepository couponRepository;
+
+    private final CouponListsRepository couponListsRepository;
+
     @Override
     @Transactional
-    public void cartPay(String email) {
+    public void cartPay(String email, List<Integer> coupons) {
         Users user = userRepository.findByEmail(email).get();
         List<Carts> cartList = cartRepository.findByUser(user);
+
+        if (cartList.size()==0){
+            throw new CartNotFoundException();
+        }
+
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(OrderStatus.PROCESS.toString());
         for (int i = 0; i < cartList.size(); ++i) {
-            orderLists = pay(cartList.get(i), orderLists, user, orderLists.getTotalPrice());
+            orderLists = pay(cartList.get(i), orderLists, user, orderLists.getTotalPrice(), coupons.get(i));
             // 여기에서
         }
         orderListRepository.save(orderLists);
@@ -66,7 +82,8 @@ public class OrderServiceImpl implements OrderService {
         return orderListRepository.save(orderLists);
     }
 
-    public OrderLists pay(Carts cart, OrderLists orderLists, Users user, int totalPrice) {
+    @Transactional
+    public OrderLists pay(Carts cart, OrderLists orderLists, Users user, int totalPrice, Integer couponsUid) {
         Orders orders = new Orders();
         orders.setOrderList(orderLists);
         orders.setCount(cart.getProductCount());
@@ -74,11 +91,17 @@ public class OrderServiceImpl implements OrderService {
         Inventories inventory = cart.getInventory();
         // 상품 할인율 적용
         Integer price = (100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice() / 100 + inventory.getPrice();
-        
+
         // 쿠폰 적용
-        if (orders.getCoupon() != null) {
-            price = price - orders.getCoupon().getDiscountPrice();
+        if (couponsUid != 0) {
+            Optional<Coupons> coupon = couponRepository.findById(couponsUid);
+            price = price - coupon.get().getDiscountPrice();
+            CouponLists couponLists =  couponListsRepository.findByCouponsAndUser(coupon.get(),user);
+            orders.setCoupon(coupon.get());
+            couponLists.use();
         }
+
+
         orders.setPrice(price);
         orders.setInventory(inventory);
         int remainingStoke = inventory.getCount() - cart.getProductCount();
@@ -108,7 +131,7 @@ public class OrderServiceImpl implements OrderService {
         OrderLists orderLists = createOrderLists(user);
         orderLists.setStatus(OrderStatus.PROCESS.toString());
         Carts cart = cartRepository.findByUserAndCurrentUid(user);
-        orderLists = pay(cart, orderLists, user, 0);
+        orderLists = pay(cart, orderLists, user, 0,cartDto.getCouponsUid());
 
         // 아래는 배송료 추가하는 로직
 //        orderLists.setTotalPrice(orderLists.getOrders().get(0).getInventory().getProduct().getDeliveryFee()+orderLists.getTotalPrice());
@@ -125,7 +148,11 @@ public class OrderServiceImpl implements OrderService {
         if (order.getStatus().equals(OrderStatus.CANCEL_REQUEST.toString()) || order.getStatus().equals(OrderStatus.REFUND_REQUEST.toString())) {
             order.setStatus(OrderStatus.CANCEL.toString());
             order.getInventory().setCount(order.getInventory().getCount() + order.getCount());
-            orderLists.setTotalPrice(orderLists.getTotalPrice() - (order.getPrice() * order.getCount()));
+            int couponPrice = 0;
+            if(order.getCoupon()!=null){
+                couponPrice=order.getCoupon().getDiscountPrice();
+            }
+            orderLists.setTotalPrice(orderLists.getTotalPrice() + couponPrice - (order.getPrice() * order.getCount()));
             // 재고 다시 돌려 놓음
             orderListRepository.save(orderLists);
             orderRepository.save(order);
