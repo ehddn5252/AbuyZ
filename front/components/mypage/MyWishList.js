@@ -68,8 +68,8 @@ export default function MyWishList() {
 const MyOrderContainer = styled.div`
   margin-top: 4rem;
   margin-bottom: 4rem;
-  width: 100%;
   width: 56rem;
+  min-height: 80vh;
 `;
 
 const MajorTitle = styled.span`

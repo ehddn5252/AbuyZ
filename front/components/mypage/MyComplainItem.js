@@ -1,5 +1,5 @@
 // React
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // StyledCopmoent
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { delnumbercenter } from "../../pages/api/customercenter";
 import { useRouter } from "next/router";
+import { productDetail } from "../../pages/api/product";
 export default function MyComplainItem({
   complain,
   idx,
@@ -15,17 +16,33 @@ export default function MyComplainItem({
   setSelected,
 }) {
   const router = useRouter();
+  const productUid = complain.productsUid;
+  const [product, setProduct] = useState({});
+
   const ansOpen = () => {
     setContentOpen(!contentOpen);
   };
 
+  // 문의 내역 삭제하기
   const deletecomplain = async () => {
     const res = await delnumbercenter(complain.uid);
     alert("문의 내역이 삭제 되었습니다");
     router.reload();
   };
 
+  // 상품 상세 정보 가져오기
+  const products = async () => {
+    const rres = await productDetail(productUid);
+    setProduct(rres.data.products);
+  };
+
   const [contentOpen, setContentOpen] = useState(false);
+
+  useEffect(() => {
+    if (complain.productsUid !== null) {
+      products();
+    }
+  }, []);
 
   return (
     <Container>
@@ -39,35 +56,49 @@ export default function MyComplainItem({
               [{complain.customerCenterCategory}] {complain.title}
               <br></br>
               <br></br>
-              <span style={{ color: "#aaaaaa" }}>
+              <GraySpan>
                 문의 일시: {complain.start_date.slice(0, 10)}{" "}
                 {complain.start_date.slice(11, 16)}
-              </span>
+              </GraySpan>
             </ComplainTitle>
 
             {selected === idx ? (
-              <div style={{ position: "relative" }}>
-                <div style={{ position: "absolute", top: "5%", right: "5%" }}>
+              <Relative>
+                <Absolute>
                   <DeleteForeverIcon
                     style={{ fontSize: "xx-large", color: "red" }}
                     onClick={deletecomplain}
                   ></DeleteForeverIcon>
-                </div>
+                </Absolute>
                 {complain.customerCenterCategory === "교환_환불" ? (
-                  <span>상품이 놓일 자리</span>
+                  <div>
+                    <br></br>
+                    <span style={{ fontWeight: "bold" }}>환불 진행 상품</span>
+
+                    <ExchangeCont>
+                      <div
+                        style={{
+                          flex: 2,
+                          paddingBottom: "0.7rem",
+                          paddingLeft: "0.7rem",
+                        }}
+                      >
+                        <br></br>
+                        <Img src={product.descriptionImg}></Img>
+                      </div>
+                      <div style={{ flex: 10 }}>
+                        <ComplainContent>
+                          <span>{product.name}</span>
+                        </ComplainContent>
+                      </div>
+                    </ExchangeCont>
+                  </div>
                 ) : null}
                 {complain.imgUrl !== null ? (
                   <div style={{ display: "flex", flexDirection: "row" }}>
                     <div style={{ flex: 2 }}>
                       <br></br>
-                      <img
-                        src={complain.imgUrl}
-                        style={{
-                          width: "5rem",
-                          height: "7rem",
-                          objectFit: "cover",
-                        }}
-                      ></img>
+                      <Img src={complain.imgUrl}></Img>
                     </div>
                     <div style={{ flex: 10 }}>
                       <ComplainContent>
@@ -101,10 +132,10 @@ export default function MyComplainItem({
                         <span>{complain.reply}</span>
                         <br></br>
                         <br></br>
-                        <span style={{ color: "#aaaaaa" }}>
+                        <GraySpan>
                           {complain.end_date.slice(0, 10)}{" "}
                           {complain.end_date.slice(11, 16)}
-                        </span>
+                        </GraySpan>
                       </div>
                     </div>
                   ) : (
@@ -122,7 +153,7 @@ export default function MyComplainItem({
                     </div>
                   )}
                 </ContentDiv>
-              </div>
+              </Relative>
             ) : null}
           </div>
         </div>
@@ -138,25 +169,34 @@ export default function MyComplainItem({
           )}
         </div>
       </div>
-
-      {/* {answerOpen ? (
-        <ContentDiv>
-          <div style={{ padding: "2rem" }}>
-            <span>{complain.reply}</span>
-          </div>
-        </ContentDiv>
-      ) : null} */}
     </Container>
   );
 }
 
 const Container = styled.div`
-  border-bottom: 1px solid;
+  border-bottom: 4px solid;
   border-color: rgba(128, 128, 128, 0.17);
   padding-top: 1rem;
   padding-bottom: 1rem;
 `;
 
+const Relative = styled.div`
+  position: relative;
+`;
+
+const Absolute = styled.div`
+  position: absolute;
+  top: 5%;
+  right: 0%;
+`;
+
+const ExchangeCont = styled.div`
+  display: flex;
+  flex-direction: row;
+  border: 2px solid rgb(170, 170, 170, 0.5);
+  border-radius: 5px;
+  margin-top: 1rem;
+`;
 const CompleteDiv = styled.div`
   background-color: #56a9f1;
   color: white;
@@ -172,6 +212,12 @@ const CompleteDiv = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const Img = styled.img`
+  width: 5rem;
+  height: 7rem;
+  object-fit: cover;
 `;
 
 const InCompleteDiv = styled.div`
@@ -206,4 +252,8 @@ const ComplainTitle = styled.span`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const GraySpan = styled.span`
+  color: #aaaaaa;
 `;

@@ -12,9 +12,10 @@ import MyOrderList from "../components/mypage/MyOrderList";
 import MyWishList from "../components/mypage/MyWishList";
 import DeliveryList from "../components/mypage/DeliveryList";
 import CanReview from "../components/mypage/CanReview";
-import { mypageNum, pageNameState } from "../states";
+import { mypageNum, pageNameState, submitNum } from "../states";
 import { useRecoilState } from "recoil";
 export default function Mypage() {
+  const [subNum, setSubNum] = useRecoilState(submitNum);
   const [mypageN, setMypageN] = useRecoilState(mypageNum);
   const [tap, setTap] = useState(mypageNum); // eslint-disable-line no-unused-vars
   const [activeTap, SetActiveTap] = useState(0);
@@ -22,20 +23,33 @@ export default function Mypage() {
   const [reviewCnt, setReviewCnt] = useState(0);
   useEffect(() => {
     const path = window.location.pathname;
-    if (prevUrl !== path) {
-      setMypageN(0);
+    if (subNum === 2) {
+      setTap(2);
+      SetActiveTap(2);
+      setSubNum(0);
     } else {
-      setTap(mypageN);
-      SetActiveTap(mypageN);
+      if (prevUrl !== path) {
+        setMypageN(0);
+      } else {
+        setTap(mypageN);
+        SetActiveTap(mypageN);
+      }
     }
   }, [mypageN]);
+  console.log(tap, activeTap, subNum, "@@@@");
 
   useEffect(() => {
     const path = window.location.pathname;
-    if (prevUrl !== path) {
-      setTap(0);
-      SetActiveTap(0);
+    if (subNum === 2) {
+      setTap(2);
+      SetActiveTap(2);
+      setSubNum(0);
     } else {
+      if (prevUrl !== path) {
+        setTap(0);
+        SetActiveTap(0);
+      } else {
+      }
     }
   }, []);
   return (
