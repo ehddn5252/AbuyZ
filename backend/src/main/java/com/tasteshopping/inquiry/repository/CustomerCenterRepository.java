@@ -13,6 +13,12 @@ public interface CustomerCenterRepository extends JpaRepository<CustomerCenters,
     @Query(value="select c from CustomerCenters c where c.user.email=:email")
     List<Optional<CustomerCenters>> findByUserEmail(String email);
 
+    @Query(value ="select c from CustomerCenters c " +
+            "join fetch Orders o on c.order = o " +
+            "join fetch Inventories i on o.inventory = i " +
+            "join fetch Products p on i.product=p")
+    List<CustomerCenters> findAllFetchJoin();
+
     @Query(value="select c from CustomerCenters c where c.user.email=:email and c.reply is null")
     List<Optional<CustomerCenters>> findByUserEmailAndNoReply(String email);
 

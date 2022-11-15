@@ -74,6 +74,8 @@ public class OrderServiceImpl implements OrderService {
         Inventories inventory = cart.getInventory();
         // 상품 할인율 적용
         Integer price = (100 - inventory.getProduct().getDiscountRate()) * inventory.getProduct().getPrice() / 100 + inventory.getPrice();
+        
+        // 쿠폰 적용
         if (orders.getCoupon() != null) {
             price = price - orders.getCoupon().getDiscountPrice();
         }

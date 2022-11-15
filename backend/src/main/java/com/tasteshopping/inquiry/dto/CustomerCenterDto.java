@@ -25,5 +25,5 @@ public class CustomerCenterDto {
     private String customerCenterCategory;
     private String userName;
     private String reply;
-
+    private Integer products_uid;
 }

@@ -67,7 +67,6 @@ public class CustomerCenters {
         customerCenterDto.setUid(uid);
         customerCenterDto.setImgUrl(imgUrl);
         customerCenterDto.setReply(this.reply);
-
         return customerCenterDto;
 
     }
