@@ -161,10 +161,8 @@ public class Products {
         this.name= p.getName();
         this.discountRate = p.getDiscountRate();
         this.deliveryFee = p.getDeliveryFee();
-        this.descriptionImg = p.getDescriptionImg();
         this.smallCategory = smallCategory;
         this.brand = brand;
-        this.repImg = p.getRepImg();
         this.price = p.getPrice();
         this.reviewRate = p.getReviewRate();
     }
