@@ -6,6 +6,7 @@ import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
+import { useRouter } from "next/router";
 
 // api
 import { regisreview } from "../../pages/api/review";
@@ -19,21 +20,7 @@ export default function ReviewAddModel({
   orderUid,
   productUid,
 }) {
-  // // 상품 이름
-  // console.log(productName, "1");
-  // // 모르겠음
-  // console.log(productOptions, "2");
-  // // 모달 닫는 거
-  // console.log(setOpen, "3");
-  // // 이미지 url
-  // console.log(image, "4");
-  // // 오더 번호
-  // console.log(orderUid, "5");
-  // // 상품 번호
-  // console.log(productUid, "6");
-  // http://localhost:8080/api/review
-  // { "product_uid" : 519, "rating": 1.0, "content" : "사람이실수할수도있지", "order_uid" : 50 }
-  // 평점
+  const router = useRouter();
   const [value, setValue] = useState(0);
   // 리뷰 내용
   const [content, setContent] = useState("");
@@ -52,17 +39,17 @@ export default function ReviewAddModel({
       content: content,
       order_uid: orderUid,
     };
-    console.log(reviewDto);
 
     formData.append(
       "dto",
       new Blob([JSON.stringify(reviewDto)], { type: "application/json" })
     );
 
-    for (let i = 0; i < imgData.length; i++) {
-      formData.append("file", imgData[i]);
+    if (imgData !== null) {
+      for (let i = 0; i < imgData.length; i++) {
+        formData.append("file", imgData[i]);
+      }
     }
-    console.log(formData);
 
     const accessToken = sessionStorage.getItem("access-token");
     axios.defaults.headers.common["access_token"] = accessToken;
@@ -77,12 +64,12 @@ export default function ReviewAddModel({
         console.log(res, "리뷰등록 성공!");
         alert("리뷰를 등록하였습니다.");
         closeModal();
+        router.reload();
       })
       .catch((err) => {
         console.log(err, "리뷰등록에 실패하였습니다.");
       });
   };
-
   // 모달 닫기
   const closeModal = () => {
     setOpen(false);

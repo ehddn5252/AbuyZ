@@ -8,7 +8,7 @@ import { couponlist } from "../../pages/api/coupon";
 import { mycenter } from "../../pages/api/customercenter";
 import CanUseCoupon from "./CanUseCoupon";
 import IncompleteAnswer from "./IncompleteAnswer";
-export default function Myinfo({ setTap, SetActiveTap }) {
+export default function Myinfo({ setTap, SetActiveTap, setMypageN }) {
   const [userName, setUserName] = useState("");
   const [reviewCnt, setReviewCnt] = useState(0);
   const [couponCnt, setCouponCnt] = useState(0);
@@ -23,6 +23,7 @@ export default function Myinfo({ setTap, SetActiveTap }) {
 
   const complain = async () => {
     const rres = await mycenter();
+    console.log(rres, "!@#");
     setComplainList(rres.data);
   };
   // 아직 작성하지 않는 리뷰

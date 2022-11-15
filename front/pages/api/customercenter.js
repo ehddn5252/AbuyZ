@@ -15,7 +15,7 @@ export async function mycenter() {
       }
     });
   }).catch((e) => {
-    console.log(e);
+    console.log(e, "@@");
   });
 }
 

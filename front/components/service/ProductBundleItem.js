@@ -14,18 +14,16 @@ export default function ProductBundleItem({
 }) {
   const bundleitem = async () => {
     let productlist = [];
+
     for (var j = 0; j < orderuidList.length; j++) {
       const res = await eachGetOrderList(orderuidList[j]);
       for (var k = 0; k < res.data.length; k++) {
-        console.log(res.data[k]);
         productlist.push(res.data[k]);
       }
     }
     productlist.sort((a, b) => b.orderUid - a.orderUid);
     setProductList(productlist);
   };
-  console.log(productList);
-
   useEffect(() => {
     bundleitem();
   }, [orderuidList]);
@@ -59,26 +57,26 @@ export default function ProductBundleItem({
 
               {Object.keys(e.inventoryDto.productOptions[0])[0] !== "x" ? (
                 <InfoContainer>
-                  <span style={{ color: "#aaaaaa", fontSize: "0.7rem" }}>
+                  <DateSpan>
                     {e.inventoryDto.productDto.date.slice(0, 10)}
-                  </span>
+                  </DateSpan>
                   <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
                   {e.inventoryDto.productOptions.map((e, idx) => (
                     <div key={idx}>
                       {Object.keys(e) == "x" ? null : (
-                        <span>[{Object.keys(e)} :</span>
+                        <span>{Object.keys(e)} :</span>
                       )}
                       {e[Object.keys(e)] == "x" ? null : (
-                        <span> {e[Object.keys(e)]}]</span>
+                        <span> {e[Object.keys(e)]}</span>
                       )}
                     </div>
                   ))}
                 </InfoContainer>
               ) : (
                 <InfoNoOptionContainer>
-                  <span style={{ color: "#aaaaaa", fontSize: "0.7rem" }}>
+                  <DateSpan>
                     {e.inventoryDto.productDto.date.slice(0, 10)}
-                  </span>
+                  </DateSpan>
                   <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>
                 </InfoNoOptionContainer>
               )}
@@ -129,18 +127,6 @@ const InfoNoOptionContainer = styled.div`
   margin-left: 2rem;
   margin-top: 0.8rem;
 `;
-
-const ButtonContainer = styled.div`
-  flex: 1;
-  margin-top: 1.5rem;
-`;
-
-const ProductoptionsInfo = styled.span`
-  font-size: 1rem;
-  font-weight: bolder;
-  padding-top: 1rem;
-  color: black;
-`;
 const ProductIntro = styled.p`
   padding: 0;
   margin: 0;
@@ -174,4 +160,9 @@ const CartButton = styled.button`
   margin-top: 1rem;
   height: 2rem;
   border-radius: 5px;
+`;
+
+const DateSpan = styled.span`
+  color: #aaaaaa;
+  font-size: 0.7rem;
 `;

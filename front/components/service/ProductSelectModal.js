@@ -53,15 +53,20 @@ export default function ProductSelectModal({
   }, []);
 
   const selectfunction = () => {
-    setDate(productList[idxSelected].inventoryDto.productDto.date);
-    setImg(productList[idxSelected].inventoryDto.productDto.descriptionImg);
-    setName(productList[idxSelected].inventoryDto.productDto.name);
-    // setOptions(productList[idxSelected].inventoryDto.productOptions);
-    setPrice(productList[idxSelected].price);
-    setCount(productList[idxSelected].count);
-    setOrderUid(productList[idxSelected].orderUid);
-    setModalOpen(false);
+    if (idxSelected === -1) {
+      alert("상품을 선택해주세요");
+    } else {
+      setDate(productList[idxSelected].inventoryDto.productDto.date);
+      setImg(productList[idxSelected].inventoryDto.productDto.descriptionImg);
+      setName(productList[idxSelected].inventoryDto.productDto.name);
+      setOptions(productList[idxSelected].inventoryDto.productOptions);
+      setPrice(productList[idxSelected].price);
+      setCount(productList[idxSelected].count);
+      setOrderUid(productList[idxSelected].orderUid);
+      setModalOpen(false);
+    }
   };
+
   return (
     <Container ref={modalRef}>
       <CloseIconDiv>
@@ -71,10 +76,6 @@ export default function ProductSelectModal({
         <h1 style={{ marginLeft: "3rem" }}>주문상품 선택</h1>
         <hr></hr>
         <Caution>1주일 이내 주문 내역만 노출됩니다.</Caution>
-        <Date>
-          {/* 7일전 ~ 오늘 날짜 */}
-          2022.10.11 - 2022.10.18
-        </Date>
         <ProductBundleItem
           orderuidList={orderuidList}
           productList={productList}
@@ -101,7 +102,8 @@ const Container = styled.div`
   background-color: white;
   border: 1px solid #56a9f1;
   border-radius: 8px;
-  min-height: 50vh;
+  height: 70vh;
+  overflow-y: scroll;
 `;
 const Caution = styled.p`
   margin-left: 3rem;
