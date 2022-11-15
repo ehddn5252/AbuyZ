@@ -11,18 +11,21 @@ import java.util.Optional;
 @Repository
 public interface CustomerCenterRepository extends JpaRepository<CustomerCenters,Integer> {
     @Query(value="select c from CustomerCenters c " +
-            "join fetch Orders o on c.order = o " +
-            "join fetch Inventories i on o.inventory = i " +
-            "join fetch Products p on i.product=p " +
-            "join fetch Users u on c.user.email = :email " +
+            "left join Orders o on c.order = o " +
+            "left join Inventories i on o.inventory = i " +
+            "left join Products p on i.product=p " +
+            "left join Users u on c.user = u " +
             "where c.user.email=:email")
     List<Optional<CustomerCenters>> findByUserEmail(String email);
 
+//    @Query(value="select c from CustomerCenters c where c.user.email=:email ")
+//    List<Optional<CustomerCenters>> findByUserEmail(String email);
+
     @Query(value ="select c from CustomerCenters c " +
-            "join fetch Orders o on c.order = o " +
-            "join fetch Inventories i on o.inventory = i " +
-            "join fetch Users u on c.user.email = u " +
-            "join fetch Products p on i.product=p")
+            "left join Orders o on c.order = o " +
+            "left join Inventories i on o.inventory = i " +
+            "left join Users u on c.user= u " +
+            "left join Products p on i.product=p")
     List<CustomerCenters> findAllFetchJoin();
 
     @Query(value="select c from CustomerCenters c where c.user.email=:email and c.reply is null")
