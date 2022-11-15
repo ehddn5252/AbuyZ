@@ -48,6 +48,7 @@ public class Orders {
 //    @JoinColumn(name="process_statuses_uid")
 //    ProcessStatuses processStatus;
 
+    @Column
     String status;
 
     @ManyToOne(fetch = FetchType.LAZY)

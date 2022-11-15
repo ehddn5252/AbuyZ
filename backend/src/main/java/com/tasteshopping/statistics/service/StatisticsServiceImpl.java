@@ -2,6 +2,7 @@ package com.tasteshopping.statistics.service;
 
 import com.tasteshopping.cart.entity.Carts;
 import com.tasteshopping.cart.repository.CartRepository;
+import com.tasteshopping.order.dto.OrderStatus;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderListRepository;
@@ -16,11 +17,23 @@ import java.util.*;
 
 @Service
 @Slf4j
-@AllArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
     private final CartRepository cartRepository;
     private final OrderListRepository orderListRepository;
     private final OrderRepository orderRepository;
+
+    private List<String> cancelStatus;
+    StatisticsServiceImpl(OrderRepository orderRepository,
+                          OrderListRepository orderListRepository,
+                          CartRepository cartRepository){
+        this.orderRepository = orderRepository;
+        this.orderListRepository = orderListRepository;
+        this.cartRepository = cartRepository;
+        cancelStatus = new ArrayList<>();
+        cancelStatus.add(OrderStatus.CANCEL.toString());
+        cancelStatus.add(OrderStatus.RETURN.toString());
+
+    }
     @Override
     public ResponseDto getSales(DateDto dateDto) {
         return getStatistics(dateDto,0);
@@ -59,7 +72,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         switch (menu){
             case 0:
                 int total_count=0,total_sales=0;
-                orderLists = orderListRepository.findByDateBetween(start_date,end_date);
+                orderLists = orderListRepository.findByDateBetweenAndOrders_StatusNotIn(start_date,end_date, cancelStatus);
                 TreeMap<String,Integer> result = new TreeMap<>();
                 for(OrderLists orderList:orderLists){
                     total_sales+=orderList.getTotalPrice();
@@ -102,7 +115,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 responseDto.setMessage("조회 성공");
                 break;
             case 2:case 3:
-                List<Orders>orders = orderRepository.findByOrderList_DateBetween(start_date,end_date);
+                List<Orders>orders = orderRepository.findByOrderList_DateBetweenAndStatusNotIn(start_date,end_date,cancelStatus);
                 if(menu==2){
                     Map<String,ProductStatisticsDto>productStatistics=new HashMap<>();
                     ProductStatisticsDtoComparator vc = new ProductStatisticsDtoComparator(productStatistics);
@@ -184,7 +197,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 break;
             default:
                 Map<String,Integer>dayStatistics = new HashMap<>();
-                orderLists = orderListRepository.findAllByDateBetween(start_date,end_date);
+                orderLists = orderListRepository.findByDateBetweenAndOrders_StatusNotIn(start_date,end_date,cancelStatus);
                 for(OrderLists orderList:orderLists){
                     dayStatistics.put(orderList.getDay(), dayStatistics.getOrDefault(orderList.getDay(), 0) + orderList.getTotalPrice());
                 }
