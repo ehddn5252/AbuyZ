@@ -587,11 +587,11 @@ public class ProductServiceImpl implements ProductService {
         modifyProduct(productCreateDto);
 
         // 상품 이미지 변경 (삭제 후 생성)
-        if (multipartFiles != null) {
-            modifyProductPicture(productCreateDto, multipartFiles);
-        }
+//        if (multipartFiles != null) {
+//            modifyProductPicture(productCreateDto, multipartFiles);
+//        }
         // product_options 변경 (삭제 후 생성)
-        modifyProductOption(productCreateDto);
+//        modifyProductOption(productCreateDto);
 
         // product_uid 에 맞는 product_keywords 변경 (삭제 후 생성)
         modifyProductKeywords(productCreateDto);
