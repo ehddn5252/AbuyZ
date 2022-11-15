@@ -1,17 +1,27 @@
+// react
 import React, { useState } from "react";
+
+// mui
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import styled from "@emotion/styled";
-import "react-dropdown/style.css";
-import ProductSelectModal from "./ProductSelectModal";
 import { TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { post } from "axios";
+
+// styled
+import styled from "@emotion/styled";
+
+// dropdown
+import "react-dropdown/style.css";
+
+// 하위 component
+import ProductSelectModal from "./ProductSelectModal";
+
+// api
 import { customercenter } from "../../pages/api/customercenter";
+
 export default function ServiceConsulting() {
-  const [selected, setSelected] = useState(0);
   const [age, setAge] = useState("");
   const [date, setDate] = useState("");
   const [img, setImg] = useState("");
@@ -28,6 +38,7 @@ export default function ServiceConsulting() {
     setCategory(event.target.value);
   };
 
+  // 카테고리:currentValue
   // 고객문의 등록 API
   // const regisCS = (e) => {
   //   e.preventDefault();
@@ -57,7 +68,10 @@ export default function ServiceConsulting() {
     console.log(res.data);
   };
 
+  // 문의하는 문의 카테고리
   const [currentValue, setCurrentValue] = useState("상품");
+
+  const [selected, setSelected] = useState(0);
   const [ShowOptions, setShowOptions] = useState(false);
   const [isExchange, setIsExchange] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -87,18 +101,12 @@ export default function ServiceConsulting() {
   return (
     <Container>
       <MajorTitle>1 : 1 문의하기</MajorTitle>
-      <hr
-        style={{
-          height: "0.3rem",
-          background: "#7895B2",
-          borderRadius: "1rem",
-        }}
-      />
+      <Hr />
       <AllDiv>
-        <div style={{ flex: 2, marginTop: "1rem" }}>
+        <ElementContainer>
           <span>카테고리</span>
-        </div>
-        <div style={{ flex: 10 }}>
+        </ElementContainer>
+        <ElementContent>
           <FormControl sx={{ width: "100%" }}>
             <InputLabel id="demo-simple-select-standard-label">
               문의 유형 선택
@@ -115,7 +123,7 @@ export default function ServiceConsulting() {
                 value={"교환_환불"}
                 onClick={(e) => handleOnChangeSelectValueex(e)}
               >
-                교환/환불
+                환불
               </MenuItem>
               <MenuItem
                 value={"이벤트_프로모션"}
@@ -137,14 +145,15 @@ export default function ServiceConsulting() {
               </MenuItem>
             </Select>
           </FormControl>
-        </div>
+        </ElementContent>
       </AllDiv>
+      {/* 교환/환불일 경우만 보여줌 */}
       {isExchange == true ? (
         <AllDiv>
-          <div style={{ flex: 2, marginTop: "0.5rem" }}>
+          <ElementContainer>
             <span>상품 선택</span>
-          </div>
-          <div style={{ flex: 10 }}>
+          </ElementContainer>
+          <ElementContent>
             {name.length > 0 ? (
               <div>
                 <div style={{ display: "flex", flexDirection: "row" }}>
@@ -192,48 +201,48 @@ export default function ServiceConsulting() {
                 )}
               </div>
             )}
-          </div>
+          </ElementContent>
         </AllDiv>
       ) : null}
 
       <AllDiv>
-        <div style={{ flex: 2, marginTop: "1rem" }}>
+        <ElementContainer>
           <span>문의 제목</span>
-        </div>
-        <div style={{ flex: 10 }}>
+        </ElementContainer>
+        <ElementContent>
           <TextField
             placeholder="문의 제목을 입력해주세요."
             fullWidth
             onChange={(event) => setTitle(event.currentTarget.value)}
           ></TextField>
-        </div>
+        </ElementContent>
       </AllDiv>
       <AllDiv>
-        <div style={{ flex: 2, marginTop: "1rem" }}>
+        <ElementContainer>
           <span>문의 내용</span>
-        </div>
-        <div style={{ flex: 10 }}>
+        </ElementContainer>
+        <ElementContent>
           <TextField
             placeholder="문의 내용을 입력해주세요."
             fullWidth
             onChange={(event) => setContent(event.currentTarget.value)}
           ></TextField>
-        </div>
+        </ElementContent>
       </AllDiv>
       <AllDiv>
-        <div style={{ flex: 2, marginTop: "0.5rem" }}>
+        <ElementContainer>
           <span>사진 첨부</span>
           <br></br>
           <span>(선택사항)</span>
-        </div>
-        <div style={{ flex: 10 }}>
+        </ElementContainer>
+        <ElementContent>
           <input
             type="file"
             id="file"
             onChange={() => setFile(event.target.files[0])}
             multiple="multiple"
           />
-        </div>
+        </ElementContent>
       </AllDiv>
 
       <div
@@ -258,6 +267,19 @@ const Container = styled.div`
   height: 80vh;
 `;
 
+const Hr = styled.hr`
+  height: 0.3rem;
+  background: #7895b2;
+  border-radius: 1rem;
+`;
+
+const ElementContainer = styled.div`
+  flex: 2;
+  margin-top: 1rem;
+`;
+const ElementContent = styled.div`
+  flex: 10;
+`;
 const AllDiv = styled.div`
   padding: 2rem;
   display: flex;

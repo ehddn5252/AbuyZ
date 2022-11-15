@@ -80,3 +80,22 @@ export async function eachGetOrderList(basketnumber) {
     console.log(e);
   });
 }
+
+export async function weekorder() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+
+  return new Promise((resolve) => {
+    https.get("/order/from-before-week").then((response) => {
+      if (response.status === 200) {
+        console.log("해당 유저의 7일간 결제 목록 가져오기 성공", response);
+        resolve(response.data);
+      } else {
+        console.log("해당 유저의 7일간 결제 목록 가져오기 실패", response);
+        resolve(response);
+      }
+    });
+  }).catch((e) => {
+    console.log(e);
+  });
+}

@@ -33,37 +33,24 @@ export default function MyWishItem(product) {
         style={{
           color: "red",
           position: "absolute",
-          bottom: "35%",
+          bottom: "38%",
           right: "14%",
           fontSize: "3rem",
         }}
         onClick={() => deletezzim()}
       ></FavoriteRoundedIcon>
 
-      {product.product.product_name.length > 15 ? (
+      {product.product.product_name.length >= 35 ? (
         <div>
-          <ProductName>{product.product.product_name.slice(0, 17)}</ProductName>
-          <br></br>
           <ProductName>
-            {product.product.product_name.slice(17, 30)}...
+            {product.product.product_name.slice(0, 35)}...
           </ProductName>
         </div>
       ) : (
         <ProductName>{product.product.product_name}</ProductName>
       )}
 
-      {product.product.discountRate === 0 ? (
-        <DiscountContainer>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <Flextwo></Flextwo>
-            <Flexfive>
-              <CardPrice>
-                {product.product.price.toLocaleString("ko-KR")}원
-              </CardPrice>
-            </Flexfive>
-          </div>
-        </DiscountContainer>
-      ) : (
+      {product.product.discountRate > 0 ? (
         <DiscountContainer>
           <div style={{ display: "flex", flexDirection: "row" }}>
             <Flextwo>
@@ -79,11 +66,15 @@ export default function MyWishItem(product) {
               </CardPrice>
             </Flexfive>
           </div>
-          <DiscountContainer>
-            <CardPriceBD>
-              {product.product.price.toLocaleString("ko-KR")}원
-            </CardPriceBD>
-          </DiscountContainer>
+          <CardPriceBD>
+            {product.product.price.toLocaleString("ko-KR")}원
+          </CardPriceBD>
+        </DiscountContainer>
+      ) : (
+        <DiscountContainer>
+          <CardPrice>
+            {product.product.price.toLocaleString("ko-KR")}원
+          </CardPrice>
         </DiscountContainer>
       )}
     </ItemContainer>
@@ -109,24 +100,18 @@ const ProductName = styled.span`
   font-weight: bolder;
 `;
 
-const CardPriceBD = styled.p`
+const CardPriceBD = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-right: 0.5rem;
-  margin-top: 0;
   margin-bottom: 0;
   text-decoration: line-through;
   text-decoration-color: #aaaaaa;
   color: #aaaaaa;
-  margin-top: 0.5rem;
 `;
 
 const Discount = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-left: 1rem;
-  margin-right: 0rem;
-  margin-top: 0;
   margin-bottom: 0;
   color: #56a9f1;
   text-align: end;
@@ -136,9 +121,7 @@ const Discount = styled.span`
 const CardPrice = styled.span`
   font-size: 1.5rem;
   font-weight: bolder;
-  margin-left: 0.5rem;
   margin-right: 1.5rem;
-  margin-top: 0;
   margin-bottom: 0;
 `;
 
@@ -146,10 +129,15 @@ const DiscountContainer = styled.div`
   margin-top: 1rem;
 `;
 
+const FirstPriceContainer = styled.div`
+  margin-top: 0.3rem;
+`;
+
 const Flextwo = styled.div`
   display: flex;
   align-items: end;
-  flex: 2;
+  text-align: start;
+  flex: 1;
 `;
 
 const Flexfive = styled.div`

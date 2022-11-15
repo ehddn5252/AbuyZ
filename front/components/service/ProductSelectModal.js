@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import ExpandCircleDownOutlinedIcon from "@mui/icons-material/ExpandCircleDownOutlined";
 import CloseIcon from "@mui/icons-material/Close";
-import { getOrderList } from "../../pages/api/order";
+import { getOrderList, weekorder } from "../../pages/api/order";
 import ProductBundleItem from "./ProductBundleItem";
 export default function ProductSelectModal({
   setModalOpen,
@@ -19,39 +19,23 @@ export default function ProductSelectModal({
   const closeModal = () => {
     setModalOpen(false);
   };
+  const [idxSelected, setIdxSelected] = useState(0);
   const modalRef = useRef(null);
-  const [orderBundle, setOrderBundle] = useState([]);
+  const [productList, setProductList] = useState([]);
 
-  const productList = [
-    {
-      id: 0,
-      img: "/images/carrot.png",
-      name: "Only Price 1등급 당근 (300g * 2입)",
-      count: 1,
-      options: "1등급/ 세척",
-      price: 3000,
-      date: "2022.10.27",
-    },
-    {
-      id: 1,
-      img: "/images/sandwich.png",
-      name: "Only Price 샌드위치 (300g * 2입)",
-      count: 5,
-      options: "치킨마요",
-      price: 5000,
-      date: "2022.10.27",
-    },
-  ];
-
-  const bundle = async () => {
-    const res = await getOrderList();
-    res.data.sort((a, b) => b.uid - a.uid);
-    console.log(res.data);
-    setOrderBundle(res.data);
+  const [orderuid, setOrderUid] = useState([]);
+  const weekOrder = async () => {
+    const res = await weekorder();
+    let orderuid = [];
+    for (var i = 0; i < res.data.length; i++) {
+      orderuid.push(res.data[i].uid);
+    }
+    setOrderUid(orderuid);
   };
 
+  console.log(orderuid);
   useEffect(() => {
-    bundle();
+    weekOrder();
     // 이벤트 핸들러 함수
     const handler = () => {
       // mousedown 이벤트가 발생한 영역이 모달창이 아닐 때, 모달창 제거 처리
@@ -59,11 +43,9 @@ export default function ProductSelectModal({
         setModalOpen(false);
       }
     };
-
     // 이벤트 핸들러 등록
     document.addEventListener("mousedown", handler);
     // document.addEventListener('touchstart', handler); // 모바일 대응
-
     return () => {
       // 이벤트 핸들러 해제
       document.removeEventListener("mousedown", handler);
@@ -72,12 +54,13 @@ export default function ProductSelectModal({
   }, []);
 
   const selectfunction = () => {
-    setDate(productList[selected].date);
-    setImg(productList[selected].img);
-    setName(productList[selected].name);
-    setOptions(productList[selected].options);
-    setPrice(productList[selected].price);
-    setCount(productList[selected].count);
+    setDate(productList[idxSelected].inventoryDto.productDto.date);
+    setImg(productList[idxSelected].inventoryDto.productDto.repImg);
+    setName(productList[idxSelected].inventoryDto.productDto.name);
+    // setOptions(productList[idxSelected].inventoryDto.productOptions);
+    setPrice(productList[idxSelected].price);
+    setCount(productList[idxSelected].count);
+    setOrderUid(productList[idxSelected].orderUid);
     setModalOpen(false);
   };
   return (
@@ -86,65 +69,20 @@ export default function ProductSelectModal({
         <CloseIcon onClick={closeModal} sx={{ cursor: "pointer" }} />
       </CloseIconDiv>
       <div>
-        <h1 style={{ marginLeft: "3rem" }}>주문상품 선택</h1>
+        <span style={{ marginLeft: "3rem" }}>주문상품 선택</span>
         <hr></hr>
         <Caution>1주일 이내 주문 내역만 노출됩니다.</Caution>
         <Date>
           {/* 7일전 ~ 오늘 날짜 */}
           2022.10.11 - 2022.10.18
         </Date>
-        {orderBundle.map((e, idx) => (
-          <ProductBundleItem uid={e.uid}></ProductBundleItem>
-        ))}
-
-        {/* for문으로 돌리기 */}
-        {productList.map((e) => (
-          <Card
-            key={e.id}
-            style={{
-              ...cardStyle,
-              display: "flex",
-              flexDirection: "row",
-            }}
-            onClick={() => setSelected(e.id)}
-          >
-            <div style={{ flex: 1 }}>
-              <IconDiv>
-                {selected === e.id ? (
-                  <ExpandCircleDownOutlinedIcon
-                    sx={{ color: "#56a9f1" }}
-                  ></ExpandCircleDownOutlinedIcon>
-                ) : (
-                  <div>
-                    <CircleOutlinedIcon
-                      sx={{ color: "rgb(128, 128, 128, 0.7)" }}
-                    ></CircleOutlinedIcon>
-                  </div>
-                )}
-              </IconDiv>
-            </div>
-            <div style={{ flex: 11 }}>
-              <RowDiv>
-                <div style={{ flex: 2 }}>
-                  <ImageStyle src={e.img}></ImageStyle>
-                </div>
-                <div style={{ flex: 9 }}>
-                  {/* 상품 이름 */}
-                  <TextDiv>
-                    <span style={{ fontWeight: "bold" }}>{e.name}</span>
-                    <br></br>
-                    <br></br>
-                    {/* 가격 | 수량 */}
-                    <span>
-                      {e.price}원 | {e.count}개
-                    </span>
-                  </TextDiv>
-                  <br></br>
-                </div>
-              </RowDiv>
-            </div>
-          </Card>
-        ))}
+        <ProductBundleItem
+          orderuid={orderuid}
+          productList={productList}
+          setProductList={setProductList}
+          setIdxSelected={setIdxSelected}
+          idxSelected={idxSelected}
+        ></ProductBundleItem>
 
         <ButtonDiv>
           <Button onClick={selectfunction}>선택완료</Button>
@@ -164,7 +102,7 @@ const Container = styled.div`
   background-color: white;
   border: 1px solid #56a9f1;
   border-radius: 8px;
-  height: 70%;
+  min-height: 50vh;
 `;
 const Caution = styled.p`
   margin-left: 3rem;

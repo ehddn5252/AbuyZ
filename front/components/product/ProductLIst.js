@@ -99,7 +99,7 @@ export default function ProductLIst({ productList }) {
     const tv = change();
     setInputValue(tv);
   }, [inputValue, value]);
-  return (
+  return productList ? (
     <div>
       <Right>
         <Autocomplete
@@ -130,7 +130,7 @@ export default function ProductLIst({ productList }) {
         </Grid>
       </Center>
     </div>
-  );
+  ) : null;
 }
 
 const Right = styled.div`

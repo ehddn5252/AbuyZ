@@ -13,5 +13,5 @@ export default function Event() {
 const AllDiv = styled.div`
   display: flex;
   justify-content: center;
-  height: 80vh;
+  min-height: 80vh;
 `;
