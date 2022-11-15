@@ -58,7 +58,8 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     @Override
     public BaseRes getMyCustomerCenter(String email) {
-        List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmailAndNoReply(email);
+//        List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmailAndNoReply(email);
+        List<Optional<CustomerCenters>> l = customerCenterRepository.findByUserEmail(email);
         List<CustomerCenterDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             new_l.add(l.get(i).get().toDto());
@@ -147,14 +148,15 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
                     return res;
                 }
             }
-
-            Optional<Orders> ordersOptional =  orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
-            if(ordersOptional.isPresent()) {
-                Orders order = ordersOptional.get();
-                if(customerCenterWriteReqDto.getCustomer_center_category().equals("환불")){
-                    order.setStatus(OrderStatus.REFUND_REQUEST.toString());
+            if(customerCenterWriteReqDto.getOrder_uid()!=null) {
+                Optional<Orders> ordersOptional = orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
+                if (ordersOptional.isPresent()) {
+                    Orders order = ordersOptional.get();
+                    if (customerCenterWriteReqDto.getCustomer_center_category().equals("환불")) {
+                        order.setStatus(OrderStatus.REFUND_REQUEST.toString());
+                    }
+                    customerCenter.setOrder(order);
                 }
-                customerCenter.setOrder(order);
             }
             customerCenter.setStart_date(UtilService.getTodayTime());
             customerCenter.setContent(customerCenterWriteReqDto.getContent());
