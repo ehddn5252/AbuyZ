@@ -54,4 +54,5 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
 //    @Query("select r from Reports r")
     List<Reports> findReportsBySearchCondition(String productName, Date startDate, Date endDate, int reasonId, Integer status);
 
+    List<Reviews> findByProduct(Products products);
 }
