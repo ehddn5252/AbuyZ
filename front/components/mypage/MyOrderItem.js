@@ -41,7 +41,7 @@ export default function MyOrderItem({ uid }) {
     bundleItem();
   }, []);
 
-  return (
+  return orderBundleItem ? (
     <ItemContainer>
       {orderBundleItem.map((e) => (
         <Container>
@@ -100,7 +100,7 @@ export default function MyOrderItem({ uid }) {
         </Container>
       ))}
     </ItemContainer>
-  );
+  ) : null;
 }
 
 const ItemContainer = styled.div`
