@@ -28,4 +28,5 @@ public interface ReviewService {
     BaseRes setStatus(ReportStatusReqDto reportStatusReqDto);
 
     BaseRes getAllReportedReview();
+    BaseRes myReviewList(String email);
 }

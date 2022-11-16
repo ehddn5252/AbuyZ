@@ -23,5 +23,8 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
     List<Orders> findByOrderList(OrderLists orderList);
 
+    @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
+    List<Orders> findByOrderListIn(OrderLists orderList);
+
     List<Orders> findByStatus(String status);
 }
