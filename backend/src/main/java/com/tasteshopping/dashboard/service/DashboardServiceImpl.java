@@ -19,9 +19,6 @@ import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.review.repository.ReportRepository;
 import com.tasteshopping.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.resource.beans.internal.FallbackBeanInstanceProducer;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -86,8 +83,8 @@ public class DashboardServiceImpl implements DashboardService {
 
     public HashMap<String, Object> addDailyOrder(HashMap<String, Object> h) {
 //        Date date = UtilService.getToday();
-        Date startDate = UtilService.getDateAfterDay(0);
-        Date endDate = UtilService.getDateAfterDay(1);
+        Date startDate = UtilService.getDateTimeAfterDay(0);
+        Date endDate = UtilService.getDateTimeAfterDay(1);
 
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
@@ -110,41 +107,41 @@ public class DashboardServiceImpl implements DashboardService {
         ArrayList<SummaryDto> l = new ArrayList<>();
         for (int i = 0; i < CURRENT_SUMMARIZE_SIZE; ++i) {
             SummaryDto summaryDto = new SummaryDto();
-            Date date = UtilService.getDateAfterDay(-i);
+            Date date = UtilService.getDateTimeAfterDay(-i);
             summaryDto.setDate(date);
             summaryDto.setVisitMainNum(getVisit(date, "main").getVisitCount());
             summaryDto.setLoginNum(getVisit(date, "login").getVisitCount());
             summaryDto.setClickLikeNum(getVisit(date, "like").getVisitCount());
             summaryDto.setPutCartNum(getVisit(date, "cart").getVisitCount());
             summaryDto.setRegisterNum(getVisit(date, "register").getVisitCount());
-            summaryDto = addDailyOrder(summaryDto);
+            summaryDto = addDailyOrder(summaryDto, -i);
             l.add(summaryDto);
         }
         return l;
     }
 
-    public SummaryDto addDailyOrder(SummaryDto summaryDto) {
+    public SummaryDto addDailyOrder(SummaryDto summaryDto,int day) {
 //        Date date = UtilService.getToday();
-        Date startDate = UtilService.getToday();
-        Date endDate = UtilService.getDateAfterDay(1);
-
+        Date startDate = UtilService.getDateAfterDay(day);
+        Date endDate = UtilService.getDateAfterDay(day+1);
+        System.out.println("startDate: "+startDate +"\n endDate: "+endDate);
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
         Integer count = 0;
         for (int i = 0; i < orderLists.size(); ++i) {
             // 여기에서 오더가 아닌 것들 가져와야 함.
             // JPA  조건문 변경
+            totalPrice += orderLists.get(i).getTotalPrice();
             List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
             for (int j = 0; j < orders.size(); ++j) {
                 String status = orders.get(j).getStatus();
                 if (status.equals(OrderStatus.PROCESS.toString()) || status.equals(OrderStatus.SOLD.toString())) {
                     count += 1;
-                    totalPrice += orders.get(j).getPrice();
                 }
             }
         }
         summaryDto.setOrderNum(count);
-        summaryDto.setTotalPrice(count);
+        summaryDto.setTotalPrice(totalPrice);
         return summaryDto;
     }
 

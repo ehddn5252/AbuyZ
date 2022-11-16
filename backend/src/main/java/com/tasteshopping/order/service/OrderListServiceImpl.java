@@ -148,8 +148,8 @@ public class OrderListServiceImpl implements OrderListService {
     @Override
     public List<OrderListDto> getOrderListsWeek(String email) {
         Users user = userRepository.findByEmail(email).get();
-        Date startDay = UtilService.getDateAfterDay(-7);
-        Date today = UtilService.getDateAfterDay(0);
+        Date startDay = UtilService.getDateTimeAfterDay(-7);
+        Date today = UtilService.getDateTimeAfterDay(0);
         List<OrderLists> orderLists = orderListRepository.findByUserAndDateBetween(user, startDay, today);
         List<OrderListDto> orderListDtos = new ArrayList<>();
         for (int i = 0; i < orderLists.size(); ++i) {
