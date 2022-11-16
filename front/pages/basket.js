@@ -27,7 +27,7 @@ const Container = styled.div`
   width: 55%;
   margin: 0 22%;
   padding-top: 3rem;
-  height: 80vh;
+  min-height: 80vh;
 `;
 const BasketBox = styled.div`
   display: flex;

@@ -22,6 +22,14 @@ export default function ProductDetailInfo() {
   // style={{ backgroundImage: `url(${product.products.descriptionImg})` }}
   return product.length !== 0 ? (
     <Container>
+      {/* <div
+        style={{
+          width: "100%",
+          
+        }}
+        dangerouslySetInnerHTML={{ __html: product.products.descriptionImg }}
+      ></div>
+      ; */}
       <iframe
         frameBorder="0"
         width="100%"

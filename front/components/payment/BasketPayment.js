@@ -136,7 +136,7 @@ const Container = styled.div`
   width: 25%;
   border: 1px solid #aaaaaa;
   border-radius: 1rem;
-  min-height: 30rem;
+  height: 32rem;
   overflow: hidden;
 `;
 
