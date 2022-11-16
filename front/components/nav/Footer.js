@@ -29,7 +29,7 @@ export default function Footer() {
     <MainContainer>
       <FooterContent container>
         <Grid item xs={12}>
-          <p style={{ margin: "0.3rem" }}>회사명 : Itda</p>
+          <p style={{ margin: "0.3rem" }}>회사명 : AbuyZ</p>
         </Grid>
         <Grid item xs={6}>
           <p style={{ margin: "0.3rem" }}>멘토 : 김강열 </p>

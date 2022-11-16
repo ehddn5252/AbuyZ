@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 
 // MUI
-import Container from "@mui/material/Container";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -128,7 +127,7 @@ export default function SearchSideNav({
             <Input
               name="start"
               id="start"
-              onClick={(e) => {
+              onChange={(e) => {
                 setStart(e.target.value);
               }}
             ></Input>
@@ -136,12 +135,14 @@ export default function SearchSideNav({
             <Input
               name="end"
               id="end"
-              onClick={(e) => {
+              onChange={(e) => {
                 setEnd(e.target.value);
               }}
             ></Input>
           </InputBox>
-          <Button onClick={startendButton}>필터 적용하기</Button>
+          <Button type="button" onClick={startendButton}>
+            필터 적용하기
+          </Button>
         </div>
       ) : null}
     </NavContainer>

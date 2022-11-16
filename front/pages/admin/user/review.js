@@ -1,76 +1,22 @@
 // React
-import React, { useState } from "react";
+import React from "react";
 
 // StyledComponents
 import styled from "styled-components";
 
-// 하위 Components
+// 컴포넌트
 import ReviewCategory from "../../../components/admin/user/ReviewCategory";
-import ReviewList from "../../../components/admin/user/ReviewList";
-
-// api
-import { searchReview } from "../../../pages/api/admin";
 
 export default function Review() {
-  const [reviewSearch, setReviewSearch] = useState(false);
-
-  const [reviews, setReviews] = useState([
-    {
-      uid: 0,
-      writer: "",
-      productName: "",
-      content: "",
-      createdDate: "",
-      answerDate: "",
-      rating: "",
-      answered: false,
-    },
-  ]);
-
-  const [searchDto, setSearchDto] = useState({
-    isAnswered: 0,
-    // startDate: "",
-    productName: "",
-    content: "",
-    // endDate: "",
-  });
-
-  const loadData = async (searchDto) => {
-    const res = await searchReview(searchDto);
-    setReviews(res.data);
-    // console.log(res.data);
-  };
-
-  const buttonClick = () => {
-    loadData(searchDto);
-  };
-
   return (
-    <Container>
-      <ReviewCategory
-        setReviewSearch={setReviewSearch}
-        setSearchDto={setSearchDto}
-        buttonClick={buttonClick}
-      />
-      {reviewSearch ? (
-        <ItemList>
-          <ReviewList reviews={reviews} />
-        </ItemList>
-      ) : null}
-    </Container>
+    <ReviewPage>
+      <ReviewCategory />
+    </ReviewPage>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background: #edf0f5;
+const ReviewPage = styled.div`
+  background: #eeeeee;
   padding: 3rem;
   padding-left: 15rem;
-  min-height: 89vh;
-`;
-
-const ItemList = styled.div`
-  background-color: white;
-  padding: 5rem;
 `;

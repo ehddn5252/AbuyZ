@@ -133,14 +133,16 @@ export default function EditProduct({ productInfo }) {
   const getStock = async () => {
     const sub = await getStockInventory(productInfo.uid);
     let sub_c = 0;
-    if (Object.keys(sub[0].productOptions[0]).includes("x")) {
-      setNoOptionUid(sub[0].productOptionUidString);
-      console.log(sub[0].productOptionUidString, "옵션 선택 안했음");
+    if (sub[0]) {
+      if (Object.keys(sub[0].productOptions[0]).includes("x")) {
+        setNoOptionUid(sub[0].productOptionUidString);
+        console.log(sub[0].productOptionUidString, "옵션 선택 안했음");
+      }
+      for (let i = 0; i < sub.length; i++) {
+        sub_c += sub[i].count;
+      }
+      setTotalCount(sub_c);
     }
-    for (let i = 0; i < sub.length; i++) {
-      sub_c += sub[i].count;
-    }
-    setTotalCount(sub_c);
   };
 
   useEffect(() => {

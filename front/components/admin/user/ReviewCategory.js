@@ -1,397 +1,587 @@
-// React
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 
 // MUI
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 // StyledComponent
 import styled from "styled-components";
-// Calender
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+
+// 컴포넌트
+import ReviewPeriod from "./ReviewPeriod";
+import ReviewList from "./ReviewList";
+
 // API
-import { BigCategory } from "../../../pages/api/category";
-import { bigSmallCategory } from "../../../pages/api/category";
+import { searchReview } from "../../../pages/api/review";
 
-export default function ReviewCategory({
-  setReviewSearch,
-  setSearchDto,
-  buttonClick,
-}) {
-  var d = new Date();
-  var dayOfMonth = d.getDate();
-  d.setDate(dayOfMonth - 7);
+// 대분류에 맞는 소분류 객체
+const smallCategoryList = {
+  1: ["과일", "채소", "고기", "과자/디저트/아이스크림", "생수/음료/주류"],
+  2: ["세제/방향/살충", "세탁용품", "청소용품", "욕실용품", "주방용품"],
+  3: ["주방가구", "거실가구", "커튼/블라인드", "학생/사무가구", "침실가구"],
+  4: ["도서", "노트/다이어리", "사료", "필기류", "반려동물 용품"],
+  5: ["스킨케어", "향수", "헤어/바디", "메이크업", "네일"],
+  6: [
+    "유아동 의류",
+    "유아동 신발",
+    "기저귀/물티슈",
+    "장난감/완구",
+    "유아동가구",
+  ],
+  7: ["TV/영상가전", "생활가전", "주방가전", "계절가전"],
+  8: [
+    "헬스/요가/수영",
+    "자전거/스키/레저",
+    "자동차/오토바이",
+    "등산/아웃도어",
+    "캠핑/낚시",
+  ],
+};
 
-  const [startDate, setStartDate] = useState(d);
-  const [endDate, setEndDate] = useState(new Date());
-  const [bigCategoryUid, setBigCategoryUid] = useState(0);
-  const [smallCategoryUid, setSmallCategoryUid] = useState(0);
+export default function ReviewCategory() {
+  // 대분류
+  const [bigCategory, setBigCategory] = useState("");
 
-  const [bigCategoryName, setBigCategoryName] = useState({
-    uid: 0,
-    categoryName: "대분류",
-  });
-  const [smallCategoryName, setSmallCategoryName] = useState({
-    uid: 0,
-    categoryName: "소분류",
-  });
+  // 소분류
+  const [smallCategory, setSmallCategory] = useState("");
 
-  const [productName, setProductName] = useState("");
+  // 제품명
+  const [name, setName] = useState("");
+
+  // 리뷰 내용
   const [reviewContent, setReviewContent] = useState("");
 
-  /**
-   * 카테고리
-   */
+  // 답변 유무
+  // 0 : 전체 / 1 : 미완료 / 2 : 완료
+  const [answered, setAnswered] = useState(0);
 
-  const [bigCategory, setbigCategory] = useState([
-    {
-      uid: 0,
-      categoryName: "대분류",
-    },
-  ]);
-  const [smallCategory, setSmallCategory] = useState([
-    {
-      uid: 0,
-      categoryName: "소분류",
-    },
-  ]);
+  // 기간 기준
+  const [stand, setStand] = useState(0);
 
-  const loadBigCategory = async () => {
-    const res = await BigCategory();
-    setbigCategory(res.data);
+  // 시작일
+  const [startDate, setStartDate] = useState("");
+
+  // 마감일
+  const [endDate, setEndDate] = useState("");
+
+  // 리셋 감지기
+  const [reset, setReset] = useState(0);
+
+  // 리뷰 리스트
+  const [reviewList, setReviewList] = useState([]);
+
+  // 대분류 셀렉트 했을 때
+  const handleChange = (event) => {
+    setSmallCategory("");
+    setBigCategory(event.target.value);
   };
 
-  const loadSmallCategory = async () => {
-    const res = await bigSmallCategory(bigCategoryUid);
-    setSmallCategory(res.data);
+  // 소분류 셀렉트 했을 때
+  const smallHandleChange = (event) => {
+    setSmallCategory(event.target.value);
+  };
+
+  // 옵션 체크
+  const checkOnlyOne = (checkThis) => {
+    const checkboxes = document.getElementsByName("answeredCheck");
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i] !== checkThis) {
+        checkboxes[i].checked = false;
+      } else if (checkboxes[i] === checkThis) {
+        if (i === 0) {
+          setAnswered(0);
+        } else if (i === 1) {
+          setAnswered(2);
+        } else if (i === 2) {
+          setAnswered(1);
+        }
+      }
+    }
+  };
+
+  // 초기화
+  const handleReset = () => {
+    setReset(reset + 1);
+    setBigCategory("");
+    setSmallCategory("");
+    setName("");
+    setReviewContent("");
+    setAnswered(0);
+    setStand(0);
+    setStartDate("");
+    setEndDate("");
+    const checkboxes = document.getElementsByName("answeredCheck");
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+  };
+
+  // 조건에 맞는 검색하기 (전체 문의 내역 불러오기)
+  const handleSearch = async () => {
+    const searchDto = {
+      bigCategoryUid: bigCategory, // 큰 카테고리
+      smallCategoryUid: smallCategory, // 작은 카테고리
+      productName: name, // 상품 이름
+      content: reviewContent, // 리뷰 내용
+      startDate: moment(startDate).format().slice(0, 10), //검색 시작 날짜
+      endDate: moment(endDate).format().slice(0, 10), // 검색 끝 날짜
+      isAnswered: answered, // 0이면 전체 1이면. 답글 없는 것, 2면 답글 있는 것. 필수값
+    };
+
+    if (bigCategory === "") {
+      searchDto.bigCategoryUid = null;
+    }
+    if (smallCategory === "") {
+      searchDto.smallCategoryUid = null;
+    }
+    if (name === "") {
+      searchDto.productName = null;
+    }
+    if (reviewContent === "") {
+      searchDto.content = null;
+    }
+    if (startDate === "") {
+      searchDto.startDate = "2012-12-01";
+    }
+    if (endDate === "") {
+      searchDto.endDate = "2032-12-01";
+    }
+
+    const lst = await searchReview(searchDto);
+
+    console.log(lst, "!@#!@#!@#");
+
+    {
+      lst.length >= 1
+        ? lst.sort(function (a, b) {
+            return b.uid - a.uid;
+          })
+        : null;
+    }
+
+    const tmp = [];
+    for (let i = 0; i < lst.length; i++) {
+      if (stand === 1 || stand === 0) {
+        tmp.push(lst[i]);
+      } else if (stand === 2) {
+        if (
+          moment(startDate).format().slice(0, 10) <=
+            moment(lst[i].reportDate).format().slice(0, 10) ||
+          moment(lst[i].reportDate).format().slice(0, 10) >=
+            moment(endDate).format().slice(0, 10)
+        ) {
+          tmp.push(lst[i]);
+        }
+      } else if (stand === 3) {
+        if (
+          moment(startDate).format().slice(0, 10) <=
+            moment(lst[i].processDate).format().slice(0, 10) ||
+          moment(lst[i].reportDate).format().slice(0, 10) >=
+            moment(endDate).format().slice(0, 10)
+        ) {
+          tmp.push(lst[i]);
+        }
+      }
+    }
+
+    setReviewList(tmp);
   };
 
   useEffect(() => {
-    loadBigCategory();
+    handleSearch();
   }, []);
 
-  useEffect(() => {
-    loadSmallCategory();
-  }, [bigCategoryUid]);
-
-  useEffect(() => {
-    if ((bigCategoryUid !== 0) & (smallCategoryUid !== 0)) {
-      setSearchDto((prevState) => ({
-        ...prevState,
-        bigCategoryUid: bigCategoryUid,
-        smallCategoryUid: smallCategoryUid,
-      }));
-    }
-  }, [smallCategoryUid]);
-
-  const dateList = () => [{ label: "리뷰작성일시" }];
-
-  const searchButton = () => {
-    setReviewSearch(true);
-    buttonClick();
-  };
-
-  const resetButton = () => {
-    setReviewSearch(false);
-    setProductName("");
-    setReviewContent("");
-    setBigCategoryName((prevState) => ({
-      ...prevState,
-      categoryName: "대분류",
-    }));
-    setSmallCategoryName((prevState) => ({
-      ...prevState,
-      categoryName: "소분류",
-    }));
-    setStartDate(d);
-    setEndDate(new Date());
-  };
-
-  // 초기화용
-  const handleReset = (e, categoryName, name) => {
-    console.log("handleReset@@@@", name);
-    console.log("handleReset@@@@", categoryName);
-    if (name === "bigCategoryUid" && categoryName !== "대분류") {
-      setBigCategoryName((prevState) => ({
-        ...prevState,
-        categoryName: categoryName,
-      }));
-    }
-    if (name === "smallCategoryUid" && categoryName !== "소분류") {
-      setSmallCategoryName((prevState) => ({
-        ...prevState,
-        categoryName: categoryName,
-      }));
-    }
-  };
-
-  // searchdto 변경
-  const handleChange = (e) => {
-    if (e.target.name === "productName") {
-      setProductName(e.target.value);
-    }
-    if (e.target.name === "content") {
-      setReviewContent(e.target.value);
-    }
-
-    setSearchDto((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  useEffect(() => {
-    setSearchDto((prevState) => ({
-      ...prevState,
-      startDate: startDate,
-      endDate: endDate,
-    }));
-  }, [startDate, endDate]);
-
   return (
-    <Container>
-      <SearchBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>카테고리</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <Autocomplete
-              name="bigCategoryUid"
-              disablePortal
-              size="small"
-              options={bigCategory}
-              getOptionLabel={(category) => category.categoryName}
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue={Object.values(bigCategory)[0]}
-              value={bigCategoryName}
-              onChange={(e, category) => {
-                setBigCategoryUid(category.uid);
-                handleReset(e, category.categoryName, "bigCategoryUid");
+    <Grid2
+      container
+      spacing={2}
+      sx={{ padding: "0", margin: "0", background: "white" }}
+    >
+      {/* 카테고리 */}
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        카테고리
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+          background: "white",
+        }}
+      >
+        <CategoryBox>
+          <Title>대분류</Title>
+          <FormControl sx={{ minWidth: 200, width: 300 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              대분류
+            </InputLabel>
+            <Select
+              value={bigCategory}
+              onChange={handleChange}
+              label="대분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
               }}
-            />
-            <Autocomplete
-              name="smallCategoryUid"
-              disablePortal
-              size="small"
-              options={smallCategory}
-              defaultValue={Object.values(smallCategory)[0]}
-              getOptionLabel={(category) => category.categoryName}
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              renderInput={(params) => <TextField {...params} />}
-              value={smallCategoryName}
-              onChange={(e, category) => {
-                setSmallCategoryUid(category.uid);
-                handleReset(e, category.categoryName, "smallCategoryUid");
-              }}
-            />
-          </CategoryDiv>
-        </ColumnBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>제품명</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <TextField
-              size="small"
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              name="productName"
-              onChange={handleChange}
-              value={productName}
-            />
-          </CategoryDiv>
-        </ColumnBox>
-
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>리뷰 내용</p>
-          </TitleDiv>
-          <CategoryDiv>
-            <TextField
-              size="small"
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              name="content"
-              onChange={handleChange}
-              value={reviewContent}
-            />
-          </CategoryDiv>
-        </ColumnBox>
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>답변유무</p>
-          </TitleDiv>
-          <CategoryDiv style={{ paddingLeft: "7rem" }}>
-            <RadioGroup
-              row
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="0"
-              name="isAnswered"
-              onChange={handleChange}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
-              <FormControlLabel value="0" control={<Radio />} label="전체" />
-              <FormControlLabel value="1" control={<Radio />} label="미답변" />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="답변완료"
-              />
-            </RadioGroup>
-          </CategoryDiv>
-        </ColumnBox>
-        {/* 기간 */}
-        <ColumnBox>
-          <TitleDiv>
-            <p style={{ margin: 0 }}>기간</p>
-          </TitleDiv>
-          <DateDiv>
-            <Autocomplete
-              disablePortal
-              options={dateList()}
-              size="small"
-              sx={{ width: 400, paddingLeft: "2rem" }}
-              renderInput={(params) => <TextField {...params} />}
-              defaultValue="리뷰작성일시"
-            />
-            <CalendarDiv>
-              <MyDatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
-                startDate={startDate}
-                dateFormat="yyyy-MM-dd"
-              />
-              <MyDatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsStart
-                startDate={endDate}
-                dateFormat="yyyy-MM-dd"
-              />
-            </CalendarDiv>
-          </DateDiv>
-        </ColumnBox>
+              <MenuItem value={"1"}>식품</MenuItem>
+              <MenuItem value={"2"}>생활/건강</MenuItem>
+              <MenuItem value={"3"}>가구/인테리어</MenuItem>
+              <MenuItem value={"4"}>반려/도서/취미</MenuItem>
+              <MenuItem value={"5"}>뷰티</MenuItem>
+              <MenuItem value={"6"}>유아동</MenuItem>
+              <MenuItem value={"7"}>가전</MenuItem>
+              <MenuItem value={"8"}>스포츠/레저/자동차</MenuItem>
+            </Select>
+          </FormControl>
+        </CategoryBox>
+        <CategoryBox>
+          <Title>소분류</Title>
+          <FormControl sx={{ minWidth: 100, width: 300 }}>
+            <InputLabel id="demo-simple-select-autowidth-label">
+              소분류
+            </InputLabel>
+            <Select
+              value={smallCategory}
+              onChange={smallHandleChange}
+              label="소분류"
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+              }}
+              sx={{ border: 1, height: 50, borderRadius: 0 }}
+            >
+              {smallCategoryList[bigCategory]?.map((data, idx) => (
+                <MenuItem key={idx} value={idx + 1}>
+                  {data}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </CategoryBox>
+      </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
+      {/* 제품명 */}
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        제품명
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+          background: "white",
+        }}
+      >
+        <Input
+          value={name}
+          placeholder={"제품명을 입력해 주세요."}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
+      {/* 리뷰내용 */}
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        리뷰내용
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+          background: "white",
+        }}
+      >
+        <Input
+          value={reviewContent}
+          placeholder={"리뷰내용을 입력해 주세요."}
+          onChange={(e) => setReviewContent(e.target.value)}
+        />
+      </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
+      {/* 답변 유무 */}
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        답변 유무
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          paddingLeft: "1.5rem",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+          background: "white",
+          alignItems: "center",
+        }}
+      >
+        <input
+          name="answeredCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{
+            width: "1.2rem",
+            height: "1.5rem",
+            marginLeft: "3.5rem",
+            marginRight: "0.5rem",
+          }}
+        />
+        <Name>전체</Name>
+        <input
+          name="answeredCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
+        />
+        <Name>완료</Name>
+        <input
+          name="answeredCheck"
+          type="checkbox"
+          onChange={(e) => checkOnlyOne(e.target)}
+          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
+        />
+        <Name>미완료</Name>
+      </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
+      {/* 기간 */}
+      <Grid2
+        xs={2}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          background: "#DADADA",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+        }}
+      >
+        기간
+      </Grid2>
+      <Grid2
+        xs={10}
+        sx={{
+          padding: "0",
+          paddingTop: "1rem",
+          paddingBottom: "1rem",
+          display: "flex",
+          zIndex: "0",
+          background: "white",
+        }}
+      >
+        <ReviewPeriod
+          reset={reset}
+          setStand={setStand}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
+      </Grid2>
+      <hr
+        style={{
+          background: "#ff9494",
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      />
+      <Grid2
+        xs={12}
+        sx={{
+          margin: "0",
+          padding: "0",
+          width: "100%",
+        }}
+      >
         <ButtonDiv>
-          <ResetButton onClick={resetButton}>초기화</ResetButton>
-          <SearchButton onClick={searchButton}>검색</SearchButton>
+          <ResetButton onClick={handleReset}>초기화</ResetButton>
+          <SearchButton onClick={handleSearch}>검색</SearchButton>
         </ButtonDiv>
-      </SearchBox>
-    </Container>
+        <TableContainer>
+          <ReviewList reviewList={reviewList} />
+        </TableContainer>
+      </Grid2>
+    </Grid2>
   );
 }
 
-const Container = styled.div`
+const CategoryBox = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 100%;
+  margin-left: 5rem;
 `;
 
-const SearchBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  background-color: white;
-`;
-
-const ColumnBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  border-bottom: 1px solid #c8c8c8;
-`;
-
-const TitleDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  width: 16%;
-  height: 4.2rem;
-  background-color: #dadada;
+const Title = styled.p`
   font-size: 1.3rem;
+  font-weight: 1000;
+  margin-right: 1rem;
+  margin: 0;
+  margin-right: 1rem;
 `;
 
-const CategoryDiv = styled.div`
+const Input = styled.input`
+  border: 0.1rem solid #000000;
+  width: 30rem;
+  height: 3rem;
+  font-size: 1.3rem;
+  margin-left: 5rem;
+  padding-left: 1rem;
+
+  &::placeholder {
+    color: gray;
+    font-size: 1rem;
+  }
+`;
+
+const Name = styled.p`
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
   display: flex;
   align-items: center;
-  width: 84%;
-  height: 100%;
-  padding-top: 0.5rem;
-  padding-left: 5rem;
-  padding-bottom: 0.5rem;
-  background-color: white;
-`;
-
-const DateDiv = styled.div`
-  display: flex;
-  align-items: center;
-  width: 84%;
-  height: 100%;
-  padding-top: 0.5rem;
-  padding-left: 5rem;
-  padding-bottom: 0.5rem;
-  background-color: white;
-`;
-
-const CalendarDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 50%;
-  height: 100%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  background-color: white;
-`;
-
-const MyDatePicker = styled(DatePicker)`
-  width: 10rem;
-  /* background-color: transparent; */
-  border-color: #c4c4c4;
-  height: 2rem;
-  margin-left: 10rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: black;
-  border: 1px solid;
+  margin-right: 1.5rem;
 `;
 
 const ButtonDiv = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  margin-top: 2rem;
+  background-color: white;
 `;
 
 const ResetButton = styled.button`
-  border: 1px solid black;
-  background-color: white;
-  margin-right: 1rem;
-  padding: 1rem;
-  width: 10%;
-  font-weight: bold;
-  cursor: pointer;
+  background-color: #ffffff;
+  color: black;
+  border: 1px solid;
+  height: 3rem;
+  width: 6rem;
   font-size: 1.3rem;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const SearchButton = styled.button`
-  border: none;
   background-color: #57a9fb;
-  font-size: 1.3rem;
-  margin-left: 1rem;
-  padding: 1rem;
-  width: 10%;
-  font-weight: bold;
-  cursor: pointer;
   color: white;
+  border: 1px solid;
+  margin-left: 1rem;
+  height: 3rem;
+  width: 7rem;
+  font-size: 1.5rem;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const TableContainer = styled.div`
+  padding: 5rem;
+  padding-top: 2rem;
 `;

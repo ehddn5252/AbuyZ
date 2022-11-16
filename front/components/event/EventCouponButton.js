@@ -17,22 +17,26 @@ export default function EventCouponButton({ uid, list, setIsGiven, isgiven }) {
     }
   }, []);
   return (
-    <div>
+    <Container>
       {isgiven ? (
-        <span>
-          <StyledNoButton disabled>쿠폰 지급 완료</StyledNoButton>
-        </span>
+        <StyledNoButton disabled>쿠폰 지급 완료</StyledNoButton>
       ) : (
-        <span>
+        <Container>
           <StyledButton onClick={ClickCoupon}>쿠폰 발급 받기</StyledButton>
           <h5 style={{ color: "#56a9f1" }}>
             쿠폰 지급 일자: {uid.start_date.slice(0, 10)}
           </h5>
-        </span>
+        </Container>
       )}
-    </div>
+    </Container>
   );
 }
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const StyledButton = styled.button`
   padding: 6px 12px;

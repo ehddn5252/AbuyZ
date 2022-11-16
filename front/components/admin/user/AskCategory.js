@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 
-// API
-import { getAsk } from "../../../pages/api/admin";
-
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
 import InputLabel from "@mui/material/InputLabel";
@@ -122,7 +119,6 @@ export default function AskCategory() {
     });
 
     const tmp = [];
-    console.log(lst);
     for (let i = 0; i < lst.length; i++) {
       // console.log(lst[i]);
       if (stand === 1 || stand === 0) {

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
+
+// Style
 import styled from "styled-components";
+
+// Component
 import SearchSideNav from "../components/nav/SearchSideNav";
 import ProductLIst from "../components/product/ProductLIst";
 
@@ -11,8 +15,8 @@ import {
   conditionSearch,
 } from "./api/product";
 
-import { useRecoilState } from "recoil";
 // State
+import { useRecoilState } from "recoil";
 import { searchName, bigCategoryValue, smallCategoryValue } from "../states";
 
 export default function Search() {

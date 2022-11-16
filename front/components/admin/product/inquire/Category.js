@@ -125,7 +125,6 @@ export default function Category(props) {
                   vertical: "top",
                   horizontal: "left",
                 },
-                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >
@@ -161,7 +160,6 @@ export default function Category(props) {
                   vertical: "top",
                   horizontal: "left",
                 },
-                // getContentAnchorEl: null,
               }}
               sx={{ border: 1, height: 50, borderRadius: 0 }}
             >

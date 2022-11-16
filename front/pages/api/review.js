@@ -84,10 +84,11 @@ export async function dellikereview(reviewId) {
 }
 
 // 리뷰 답글 작성
-export async function replyreview(replyDto) {
+export async function replyReview(replyDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
+    console.log(replyDto, "321321");
     https
       .post("/review/reply", {
         content: replyDto.content,
@@ -329,6 +330,25 @@ export async function PutReviewStatus(reportsUid, status) {
           resolve(response);
         }
       });
+  }).catch((e) => {
+    console.log(e);
+  });
+}
+
+// 조건에 맞는 리뷰 가져오기
+export async function searchReview(reviewDto) {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https.post("/review/searchReview", reviewDto).then((response) => {
+      if (response.status === 200) {
+        console.log("조건에 맞는 리뷰 가져오기 성공!", response);
+        resolve(response.data.data);
+      } else {
+        console.log("조건에 맞는 리뷰 가져오기 실패ㅠㅠ", response);
+        resolve(response);
+      }
+    });
   }).catch((e) => {
     console.log(e);
   });
