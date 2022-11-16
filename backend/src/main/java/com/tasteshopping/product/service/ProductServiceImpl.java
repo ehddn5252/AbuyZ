@@ -364,6 +364,7 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Transactional
     public void createOptionsAndInventories(LinkedHashMap<String, String> options, ProductCreateDto productCreateDto, Products product) {
         if (options == null) {
             ProductOptions productOptions = productOptionService.createProductOptionList(product, "x", "x");

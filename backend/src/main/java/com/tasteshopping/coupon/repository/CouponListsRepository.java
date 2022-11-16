@@ -5,8 +5,10 @@ import com.tasteshopping.coupon.entity.Coupons;
 import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.LockModeType;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,5 +26,6 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     @EntityGraph(attributePaths = {"user","coupons"})
     List<CouponLists> findByCoupons_EndDateAndStatus(Date yesterday,int status);
 
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     CouponLists findByCouponsAndUser(Coupons coupons, Users user);
 }
