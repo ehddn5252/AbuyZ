@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function AskPeriod(props) {
+export default function ReviewPeriod(props) {
   // 기준기간
   const [standard, setStandard] = useState("");
 
@@ -122,8 +122,8 @@ export default function AskPeriod(props) {
           }}
           sx={{ border: 1, height: 50, borderRadius: 0 }}
         >
-          <MenuItem value={2}>등록일시</MenuItem>
-          <MenuItem value={3}>처리일시</MenuItem>
+          <MenuItem value={2}>리뷰 작성 일시</MenuItem>
+          <MenuItem value={2}>답변 처리 일시</MenuItem>
         </Select>
       </FormControl>
       <ButtonGroup>
