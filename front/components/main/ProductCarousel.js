@@ -14,6 +14,7 @@ export default function ProductCarousel() {
   const router = useRouter();
   const [user, setUser] = useState("");
   const [products, setProducts] = useState([]);
+  const [productid, setProductId] = useState("");
   const uuser = async () => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -37,8 +38,8 @@ export default function ProductCarousel() {
     setProducts(res.data);
   };
 
-  const goDetail = (uid) => {
-    router.push(`/detail/${uid}`);
+  const goDetail = (product) => {
+    router.push(`/detail/${product.uid}`);
   };
   useEffect(() => {
     getProducts();
@@ -52,7 +53,11 @@ export default function ProductCarousel() {
         <RecbuSpan>추천 상품</RecbuSpan>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
           {products.map((product, idx) => (
-            <div style={{ cursor: "pointer" }} key={idx} onClick={goDetail}>
+            <div
+              style={{ cursor: "pointer" }}
+              key={idx}
+              onClick={(e) => goDetail(product)}
+            >
               <CardImg alt="추천상품" src={product.repImg} />
               {product.name.length >= 30 ? (
                 <NameContainer>
