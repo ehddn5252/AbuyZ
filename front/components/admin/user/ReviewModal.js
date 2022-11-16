@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 // MUI
-import Rating from "@mui/material/Rating";
-import StarIcon from "@mui/icons-material/Star";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid2 from "@mui/material/Unstable_Grid2";
+import Rating from "@mui/material/Rating";
+import StarIcon from "@mui/icons-material/Star";
 
-// API
-import { GetReviewDetail } from "../../../pages/api/review";
-import { PutReviewStatus } from "../../../pages/api/review";
+// api
+import { writeInquiryReply } from "../../../pages/api/admin";
+import { replyReview } from "../../../pages/api/review";
 
 const style = {
   position: "absolute",
@@ -24,58 +24,57 @@ const style = {
   p: 4,
 };
 
-export default function ReportItemModal({ row }) {
+export default function ReviewModal({ row }) {
   // 모달
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // 문의 상세 정보
+  const [askInfo, setAskInfo] = useState([]);
+
   // 리뷰 데이터 불러오기 감지
   const [upload, setUpload] = useState(0);
 
-  const [reviewInfo, setReviewInfo] = useState([]);
+  // 답변 내용
+  const [answerContent, setAnswerContent] = useState("");
 
-  const getDetail = async () => {
-    const data = await GetReviewDetail(row.reviewsUid);
-    setReviewInfo(data);
+  //   작성한 답변 내용
+  const [fixContent, setFixContent] = useState(row.reply ? row.reply : null);
+
+  // 리뷰 답변 작성
+  const handleAnswer = () => {
+    const answer = {
+      review_uid: row.uid,
+      content: answerContent,
+    };
+
+    replyReview(answer);
+    alert("답변이 등록되었습니다.");
+    location.reload();
   };
-
-  useEffect(() => {
-    getDetail();
-  }, [upload]);
-
-  console.log(reviewInfo);
 
   return (
     <div>
-      {row.status === "대기" ? (
+      {row.answered === false ? (
         <SolvedButton
           onClick={() => {
             handleOpen(), setUpload(upload + 1);
           }}
           style={{ backgroundColor: "#7A7A7A" }}
         >
-          대기
+          미완료
         </SolvedButton>
-      ) : row.status === "거절" ? (
-        <SolvedButton
-          onClick={() => {
-            handleOpen(), setUpload(upload + 1);
-          }}
-          style={{ backgroundColor: "#FB5757" }}
-        >
-          거절
-        </SolvedButton>
-      ) : row.status === "승인" ? (
+      ) : (
         <SolvedButton
           onClick={() => {
             handleOpen(), setUpload(upload + 1);
           }}
           style={{ backgroundColor: "#57A9FB" }}
         >
-          승인
+          완료
         </SolvedButton>
-      ) : null}
+      )}
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <Grid2
@@ -99,7 +98,7 @@ export default function ReportItemModal({ row }) {
                   paddingBottom: "1rem",
                 }}
               >
-                상세 문의
+                상세 리뷰
               </h2>
               <CloseIcon
                 onClick={handleClose}
@@ -126,17 +125,17 @@ export default function ReportItemModal({ row }) {
                 marginTop: "1rem",
               }}
             >
-              {reviewInfo.repImg ? (
+              {askInfo.imgUrl ? (
                 <img
-                  src={reviewInfo.repImg}
-                  alt={"이미지를 준비중입니다."}
-                  style={{ width: "18rem", height: "20rem" }}
+                  src={askInfo.imgUrl}
+                  alt={"문의 관련 이미지입니다."}
+                  style={{ width: "18rem", height: "17rem" }}
                 />
               ) : (
                 <img
                   src="/images/ABUYZ_LOGO.png"
                   alt={"이미지를 준비중입니다."}
-                  style={{ width: "18rem", height: "20rem" }}
+                  style={{ width: "18rem", height: "17rem" }}
                 />
               )}
             </Grid2>
@@ -144,30 +143,31 @@ export default function ReportItemModal({ row }) {
               xs={7}
               sx={{
                 marginLeft: "3rem",
+                marginTop: "1rem",
               }}
             >
               <ContentP style={{ fontSize: "2rem" }}>{row.product}</ContentP>
               <ContentP>{row.report_date}</ContentP>
 
-              <ContentP>작성자 : {reviewInfo.writer}</ContentP>
+              <ContentP>작성자 : {row.writer}</ContentP>
               <ContentP>
                 작성일 :{" "}
-                {reviewInfo.date
-                  ? reviewInfo.date.slice(0, 4) +
+                {row.createdDate
+                  ? row.createdDate.slice(0, 4) +
                     "년" +
                     " " +
-                    reviewInfo.date.slice(5, 7) +
+                    row.createdDate.slice(5, 7) +
                     "월" +
                     " " +
-                    reviewInfo.date.slice(8, 10) +
+                    row.createdDate.slice(8, 10) +
                     "일" +
                     " " +
-                    reviewInfo.date.slice(11, 19)
+                    row.createdDate.slice(11, 19)
                   : null}
               </ContentP>
               <Rating
                 name="text-feedback"
-                value={reviewInfo.rating}
+                value={row.rating}
                 precision={0.5}
                 style={{
                   marginTop: "1rem",
@@ -179,38 +179,44 @@ export default function ReportItemModal({ row }) {
                   <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
                 }
               />
-              <ContentP>제품명 : {reviewInfo.productName}</ContentP>
-              <ContentP>제목 : {reviewInfo.title}</ContentP>
-              <ContentP>내용 : {reviewInfo.reviewContent}</ContentP>
+              <ContentP>제품명 : {row.productName}</ContentP>
+              <ContentP>리뷰 내용 : {row.content}</ContentP>
             </Grid2>
-            {row.status === "대기" ? (
-              <Grid2
-                xs={12}
-                sx={{
-                  marginTop: "1rem",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <RefusalButton
-                  onClick={() => {
-                    PutReviewStatus(row.uid, 1),
-                      alert("거절 처리 되었습니다."),
-                      location.reload();
-                  }}
-                >
-                  거절
-                </RefusalButton>
-                <AcceptButton
-                  onClick={() => {
-                    PutReviewStatus(row.uid, 2),
-                      alert("승인 처리 되었습니다."),
-                      location.reload();
-                  }}
-                >
-                  승인
-                </AcceptButton>
-              </Grid2>
+          </Grid2>
+          <Grid2
+            xs={12}
+            sx={{
+              margin: "0",
+              padding: "0",
+              width: "100%",
+              display: "flex",
+              marginTop: "1rem",
+            }}
+          >
+            <TitleP>답변</TitleP>
+            {row.answered === false ? (
+              <AnswerDiv
+                value={answerContent}
+                onChange={(e) => setAnswerContent(e.target.value)}
+              />
+            ) : (
+              <FixAnswerDiv>{fixContent}</FixAnswerDiv>
+            )}
+          </Grid2>
+
+          <Grid2
+            xs={12}
+            sx={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <RefusalButton onClick={handleClose}>취소</RefusalButton>
+            {row.answered === false ? (
+              <AcceptButton onClick={() => handleAnswer()}>
+                답변 등록
+              </AcceptButton>
             ) : null}
           </Grid2>
         </Box>
@@ -223,6 +229,30 @@ const ContentP = styled.p`
   margin: 0;
   padding: 0.5rem;
   font-weight: bold;
+`;
+
+const TitleP = styled.p`
+  margin: 0;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  font-weight: 800;
+`;
+
+const AnswerDiv = styled.textarea`
+  width: 90%;
+  height: 10rem;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+`;
+
+const FixAnswerDiv = styled.div`
+  width: 90%;
+  height: 10rem;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
 `;
 
 const AcceptButton = styled.button`
@@ -265,4 +295,29 @@ const SolvedButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const TableContainer = styled.table`
+  background-color: white;
+  margin-left: 1rem;
+  width: 100%;
+  height: 7rem;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid black;
+`;
+
+const TableRow = styled.tr`
+  width: 100%;
+  height: 3rem;
+  margin: 0;
+`;
+
+const Td = styled.td`
+  margin: 0;
+  border: 1px solid black;
+  text-align: center;
+  height: fit-content;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 `;
