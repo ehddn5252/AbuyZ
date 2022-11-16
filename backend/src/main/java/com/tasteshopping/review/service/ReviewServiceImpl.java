@@ -48,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
         Optional<Products> product = productRepository.findById(dto.getProduct_uid());
         Optional<Orders> order = orderRepository.findById(dto.getOrder_uid());
         Reviews review = dto.toEntity(dto, findUser.get(), product.get(), imagePath, order.get());
+//        product.get().addReview(review);
         reviewRepository.save(review);
         return new BaseRes(200, "리뷰 작성 성공", null);
     }
