@@ -28,8 +28,8 @@ export default function AzDeliveryCarousel() {
     setProducts(res.data);
   };
 
-  const goDetail = (uid) => {
-    router.push(`/detail/${uid}`);
+  const goDetail = (product) => {
+    router.push(`/detail/${product.uid}`);
   };
   useEffect(() => {
     getProducts();
@@ -43,7 +43,11 @@ export default function AzDeliveryCarousel() {
         <RecbuSpan>내일 오전 배송 출발 🐱‍🏍</RecbuSpan>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
           {products.map((product, idx) => (
-            <div style={{ cursor: "pointer" }} key={idx} onClick={goDetail}>
+            <div
+              style={{ cursor: "pointer" }}
+              key={idx}
+              onClick={(e) => goDetail(product)}
+            >
               <CardImg alt="추천상품" src={product.repImg} />
               {product.name.length >= 30 ? (
                 <NameContainer>
