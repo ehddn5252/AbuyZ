@@ -88,7 +88,7 @@ export default function EditInfo(props) {
             <Input
               value={name}
               onChange={nameChange}
-              style={{ height: "3rem", width: "20rem" }}
+              style={{ height: "3rem", width: "15rem" }}
             />
             <TitleBox style={{ width: "7rem" }}>
               <Title>할인</Title>
@@ -116,7 +116,7 @@ export default function EditInfo(props) {
             <Input
               value={price}
               onChange={priceChange}
-              style={{ height: "3rem", width: "20rem" }}
+              style={{ height: "3rem", width: "15rem" }}
             />
             <TitleBox style={{ width: "7rem" }}>
               <Title>배송비</Title>
@@ -140,7 +140,7 @@ const TitleBox = styled.div`
   display: flex;
   align-items: flex-end;
   margin-left: 2rem;
-  width: 9rem;
+  width: 6.5rem;
   margin-right: 1rem;
 `;
 
@@ -151,7 +151,7 @@ const Title = styled.div`
 
 const Input = styled.input`
   border: 0.1rem solid #000000;
-  width: 12rem;
+  width: 7rem;
   height: 3rem;
   font-size: 1.3rem;
   padding-left: 1rem;

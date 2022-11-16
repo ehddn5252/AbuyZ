@@ -62,3 +62,28 @@ export const kakaoUid = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+export const submitNum = atom({
+  key: "submitNum",
+  default: 0,
+  effects_UNSTABLE: [persistAtom],
+});
+
+// 결제에 쓰일 쿠폰 리스트
+export const couponitems = atom({
+  key: "couponList",
+  default: [0],
+  effects_UNSTABLE: [persistAtom],
+});
+
+// 장바구니 결제 정보
+export const baksetPayments = atom({
+  key: "baksetPayments",
+  default: {
+    productName: "",
+    totalPrice: "",
+    feePrice: "",
+    count: 1,
+  },
+  effects_UNSTABLE: [persistAtom],
+});

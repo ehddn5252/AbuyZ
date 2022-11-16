@@ -1,25 +1,59 @@
 import React, { useEffect, useState } from "react";
+
+// Style
 import styled from "styled-components";
+import { Container } from "@mui/system";
+
+// 하위 컴포넌트
 import MyShippingInfo from "../components/payment/MyShippingInfo";
 import PaymentProcess from "../components/payment/PaymentProcess";
 import ProductSaleInfo from "../components/payment/ProductSaleInfo";
 import ProductSimpleInfo from "../components/payment/ProductSimpleInfo";
-import { Container } from "@mui/system";
+
 // State
-import { paymentProduct, kakaoUid } from "../states/index";
+import {
+  paymentProduct,
+  kakaoUid,
+  baksetPayments,
+  couponitems,
+} from "../states/index";
 import { useRecoilState } from "recoil";
+
+// axios
 import axios from "axios";
+
 // Next.js
 import { useRouter } from "next/router";
+
+// API
+import { payProduct, payBasket } from "./api/order";
 import { cartlist } from "./api/cart";
+
 export default function Payment() {
   const router = useRouter();
+  // 단일 상품
   const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
+
+  // 장바구니 상품
+  const [basketValue, setBasketValue] = useRecoilState(baksetPayments);
+
+  // 결제 쿠폰 리스트
+  const [couponList, setCouponList] = useRecoilState(couponitems);
+  // 구매상품리스트
   const [paymentList, setPaymentList] = useState([]);
 
   // kakao 상품 결제 id
   const [kakaoId, setKakaoId] = useRecoilState(kakaoUid);
-  // 결제 준비
+
+  const KakaoPay = () => {
+    if (paymentValue === "") {
+      PaymentKakao();
+    } else {
+      BasketKakao();
+    }
+  };
+
+  // 단일 상품 결제 준비
   const PaymentKakao = async () => {
     const headers = {
       Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
@@ -30,13 +64,13 @@ export default function Payment() {
         "https://kapi.kakao.com/v1/payment/ready",
         {
           cid: "TC0ONETIME",
-          partner_order_id: "partner_order_id",
-          partner_user_id: "partner_user_id",
-          item_name: "초코파이",
+          partner_order_id: "AbuyZ",
+          partner_user_id: "Abuyz 고객",
+          item_name: paymentList[0].productDto.name,
           quantity: 1,
-          total_amount: 2200,
+          total_amount: paymentList[0].productDto.price,
           vat_amount: 200,
-          tax_free_amount: 0,
+          tax_free_amount: paymentList[0].productDto.deliveryFee,
           approval_url: "http://localhost:3000/payment",
           fail_url: "http://localhost:3000/payment",
           cancel_url: "http://localhost:3000/payment",
@@ -53,7 +87,7 @@ export default function Payment() {
       });
   };
 
-  // 결제 승인
+  // 단일 상품 결제 승인
   const ApprovalKakao = async (pg_token) => {
     const headers = {
       Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
@@ -64,8 +98,8 @@ export default function Payment() {
         "https://kapi.kakao.com/v1/payment/approve",
         {
           cid: "TC0ONETIME",
-          partner_order_id: "partner_order_id",
-          partner_user_id: "partner_user_id",
+          partner_order_id: "AbuyZ",
+          partner_user_id: "Abuyz 고객",
           tid: kakaoId,
           pg_token: pg_token,
         },
@@ -75,31 +109,126 @@ export default function Payment() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
-          // 여기에 우리 결제 송신보내면 됨
+          PayOne();
         }
       });
   };
+
+  // 단일 상품 결제하기
+  const PayOne = async () => {
+    const optionValues = {};
+    const options = paymentValue[0].inventoryDto.productOptions;
+    console.log(Object.values(options[0])[0]);
+    for (let i = 0; i < options.length; i++) {
+      optionValues[Object.keys(options[i])[0]] = Object.values(options[i])[0];
+    }
+    const productDto = {
+      products_uid: paymentValue[0].uid,
+      product_count: paymentValue[0].productCount,
+      option_values: optionValues,
+      coupons_uid: couponList[0],
+    };
+    const res = await payProduct(productDto);
+    if (res.statusCode) {
+      alert("결제 성공");
+      router.push("/");
+    } else {
+      alert("결제가 실패하였습니다. 다시 시도해주세요.");
+    }
+  };
+
+  console.log(basketValue);
+  // 장바구니 상품 결제 준비
+  const BasketKakao = async () => {
+    console.log("장바구니 상품 결제 준비");
+    const headers = {
+      Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
+      "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    };
+    await axios
+      .post(
+        "https://kapi.kakao.com/v1/payment/ready",
+        {
+          cid: "TC0ONETIME",
+          partner_order_id: "AbuyZ",
+          partner_user_id: "Abuyz 고객",
+          item_name: basketValue.productName,
+          quantity: basketValue.count,
+          total_amount: basketValue.totalPrice,
+          vat_amount: 200,
+          tax_free_amount: basketValue.feePrice,
+          approval_url: "http://localhost:3000/payment",
+          fail_url: "http://localhost:3000/payment",
+          cancel_url: "http://localhost:3000/payment",
+        },
+        {
+          headers,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setKakaoId(res.data.tid);
+          router.push(res.data.next_redirect_pc_url);
+        }
+      });
+  };
+  // 장바구니 상품 결제 승인
+  const ApprovalBasket = async (pg_token) => {
+    console.log("장바구니 상품 결제 승인");
+    const headers = {
+      Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
+      "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+    };
+    await axios
+      .post(
+        "https://kapi.kakao.com/v1/payment/approve",
+        {
+          cid: "TC0ONETIME",
+          partner_order_id: "AbuyZ",
+          partner_user_id: "Abuyz 고객",
+          tid: kakaoId,
+          pg_token: pg_token,
+        },
+        {
+          headers,
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          PayOther();
+        }
+      });
+  };
+  // 장바구니 상품 결제하기
+  const PayOther = async () => {
+    console.log("장바구니 상품 결제하기");
+    const cartDto = {
+      coupons: couponList,
+    };
+    payBasket(cartDto);
+  };
+  // 결제 승인 동작
   useEffect(() => {
     const url = new URL(window.location.href);
     const urlParams = url.searchParams;
-
     const pg_token = urlParams.get("pg_token");
     if (pg_token) {
-      ApprovalKakao(pg_token);
+      if (paymentValue) {
+        ApprovalKakao(pg_token);
+      } else {
+        ApprovalBasket(pg_token);
+      }
     }
   }, []);
+
   const basketpay = async () => {
     const res = await cartlist();
     setPaymentList(res.data);
   };
-  // console.log("이게된거야", paymentList);
-  useEffect(() => {
-    setPaymentValue("");
-  }, [router.pathname]);
 
+  // 결제정보 들고오기
   useEffect(() => {
-    if (!paymentValue) {
+    if (paymentValue === "") {
       // null 이면 장바구니에서 결제 한거임
       basketpay();
     } else {
@@ -107,7 +236,6 @@ export default function Payment() {
       setPaymentList(paymentValue);
     }
   }, []);
-
   return (
     <Container maxWidth="xl" sx={{ my: 10 }}>
       <Center>
@@ -127,7 +255,7 @@ export default function Payment() {
         <PaymentProcess />
       </Card>
       <ButtonDiv>
-        <Button onClick={PaymentKakao}>결제하기</Button>
+        <Button onClick={KakaoPay}>결제하기</Button>
       </ButtonDiv>
     </Container>
   );

@@ -16,6 +16,7 @@ export default function MyCouponSelectModal({
   setModalOpen,
   setCouponDiscount,
   uniqueCate,
+  setUsedCoupon,
 }) {
   // 모달 닫기
   const closeModal = () => {
@@ -24,6 +25,7 @@ export default function MyCouponSelectModal({
 
   const closeCheckModal = () => {
     setModalOpen(false);
+    setUsedCoupon(couponList[selected]);
     setCouponDiscount(couponList[selected].discount_price);
   };
 

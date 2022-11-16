@@ -1,18 +1,40 @@
 import https from "./https.js";
 
+// 전체 문의 내역 가져오기
+export async function getAsk() {
+  const accessToken = sessionStorage.getItem("access-token");
+  https.defaults.headers.common["access_token"] = accessToken;
+  return new Promise((resolve) => {
+    https
+      .get("/customer-center")
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("전체 문의 내역 가져오기", response);
+          resolve(response.data.data);
+        } else {
+          // console.log("전체 문의 내역 가져오기 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
+}
+
 // 문의관리 - 조회
-export async function searchCustomerCenter(searchDto) {
-  console.log("searchCustomerCenter@@@@@@@", searchDto);
+export async function searchCustomerCenter(AskDto) {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
+    console.log(AskDto, "@#");
     https
-      .post("/customer-center/search", searchDto)
+      .post("/customer-center/search", AskDto)
       .then((response) => {
         if (response.status === 200) {
           // console.log("문의관리 - 조회 완료", response);
-          resolve(response.data);
+          resolve(response.data.data);
         } else {
           // console.log("문의관리 - 조회 실패", response);
           resolve(response);
@@ -49,7 +71,6 @@ export async function detailCustomerCenter(uid) {
 
 // 문의 관리 - 답변 작성
 export async function writeInquiryReply(reply) {
-  // console.log("writeInquiryReply@@", reply);
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
@@ -58,15 +79,15 @@ export async function writeInquiryReply(reply) {
       .post(`/customer-center/reply`, reply)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("문의관리 - 답변 작성 완료", response);
+          console.log("신고관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          // console.log("문의관리 - 답변 작성 실패", response);
+          console.log("신고관리 - 조회 완료", response);
           resolve(response);
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.log(e, "$$");
       });
   });
 }

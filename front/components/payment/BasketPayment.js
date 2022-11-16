@@ -7,7 +7,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 // StyeldComponet
 import styled from "styled-components";
 // API
-import { getMyInfo } from "../../pages/api/user";
+import { getAddress } from "../../pages/api/user";
 
 // Next.js
 import { useRouter } from "next/router";
@@ -20,10 +20,9 @@ export default function BasketPayment() {
   const router = useRouter();
   const [basketList, setBasketList] = useRecoilState(basketProducts);
   const [paymentValue, setpaymentValue] = useRecoilState(basketProducts);
-  const [address, setAddress] = useState(
-    "녹산 송정동 1627-5 그린코어 오피스텔"
-  );
-  const [detailAddress, setDetailAddress] = useState("691호");
+  const [address, setAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalDiscount, setTotalDiscount] = useState(0);
@@ -31,11 +30,13 @@ export default function BasketPayment() {
 
   // 개인정보 조회
   const getName = async () => {
-    const res = await getMyInfo();
-    setAddress(res.data.address);
-    setDetailAddress(res.data.detailAddress);
+    const res = await getAddress();
+    console.log("네주소", res.data.data[0]);
+    setAddress(res.data.data[0].address);
+    // setAddress(res.data.address);
+    setDetailAddress(res.data.data[0].detailAddress);
+    setPostalCode(res.data.data[0].postalCode);
   };
-
   const goPayment = () => {
     setpaymentValue("");
     router.push("/payment");
@@ -79,9 +80,19 @@ export default function BasketPayment() {
               </p>
             </div>
             {address ? (
-              <p style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}>
-                {address} {detailAddress}
-              </p>
+              <div>
+                <span
+                  style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}
+                >
+                  [{postalCode}]
+                </span>
+                <br></br>
+                <span
+                  style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}
+                >
+                  {address} {detailAddress}
+                </span>
+              </div>
             ) : (
               <p style={{ margin: 0, fontWeight: "bold", fontSize: "1rem" }}>
                 등록된 주소가 없습니다.
@@ -125,14 +136,14 @@ const Container = styled.div`
   width: 25%;
   border: 1px solid #aaaaaa;
   border-radius: 1rem;
-  height: 34rem;
+  height: 32rem;
   overflow: hidden;
 `;
 
 const TopBox = styled.div`
   width: 100%;
   padding: 1.5rem;
-  height: 12rem;
+  min-height: 8rem;
 `;
 const BottomBox = styled.div`
   width: 100%;

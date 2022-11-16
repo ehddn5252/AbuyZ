@@ -15,6 +15,7 @@ import ExchangeReturn from "../../components/product/ExchangeReturn";
 
 // 스크롤
 import { Link } from "react-scroll";
+
 export default function Detail() {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");

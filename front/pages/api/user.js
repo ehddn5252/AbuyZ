@@ -77,10 +77,10 @@ export async function getMyInfo() {
 
     https.get("/user").then((response) => {
       if (response.status === 200) {
-        console.log("내 정보 조회 성공", response);
+        // console.log("내 정보 조회 성공", response);
         resolve(response.data);
       } else {
-        console.log("내 정보 조회 실패", response);
+        // console.log("내 정보 조회 실패", response);
         resolve(response);
       }
     });
@@ -347,7 +347,6 @@ export async function refresh() {
   return new Promise((resolve) => {
     https.get("/user/refresh").then((response) => {
       if (response.status === 200) {
-        console.log("재발급 완료", response.data);
         // 토큰 저장
         window.sessionStorage.setItem(
           "access-token",
@@ -356,7 +355,6 @@ export async function refresh() {
         setCookie("refresh_token", response.data.data.refresh_token, 30);
         resolve(response.data);
       } else {
-        console.log("재발급 실패", response);
         resolve(response);
       }
     });

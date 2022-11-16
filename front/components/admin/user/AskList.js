@@ -5,22 +5,16 @@ import styled from "styled-components";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 // 컴포넌트
-import ReportItemModal from "./ReportItemModal";
 import CustomerPagination from "./CustomerPagination";
+import AskModal from "./AskModal";
 
-export default function ReportList(props) {
-  // 내림차순정렬
-  const declaration = props.declaration;
-  declaration.sort(function (a, b) {
-    return b.uid - a.uid;
-  });
-
+export default function AskList({ askList }) {
   const header = [
-    "해결 유무",
-    "신고 사유",
-    "상품명",
-    "리뷰내용",
-    "신고 일시",
+    "답변 유무",
+    "문의 사유",
+    "문의명",
+    "문의내용",
+    "문의 일시",
     "처리 일시",
     "작성자",
   ];
@@ -57,21 +51,23 @@ export default function ReportList(props) {
             </TableRow>
           </thead>
           <tbody style={{ height: "50%" }}>
-            {declaration
-              ? declaration.slice(offset, offset + limit).map((row) => (
+            {askList
+              ? askList.slice(offset, offset + limit).map((row) => (
                   <TableRow key={row.uid}>
                     <Td>
-                      <ReportItemModal row={row} />
+                      <AskModal row={row} />
                     </Td>
-                    <Td>{row.reason}</Td>
-                    <Td>{row.productName}</Td>
+                    <Td>{row.category_name}</Td>
+                    <Td>{row.title}</Td>
                     <Td>
-                      {row.reviewName.length <= 20
-                        ? row.reviewName
-                        : row.reviewName.slice(0, 20) + "..."}
+                      {row.content.length <= 30
+                        ? row.content
+                        : row.content.slice(0, 30) + "..."}
                     </Td>
-                    <Td>{row.reportDate.slice(0, 10)}</Td>
-                    <Td>{row.processDate.slice(0, 10)}</Td>
+                    <Td>{row.start_date ? row.start_date.slice(0, 10) : 0}</Td>
+                    <Td>
+                      {row.end_date ? row.end_date.slice(0, 10) : "미완료"}
+                    </Td>
                     <Td>{row.writer}</Td>
                   </TableRow>
                 ))
@@ -80,9 +76,9 @@ export default function ReportList(props) {
         </TableContainer>
       </div>
       <div style={{ marginTop: "1rem" }}>
-        {declaration ? (
+        {askList ? (
           <CustomerPagination
-            total={declaration.length}
+            total={askList.length}
             limit={limit}
             page={page}
             setPage={setPage}
