@@ -466,4 +466,21 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return new BaseRes(200,"신고한 리뷰 가져오기 성공",newL);
     }
+
+    @Override
+    public BaseRes myReviewList(String email) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        List<Reviews> reviewPage = reviewRepository.findByUserAndParentReviewIsNull(findUser.get());
+        List<MyReviewResDto> resultList = new ArrayList<>();
+        boolean answered;
+        for (Reviews review: reviewPage) {
+            answered = false;
+            Reviews reply = reviewRepository.findByParentReview(review);
+            if(reply !=null) answered = true;
+            resultList.add(MyReviewResDto.from(review, reply, findUser.get(), answered));
+        }
+        return new BaseRes(200, "내 리뷰 내역 조회 성공", resultList);
+    }
+
+
 }
