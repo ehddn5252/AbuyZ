@@ -79,10 +79,6 @@ export default function ProductItem({ product }) {
             </div>
           )}
         </div>
-
-        {/* {product.discountRate ? (
-          <CancelP>{product.price.toLocaleString("ko-KR")} 원</CancelP>
-        ) : null} */}
       </ContentBox>
     </Container>
   ) : null;
@@ -121,8 +117,8 @@ const CardDiscountCont = styled.div`
 const CardPrice = styled.span`
   font-size: 1.5rem;
   font-weight: bolder;
-  margin-right: 1.5rem;
   margin-bottom: 0;
+  width: 100%;
 `;
 const CardPriceBD = styled.span`
   font-size: 1rem;
