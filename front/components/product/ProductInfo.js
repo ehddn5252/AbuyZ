@@ -63,24 +63,32 @@ export default function ProductInfo() {
   };
   // 장바구니 가기
   const goBasket = async () => {
-    let cartDto;
-    if (product.productOptionListMap.length !== 1) {
-      cartDto = {
-        productsUid: product.products.uid,
-        productCount: count,
-        optionValues: optionValue,
-      };
-    } else if (product.productOptionListMap.length === 1) {
-      cartDto = {
-        productsUid: product.products.uid,
-        productCount: count,
-        optionValues: {
-          x: "x",
-        },
-      };
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        let cartDto;
+        if (product.productOptionListMap.length !== 1) {
+          cartDto = {
+            productsUid: product.products.uid,
+            productCount: count,
+            optionValues: optionValue,
+          };
+        } else if (product.productOptionListMap.length === 1) {
+          cartDto = {
+            productsUid: product.products.uid,
+            productCount: count,
+            optionValues: {
+              x: "x",
+            },
+          };
+        }
+        await regiscart(cartDto);
+        router.push("/basket");
+      } else {
+        alert("로그인이 필요한 기능입니다.");
+        router.push("/login");
+      }
     }
-    await regiscart(cartDto);
-    router.push("/basket");
   };
 
   // 바로 결제하기

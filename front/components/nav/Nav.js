@@ -16,7 +16,6 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
-import Link from "@mui/material/Link";
 
 // API
 import { getMyInfo, logout, refresh } from "../../pages/api/user";
@@ -28,6 +27,7 @@ import {
   filterName,
   bigCategoryValue,
   smallCategoryValue,
+  mypageValues,
 } from "../../states";
 import { useRecoilState } from "recoil";
 
@@ -47,9 +47,11 @@ export default function Nav() {
   const [categoryValue, setCategoryValue] = useRecoilState(bigCategoryValue);
   const [smallCategoryId, setSmallCategoryId] =
     useRecoilState(smallCategoryValue);
+  // 마이페이지
+  const [mypageValue, setMypageValue] = useRecoilState(mypageValues);
   // 카테고리
   const [bigCategory, setBigCategory] = useState([]);
-
+  const [userType, setUserType] = useState(0);
   // window 위치
   const [isNavOn, setIsNavOn] = useState(true);
 
@@ -91,6 +93,7 @@ export default function Nav() {
   // 개인정보 조회
   const getName = async () => {
     const res = await getMyInfo();
+    setUserType(res.data.role);
     setUsername(res.data.name);
   };
 
@@ -151,11 +154,11 @@ export default function Nav() {
     }
     router.push("/search");
   };
-
+  // 이벤트이동
   const goEvent = () => {
     router.push("/event");
   };
-
+  // 마이페이지이동
   const goMypage = () => {
     if (username) {
       router.push("/mypage");
@@ -164,10 +167,11 @@ export default function Nav() {
       router.push("/login");
     }
   };
-
+  // 메인으로 이동
   const goHome = () => {
     router.push("/");
   };
+  //
 
   const goSearch1 = () => {
     setFilterValue("최근 등록 순");
@@ -218,6 +222,20 @@ export default function Nav() {
       router.push("/login");
     }
   };
+
+  const goWish = () => {
+    if (username) {
+      setMypageValue(1);
+      router.push("/mypage");
+    } else {
+      alert("로그인이 필요합니다.");
+      router.push("/login");
+    }
+  };
+
+  const goDashboard = () => {
+    router.push("/admin/dashboard");
+  };
   return (
     <div>
       <Container>
@@ -237,6 +255,9 @@ export default function Nav() {
             <UserLink onClick={goService} sx={{ marginLeft: "1rem" }}>
               고객센터
             </UserLink>
+            {userType === "ADMIN" ? (
+              <AdminLink onClick={goDashboard}> 관리자 페이지로 이동</AdminLink>
+            ) : null}
           </UserBox>
           <SearchBox>
             <div onClick={goHome} style={{ cursor: "pointer" }}>
@@ -267,7 +288,7 @@ export default function Nav() {
             </SearchPaper>
             <div style={{ display: "flex" }}>
               <IconBox>
-                <div onClick={goMypage}>
+                <div onClick={goWish} style={{ cursor: "pointer" }}>
                   <FavoriteBorderOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black" }}
@@ -275,7 +296,7 @@ export default function Nav() {
                 </div>
               </IconBox>
               <IconBox>
-                <div onClick={goMypage}>
+                <div onClick={goMypage} style={{ cursor: "pointer" }}>
                   <PersonOutlineOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black" }}
@@ -283,7 +304,7 @@ export default function Nav() {
                 </div>
               </IconBox>
               <IconBox>
-                <div onClick={goBasket}>
+                <div onClick={goBasket} style={{ cursor: "pointer" }}>
                   <ShoppingBasketOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black", fontWeight: 100 }}
@@ -393,28 +414,28 @@ export default function Nav() {
             </ScrollSearchPaper>
             <ScrollIconDiv>
               <ScrollIconBox>
-                <Link onClick={goMypage}>
+                <div onClick={goWish} style={{ cursor: "pointer" }}>
                   <FavoriteBorderOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black" }}
                   />
-                </Link>
+                </div>
               </ScrollIconBox>
               <ScrollIconBox>
-                <Link onClick={goMypage}>
+                <div onClick={goMypage} style={{ cursor: "pointer" }}>
                   <PersonOutlineOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black" }}
                   />
-                </Link>
+                </div>
               </ScrollIconBox>
               <ScrollIconBox>
-                <Link onClick={goBasket}>
+                <div onClick={goBasket} style={{ cursor: "pointer" }}>
                   <ShoppingBasketOutlinedIcon
                     fontSize="medium"
                     sx={{ color: "black" }}
                   />
-                </Link>
+                </div>
               </ScrollIconBox>
             </ScrollIconDiv>
           </ScrollCategoryBox>
@@ -455,6 +476,18 @@ const UserLink = styled.p`
   margin-left: 0.5rem;
   font-size: 0.8rem;
   color: #aaaaaa;
+  cursor: pointer;
+`;
+
+const AdminLink = styled.p`
+  margin: 0;
+  text-decoration: none;
+  background-color: #aaaaaa;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+
+  color: white;
   cursor: pointer;
 `;
 

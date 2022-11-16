@@ -5,16 +5,13 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 // MUI
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 // API
-import { login, refresh } from "./api/user.js";
+import { login } from "./api/user.js";
 import https from "./api/https.js";
 
 // StyledComponent
@@ -163,14 +160,33 @@ export default function Login() {
           </SignupButton>
         </LoginBox>
       </LoginContainer>
-
-      <hr
+      <div
         style={{
-          border: "0px",
-          borderTop: "3px dotted black",
-          width: "26%",
+          display: "flex",
+          width: "27%",
+          alignItems: "center",
+          justifyContent: "space-around",
         }}
-      ></hr>
+      >
+        <hr
+          style={{
+            border: "0px",
+            borderTop: "4px dotted #c4c4c4",
+            width: "44%",
+            margin: 0,
+          }}
+        ></hr>
+        <p style={{ fontWeight: "bold" }}>또는</p>
+        <hr
+          style={{
+            border: "0px",
+            borderTop: "4px dotted #c4c4c4",
+            width: "44%",
+            margin: 0,
+          }}
+        ></hr>
+      </div>
+
       <KakaoContainer>
         <KakaoButton onClick={socialLogin}>카카오로 시작하기</KakaoButton>
       </KakaoContainer>
@@ -179,7 +195,7 @@ export default function Login() {
 }
 
 const AllContainer = styled.div`
-  margin-top: 5rem;
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
   width: 55%;
@@ -189,14 +205,15 @@ const LoginContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 40rem;
-  height: 50vh;
+  height: 45vh;
 `;
 
 const LoginBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
   padding: 3rem;
+  padding-top: 0;
+  padding-bottom: 0;
   width: 100%;
   height: auto;
   border-radius: 1rem;
@@ -212,7 +229,6 @@ const LoginLink = styled.a`
 const LoginButton = styled.button`
   border: none;
   height: 3rem;
-  margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 1rem;
   font-weight: bolder;

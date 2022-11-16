@@ -37,6 +37,7 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.price - b.price;
     });
+    sortable.reverse();
     return sortable;
   }
 
@@ -47,7 +48,6 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.price - b.price;
     });
-    sortable.reverse();
     return sortable;
   }
 
@@ -58,7 +58,6 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewNum - b.reviewNum;
     });
-    sortable.reverse();
     return sortable;
   }
 
@@ -69,21 +68,15 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewRate - b.reviewRate;
     });
-    sortable.reverse();
     return sortable;
   }
 
-  // 랜더링시 초기값
-  useEffect(() => {
-    setInputValue(productList);
-  }, [productList]);
   // 필터링 클릭시
-
   const change = () => {
     let data;
     if (productList.length >= 1) {
       if (value === "최근 등록 순") {
-        data = productList;
+        data = productList.reverse();
       } else if (value === "가격 낮은 순") {
         data = getLowPrcie(productList);
       } else if (value === "가격 높은 순") {
@@ -98,7 +91,7 @@ export default function ProductLIst({ productList }) {
   useEffect(() => {
     const tv = change();
     setInputValue(tv);
-  }, [inputValue, value]);
+  }, [inputValue, value, productList]);
   return productList ? (
     <div>
       <Right>
