@@ -122,9 +122,8 @@ export default function ReportPeriod(props) {
           }}
           sx={{ border: 1, height: 50, borderRadius: 0 }}
         >
-          <MenuItem value={1}>전체</MenuItem>
           <MenuItem value={2}>신고일시</MenuItem>
-          <MenuItem value={2}>처리일시</MenuItem>
+          <MenuItem value={3}>처리일시</MenuItem>
         </Select>
       </FormControl>
       <ButtonGroup>

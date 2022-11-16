@@ -92,6 +92,7 @@ export default function ReportCategory() {
     }
 
     const decList = await SearchDeclaration(declarationDto);
+
     let tmp = [];
     for (let i = 0; i < decList.data.length; i++) {
       if (stand === 1 || stand === 0) {

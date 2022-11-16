@@ -18,8 +18,11 @@ import styled from "styled-components";
 import AskPeriod from "./AskPeriod";
 import AskList from "./AskList";
 
+// API
+import { searchCustomerCenter } from "../../../pages/api/admin";
+
 export default function AskCategory() {
-  // 문의 사유(전체, 상품, 환불, 이벤트, 사이트, 주문결제)
+  // 문의 사유(전체, 상품, 환불, 배송, 사이트, 주문결제)
   const [reason, setReason] = useState("");
 
   // 문의명
@@ -89,11 +92,63 @@ export default function AskCategory() {
 
   // 조건에 맞는 검색하기 (전체 문의 내역 불러오기)
   const handleSearch = async () => {
-    const tmp = await getAsk();
-    tmp.data.sort(function (a, b) {
+    const searchDto = {
+      customerCenterCategory: reason,
+      title: name,
+      status: approval,
+      start_date: moment(startDate).format().slice(0, 10) + " 00:00:00",
+      end_date: moment(endDate).format().slice(0, 10) + " 00:00:00",
+    };
+    if (reason === "전체" || reason === "") {
+      searchDto.customerCenterCategory = null;
+    }
+    if (name === "") {
+      searchDto.title = null;
+    }
+    if (approval === "") {
+      searchDto.status = null;
+    }
+    if (startDate === "") {
+      searchDto.start_date = "2012-12-01 00:00:00";
+    }
+    if (endDate === "") {
+      searchDto.end_date = "2032-12-01 00:00:00";
+    }
+
+    const lst = await searchCustomerCenter(searchDto);
+
+    lst.sort(function (a, b) {
       return b.uid - a.uid;
     });
-    setAskList(tmp.data);
+
+    const tmp = [];
+    console.log(lst);
+    for (let i = 0; i < lst.length; i++) {
+      // console.log(lst[i]);
+      if (stand === 1 || stand === 0) {
+        tmp.push(lst[i]);
+      } else if (stand === 2) {
+        if (
+          moment(startDate).format().slice(0, 10) <=
+            moment(lst[i].reportDate).format().slice(0, 10) ||
+          moment(lst[i].reportDate).format().slice(0, 10) >=
+            moment(endDate).format().slice(0, 10)
+        ) {
+          tmp.push(lst[i]);
+        }
+      } else if (stand === 3) {
+        if (
+          moment(startDate).format().slice(0, 10) <=
+            moment(lst[i].processDate).format().slice(0, 10) ||
+          moment(lst[i].reportDate).format().slice(0, 10) >=
+            moment(endDate).format().slice(0, 10)
+        ) {
+          tmp.push(lst[i]);
+        }
+      }
+    }
+
+    setAskList(tmp);
   };
 
   // 렌더링 시 리뷰 신고 조회
@@ -159,7 +214,7 @@ export default function AskCategory() {
               <MenuItem value={"전체"}>전체</MenuItem>
               <MenuItem value={"상품"}>상품</MenuItem>
               <MenuItem value={"환불"}>환불</MenuItem>
-              <MenuItem value={"이벤트"}>이벤트</MenuItem>
+              <MenuItem value={"배송"}>배송</MenuItem>
               <MenuItem value={"사이트"}>사이트</MenuItem>
               <MenuItem value={"주문결제"}>주문결제</MenuItem>
             </Select>
@@ -263,14 +318,14 @@ export default function AskCategory() {
           onChange={(e) => checkOnlyOne(e.target)}
           style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
-        <Name>완료답변</Name>
+        <Name>완료</Name>
         <input
           name="approvalCheck"
           type="checkbox"
           onChange={(e) => checkOnlyOne(e.target)}
           style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
-        <Name>미답변</Name>
+        <Name>미완료</Name>
       </Grid2>
       <hr
         style={{
