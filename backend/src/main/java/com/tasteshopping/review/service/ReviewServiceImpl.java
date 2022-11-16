@@ -375,6 +375,7 @@ public class ReviewServiceImpl implements ReviewService {
                             ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
                             reviewSearchDto.setAnswered(true);
                             reviewSearchDto.setAnswerDate(filteredReviews.get(j).getDate());
+                            reviewSearchDto.setReply(filteredReviews.get(j).getContent());
                             answerReviewDtos.add(reviewSearchDto);
                             allAnswerReviewDtos.add(reviewSearchDto);
                             isBreak=true;

@@ -18,4 +18,5 @@ public class ReviewSearchDto {
     Date createdDate;   // 생성 날짜
     Date answerDate;    // 답변을 단 날짜
     String writer;  // 글쓴이
+    String reply;  // 답변
 }
