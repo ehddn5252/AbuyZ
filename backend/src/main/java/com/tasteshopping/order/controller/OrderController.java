@@ -32,34 +32,34 @@ public class OrderController {
     @Autowired
     OrderListService orderListService;
 
-    @GetMapping("/test")
-    public ResponseEntity<BaseRes> payTest(){
-        /*
-
-            DB lock test
-
-            private Integer products_uid;
-            private Integer product_count;
-            private LinkedHashMap<String,String> option_values;
-            private Integer users_uid;
-            private Integer inventories_uid;
-            private Integer coupons_uid;
-            "780" "1254 1256" "1087"
-         */
-
-        CartDto cartDto = new CartDto();
-        cartDto.setProductsUid(780);
-        cartDto.setProductCount(1);
-        cartDto.setInventoriesUid(1087);
-        LinkedHashMap<String,String> option_values = new LinkedHashMap<String,String>();
-        option_values.put("size","260");
-        option_values.put("color","black");
-        cartDto.setOptionValues(option_values);
-        cartDto.setCouponsUid(0);
-        String email="zzieun_choi@naver.com";
-        orderService.basicPay(email,cartDto);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "payTest 성공!"));
-    }
+//    @GetMapping("/test")
+//    public ResponseEntity<BaseRes> payTest(){
+//        /*
+//
+//            DB lock test
+//
+//            private Integer products_uid;
+//            private Integer product_count;
+//            private LinkedHashMap<String,String> option_values;
+//            private Integer users_uid;
+//            private Integer inventories_uid;
+//            private Integer coupons_uid;
+//            "780" "1254 1256" "1087"
+//         */
+//
+//        CartDto cartDto = new CartDto();
+//        cartDto.setProductsUid(780);
+//        cartDto.setProductCount(1);
+//        cartDto.setInventoriesUid(1087);
+//        LinkedHashMap<String,String> option_values = new LinkedHashMap<String,String>();
+//        option_values.put("size","260");
+//        option_values.put("color","black");
+//        cartDto.setOptionValues(option_values);
+//        cartDto.setCouponsUid(0);
+//        String email="zzieun_choi@naver.com";
+//        orderService.basicPay(email,cartDto);
+//        return ResponseEntity.status(HttpStatus.OK).body(BaseRes.of(200, "payTest 성공!"));
+//    }
 
 
 
