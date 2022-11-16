@@ -67,6 +67,12 @@ public class ReviewController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("")
+    public ResponseEntity<BaseRes> myReviewList(@AuthenticationPrincipal String email) {
+        return new ResponseEntity<>(reviewService.myReviewList(email), HttpStatus.OK);
+    }
+
+
     @DeleteMapping("/{review_uid}")
     public ResponseEntity<BaseRes> reviewDelete(@AuthenticationPrincipal String email, @PathVariable int review_uid) {
         return new ResponseEntity<>(reviewService.reviewDelete(email, review_uid), HttpStatus.OK);
