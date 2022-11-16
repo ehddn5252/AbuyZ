@@ -1,36 +1,106 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+// Style
 import styled from "styled-components";
+
+// 하위 Component
 import MyCouponSelectModal from "./MyCouponSelectModal";
+
+// State
+import { baksetPayments, couponitems } from "../../states/index";
+import { useRecoilState } from "recoil";
+
 export default function ProductSaleInfo({ paymentList }) {
   const [modalOpen, setModalOpen] = useState(false);
-  let categoryList = [];
-  for (var i = 0; i < paymentList.length; i++) {
-    categoryList.push(paymentList[i].productDto.bigCategoryUid);
-  }
-  const set = new Set(categoryList);
-  const uniqueCate = [...set];
-
-  let priceadd = 0;
-  for (var i = 0; i < paymentList.length; i++) {
-    priceadd += paymentList[i].productDto.price * paymentList[i].productCount;
-  }
-
-  let discountprice = 0;
-  for (var j = 0; j < paymentList.length; j++) {
-    discountprice +=
-      paymentList[j].productDto.price *
-      (paymentList[j].productDto.discountRate / 100) *
-      paymentList[j].productCount;
-  }
-
-  let deliveryFee = 0;
-  let brandlist = [];
-  for (var k = 0; k < paymentList.length; k++) {
-    if (!brandlist.includes(paymentList[k].productDto.brandName)) {
-      brandlist.push(paymentList[k].productDto.brandName);
-      deliveryFee += paymentList[k].productDto.deliveryFee;
+  const [basketValue, setBasketValue] = useRecoilState(baksetPayments);
+  const [couponUidList, setCouponUidList] = useRecoilState(couponitems);
+  const [uniqueCate, setUniqueCate] = useState(null);
+  const [couponDiscount, setCouponDiscount] = useState(-1);
+  const [usedCoupon, setUsedCoupon] = useState(null);
+  // 금액
+  const [priceadd, setPriceadd] = useState(0);
+  const [discountprice, setcountprice] = useState(0);
+  const [deliveryFee, setDeliveryFee] = useState(0);
+  useEffect(() => {
+    let categoryList = [];
+    for (var i = 0; i < paymentList.length; i++) {
+      categoryList.push(paymentList[i].productDto.bigCategoryUid);
     }
-  }
+    const set = new Set(categoryList);
+    const uniqueCate1 = [...set];
+    setUniqueCate(uniqueCate1);
+    // 총 금액
+    let temp1 = 0;
+    for (var i = 0; i < paymentList.length; i++) {
+      temp1 += paymentList[i].productDto.price * paymentList[i].productCount;
+    }
+    // 할인 가격
+    let temp2 = 0;
+    for (var j = 0; j < paymentList.length; j++) {
+      temp2 +=
+        paymentList[j].productDto.price *
+        (paymentList[j].productDto.discountRate / 100) *
+        paymentList[j].productCount;
+    }
+    // 배달요금
+    let temp3 = 0;
+    let brandlist = [];
+    for (var k = 0; k < paymentList.length; k++) {
+      if (!brandlist.includes(paymentList[k].productDto.brandName)) {
+        brandlist.push(paymentList[k].productDto.brandName);
+        temp3 += paymentList[k].productDto.deliveryFee;
+      }
+    }
+
+    // 쿠폰 리스트 선정
+    let tempCoupon = [];
+    let sum = 0;
+    if (usedCoupon) {
+      for (let v = 0; v < paymentList.length; v++) {
+        if (
+          paymentList[v].productDto.bigCategoryUid ===
+            usedCoupon.available_categories_uid &&
+          sum === 0
+        ) {
+          tempCoupon.push(usedCoupon.coupon_uid);
+          sum += 1;
+        } else {
+          tempCoupon.push(0);
+        }
+      }
+    } else {
+      for (let v = 0; v < paymentList.length; v++) {
+        tempCoupon.push(0);
+      }
+    }
+    // 결제 정보
+    let temp = {
+      productName: "",
+      totalPrice: temp1 - temp2,
+      feePrice: temp3,
+      count: paymentList.length,
+    };
+    if (paymentList.length !== 0) {
+      temp = {
+        productName:
+          paymentList[0].productDto.name +
+          " " +
+          "외" +
+          " " +
+          (paymentList.length - 1).toString() +
+          "개",
+        totalPrice: temp1 - temp2,
+        feePrice: temp3,
+        count: paymentList.length,
+      };
+    }
+    setCouponUidList(tempCoupon);
+    setPriceadd(temp1);
+    setcountprice(temp2);
+    setDeliveryFee(temp3);
+    setBasketValue(temp);
+  }, [paymentList, modalOpen]);
+
   const showModal = () => {
     setModalOpen(true);
   };
@@ -38,8 +108,7 @@ export default function ProductSaleInfo({ paymentList }) {
   const deletecoupon = () => {
     setCouponDiscount(0);
   };
-  const [couponDiscount, setCouponDiscount] = useState(-1);
-  return (
+  return paymentList ? (
     <div>
       <Title>할인 및 쿠폰 정보</Title>
       <hr></hr>
@@ -132,10 +201,11 @@ export default function ProductSaleInfo({ paymentList }) {
           setModalOpen={setModalOpen}
           setCouponDiscount={setCouponDiscount}
           uniqueCate={uniqueCate}
+          setUsedCoupon={setUsedCoupon}
         ></MyCouponSelectModal>
       )}
     </div>
-  );
+  ) : null;
 }
 
 const AllDiv = styled.div`

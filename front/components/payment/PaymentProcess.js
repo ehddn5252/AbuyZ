@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 export default function PaymentProcess() {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(1);
 
   return (
     <div>
@@ -22,7 +22,7 @@ export default function PaymentProcess() {
             <span>카카오페이</span>
           </KakaoPayImageDiv>
         </div>
-        <div
+        {/* <div
           style={{
             ...cardStyle,
             ...(selected === 0 && cardSelect),
@@ -34,7 +34,7 @@ export default function PaymentProcess() {
           <CardImageDiv>
             <span>일반결제</span>
           </CardImageDiv>
-        </div>
+        </div> */}
       </AllDiv>
     </div>
   );
