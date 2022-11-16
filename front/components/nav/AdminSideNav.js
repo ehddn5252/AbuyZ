@@ -42,12 +42,9 @@ export default function AdminSideNav() {
     router.push("/admin/dashboard");
   };
 
-  const goSite = () => {
-    router.push("/");
-  };
   return (
     <SideNavContainer>
-      <LogoDiv>
+      <LogoDiv onClick={goHome}>
         <img src="/images/ABUYZ_LOGO.png" style={{ width: "6rem" }} />
         <p>셀러오피스</p>
       </LogoDiv>
@@ -229,6 +226,7 @@ const LogoDiv = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
+  cursor: pointer;
 `;
 
 const TitleGrid = styled(Grid)`

@@ -87,3 +87,9 @@ export const baksetPayments = atom({
   },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const mypageValues = atom({
+  key: "mypageValue",
+  default: 0,
+  effects_UNSTABLE: [persistAtom],
+});

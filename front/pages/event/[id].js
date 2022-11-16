@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
+
+// Style
 import styled from "styled-components";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 // Next.js
-import { Event, inquireEvent } from "../api/event";
+import { useRouter } from "next/router";
+
+// API
 import { couponlist, getCoupon } from "../api/coupon";
 import { detailEvent } from "../api/event";
+
+// Component
 import EventCouponButton from "../../components/event/EventCouponButton";
+
 export default function Detail() {
+  const router = useRouter();
   // 이벤트 아이디
   const [eventId, setEventId] = useState(0);
   // 내가 가지고 있는 쿠폰 리스트
@@ -28,6 +37,9 @@ export default function Detail() {
     setCouponList(rres.data.result);
   };
 
+  const backClick = () => {
+    router.back();
+  };
   useEffect(() => {
     // 사이트 주소에서 마지막 번호 받아오고
     const pathname = window.location.pathname;
@@ -41,62 +53,62 @@ export default function Detail() {
     myCoupon();
   }, [eventId]);
 
-  return (
+  return currentEvent.length !== 0 ? (
     <Container>
-      {currentEvent.length === 0 ? null : (
-        <div>
-          <TitleContainer>
-            <EventP>{currentEvent.name}</EventP>
-          </TitleContainer>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              marginRight: "25rem",
-            }}
-          >
-            <p> 일시:</p>
-            <p>{currentEvent.start_date.slice(0, 10)}</p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "start",
+          marginTop: "2rem",
+          marginLeft: "24rem",
+        }}
+      >
+        <ArrowBackIcon
+          onClick={backClick}
+          sx={{ fontSize: "2rem", fontWeight: "bold" }}
+        />
+      </div>
+      <div>
+        <TitleContainer>
+          <EventP>{currentEvent.name}</EventP>
+        </TitleContainer>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "end",
+            marginRight: "25rem",
+          }}
+        >
+          <p> 일시:</p>
+          <p>{currentEvent.start_date.slice(0, 10)}</p>
 
-            <p> - </p>
-            <p>{currentEvent.end_date.slice(0, 10)}</p>
-          </div>
-          <ImgDiv>
-            <Image src={currentEvent.contentImg}></Image>
-          </ImgDiv>
-          <div style={{ marginLeft: "25rem" }}>
-            <p>{currentEvent.content}</p>
-          </div>
-
-          <div>
-            <ButtonDiv>
-              <EventCouponButton
-                // 현재 이벤트에서 제공하고 있는 쿠폰 아이디
-                uid={currentEvent.coupon_lists[0]}
-                // 내가 가지고 있는 쿠폰들의 아이디
-                list={couponList}
-                setIsGiven={setIsGiven}
-                isgiven={isgiven}
-                currentEvent={currentEvent}
-              ></EventCouponButton>
-            </ButtonDiv>
-          </div>
+          <p> - </p>
+          <p>{currentEvent.end_date.slice(0, 10)}</p>
         </div>
-      )}
-    </Container>
-  );
-}
+        <ImgDiv>
+          <Image src={currentEvent.contentImg}></Image>
+        </ImgDiv>
+        <div style={{ marginLeft: "25rem" }}>
+          <p>{currentEvent.content}</p>
+        </div>
 
-const StyledNoButton = styled.button`
-  padding: 6px 12px;
-  border-radius: 5px;
-  font-size: 1rem;
-  line-height: 1.5;
-  width: 8rem;
-  color: white;
-  border: none;
-  background: #aaaaaa;
-`;
+        <div>
+          <ButtonDiv>
+            <EventCouponButton
+              // 현재 이벤트에서 제공하고 있는 쿠폰 아이디
+              uid={currentEvent.coupon_lists[0]}
+              // 내가 가지고 있는 쿠폰들의 아이디
+              list={couponList}
+              setIsGiven={setIsGiven}
+              isgiven={isgiven}
+              currentEvent={currentEvent}
+            ></EventCouponButton>
+          </ButtonDiv>
+        </div>
+      </div>
+    </Container>
+  ) : null;
+}
 
 const ImgDiv = styled.div`
   display: flex;
@@ -106,13 +118,6 @@ const ImgDiv = styled.div`
 
 const ButtonDiv = styled.div`
   margin-top: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ButtonDateDiv = styled.div`
-  margin-bottom: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,6 +139,7 @@ const TitleContainer = styled.div`
 
 const EventP = styled.p`
   font-size: 2.5rem;
+  margin-top: 0;
   font-weight: bold;
   text-align: center;
 `;
