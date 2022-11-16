@@ -35,6 +35,9 @@ public class OrderController {
     @GetMapping("/test")
     public ResponseEntity<BaseRes> payTest(){
         /*
+
+            DB lock test
+
             private Integer products_uid;
             private Integer product_count;
             private LinkedHashMap<String,String> option_values;
@@ -43,6 +46,7 @@ public class OrderController {
             private Integer coupons_uid;
             "780" "1254 1256" "1087"
          */
+
         CartDto cartDto = new CartDto();
         cartDto.setProductsUid(780);
         cartDto.setProductCount(1);

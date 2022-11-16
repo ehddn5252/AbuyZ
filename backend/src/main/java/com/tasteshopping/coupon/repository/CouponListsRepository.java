@@ -26,6 +26,6 @@ public interface CouponListsRepository extends JpaRepository<CouponLists,Integer
     @EntityGraph(attributePaths = {"user","coupons"})
     List<CouponLists> findByCoupons_EndDateAndStatus(Date yesterday,int status);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     CouponLists findByCouponsAndUser(Coupons coupons, Users user);
 }
