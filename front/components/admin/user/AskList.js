@@ -57,18 +57,18 @@ export default function AskList({ askList }) {
                     <Td>
                       <AskModal row={row} />
                     </Td>
-                    <Td>{row.customerCenterCategory}</Td>
+                    <Td>{row.category_name}</Td>
                     <Td>{row.title}</Td>
                     <Td>
-                      {row.content.length <= 20
+                      {row.content.length <= 30
                         ? row.content
-                        : row.content.slice(0, 20) + "..."}
+                        : row.content.slice(0, 30) + "..."}
                     </Td>
                     <Td>{row.start_date ? row.start_date.slice(0, 10) : 0}</Td>
                     <Td>
                       {row.end_date ? row.end_date.slice(0, 10) : "미완료"}
                     </Td>
-                    <Td>{row.userName}</Td>
+                    <Td>{row.writer}</Td>
                   </TableRow>
                 ))
               : null}

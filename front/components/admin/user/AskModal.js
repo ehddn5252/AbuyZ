@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // MUI
-import Rating from "@mui/material/Rating";
-import StarIcon from "@mui/icons-material/Star";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import CloseIcon from "@mui/icons-material/Close";
@@ -36,11 +34,24 @@ export default function AskModal({ row }) {
   // 리뷰 데이터 불러오기 감지
   const [upload, setUpload] = useState(0);
 
+  // 답변 내용
+  const [answerContent, setAnswerContent] = useState("");
+
   // 리뷰 데이터 불러오기
   const getDetail = async () => {
     const data = await detailCustomerCenter(row.uid);
     setAskInfo(data.data);
-    console.log(data.data, "@@@");
+  };
+
+  // 리뷰 답변 작성
+  const handleAnswer = () => {
+    const answer = {
+      uid: row.uid,
+      content: answerContent,
+    };
+    writeInquiryReply(answer);
+    alert("답변이 등록되었습니다.");
+    location.reload();
   };
 
   useEffect(() => {
@@ -63,80 +74,181 @@ export default function AskModal({ row }) {
           onClick={() => {
             handleOpen(), setUpload(upload + 1);
           }}
-          style={{ backgroundColor: "#FB5757" }}
+          style={{ backgroundColor: "#57A9FB" }}
         >
           완료
         </SolvedButton>
       )}
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <div>왜 안돼</div>
+          <Grid2
+            container
+            spacing={2}
+            sx={{ padding: "0", margin: "0", background: "#fff" }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                marginBottom: "2rem",
+              }}
+            >
+              <h2
+                style={{
+                  paddingLeft: "2rem",
+                  margin: "0",
+                  paddingTop: "2rem",
+                  paddingBottom: "1rem",
+                }}
+              >
+                상세 문의
+              </h2>
+              <CloseIcon
+                onClick={handleClose}
+                sx={{
+                  cursor: "pointer",
+                  marginRight: "2rem",
+                  marginTop: "2rem",
+                }}
+              />
+            </div>
+            <Grid2
+              xs={12}
+              sx={{
+                margin: "0",
+                padding: "0",
+                width: "100%",
+              }}
+            >
+              <hr style={{ background: "#000", margin: "0", padding: "0" }} />
+            </Grid2>
+            <Grid2
+              xs={4}
+              sx={{
+                marginTop: "1rem",
+              }}
+            >
+              {askInfo.imgUrl ? (
+                <img
+                  src={askInfo.imgUrl}
+                  alt={"문의 관련 이미지입니다."}
+                  style={{ width: "18rem", height: "17rem" }}
+                />
+              ) : (
+                <img
+                  src="/images/ABUYZ_LOGO.png"
+                  alt={"이미지를 준비중입니다."}
+                  style={{ width: "18rem", height: "17rem" }}
+                />
+              )}
+            </Grid2>
+            <Grid2
+              xs={7}
+              sx={{
+                marginLeft: "3rem",
+                marginTop: "1rem",
+              }}
+            >
+              <TableContainer>
+                <tbody>
+                  {askInfo ? (
+                    <TableRow>
+                      <Td style={{ background: "#E4E4E4" }}>사유</Td>
+                      <Td>{askInfo.customerCenterCategory}</Td>
+                    </TableRow>
+                  ) : null}
+                </tbody>
+                <tbody>
+                  {askInfo ? (
+                    <TableRow>
+                      <Td style={{ background: "#E4E4E4" }}>문의 일시</Td>
+                      <Td>
+                        {askInfo.start_date
+                          ? askInfo.start_date.slice(0, 10)
+                          : 0}
+                      </Td>
+                    </TableRow>
+                  ) : null}
+                </tbody>
+                <tbody>
+                  {askInfo ? (
+                    <TableRow>
+                      <Td style={{ background: "#E4E4E4" }}>작성자</Td>
+                      <Td>{askInfo.userName}</Td>
+                    </TableRow>
+                  ) : null}
+                </tbody>
+                <tbody>
+                  {askInfo ? (
+                    <TableRow>
+                      <Td style={{ background: "#E4E4E4" }}>문의명</Td>
+                      <Td>{askInfo.title}</Td>
+                    </TableRow>
+                  ) : null}
+                </tbody>
+                <tbody>
+                  {askInfo ? (
+                    <TableRow>
+                      <Td style={{ background: "#E4E4E4" }}>문의내용</Td>
+                      <Td>{askInfo.content}</Td>
+                    </TableRow>
+                  ) : null}
+                </tbody>
+              </TableContainer>
+            </Grid2>
+          </Grid2>
+          <Grid2
+            xs={12}
+            sx={{
+              margin: "0",
+              padding: "0",
+              width: "100%",
+              display: "flex",
+              marginTop: "1rem",
+            }}
+          >
+            <TitleP>답변</TitleP>
+            <AnswerDiv onChange={(e) => setAnswerContent(e.target.value)} />
+          </Grid2>
+
+          <Grid2
+            xs={12}
+            sx={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <RefusalButton onClick={handleClose}>취소</RefusalButton>
+            <AcceptButton
+              onClick={() => {
+                handleAnswer();
+              }}
+            >
+              답변 등록
+            </AcceptButton>
+          </Grid2>
         </Box>
       </Modal>
     </div>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40%;
-  border: 2px solid #000;
-  background-color: #fff;
-  box-shadow: 24;
-`;
-
-const TitleDiv = styled.div`
-  border-bottom: 1px solid #c8c8c8;
-  width: 100%;
-  padding: 2rem;
-  font-size: 1.6rem;
-  font-weight: bold;
-`;
-
-const ContentDiv = styled.div`
-  padding: 2rem;
-`;
-
-const ContentBox = styled.div`
-  display: flex;
-
-  width: 100%;
-  height: 2.5rem;
-`;
-
 const TitleP = styled.p`
   margin: 0;
-  border: 1px solid black;
+  margin-left: 1rem;
+  margin-right: 0.5rem;
   padding: 0.5rem;
-  width: 20%;
-  background-color: #c8c8c8;
+  font-weight: 800;
 `;
 
 const AnswerDiv = styled.textarea`
-  width: 100%;
+  width: 90%;
   height: 10rem;
-`;
-
-const SubmitButton = styled.button`
-  width: 8rem;
-  padding: 1rem;
-  background-color: #1a6dff;
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: white;
-  border: none;
-  margin-bottom: 2rem;
-`;
-
-const ContentP = styled.p`
-  margin: 0;
-  padding: 0.5rem;
-  font-weight: bold;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
 `;
 
 const AcceptButton = styled.button`
@@ -179,4 +291,29 @@ const SolvedButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const TableContainer = styled.table`
+  background-color: white;
+  margin-left: 1rem;
+  width: 100%;
+  height: 7rem;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid black;
+`;
+
+const TableRow = styled.tr`
+  width: 100%;
+  height: 3rem;
+  margin: 0;
+`;
+
+const Td = styled.td`
+  margin: 0;
+  border: 1px solid black;
+  text-align: center;
+  height: fit-content;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
 `;

@@ -187,28 +187,28 @@ export default function ServiceConsulting() {
                 상품
               </MenuItem>
               <MenuItem
-                value={"교환_환불"}
+                value={"환불"}
                 onClick={(e) => handleOnChangeSelectValueex(e)}
               >
                 환불
               </MenuItem>
               <MenuItem
-                value={"이벤트"}
+                value={"배송"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
-                이벤트 프로모션
+                배송
               </MenuItem>
               <MenuItem
-                value={"사이트_개선"}
+                value={"사이트"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
-                사이트 개선
+                사이트
               </MenuItem>
               <MenuItem
                 value={"주문결제"}
                 onClick={(e) => handleOnChangeSelectValue(e)}
               >
-                주문 / 결제
+                주문/결제
               </MenuItem>
             </Select>
           </FormControl>
