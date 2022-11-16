@@ -37,7 +37,7 @@ public class Products {
     @ColumnDefault("0")
     private Integer price;
 
-    @Column(name = "description_img", columnDefinition = "varchar(500)")
+    @Column(name = "description_img", columnDefinition = "varchar(3000)")
     private String descriptionImg;
 
     @Column(name = "rep_img", columnDefinition = "varchar(3000)")
