@@ -12,6 +12,8 @@ import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
 import com.tasteshopping.product.repository.*;
 import com.tasteshopping.categories.repository.SmallCategoryRepository;
+import com.tasteshopping.review.entity.Reviews;
+import com.tasteshopping.review.repository.ReviewRepository;
 import com.tasteshopping.review.service.AwsS3Service;
 import com.tasteshopping.user.dto.Role;
 import com.tasteshopping.user.entity.Users;
@@ -47,6 +49,8 @@ public class ProductServiceImpl implements ProductService {
     private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
     private final WishRepository wishRepository;
+
+    private final ReviewRepository reviewRepositry;
 
     @Override
     public BaseRes boSearch(String email, BoSearchReqDto boSearchReqDto) {
@@ -207,10 +211,10 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Products> productsOptional = productRepository.findById(products_uid);
 
-        if(!productsOptional.isPresent()){
+        if (!productsOptional.isPresent()) {
             throw new ProductNotFoundException();
         }
-        Products p=productsOptional.get();
+        Products p = productsOptional.get();
 
         /*
 
@@ -270,7 +274,7 @@ public class ProductServiceImpl implements ProductService {
         // 여기에서 옵션 형태를 갖다줘야 함.
         //  HashMap <String,String> 구조
         productCreateModifyDto.setOptions(hashMap);
-        return new BaseRes(200,"입력한 값 가져오기 성공",productCreateModifyDto);
+        return new BaseRes(200, "입력한 값 가져오기 성공", productCreateModifyDto);
     }
 
     @Override
@@ -761,7 +765,7 @@ public class ProductServiceImpl implements ProductService {
 
             HashMap<String, List> hashMap = new HashMap<>();
 
-            if(productOptionsList.isEmpty()){
+            if (productOptionsList.isEmpty()) {
                 throw new OptionNotFoundException();
             }
             String name = productOptionsList.get(0).getName();
@@ -994,10 +998,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProduct() {
-        List<Products> l = productRepository.findAllFetchJoin();
+        List<Products> l = productRepository.findAllFetchJoinWithReview();
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
-            new_l.add(l.get(i).toDto());
+            ProductDto productDto = l.get(i).toDto();
+            // 여기에서 리뷰들의 평균 가져오기
+//            List<Reviews> reviews =reviewRepositry.findByProduct(l.get(i));
+            List<Reviews> reviews = l.get(i).getReviews();
+            productDto.setReviewNum(reviews.size());
+            Float reviewRate = 0f;
+            for(int j=0;j<reviews.size();++j){
+                reviewRate+=reviews.get(j).getRating();
+            }
+            reviewRate/=reviews.size();
+            reviewRate = (int)(reviewRate * 100) /100f;
+            productDto.setReviewNum(reviews.size());
+            productDto.setReviewRate(reviewRate);
+            new_l.add(productDto);
         }
         return new_l;
     }

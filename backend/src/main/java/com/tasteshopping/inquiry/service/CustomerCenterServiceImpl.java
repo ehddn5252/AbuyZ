@@ -47,8 +47,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
 
     private final AwsS3Service awsS3Service;
 
-    private final OrderService orderService;
-
     @Override
     public Integer getNoReplyNum(String status) {
         List<CustomerCenters> l = customerCenterRepository.findByStatus(status);
@@ -151,7 +149,7 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
                 Optional<Orders> ordersOptional = orderRepository.findById(customerCenterWriteReqDto.getOrder_uid());
                 if (ordersOptional.isPresent()) {
                     Orders order = ordersOptional.get();
-                    if (customerCenterWriteReqDto.getCustomer_center_category().equals("환불")) {
+                    if (customerCenterWriteReqDto.getCustomer_center_category().equals(CustomerCenterCategory.환불.toString())) {
                         order.setStatus(OrderStatus.REFUND_REQUEST.toString());
                     }
                     customerCenter.setOrder(order);
@@ -169,46 +167,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
             return new BaseRes(500, "문의 저장 서버 에러", null);
         }
     }
-
-//    @Override
-//    public BaseRes writeReplyCustomerCenter(String email, int parentUid, String content) {
-//
-//        BaseRes baseRes = new BaseRes();
-//        Optional<Users> usersOptional = userRepository.findByEmail(email);
-//        if (usersOptional.get().getUserRoles() == Role.ADMIN) {
-//            CustomerCenters childCustomerCenter = new CustomerCenters();
-//
-//            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            Date date = new Date(System.currentTimeMillis());
-//            String s = formatter.format(date).toString();
-//            try {
-//                date = formatter.parse(s);
-//            } catch (ParseException pErr) {
-//                System.out.println(pErr);
-//            }
-//            Optional<CustomerCenters> parentCustomerCentersOptional = customerCenterRepository.findById(parentUid);
-//            CustomerCenters parentCustomerCenter = null;
-//            if (parentCustomerCentersOptional.isPresent()) {
-//                parentCustomerCenter = parentCustomerCentersOptional.get();
-//            }
-//            childCustomerCenter.setDate(date);
-//            childCustomerCenter.setUser(usersOptional.get());
-//            childCustomerCenter.setContent(content);
-//            childCustomerCenter.setCustomerCenterCategory(parentCustomerCenter.getCustomerCenterCategory());
-//            childCustomerCenter.setParent(parentCustomerCenter);
-//            childCustomerCenter.setStatus(Status.답변_완료.toString());
-//            parentCustomerCenter.setStatus(Status.답변_완료.toString());
-//            customerCenterRepository.save(childCustomerCenter);
-//            customerCenterRepository.save(parentCustomerCenter);
-//            baseRes.setMessage("문의 답변 작성 성공");
-//            baseRes.setStatusCode(200);
-//            return baseRes;
-//        } else {
-//            baseRes.setStatusCode(403);
-//            baseRes.setMessage("관리자가 아닙니다.");
-//            return baseRes;
-//        }
-//    }
 
 
     @Override
@@ -229,7 +187,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         customerCenterRepository.delete(customerCenter);
     }
 
-
     /**
      * 고객센터 - 신고
      */
@@ -249,7 +206,6 @@ public class CustomerCenterServiceImpl implements CustomerCenterService {
         String startDate = dto.getStart_date();
         String endDate = dto.getEnd_date();
         int status = dto.getStatus();
-
 
         return new BaseRes(200, "고객센터 신고 - 조회 하는중", null);
     }

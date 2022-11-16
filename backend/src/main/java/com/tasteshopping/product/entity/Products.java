@@ -87,19 +87,9 @@ public class Products {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Reviews> reviews;
 
-    /*
-        Integer productsUid; // product에서 가져옴
-    Integer smallCategoriesUid; // products 에서 가져옴
-    String name; // products 에서 가져옴
-    Integer discountRate; // products 에서 가져옴
-    Float reviewRate; // products 에서 가져옴
-    Integer price; // products 에서 가져옴
-    Integer deliveryFee; // products 에서 가져옴
-    String brandName; // products 에서 가져옴
-    String descriptionImg; // products 에서 가져옴
-    String repImg; // products 에서 가져옴
-     */
-
+    public void addReview(Reviews review){
+        reviews.add(review);
+    }
 
     public ProductCreateModifyDto toCreateModifyDto(){
         return ProductCreateModifyDto.builder()
