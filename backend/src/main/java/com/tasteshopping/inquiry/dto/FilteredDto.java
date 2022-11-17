@@ -17,9 +17,10 @@ public class FilteredDto {
     private Date start_date;
     private Date end_date;
     private String writer;
+    private String reply;
 
     @QueryProjection
-    public FilteredDto(int uid,String status, String category_name, String title, String content, Date start_date,Date end_date,String writer){
+    public FilteredDto(int uid,String status, String category_name, String title, String content, Date start_date,Date end_date,String writer, String reply){
         this.uid = uid;
         this.status = status;
         this.category_name = category_name;
@@ -28,5 +29,6 @@ public class FilteredDto {
         this.start_date = start_date;
         this.end_date = end_date;
         this.writer = writer;
+        this.reply = reply;
     }
 }
