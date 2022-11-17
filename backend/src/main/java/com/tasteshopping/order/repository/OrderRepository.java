@@ -23,9 +23,9 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
     List<Orders> findByOrderList(OrderLists orderList);
 
-    @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
-    List<Orders> findByOrderListIn(OrderLists orderList);
+    @EntityGraph(attributePaths = {"inventory","review"})
+    List<Orders> findByOrderListAndStatusNotIn(OrderLists orderList, List status);
 
-    @Query("select o from Orders o join fetch Reviews  r on o.review=r where o.status=:status")
+    @Query("select o from Orders o join fetch o.review r where o.status=:status")
     List<Orders> findByStatus(String status);
 }

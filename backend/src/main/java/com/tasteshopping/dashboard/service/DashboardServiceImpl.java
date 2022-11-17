@@ -124,15 +124,19 @@ public class DashboardServiceImpl implements DashboardService {
 //        Date date = UtilService.getToday();
         Date startDate = UtilService.getDateAfterDay(day);
         Date endDate = UtilService.getDateAfterDay(day+1);
-        System.out.println("startDate: "+startDate +"\n endDate: "+endDate);
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
         Integer count = 0;
+        List<String> orderStatus = new ArrayList<>();
+        orderStatus.add(OrderStatus.PROCESS.toString());
+        orderStatus.add(OrderStatus.SOLD.toString());
         for (int i = 0; i < orderLists.size(); ++i) {
             // 여기에서 오더가 아닌 것들 가져와야 함.
             // JPA  조건문 변경
             totalPrice += orderLists.get(i).getTotalPrice();
             List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
+//            List<Orders> orders = orderRepository.findByOrderListAndStatusNotIn(orderLists.get(i),orderStatus);
+//            count+=orders.size();
             for (int j = 0; j < orders.size(); ++j) {
                 String status = orders.get(j).getStatus();
                 if (status.equals(OrderStatus.PROCESS.toString()) || status.equals(OrderStatus.SOLD.toString())) {
@@ -194,7 +198,6 @@ public class DashboardServiceImpl implements DashboardService {
             }
         }
         if (isNotChecked) {
-            System.out.println("is not checked");
             redisService.addData("userIp", userIp);
             doVisit(UtilService.getToday(), "main");
             return new BaseRes(200, "조회수 증가 성공", null);
