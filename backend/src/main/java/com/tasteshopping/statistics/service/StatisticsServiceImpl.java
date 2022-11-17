@@ -9,7 +9,6 @@ import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.statistics.dto.*;
 import com.tasteshopping.user.dto.ResponseDto;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
