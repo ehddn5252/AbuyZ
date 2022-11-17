@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "./CouponPeriod";
+import SweetAlert2 from "react-sweetalert2";
 
 // API
 import { modifycoupon } from "../../../pages/api/coupon";
@@ -34,6 +35,9 @@ export default function EditCouponModal(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // alert창
+  const [swalProps, setSwalProps] = useState({});
 
   // 대분류 카테고리
   const [category, setCategory] = useState(
@@ -95,6 +99,15 @@ export default function EditCouponModal(props) {
       big_categories_uid: Number(category),
     };
     modifycoupon(couponDto, props.couponInfo.uid);
+    setSwalProps({
+      show: true,
+      title: "쿠폰이 수정되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    location.reload();
   };
 
   return (
@@ -105,8 +118,9 @@ export default function EditCouponModal(props) {
       >
         수정하기
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
+          <SweetAlert2 {...swalProps} />
           <Grid2
             container
             spacing={1}
@@ -388,7 +402,7 @@ export default function EditCouponModal(props) {
               <ButtonBox>
                 <AddButton
                   onClick={() => {
-                    modiCoupon(), location.reload();
+                    modiCoupon();
                   }}
                 >
                   수정
