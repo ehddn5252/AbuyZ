@@ -105,7 +105,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<CartResDto> getCart(String email) {
         Users user = userRepository.findByEmail(email).get();
-        List<Carts> cartsList = cartRepository.findByUser(user);
+        List<Carts> cartsList = cartRepository.findByUserFetchJoin(user);
         List<CartResDto> cartResDtoList = new ArrayList<>();
         for (int i = 0; i < cartsList.size(); ++i) {
             CartResDto cartResDto = new CartResDto();

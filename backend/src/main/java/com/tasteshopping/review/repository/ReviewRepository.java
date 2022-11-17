@@ -6,6 +6,7 @@ import com.tasteshopping.review.entity.Reviews;
 import com.tasteshopping.user.entity.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -39,8 +40,10 @@ public interface ReviewRepository extends JpaRepository<Reviews, Integer> {
     @Query("select r from Reviews r where r.parentReview is null order by r.date desc")
     List<Reviews> findCurrent();
 
+    @EntityGraph(attributePaths = {"parentReview","order"})
     List<Reviews> findByParentReviewIsNull();
 
+    @EntityGraph(attributePaths = {"parentReview","order"})
     List<Reviews> findByParentReviewIsNotNull();
 
 

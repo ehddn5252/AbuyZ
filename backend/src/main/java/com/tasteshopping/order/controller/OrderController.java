@@ -62,9 +62,6 @@ public class OrderController {
 //    }
 
 
-
-
-
     @GetMapping("/status/num/{status}")
     public ResponseEntity<BaseRes> getByStatus(@AuthenticationPrincipal String email, @PathVariable String status) {
         // 상품 상태로로 검색한 기록

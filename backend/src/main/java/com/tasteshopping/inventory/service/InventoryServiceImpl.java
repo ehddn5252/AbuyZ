@@ -98,7 +98,7 @@ public class InventoryServiceImpl implements InventoryService {
         Users user = userRepository.findByEmail(email).get();
         // 장바구니 가져와서 orderList 만들기
 
-        List<Carts> cartList = cartRepository.findByUser(user);
+        List<Carts> cartList = cartRepository.findByUserFetchJoin(user);
         for (int i = 0; i < cartList.size(); ++i) {
             Carts cart = cartList.get(i);
             Inventories inventory = cart.getInventory();

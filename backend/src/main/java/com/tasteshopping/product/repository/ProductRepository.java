@@ -22,6 +22,9 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 //            "join fetch ProductPictures pp on p.productPictures = pp ")
 //    Optional<Integer> findByIdFetchJoin();
 
+    @Query("select p from Products p join fetch Brands b on p.brand = b join fetch ProductPictures pp on p=pp.product join fetch Inventories i on p= i.product join fetch p.productOptions po where p.uid=:uid ")
+    Optional<Products> findByIdFetchJoin(int uid);
+
     @Query("select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories b on s.bigCategory=b where b.uid=:categoriesUid")
     List<Optional<Products>> findByBigCategory(int categoriesUid);
 
@@ -41,7 +44,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
 
-    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
+//    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
+    @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch Inventories i on i.product=p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     List<Products> findAllFetchJoin();
     @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     List<Products> findAllFetchJoinWithReview();
