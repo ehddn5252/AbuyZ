@@ -40,7 +40,7 @@ public class InquiryRepositoryImpl {
 
         return factory.select(new QFilteredDto(customerCenters.uid,customerCenters.status,customerCenters.customerCenterCategory,
                         customerCenters.title,customerCenters.content,customerCenters.start_date,customerCenters.end_date,
-                        users.name))
+                        users.name,customerCenters.reply))
                 .from(customerCenters)
                 .join(customerCenters.user, users)
                 .where(builder)
