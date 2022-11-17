@@ -85,7 +85,7 @@ const TotalDiv = styled.div`
   height: 30%;
   background-color: #fff5d6;
   padding: 1rem;
-  margin: 0.3rem;
+  margin: 0.2rem;
   border-radius: 1rem;
 `;
 
