@@ -68,7 +68,7 @@ export default function LineChart({ lineChartData }) {
       setLineLabel(templabel);
       setLineData(tempdata);
     }
-  }, []);
+  }, [lineChartData]);
   return lineChartData ? (
     <Container>
       <Line options={options} data={data} />
