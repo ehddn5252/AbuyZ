@@ -127,6 +127,8 @@ public class DashboardServiceImpl implements DashboardService {
         List<OrderLists> orderLists = orderListRepository.findByDateBetween(startDate, endDate);
         Integer totalPrice = 0;
         Integer count = 0;
+
+
         List<String> orderStatus = new ArrayList<>();
         orderStatus.add(OrderStatus.PROCESS.toString());
         orderStatus.add(OrderStatus.SOLD.toString());
@@ -134,15 +136,15 @@ public class DashboardServiceImpl implements DashboardService {
             // 여기에서 오더가 아닌 것들 가져와야 함.
             // JPA  조건문 변경
             totalPrice += orderLists.get(i).getTotalPrice();
-            List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
-//            List<Orders> orders = orderRepository.findByOrderListAndStatusNotIn(orderLists.get(i),orderStatus);
-//            count+=orders.size();
-            for (int j = 0; j < orders.size(); ++j) {
-                String status = orders.get(j).getStatus();
-                if (status.equals(OrderStatus.PROCESS.toString()) || status.equals(OrderStatus.SOLD.toString())) {
-                    count += 1;
-                }
-            }
+//            List<Orders> orders = orderRepository.findByOrderList(orderLists.get(i));
+            List<Orders> orders = orderRepository.findByOrderListAndStatusIn(orderLists.get(i),orderStatus);
+            count+=orders.size();
+//            for (int j = 0; j < orders.size(); ++j) {
+//                String status = orders.get(j).getStatus();
+//                if (status.equals(OrderStatus.PROCESS.toString()) || status.equals(OrderStatus.SOLD.toString())) {
+//                    count += 1;
+//                }
+//            }
         }
         summaryDto.setOrderNum(count);
         summaryDto.setTotalPrice(totalPrice);

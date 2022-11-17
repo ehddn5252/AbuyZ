@@ -22,7 +22,7 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     List<Orders> findByOrderList(OrderLists orderList);
 
     @EntityGraph(attributePaths = {"inventory","review"})
-    List<Orders> findByOrderListAndStatusNotIn(OrderLists orderList, List status);
+    List<Orders> findByOrderListAndStatusIn(OrderLists orderList, List status);
 
     @Query("select o from Orders o join fetch o.review r where o.status=:status")
     List<Orders> findByStatus(String status);
