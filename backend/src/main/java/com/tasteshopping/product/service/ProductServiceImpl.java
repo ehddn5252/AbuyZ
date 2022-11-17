@@ -750,7 +750,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDetailDto getDetailProduct(String email, int uid) {
-        Optional<Products> productsOptional = productRepository.findById(uid);
+        Optional<Products> productsOptional = productRepository.findByIdFetchJoin(uid);
         if (productsOptional.isPresent()) {
             Products p = productsOptional.get();
             ProductDetailDto productDetailDto = new ProductDetailDto();

@@ -22,6 +22,9 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 //            "join fetch ProductPictures pp on p.productPictures = pp ")
 //    Optional<Integer> findByIdFetchJoin();
 
+    @Query("select p from Products p join fetch Brands b on p.brand = b join fetch ProductPictures pp on p=pp.product join fetch Inventories i on p= i.product join fetch p.productOptions po where p.uid=:uid ")
+    Optional<Products> findByIdFetchJoin(int uid);
+
     @Query("select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories b on s.bigCategory=b where b.uid=:categoriesUid")
     List<Optional<Products>> findByBigCategory(int categoriesUid);
 

@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders,Integer> {
-    @Query(value = "select max(uid) from orders", nativeQuery = true)
-    Integer findMaxUid();
 
     @EntityGraph(attributePaths = {"review","orderList","inventory","inventory.product","inventory.product.smallCategory",
     "inventory.product.smallCategory.bigCategory"})
