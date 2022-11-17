@@ -28,15 +28,21 @@ public class EventScheduler {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate yesterdayLocalDate = LocalDate.now().minusDays(1);
         Date yesterday = null;
+        Date today = null;
         try {
             yesterday = formatter.parse(yesterdayLocalDate.toString());
+            today = formatter.parse(yesterdayLocalDate.toString());
         } catch (ParseException e) {
             log.warn("EventScheduler ParseException");
             e.printStackTrace();
         }
         List<Events> target = eventRepository.findByEndDateAndStatus(yesterday,1);
         for(Events events:target){
-            events.updateStatus();
+            events.updateStatus(2);
+        }
+        target = eventRepository.findByEndDateAndStatus(today,0);
+        for(Events events:target){
+            events.updateStatus(1);
         }
         log.info("EventScheduler finish");
     }
