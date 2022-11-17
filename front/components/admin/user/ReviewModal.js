@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import SweetAlert2 from "react-sweetalert2";
+import Swal from "sweetalert2";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -30,9 +30,6 @@ export default function ReviewModal({ row }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // alert창
-  const [swalProps, setSwalProps] = useState({});
-
   // 문의 상세 정보
   const [askInfo, setAskInfo] = useState([]);
 
@@ -52,7 +49,7 @@ export default function ReviewModal({ row }) {
       content: answerContent,
     };
     replyReview(answer);
-    setSwalProps({
+    Swal.fire({
       show: true,
       title: "답변이 등록되었습니다.",
       position: "top-center",
@@ -86,7 +83,6 @@ export default function ReviewModal({ row }) {
       )}
       <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
-          <SweetAlert2 {...swalProps} />
           <Grid2
             container
             spacing={2}

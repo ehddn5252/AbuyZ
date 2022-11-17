@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
-import SweetAlert2 from "react-sweetalert2";
+import Swal from "sweetalert2";
 
 // API
 import { delEvent } from "../../../pages/api/event";
@@ -41,7 +41,6 @@ export default function SaleEventList(props) {
                   <img
                     alt="이미지 준비중"
                     src={data.thumbnail}
-                    // layout="fill"
                     width={600}
                     height={200}
                   />
@@ -74,7 +73,7 @@ export default function SaleEventList(props) {
                       onClick={() => {
                         delEvent(data.uid),
                           props.setDelNum(data.uid),
-                          setSwalProps({
+                          Swal.fire({
                             show: true,
                             title: "이벤트가 삭제되었습니다.",
                             position: "top-center",

@@ -126,7 +126,7 @@ export default function CouponInquire() {
           }
           // 이벤트 마감 일시
           else if (standDate === 2) {
-            if (e_lst[i][1].end_date <= endDate.toISOString().slice(0, 10)) {
+            if (e_lst[i][1].end_date <= moment(endDate).format().slice(0, 10)) {
               tmp.push(e_lst[i][1]);
             }
           }
