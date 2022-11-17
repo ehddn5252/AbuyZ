@@ -151,9 +151,9 @@ export default function ReviewCategory() {
       searchDto.endDate = "2032-12-01";
     }
 
-    const lst = await searchReview(searchDto);
+    console.log(searchDto, "~~~~");
 
-    console.log(lst, "!@#!@#!@#");
+    const lst = await searchReview(searchDto);
 
     {
       lst.length >= 1
@@ -191,9 +191,15 @@ export default function ReviewCategory() {
     setReviewList(tmp);
   };
 
+  // 초기 렌더링 시
   useEffect(() => {
     handleSearch();
   }, []);
+
+  // 리셋됐을 때
+  useEffect(() => {
+    handleSearch();
+  }, [reset]);
 
   return (
     <Grid2

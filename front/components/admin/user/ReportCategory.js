@@ -140,6 +140,11 @@ export default function ReportCategory() {
     getSearch();
   }, []);
 
+  // 초기화 됐을 때 신고 조회
+  useEffect(() => {
+    getSearch();
+  }, [reset]);
+
   return (
     <Grid2
       container

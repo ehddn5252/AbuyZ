@@ -20,7 +20,7 @@ export async function mycenter() {
         console.log(e);
       });
   }).catch((e) => {
-    console.log(e, "@@");
+    console.log(e);
   });
 }
 

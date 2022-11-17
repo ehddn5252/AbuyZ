@@ -28,7 +28,6 @@ export async function searchCustomerCenter(AskDto) {
   https.defaults.headers.common["access_token"] = accessToken;
 
   return new Promise((resolve) => {
-    console.log(AskDto, "@#");
     https
       .post("/customer-center/search", AskDto)
       .then((response) => {
@@ -145,7 +144,6 @@ export async function searchReview(searchDto) {
 
 // 리뷰 상세보기(모달)
 export async function detailReview(uid) {
-  console.log("상세보기@@@@@@@");
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
@@ -169,7 +167,6 @@ export async function detailReview(uid) {
 
 // 리뷰 답글 작성
 export async function writeReviewReply(reply) {
-  console.log("writeReviewReply@@@@@@@@@@@", reply);
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
 
