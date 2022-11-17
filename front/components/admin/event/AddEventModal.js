@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import SweetAlert2 from "react-sweetalert2";
 
 // API
 import axios from "axios";
@@ -36,6 +37,9 @@ export default function AddEventModal(props) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // alert창
+  const [swalProps, setSwalProps] = useState({});
 
   // 이벤트명
   const [name, setName] = useState("");
@@ -130,6 +134,16 @@ export default function AddEventModal(props) {
       })
       .then((res) => {
         console.log(res);
+        setSwalProps({
+          show: true,
+          title: "이벤트가 생성되었습니다.",
+          position: "top-center",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        location.reload();
+        handleClose();
       })
       .catch((err) => {
         console.log(err, "등록을 실패하였습니다.");
@@ -144,8 +158,9 @@ export default function AddEventModal(props) {
       >
         이벤트 등록
       </InquireAddButton>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
+          <SweetAlert2 {...swalProps} />
           <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
             {/* 헤더 */}
             <Grid2
@@ -412,10 +427,7 @@ export default function AddEventModal(props) {
             >
               <AddButton
                 onClick={() => {
-                  handleAddEvent(),
-                    alert("이벤트가 생성되었습니다."),
-                    location.reload(),
-                    handleClose();
+                  handleAddEvent();
                 }}
               >
                 등록

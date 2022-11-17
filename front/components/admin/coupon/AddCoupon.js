@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "../coupon/CouponPeriod";
 import { createcoupon } from "../../../pages/api/coupon";
+import SweetAlert2 from "react-sweetalert2";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -14,6 +15,9 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function AddCoupon() {
   // 대분류 카테고리
   const [category, setCategory] = useState("");
+
+  // alert창
+  const [swalProps, setSwalProps] = useState(null);
 
   // 쿠폰이름
   const [name, setName] = useState("");
@@ -68,6 +72,15 @@ export default function AddCoupon() {
       big_categories_uid: Number(category),
     };
     createcoupon(couponDto);
+    setSwalProps({
+      show: true,
+      title: "쿠폰이 등록되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    location.reload();
   };
 
   return (
@@ -101,6 +114,7 @@ export default function AddCoupon() {
           width: "100%",
         }}
       >
+        {swalProps ? <SweetAlert2 {...swalProps} /> : null}
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
       </Grid2>
       {/* 카테고리 */}
@@ -350,7 +364,7 @@ export default function AddCoupon() {
         <ButtonBox>
           <AddButton
             onClick={() => {
-              regisCoupon(), alert("쿠폰이 등록되었습니다."), location.reload();
+              regisCoupon();
             }}
           >
             등록

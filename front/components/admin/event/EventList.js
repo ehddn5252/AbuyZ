@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import SweetAlert2 from "react-sweetalert2";
 
 // API
 import { delEvent } from "../../../pages/api/event";
@@ -10,6 +11,9 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import EditEventModal from "./EditEventModal";
 
 export default function SaleEventList(props) {
+  // alert창
+  const [swalProps, setSwalProps] = useState({});
+
   // 이벤트 목록
   const eventArr = props.eventArray;
 
@@ -68,7 +72,17 @@ export default function SaleEventList(props) {
                   <ButtonBox>
                     <DeleteButton
                       onClick={() => {
-                        delEvent(data.uid), props.setDelNum(data.uid);
+                        delEvent(data.uid),
+                          props.setDelNum(data.uid),
+                          setSwalProps({
+                            show: true,
+                            title: "이벤트가 삭제되었습니다.",
+                            position: "top-center",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                          });
+                        location.reload();
                       }}
                     >
                       삭제

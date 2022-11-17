@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "./AddEventModal";
 import moment from "moment";
+import SweetAlert2 from "react-sweetalert2";
 
 // API
 import { inquirecoupon } from "../../../pages/api/coupon";
@@ -36,6 +37,9 @@ export default function EditEventModal(props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // alert창
+  const [swalProps, setSwalProps] = useState({});
+
   // 이벤트명
   const [name, setName] = useState(props.eventInfo.name);
 
@@ -60,11 +64,6 @@ export default function EditEventModal(props) {
   // 쿠폰명 셀렉트 했을 때
   const handleChange = (event) => {
     setSelectCoupon(event.target.value);
-  };
-
-  // 이벤트명 입력하면
-  const nameChange = (event) => {
-    setName(event.target.value);
   };
 
   // 사용 가능한 쿠폰 목록
@@ -151,6 +150,14 @@ export default function EditEventModal(props) {
       )
       .then((res) => {
         console.log(res);
+        setSwalProps({
+          show: true,
+          title: "이벤트가 수정되었습니다.",
+          position: "top-center",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         location.reload();
       })
       .catch((err) => {
@@ -166,8 +173,9 @@ export default function EditEventModal(props) {
       >
         수정
       </EditButton>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
+          <SweetAlert2 {...swalProps} />
           <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
             {/* 헤더 */}
             <Grid2
