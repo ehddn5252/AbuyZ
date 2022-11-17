@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import https from "./https.js";
-
+// Alert
+import Swal from "sweetalert2";
 // 장바구니에 담기
 export async function regiscart(cartDto) {
   const accessToken = sessionStorage.getItem("access-token");
@@ -19,8 +20,11 @@ export async function regiscart(cartDto) {
         }
       })
       .catch((e) => {
-        console.log(e);
-        alert("재고가 부족합니다");
+        Swal.fire({
+          title: "장바구니에 담기를 실패하였습니다.",
+          icon: "error",
+          showConfirmButton: false,
+        });
       });
   });
 }

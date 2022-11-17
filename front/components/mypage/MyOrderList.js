@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 
 // MUI
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import Button from "@mui/material/Button";
 
 // StyledComponents
 import styled from "styled-components";

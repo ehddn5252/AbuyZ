@@ -9,7 +9,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+
+// Alert
+import Swal from "sweetalert2";
 
 // StyledComponents
 import styled from "styled-components";
@@ -31,8 +33,18 @@ export default function PasswordFind() {
       name: name,
     };
     const res = await findPW(pwDto);
+    console.log(res);
     if (res.data.data.result === true) {
-      router.push("/login");
+      Swal.fire({
+        title: "비밀번호 변경 성공",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "로그인으로",
+      }).then((e) => {
+        router.push("/login");
+      });
+    } else {
+      Swal.fire("비밀번호 변경 실패", "잠시 후 다시 시도해주세요", "error");
     }
   };
 

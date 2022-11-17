@@ -1,20 +1,33 @@
 import https from "./https.js";
 
+// Alert
+import Swal from "sweetalert2";
 // 장바구니 결제
 export async function payBasket(cartDto) {
   // Header에 토큰 집어넣기
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.post("/order/cart", cartDto).then((response) => {
-      if (response.status === 200) {
-        console.log("장바구니 결제 성공", response);
-        resolve(response.data);
-      } else {
-        console.log("장바구니 결제 실패", response);
-        return response;
-      }
-    });
+    https
+      .post("/order/cart", cartDto)
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("장바구니 결제 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("장바구니 결제 실패", response);
+          return response;
+        }
+      })
+      .catch((e) => {
+        Swal.fire({
+          title: "결제가 실패하였습니다.",
+          text: "잠시 후 다시 시도해주세요",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "확인",
+        });
+      });
   });
 }
 

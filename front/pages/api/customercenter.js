@@ -5,15 +5,20 @@ export async function mycenter() {
   const accessToken = sessionStorage.getItem("access-token");
   https.defaults.headers.common["access_token"] = accessToken;
   return new Promise((resolve) => {
-    https.get("/customer-center/my").then((response) => {
-      if (response.status === 200) {
-        console.log("내 문의 내역 가져오기 성공", response);
-        resolve(response.data);
-      } else {
-        console.log("내 문의 내역 가져오기 실패", response);
-        resolve(response);
-      }
-    });
+    https
+      .get("/customer-center/my")
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("내 문의 내역 가져오기 성공", response);
+          resolve(response.data);
+        } else {
+          console.log("내 문의 내역 가져오기 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }).catch((e) => {
     console.log(e, "@@");
   });

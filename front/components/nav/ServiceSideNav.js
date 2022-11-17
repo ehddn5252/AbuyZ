@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Container from "@mui/material/Container";
+// Recoil
 import { serviceNum, pageNameState } from "../../states";
 import { useRecoilState } from "recoil";
-
+import { useRouter } from "next/router";
+// Alert
+import Swal from "sweetalert2";
 export default function ServiceSideNav(props) {
+  const router = useRouter();
   // 사이드바 번호(전역)
   const [side, setSide] = useRecoilState(serviceNum);
 
@@ -31,7 +34,6 @@ export default function ServiceSideNav(props) {
     const path = window.location.pathname;
     if (prevUrl !== path) {
       setActiveTap(0);
-    } else {
     }
   }, []);
 
@@ -41,9 +43,23 @@ export default function ServiceSideNav(props) {
     setActiveTap(0);
   };
   const tap1Change = () => {
-    props.setServiceTap(1);
-    setSide(1);
-    setActiveTap(1);
+    if (typeof window !== "undefined") {
+      const accessToken = sessionStorage.getItem("access-token");
+      if (accessToken) {
+        props.setServiceTap(1);
+        setSide(1);
+        setActiveTap(1);
+      } else {
+        Swal.fire({
+          title: "로그인이 필요한 기능입니다.",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "확인",
+        }).then((e) => {
+          router.push("/login");
+        });
+      }
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 // React
 import React, { useEffect, useState } from "react";
-
+// Alert
+import Swal from "sweetalert2";
 // StyledCopmoent
 import styled from "styled-components";
 import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
@@ -26,7 +27,11 @@ export default function MyComplainItem({
   // 문의 내역 삭제하기
   const deletecomplain = async () => {
     const res = await delnumbercenter(complain.uid);
-    alert("문의 내역이 삭제 되었습니다");
+    Swal.fire({
+      title: "문의 내역이 삭제 되었습니다.",
+      icon: "success",
+      showConfirmButton: false,
+    });
     router.reload();
   };
 
