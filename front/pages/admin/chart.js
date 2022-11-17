@@ -237,11 +237,12 @@ const LargeChart = styled.div`
 const LargeChartPage = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 95%;
 `;
 
 const LargeOnlyChart = styled.div`
   width: 70%;
+  height: 100%;
 `;
 const LargeChartExplantion = styled.div`
   width: 30%;
@@ -288,5 +289,6 @@ const MajorTitle = styled.p`
   padding-bottom: 1rem;
   text-align: center;
   font-size: 2.5rem;
+  height: 10%;
   font-weight: 1000;
 `;
