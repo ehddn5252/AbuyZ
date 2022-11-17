@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 // MUI
 import Rating from "@mui/material/Rating";
@@ -44,8 +45,6 @@ export default function ReportItemModal({ row }) {
     getDetail();
   }, [upload]);
 
-  console.log(reviewInfo);
-
   return (
     <div>
       {row.status === "대기" ? (
@@ -76,7 +75,7 @@ export default function ReportItemModal({ row }) {
           승인
         </SolvedButton>
       ) : null}
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2
             container
@@ -195,7 +194,14 @@ export default function ReportItemModal({ row }) {
                 <RefusalButton
                   onClick={() => {
                     PutReviewStatus(row.uid, 1),
-                      alert("거절 처리 되었습니다."),
+                      Swal.fire({
+                        show: true,
+                        title: "거절 처리 되었습니다.",
+                        position: "top-center",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      }),
                       location.reload();
                   }}
                 >
@@ -204,7 +210,14 @@ export default function ReportItemModal({ row }) {
                 <AcceptButton
                   onClick={() => {
                     PutReviewStatus(row.uid, 2),
-                      alert("승인 처리 되었습니다."),
+                      Swal.fire({
+                        show: true,
+                        title: "승인 처리 되었습니다.",
+                        position: "top-center",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                      }),
                       location.reload();
                   }}
                 >

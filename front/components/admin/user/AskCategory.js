@@ -120,7 +120,6 @@ export default function AskCategory() {
 
     const tmp = [];
     for (let i = 0; i < lst.length; i++) {
-      // console.log(lst[i]);
       if (stand === 1 || stand === 0) {
         tmp.push(lst[i]);
       } else if (stand === 2) {

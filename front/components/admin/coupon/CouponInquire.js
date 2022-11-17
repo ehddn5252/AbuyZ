@@ -157,9 +157,15 @@ export default function CouponInquire() {
     setCouponArray([]);
   };
 
+  // 초기에 불러옴
   useEffect(() => {
     getCoupon();
   }, []);
+
+  // 초기화 됐을 때 다시 불러옴
+  useEffect(() => {
+    getCoupon();
+  }, [reset]);
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>

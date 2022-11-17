@@ -16,6 +16,9 @@ import { registFAQ, getFAQ } from "../../api/faq";
 // Next.js
 import { useRouter } from "next/router";
 
+// SweetAlert
+import Swal from "sweetalert2";
+
 export default function Faq() {
   const router = useRouter();
   const modalRef = useRef(null);
@@ -33,20 +36,44 @@ export default function Faq() {
 
   const getfaqList = async () => {
     const res = await getFAQ();
+    res.data.sort(function (a, b) {
+      return b.uid - a.uid;
+    });
     setFaqList(res.data);
   };
 
   const createFaq = async () => {
-    const faqDto = {
-      question: title,
-      answer: content,
-    };
-    await registFAQ(faqDto);
-    router.reload();
+    if (title === "" || content === "") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      const faqDto = {
+        question: title,
+        answer: content,
+      };
+      await registFAQ(faqDto);
+      Swal.fire({
+        show: true,
+        title: "FAQ가 등록되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      router.reload();
+    }
   };
+
   useEffect(() => {
     getfaqList();
   }, []);
+
   return (
     <Container>
       <AddBox>
@@ -68,7 +95,13 @@ export default function Faq() {
             }}
           ></ContentInput>
         </ContentBox>
-        <AddButton onClick={createFaq}>등록</AddButton>
+        <AddButton
+          onClick={() => {
+            createFaq();
+          }}
+        >
+          등록
+        </AddButton>
       </AddBox>
       <InquireBox>
         <TableBox>
@@ -106,8 +139,13 @@ export default function Faq() {
                   open={openUid === e.uid}
                   aria-labelledby="modal-modal-title"
                   aria-describedby="modal-modal-description"
+                  sx={{ zIndex: "1000" }}
                 >
-                  <FaqEditModal faq={e} onClose={handleClose} />
+                  <FaqEditModal
+                    faq={e}
+                    onClose={handleClose}
+                    setOpenUid={setOpenUid}
+                  />
                 </Modal>
               </TableRow>
             ))}
