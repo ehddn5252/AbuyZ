@@ -4,6 +4,7 @@ import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.common.service.RedisService;
 import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.dashboard.dto.AnalysisDataDto;
+import com.tasteshopping.dashboard.dto.CountAndPriceDto;
 import com.tasteshopping.dashboard.dto.SummaryDto;
 import com.tasteshopping.dashboard.entity.AnalysisData;
 import com.tasteshopping.dashboard.repository.AnalysisDataRepository;
@@ -120,6 +121,22 @@ public class DashboardServiceImpl implements DashboardService {
         return l;
     }
 
+//    public SummaryDto addDailyOrder(SummaryDto summaryDto,int day) {
+//        Date startDate = UtilService.getDateAfterDay(day);
+//        Date endDate = UtilService.getDateAfterDay(day+1);
+//        CountAndPriceDto countAndPrice = orderListRepository.getPriceAndCount(startDate, endDate);
+////        CountAndPriceDto countAndPrice = orderListRepository.getPriceAndCount();
+//
+//        Integer totalPrice = 0;
+//        Integer count = 0;
+//        totalPrice =  countAndPrice.getTotalPrice();
+//        count = countAndPrice.getTotalCount();
+//        summaryDto.setOrderNum(count);
+//        summaryDto.setTotalPrice(totalPrice);
+//        return summaryDto;
+//    }
+
+
     public SummaryDto addDailyOrder(SummaryDto summaryDto,int day) {
 //        Date date = UtilService.getToday();
         Date startDate = UtilService.getDateAfterDay(day);
@@ -150,7 +167,6 @@ public class DashboardServiceImpl implements DashboardService {
         summaryDto.setTotalPrice(totalPrice);
         return summaryDto;
     }
-
 
     @Override
     public List<ReviewDto> getCurrent() {

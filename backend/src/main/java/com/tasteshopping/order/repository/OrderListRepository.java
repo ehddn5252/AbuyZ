@@ -1,5 +1,6 @@
 package com.tasteshopping.order.repository;
 
+import com.tasteshopping.dashboard.dto.CountAndPriceDto;
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.user.entity.Users;
@@ -28,6 +29,11 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
 
     @EntityGraph(attributePaths = {"orders","orders.review"})
     List<OrderLists>findByDateBetween(Date start_date,Date end_date);
+
+//    @Query(value = "select new com.tasteshopping.dashboard.dto.CountAndPriceDto(coalesce(COUNT(o.uid),0) ,coalesce(SUM(o.price),0)) from OrderLists ol inner join Orders o on o.orderList = ol where (o.status='PROCESS' or o.status='SOLD') and ol.date between :start_date and :end_date")
+//    CountAndPriceDto getPriceAndCount(Date start_date, Date end_date);
+
+
     List<OrderLists> findByUserAndDateBetween(Users user, Date startDay, Date today);
 }
 
