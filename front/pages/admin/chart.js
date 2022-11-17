@@ -34,8 +34,7 @@ export default function Chart() {
     new Date(now.setDate(now.getDate() - 30))
   );
   const [endDate, setEndDate] = useState(new Date());
-  const [starttime, setStarttime] = useState("2022-10-01");
-  const [endtime, setEndtime] = useState("2022-11-09");
+
   const [day, setday] = useState(1);
   // 각 차트 데이터
   const [lineChartData, setLineChartData] = useState(null);
@@ -68,6 +67,8 @@ export default function Chart() {
     return data4;
   }
   const loadData = async () => {
+    const starttime = getTime(startDate);
+    const endtime = getTime(endDate);
     const DateDto = {
       start_date: starttime,
       end_date: endtime,
@@ -84,8 +85,6 @@ export default function Chart() {
     setStackhartData(res2.data);
   };
   useEffect(() => {
-    setStarttime(getTime(startDate));
-    setEndtime(getTime(endDate));
     loadData();
     const days =
       (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);

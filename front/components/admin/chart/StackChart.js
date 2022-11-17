@@ -90,7 +90,7 @@ export default function StackChart({ stackChartData }) {
 
   useEffect(() => {
     console.log(stackChartData);
-  }, []);
+  }, [stackChartData]);
   return (
     <Container>
       <Bar options={options} data={data} />
