@@ -82,10 +82,10 @@ const Container = styled.div`
 
 const TotalDiv = styled.div`
   width: 90%;
-  height: 24%;
+  height: 30%;
   background-color: #fff5d6;
   padding: 1rem;
-  margin: 0.3rem;
+  margin: 0.2rem;
   border-radius: 1rem;
 `;
 
@@ -100,5 +100,5 @@ const ResultText = styled.p`
   padding: 0;
   text-align: end;
   font-weight: 1000;
-  font-size: 2.2rem;
+  font-size: 2rem;
 `;

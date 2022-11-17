@@ -70,10 +70,10 @@ const Container = styled.div`
 
 const TotalDiv = styled.div`
   width: 90%;
-  height: 33%;
+  height: 35%;
   background-color: #fff5d6;
   padding: 1rem;
-  margin: 0.3rem;
+  margin: 0.5rem;
   border-radius: 1rem;
 `;
 
