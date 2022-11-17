@@ -7,6 +7,9 @@ import { useRouter } from "next/router";
 // Styled-Component
 import styled from "styled-components";
 
+// Alert
+import Swal from "sweetalert2";
+
 // MUI
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -141,6 +144,7 @@ export default function Nav() {
     const res = await BigCategory();
     setBigCategory(res.data);
   };
+
   useEffect(() => {
     getCategory();
   }, []);
@@ -163,8 +167,14 @@ export default function Nav() {
     if (username) {
       router.push("/mypage");
     } else {
-      alert("로그인이 필요합니다.");
-      router.push("/login");
+      Swal.fire({
+        title: "로그인이 필요한 기능입니다.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "확인",
+      }).then((e) => {
+        router.push("/login");
+      });
     }
   };
   // 메인으로 이동
@@ -218,8 +228,14 @@ export default function Nav() {
     if (username) {
       router.push("/basket");
     } else {
-      alert("로그인이 필요합니다.");
-      router.push("/login");
+      Swal.fire({
+        title: "로그인이 필요한 기능입니다.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "확인",
+      }).then((e) => {
+        router.push("/login");
+      });
     }
   };
 
@@ -228,8 +244,14 @@ export default function Nav() {
       setMypageValue(1);
       router.push("/mypage");
     } else {
-      alert("로그인이 필요합니다.");
-      router.push("/login");
+      Swal.fire({
+        title: "로그인이 필요한 기능입니다.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "확인",
+      }).then((e) => {
+        router.push("/login");
+      });
     }
   };
 

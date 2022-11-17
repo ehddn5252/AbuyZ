@@ -10,6 +10,9 @@ import styled from "styled-components";
 // 하위 컴포넌트
 import ReviewAddModel from "./ReviewAddModel";
 
+// Alert
+import Swal from "sweetalert2";
+
 // api
 import { eachGetOrderList } from "../../pages/api/order";
 import { regiscart } from "../../pages/api/cart";
@@ -34,7 +37,11 @@ export default function MyOrderItem({ uid }) {
       optionValues: b,
     };
     const res = await regiscart(cartDto);
-    alert("장바구니에 담았습니다!");
+    Swal.fire({
+      title: "장바구니에 담겼습니다.",
+      icon: "success",
+      showConfirmButton: false,
+    });
   };
 
   useEffect(() => {
