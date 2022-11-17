@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomerPagination from "../user/CustomerPagination";
-import SweetAlert2 from "react-sweetalert2";
+import Swal from "sweetalert2";
 
 // 컴포넌트
 import EditCouponModal from "./EditCouponModal";
@@ -16,9 +16,6 @@ import "react-datepicker/dist/react-datepicker.css";
 export default function CouponList(props) {
   // 체크된 아이템을 담을 배열
   const [checkItems, setCheckItems] = useState([]);
-
-  // alert창
-  const [swalProps, setSwalProps] = useState(null);
 
   // 쿠폰 목록
   const couponArr = props.couponArray;
@@ -73,10 +70,10 @@ export default function CouponList(props) {
     }
   };
 
-  // 전체 삭제
+  // 쿠폰 삭제
   const handleDel = () => {
     checkItems.forEach((e) => delcoupon(e));
-    setSwalProps({
+    Swal.fire({
       show: true,
       title: "쿠폰이 삭제되었습니다.",
       position: "top-center",
@@ -89,7 +86,7 @@ export default function CouponList(props) {
 
   // 수정사항 저장
   const handleSave = () => {
-    setSwalProps({
+    Swal.fire({
       show: true,
       title: "수정 항목이 저장되었습니다.",
       position: "top-center",
@@ -115,7 +112,6 @@ export default function CouponList(props) {
         padding: "0",
       }}
     >
-      {swalProps ? <SweetAlert2 {...swalProps} /> : null}
       <h2 style={{ paddingLeft: "2rem" }}>쿠폰 목록</h2>
       <hr
         style={{ background: "#ff9494", width: "95%", marginBottom: "2rem" }}

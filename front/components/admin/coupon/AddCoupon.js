@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "../coupon/CouponPeriod";
 import { createcoupon } from "../../../pages/api/coupon";
-import SweetAlert2 from "react-sweetalert2";
+import Swal from "sweetalert2";
+import moment from "moment";
 
 // mui
 import InputLabel from "@mui/material/InputLabel";
@@ -16,9 +17,6 @@ export default function AddCoupon() {
   // 대분류 카테고리
   const [category, setCategory] = useState("");
 
-  // alert창
-  const [swalProps, setSwalProps] = useState(null);
-
   // 쿠폰이름
   const [name, setName] = useState("");
   const [namePlaceholder, setNamePlaceholder] =
@@ -31,10 +29,9 @@ export default function AddCoupon() {
 
   // 시작 날짜
   const [startDate, setStartDate] = useState(new Date());
+
   // 마감 날짜
   const [endDate, setEndDate] = useState(new Date());
-
-  // const [couponDto, setCouponDto] = useState({});
 
   // 대분류 셀렉트 했을 때
   const handleChange = (event) => {
@@ -67,20 +64,31 @@ export default function AddCoupon() {
     const couponDto = {
       name: name,
       discount_price: sale,
-      start_date: startDate.toISOString().slice(0, 10),
-      end_date: endDate.toISOString().slice(0, 10),
+      start_date: moment(startDate).format().slice(0, 10),
+      end_date: moment(endDate).format().slice(0, 10),
       big_categories_uid: Number(category),
     };
-    createcoupon(couponDto);
-    setSwalProps({
-      show: true,
-      title: "쿠폰이 등록되었습니다.",
-      position: "top-center",
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    location.reload();
+    if (category === "" || name === "" || sale === "" || !Number(sale)) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      createcoupon(couponDto);
+      Swal.fire({
+        show: true,
+        title: "쿠폰이 등록되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      location.reload();
+    }
   };
 
   return (
@@ -114,7 +122,6 @@ export default function AddCoupon() {
           width: "100%",
         }}
       >
-        {swalProps ? <SweetAlert2 {...swalProps} /> : null}
         <hr style={{ background: "#ff9494", margin: "0", padding: "0" }} />
       </Grid2>
       {/* 카테고리 */}
