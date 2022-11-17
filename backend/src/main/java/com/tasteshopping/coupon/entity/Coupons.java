@@ -66,7 +66,7 @@ public class Coupons {
     public void update(CouponDto couponDto,BigCategories bigCategories){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            this.startDate = formatter.parse(couponDto.getEnd_date());
+            this.startDate = formatter.parse(couponDto.getStart_date());
             this.endDate = formatter.parse(couponDto.getEnd_date());
             this.name = couponDto.getName();
             this.bigCategories = bigCategories;

@@ -750,7 +750,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDetailDto getDetailProduct(String email, int uid) {
-        Optional<Products> productsOptional = productRepository.findById(uid);
+        Optional<Products> productsOptional = productRepository.findByIdFetchJoin(uid);
         if (productsOptional.isPresent()) {
             Products p = productsOptional.get();
             ProductDetailDto productDetailDto = new ProductDetailDto();
@@ -975,7 +975,6 @@ public class ProductServiceImpl implements ProductService {
 
         product.modifyEntity(productCreateDto, smallCategory, brand);
         productRepository.save(product);
-
     }
 
     @Override
@@ -1003,8 +1002,6 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
             ProductDto productDto = l.get(i).toDto();
-            // 여기에서 리뷰들의 평균 가져오기
-//            List<Reviews> reviews =reviewRepositry.findByProduct(l.get(i));
             List<Reviews> reviews = l.get(i).getReviews();
             productDto.setReviewNum(reviews.size());
             Float reviewRate = 0f;

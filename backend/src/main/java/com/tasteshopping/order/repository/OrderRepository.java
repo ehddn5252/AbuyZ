@@ -12,8 +12,6 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders,Integer> {
-    @Query(value = "select max(uid) from orders", nativeQuery = true)
-    Integer findMaxUid();
 
     @EntityGraph(attributePaths = {"review","orderList","inventory","inventory.product","inventory.product.smallCategory",
     "inventory.product.smallCategory.bigCategory"})
@@ -23,8 +21,9 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
     List<Orders> findByOrderList(OrderLists orderList);
 
-    @Query("select o from Orders o join fetch Inventories i on o.inventory = i  where o.orderList=:orderList")
-    List<Orders> findByOrderListIn(OrderLists orderList);
+    @EntityGraph(attributePaths = {"inventory","review"})
+    List<Orders> findByOrderListAndStatusIn(OrderLists orderList, List status);
 
+    @Query("select o from Orders o join fetch o.review r where o.status=:status")
     List<Orders> findByStatus(String status);
 }
