@@ -356,6 +356,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
         // 답변단 것인지 안 단 것인지 확인한다.Review
         List<Reviews> filteredReviews = reviewRepository.findByDetailInfo(bigCategoriesUid, smallCategoriesUid, productName, content, startDate, endDate);
+        List<Reviews> allReviews = reviewRepository.findAll();
 
         List<ReviewSearchDto> allAnswerReviewDtos = new ArrayList<>();
         List<ReviewSearchDto> noAnswerReviewDtos = new ArrayList<>();
@@ -368,14 +369,14 @@ public class ReviewServiceImpl implements ReviewService {
         for (int i = 0; i < filteredReviews.size(); ++i) {
             boolean isBreak = false;
             if (filteredReviews.get(i).getParentReview() == null) {
-                for (int j = 0; j < filteredReviews.size(); ++j) {
-                    if (filteredReviews.get(j).getParentReview() != null) {
+                for (int j = 0; j < allReviews.size(); ++j) {
+                    if (allReviews.get(j).getParentReview() != null) {
                         // 답변
-                        if (filteredReviews.get(i).getUid() == filteredReviews.get(j).getParentReview().getUid()) {
+                        if (filteredReviews.get(i).getUid() == allReviews.get(j).getParentReview().getUid()) {
                             ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
                             reviewSearchDto.setAnswered(true);
-                            reviewSearchDto.setAnswerDate(filteredReviews.get(j).getDate());
-                            reviewSearchDto.setReply(filteredReviews.get(j).getContent());
+                            reviewSearchDto.setAnswerDate(allReviews.get(j).getDate());
+                            reviewSearchDto.setReply(allReviews.get(j).getContent());
                             answerReviewDtos.add(reviewSearchDto);
                             allAnswerReviewDtos.add(reviewSearchDto);
                             isBreak=true;
@@ -400,6 +401,93 @@ public class ReviewServiceImpl implements ReviewService {
             return allAnswerReviewDtos;
         }
     }
+
+//    @Override
+//    @Transactional
+//    public List<ReviewSearchDto> searchByDetail(ReviewSearchReqDto reviewSearchReqDto) {
+//        /*
+//        DTO
+//        답변 유무, 평점, 제품명, 리뷰내용, 등록 일시, 답변 일시, 작성자
+//         */
+//        Integer bigCategoriesUid = reviewSearchReqDto.getBigCategoryUid();
+//        Integer smallCategoriesUid = reviewSearchReqDto.getSmallCategoryUid();
+//        String productName = reviewSearchReqDto.getProductName();
+//        String content = reviewSearchReqDto.getContent();
+//        Date startDate = reviewSearchReqDto.getStartDate();
+//        Date endDate = reviewSearchReqDto.getEndDate();
+//        Integer isAnswered = reviewSearchReqDto.getIsAnswered();
+//
+//        // 여기에서 NULL 이면 NULL 처리를 못하게 해야 한다.
+//        if (productName == null) {
+//            productName = "%%";
+//        } else {
+//            productName = "%" + productName + "%";
+//        }
+//        if (content == null) {
+//            content = "%%";
+//        } else {
+//            content = "%" + content + "%";
+//        }
+//        if (endDate == null) {
+//            try {
+//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                endDate = format.parse("2300-1-1");
+//            } catch (Exception e) {
+//            }
+//        }
+//        if (startDate == null) {
+//            try {
+//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                startDate = format.parse("1900-1-1");
+//            } catch (Exception e) {
+//            }
+//        }
+//        // 답변단 것인지 안 단 것인지 확인한다.Review
+//        List<Reviews> filteredReviews = reviewRepository.findByDetailInfo(bigCategoriesUid, smallCategoriesUid, productName, content, startDate, endDate);
+//
+//        List<ReviewSearchDto> allAnswerReviewDtos = new ArrayList<>();
+//        List<ReviewSearchDto> noAnswerReviewDtos = new ArrayList<>();
+//        List<ReviewSearchDto> answerReviewDtos = new ArrayList<>();
+//        //로직
+//        //1. 위의 조건에서 거른 것전체 검색
+//        //2. 2중 for 문 바깥 for 문은 전체 하나씩 검사
+//        // 3. 안쪽에 있는 parent의 uid를 검사하여서 만약에 동일하다면 답변이 있는 review, 아니라면 답변이 없는 리뷰
+//
+//        for (int i = 0; i < filteredReviews.size(); ++i) {
+//            boolean isBreak = false;
+//            if (filteredReviews.get(i).getParentReview() == null) {
+//                for (int j = 0; j < filteredReviews.size(); ++j) {
+//                    if (filteredReviews.get(j).getParentReview() != null) {
+//                        // 답변
+//                        if (filteredReviews.get(i).getUid() == filteredReviews.get(j).getParentReview().getUid()) {
+//                            ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
+//                            reviewSearchDto.setAnswered(true);
+//                            reviewSearchDto.setAnswerDate(filteredReviews.get(j).getDate());
+//                            reviewSearchDto.setReply(filteredReviews.get(j).getContent());
+//                            answerReviewDtos.add(reviewSearchDto);
+//                            allAnswerReviewDtos.add(reviewSearchDto);
+//                            isBreak=true;
+//                            break;
+//                        }
+//                    }
+//                }
+//                if(!isBreak) {
+//                    ReviewSearchDto reviewSearchDto = filteredReviews.get(i).toReviewSearchDto();
+//                    reviewSearchDto.setAnswered(false);
+//                    reviewSearchDto.setAnswerDate(null);
+//                    noAnswerReviewDtos.add(reviewSearchDto);
+//                    allAnswerReviewDtos.add(reviewSearchDto);
+//                }
+//            }
+//        }
+//        if (isAnswered == 1) {
+//            return noAnswerReviewDtos;
+//        } else if (isAnswered == 2) {
+//            return answerReviewDtos;
+//        } else {
+//            return allAnswerReviewDtos;
+//        }
+//    }
 
     @Override
     public BaseRes searchReport(ReportSearchReqDto reportSearchReqDto) {
