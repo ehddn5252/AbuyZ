@@ -56,8 +56,8 @@ public class Events {
     public void update(EventReqDto eventDto){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            this.thumbnail = eventDto.getThumbnail();
-            this.contentImgUrl = eventDto.getContentImg();
+            if(eventDto.getThumbnail()!=null)this.thumbnail = eventDto.getThumbnail();
+            if(eventDto.getContentImg()!=null)this.contentImgUrl = eventDto.getContentImg();
             this.content = eventDto.getContent();
             this.endDate = formatter.parse(eventDto.getEnd_date());
             this.startDate = formatter.parse(eventDto.getStart_date());
@@ -119,7 +119,7 @@ public class Events {
                 .status(status)
                 .build();
     }
-    public void updateStatus(){
-        this.status = 2;
+    public void updateStatus(int status){
+        this.status = status;
     }
 }
