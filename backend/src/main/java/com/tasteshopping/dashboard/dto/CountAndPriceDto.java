@@ -6,10 +6,10 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 public class CountAndPriceDto {
-    int totalCount;
-    int totalPrice;
-    public CountAndPriceDto(int totalCount, int totalPrice){
-        this.totalPrice = totalPrice;
+    Long totalCount;
+    Long totalPrice;
+    public CountAndPriceDto(Long totalCount, Long totalPrice){
         this.totalCount = totalCount;
+        this.totalPrice = totalPrice;
     }
 }

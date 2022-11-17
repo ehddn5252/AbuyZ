@@ -129,8 +129,8 @@ public class DashboardServiceImpl implements DashboardService {
 //
 //        Integer totalPrice = 0;
 //        Integer count = 0;
-//        totalPrice =  countAndPrice.getTotalPrice();
-//        count = countAndPrice.getTotalCount();
+//        totalPrice =  (int)(long)countAndPrice.getTotalPrice();
+//        count = (int)(long)countAndPrice.getTotalCount();
 //        summaryDto.setOrderNum(count);
 //        summaryDto.setTotalPrice(totalPrice);
 //        return summaryDto;
