@@ -20,19 +20,20 @@ public interface OrderListRepository extends JpaRepository<OrderLists, Integer> 
     Optional<OrderLists> findFetchJoinById(int orderListsUid);
     List<OrderLists> findByUser(Users user);
 
-    List<OrderLists> findByDate(Date date);
-
-    Optional<OrderLists> findByOrders(Orders order);
-
     @EntityGraph(attributePaths = {"orders","orders.review"})
     List<OrderLists>findByDateBetweenAndOrders_StatusNotIn(Date start_date,Date end_date, List status);
 
     @EntityGraph(attributePaths = {"orders","orders.review"})
     List<OrderLists>findByDateBetween(Date start_date,Date end_date);
 
-//    @Query(value = "select new com.tasteshopping.dashboard.dto.CountAndPriceDto(coalesce(COUNT(o.uid),0) ,coalesce(SUM(o.price),0)) from OrderLists ol inner join Orders o on o.orderList = ol where (o.status='PROCESS' or o.status='SOLD') and ol.date between :start_date and :end_date")
+//    @Query(value = "select new com.tasteshopping.dashboard.dto.CountAndPriceDto(count(ol.uid) ,sum(ol.totalPrice)) " +
+//            "from OrderLists ol join fetch Orders o on o.orderList = ol " +
+//            "where (o.status='PROCESS' or o.status='SOLD') and " +
+//            "ol.date between :start_date and :end_date")
 //    CountAndPriceDto getPriceAndCount(Date start_date, Date end_date);
 
+//    @Query(value = "select  from order_lists ol inner join orders o on o.order_lists_uid = ol.uid where (o.status=\"PROCESS\" or o.status=\"SOLD\") and ol.date between :start_date and  :end_date", nativeQuery = true)
+//    List<Long> getPriceAndCount(Date start_date, Date end_date);
 
     List<OrderLists> findByUserAndDateBetween(Users user, Date startDay, Date today);
 }

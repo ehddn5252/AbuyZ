@@ -32,6 +32,6 @@ public class FAQ {
 
     public void update(FAQDto faqDto){
         this.answer = faqDto.getAnswer();
-        this.question = faqDto.getAnswer();
+        this.question = faqDto.getQuestion();
     }
 }
