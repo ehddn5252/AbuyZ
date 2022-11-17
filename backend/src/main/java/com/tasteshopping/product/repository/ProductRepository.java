@@ -41,7 +41,8 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
 
-    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
+//    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
+    @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch Inventories i on i.product=p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     List<Products> findAllFetchJoin();
     @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     List<Products> findAllFetchJoinWithReview();
