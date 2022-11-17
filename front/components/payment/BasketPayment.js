@@ -61,7 +61,7 @@ export default function BasketPayment() {
     getName();
   }, [basketList]);
 
-  return (
+  return basketList.length ? (
     <Container>
       {basketList.length ? (
         <ContainerDiv>
@@ -129,7 +129,7 @@ export default function BasketPayment() {
         </ContainerDiv>
       ) : null}
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`

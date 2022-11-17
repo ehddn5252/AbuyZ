@@ -1,5 +1,8 @@
 import https from "./https.js";
 
+// Alert
+import Swal from "sweetalert2";
+
 const setCookie = (key, value, expiredDays) => {
   // 자동 삭제 날짜를 지정하는 코드
   let today = new Date();
@@ -35,36 +38,50 @@ const getCookie = (key) => {
 // 회원가입
 export async function signup(signDto) {
   return new Promise((resolve) => {
-    https.post("/user/signup", signDto).then((response) => {
-      if (response.status === 200) {
-        console.log("회원가입 완료", response);
-        resolve(response);
-      } else {
-        console.log("회원가입 실패", response);
-        resolve(response);
-      }
-    });
+    https
+      .post("/user/signup", signDto)
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("회원가입 완료", response);
+          resolve(response);
+        } else {
+          // console.log("회원가입 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        Swal.fire("회원가입 실패", "입력 정보를 재확인해주세요!", "error");
+      });
   });
 }
 
 // 로그인
 export async function login(loginDto) {
   return new Promise((resolve) => {
-    https.post("/user/login", loginDto).then((response) => {
-      if (response.status === 200) {
-        console.log("로그인 완료", response.data);
-        // 토큰 저장
-        window.sessionStorage.setItem(
-          "access-token",
-          response.data.data.access_token
+    https
+      .post("/user/login", loginDto)
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("로그인 완료", response.data);
+          // 토큰 저장
+          window.sessionStorage.setItem(
+            "access-token",
+            response.data.data.access_token
+          );
+          setCookie("refresh_token", response.data.data.refresh_token, 30);
+          resolve(response);
+        } else {
+          // console.log("로그인 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        Swal.fire(
+          "로그인 실패",
+          "아이디와 비밀번호를 재확인해주세요!",
+          "error"
         );
-        setCookie("refresh_token", response.data.data.refresh_token, 30);
-        resolve(response);
-      } else {
-        console.log("로그인 실패", response);
-        resolve(response);
-      }
-    });
+      });
   });
 }
 
@@ -96,16 +113,16 @@ export async function withdrawal() {
   return new Promise((resolve) => {
     https.put("/user/withdrawal").then((response) => {
       if (response.status === 200) {
-        console.log("회원 탈퇴 여부", response.data.message);
+        // console.log("회원 탈퇴 여부", response.data.message);
         sessionStorage.removeItem("access-token");
         resolve(response.data);
       } else {
-        console.log("회원 탈퇴 실패", response);
+        // console.log("회원 탈퇴 실패", response);
         resolve(response);
       }
     });
   }).catch((e) => {
-    console.log(e);
+    Swal.fire("회원탈퇴 실패", "다시 시도 해주세요", "error");
   });
 }
 
@@ -114,10 +131,10 @@ export async function sendCheckNumber(email) {
   return new Promise((resolve) => {
     https.get(`/user/send-email/${email}`).then((response) => {
       if (response === 200) {
-        console.log("이메일 인증 성공", response);
+        // console.log("이메일 인증 성공", response);
         resolve(response.data);
       } else {
-        console.log("이메일 인증 실패", response);
+        // console.log("이메일 인증 실패", response);
         resolve(response);
       }
     });
@@ -135,10 +152,10 @@ export async function emailCheck(emailDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("이메일 인증 성공", response);
+          // console.log("이메일 인증 성공", response);
           resolve(response.data);
         } else {
-          console.log("이메일 인증 실패", response);
+          // console.log("이메일 인증 실패", response);
           resolve(response);
         }
       });
@@ -153,7 +170,6 @@ export async function chnagePw(pwDto) {
   return new Promise((resolve) => {
     const accessToken = sessionStorage.getItem("access-token");
     https.defaults.headers.common["access_token"] = accessToken;
-    console.log(accessToken);
     https
       .put("/user/change-pw", {
         password: pwDto.password,
@@ -161,15 +177,15 @@ export async function chnagePw(pwDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("비밀번호 변경 성공", response);
+          // console.log("비밀번호 변경 성공", response);
           resolve(response.data);
         } else {
-          console.log("비밀번호 변경 실패", response);
+          // console.log("비밀번호 변경 실패", response);
           resolve(response);
         }
       });
   }).catch((e) => {
-    console.log(e);
+    Swal.fire("비밀번호 변경 실패", "잠시 후 다시 시도해주세요", "error");
   });
 }
 
@@ -178,10 +194,10 @@ export async function checkNickname(nickname) {
   return new Promise((resolve) => {
     https.get(`/user/check-nickname/${nickname}`).then((response) => {
       if (response.status === 200) {
-        console.log("닉네임 중복 확인 성공", response);
+        // console.log("닉네임 중복 확인 성공", response);
         resolve(response.data);
       } else {
-        console.log("닉네임 중복 확인 실패", response);
+        // console.log("닉네임 중복 확인 실패", response);
         resolve(response);
       }
     });
@@ -195,10 +211,10 @@ export async function checkEmail(email) {
   return new Promise((resolve) => {
     https.get(`/user/check-email/${email}`).then((response) => {
       if (response.status === 200) {
-        console.log("이메일 중복 확인 성공", response);
+        // console.log("이메일 중복 확인 성공", response);
         resolve(response.data);
       } else {
-        console.log("이메일 중복 확인 실패", response);
+        // console.log("이메일 중복 확인 실패", response);
         resolve(response);
       }
     });
@@ -215,10 +231,10 @@ export async function addAddress(addressDto) {
   return new Promise((resolve) => {
     https.post("/user/addresses", addressDto).then((response) => {
       if (response.status === 200) {
-        console.log("주소 추가 성공", response);
+        // console.log("주소 추가 성공", response);
         resolve(response);
       } else {
-        console.log("주소 추가 실패", response);
+        // console.log("주소 추가 실패", response);
         resolve(response);
       }
     });
@@ -235,10 +251,10 @@ export async function getAddress() {
   return new Promise((resolve) => {
     https.get("/user/addresses").then((response) => {
       if (response.status === 200) {
-        console.log("주소 조회 성공", response);
+        // console.log("주소 조회 성공", response);
         resolve(response);
       } else {
-        console.log("주소 조회 실패", response);
+        // console.log("주소 조회 실패", response);
         resolve(response);
       }
     });
@@ -255,10 +271,10 @@ export async function delAddress(number) {
   return new Promise((resolve) => {
     https.delete(`/user/addresses/${number}`).then((response) => {
       if (response.status === 200) {
-        console.log("주소 삭제 성공", response);
+        // console.log("주소 삭제 성공", response);
         resolve(response);
       } else {
-        console.log("주소 삭제 실패", response);
+        // console.log("주소 삭제 실패", response);
         resolve(response);
       }
     });
@@ -275,10 +291,10 @@ export async function changeInfo(userDto) {
   return new Promise((resolve) => {
     https.put("/user/change-info", userDto).then((response) => {
       if (response.status === 200) {
-        console.log("회원 수정 성공", response);
+        // console.log("회원 수정 성공", response);
         resolve(response);
       } else {
-        console.log("회원 수정 실패", response);
+        // console.log("회원 수정 실패", response);
         resolve(response);
       }
     });
@@ -295,10 +311,10 @@ export async function changeAddress(addressDto, addressuid) {
   return new Promise((resolve) => {
     https.put(`/user/addresses/${addressuid}`, addressDto).then((response) => {
       if (response.status === 200) {
-        console.log("주소 수정 성공", response);
+        // console.log("주소 수정 성공", response);
         resolve(response);
       } else {
-        console.log("주소 수정 실패", response);
+        // console.log("주소 수정 실패", response);
         resolve(response);
       }
     });
@@ -310,15 +326,20 @@ export async function changeAddress(addressDto, addressuid) {
 // 임시비밀번호 발송 완료
 export async function findPW(pwDto) {
   return new Promise((resolve) => {
-    https.post("/user/find-pw", pwDto).then((response) => {
-      if (response.status === 200) {
-        console.log("임시비밀번호 전송 성공 ", response);
-        resolve(response);
-      } else {
-        console.log("임시비밀번호 전송 실패", response);
-        resolve(response);
-      }
-    });
+    https
+      .post("/user/find-pw", pwDto)
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log("임시비밀번호 전송 성공 ", response);
+          resolve(response);
+        } else {
+          // console.log("임시비밀번호 전송 실패", response);
+          resolve(response);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   });
 }
 
@@ -331,7 +352,7 @@ export async function logout() {
     https.get("user/log-out").then((response) => {
       if (response.status === 200) {
         sessionStorage.removeItem("access-token");
-        console.log("로그아웃 통신 완료", response);
+        // console.log("로그아웃 통신 완료", response);
         resolve(response);
       } else {
         resolve(response);

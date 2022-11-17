@@ -51,7 +51,7 @@ export default function Detail() {
     // 현재 이벤트의 상세 정보 가져오기
     ddetailEvent();
     myCoupon();
-  }, [eventId]);
+  }, [eventId, isgiven]);
 
   return currentEvent.length !== 0 ? (
     <Container>

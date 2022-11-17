@@ -22,6 +22,10 @@ import { regiscart } from "../../pages/api/cart";
 // State
 import { paymentProduct } from "../../states";
 import { useRecoilState } from "recoil";
+
+// Alert
+import Swal from "sweetalert2";
+
 export default function ProductInfo() {
   const router = useRouter();
 
@@ -85,8 +89,14 @@ export default function ProductInfo() {
         await regiscart(cartDto);
         router.push("/basket");
       } else {
-        alert("로그인이 필요한 기능입니다.");
-        router.push("/login");
+        Swal.fire({
+          title: "로그인이 필요한 기능입니다.",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "확인",
+        }).then((e) => {
+          router.push("/login");
+        });
       }
     }
   };
@@ -117,8 +127,14 @@ export default function ProductInfo() {
         setPaymentValue(productDto);
         router.push("/payment");
       } else {
-        alert("로그인이 필요한 기능입니다.");
-        router.push("/login");
+        Swal.fire({
+          title: "로그인이 필요한 기능입니다.",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "확인",
+        }).then((e) => {
+          router.push("/login");
+        });
       }
     }
   };

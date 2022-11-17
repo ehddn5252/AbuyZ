@@ -9,6 +9,10 @@ import { TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import DaumPostModal from "./DaumPostModal";
 import { addAddress } from "../../pages/api/user";
+
+// Alert
+import Swal from "sweetalert2";
+
 export default function DeliveryAddModal({ setAddOpen }) {
   const router = useRouter();
   const [address, setAddress] = useState("");
@@ -31,8 +35,14 @@ export default function DeliveryAddModal({ setAddOpen }) {
     };
     const res = await addAddress(addressDto);
     closeModal();
-    alert("배송지 추가가 완료되었습니다");
-    router.reload();
+    Swal.fire({
+      title: "배송지 추가가 완료되었습니다",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "확인",
+    }).then((e) => {
+      router.reload();
+    });
   };
 
   return (
