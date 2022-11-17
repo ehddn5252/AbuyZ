@@ -59,7 +59,7 @@ export default function DoughnutChart({ doughnutChartData }) {
     setSmaillData(tempSmallData);
     setBigLabel(tempBigLabel);
     setSmallLabel(tempBigLabel);
-  }, []);
+  }, [doughnutChartData]);
 
   const data1 = {
     labels: bigLabel,

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "./CouponPeriod";
+import Swal from "sweetalert2";
+import moment from "moment";
 
 // API
 import { modifycoupon } from "../../../pages/api/coupon";
@@ -22,7 +24,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  //   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -42,13 +43,9 @@ export default function EditCouponModal(props) {
 
   // 쿠폰이름
   const [name, setName] = useState(props.couponInfo.name);
-  const [namePlaceholder, setNamePlaceholder] = useState(props.couponInfo.name);
 
   // 할인금액
   const [sale, setSale] = useState(props.couponInfo.discount_price);
-  const [salePlaceholder, setSalePlaceholder] = useState(
-    props.couponInfo.discount_price
-  );
 
   // 시작 날짜
   const [startDate, setStartDate] = useState(
@@ -67,22 +64,10 @@ export default function EditCouponModal(props) {
   const nameChange = (event) => {
     setName(event.target.value);
   };
-  const nameFocus = () => {
-    setNamePlaceholder("");
-  };
-  const nameBlur = () => {
-    setNamePlaceholder(props.couponInfo.name);
-  };
 
   // 할인 금액 입력하면
   const saleChange = (event) => {
     setSale(event.target.value);
-  };
-  const saleFocus = () => {
-    setSalePlaceholder("");
-  };
-  const saleBlur = () => {
-    setSalePlaceholder(props.couponInfo.discount_price);
   };
 
   // 쿠폰수정 API
@@ -90,11 +75,31 @@ export default function EditCouponModal(props) {
     const couponDto = {
       name: name,
       discount_price: sale,
-      start_date: startDate.toISOString().slice(0, 10),
-      end_date: endDate.toISOString().slice(0, 10),
+      start_date: moment(startDate).format().slice(0, 10),
+      end_date: moment(endDate).format().slice(0, 10),
       big_categories_uid: Number(category),
     };
-    modifycoupon(couponDto, props.couponInfo.uid);
+    if (category === "" || name === "" || sale === "" || !Number(sale)) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      modifycoupon(couponDto, props.couponInfo.uid);
+      Swal.fire({
+        show: true,
+        title: "쿠폰이 수정되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      location.reload();
+    }
   };
 
   return (
@@ -105,7 +110,7 @@ export default function EditCouponModal(props) {
       >
         수정하기
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2
             container
@@ -251,12 +256,7 @@ export default function EditCouponModal(props) {
                 alignItems: "center",
               }}
             >
-              <Input
-                placeholder={namePlaceholder}
-                onChange={nameChange}
-                onFocus={nameFocus}
-                onBlur={nameBlur}
-              />
+              <Input value={name} onChange={nameChange} />
             </Grid2>
             <Grid2
               xs={12}
@@ -298,12 +298,7 @@ export default function EditCouponModal(props) {
                 alignItems: "center",
               }}
             >
-              <SaleInput
-                placeholder={salePlaceholder}
-                onChange={saleChange}
-                onFocus={saleFocus}
-                onBlur={saleBlur}
-              />
+              <SaleInput value={sale} onChange={saleChange} />
             </Grid2>
             <Grid2
               xs={12}
@@ -388,7 +383,7 @@ export default function EditCouponModal(props) {
               <ButtonBox>
                 <AddButton
                   onClick={() => {
-                    modiCoupon(), location.reload();
+                    modiCoupon();
                   }}
                 >
                   수정

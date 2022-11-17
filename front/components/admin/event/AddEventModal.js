@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 // API
 import axios from "axios";
@@ -103,37 +104,63 @@ export default function AddEventModal(props) {
   const handleAddEvent = () => {
     let formData = new FormData();
 
-    let data = {
-      name: name,
-      start_date: moment(startDate).format().slice(0, 10),
-      end_date: moment(endDate).format().slice(0, 10),
-      coupon_lists: [couponName],
-      content: content,
-    };
-
-    formData.append(
-      "eventDto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    formData.append("thumbnail", profileImg);
-    formData.append("content_img", detailImg);
-
-    const accessToken = sessionStorage.getItem("access-token");
-    axios.defaults.headers.common["access_token"] = accessToken;
-
-    axios
-      .post("https://k7e201.p.ssafy.io:8081/api/event/create", formData, {
-        headers: {
-          "Contest-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err, "등록을 실패하였습니다.");
+    if (
+      name === "" ||
+      content === "" ||
+      couponName === "" ||
+      !profileImg ||
+      !detailImg
+    ) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } else {
+      let data = {
+        name: name,
+        start_date: moment(startDate).format().slice(0, 10),
+        end_date: moment(endDate).format().slice(0, 10),
+        coupon_lists: [couponName],
+        content: content,
+      };
+
+      formData.append(
+        "eventDto",
+        new Blob([JSON.stringify(data)], { type: "application/json" })
+      );
+
+      formData.append("thumbnail", profileImg);
+      formData.append("content_img", detailImg);
+
+      const accessToken = sessionStorage.getItem("access-token");
+      axios.defaults.headers.common["access_token"] = accessToken;
+
+      axios
+        .post("https://k7e201.p.ssafy.io:8081/api/event/create", formData, {
+          headers: {
+            "Contest-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          Swal.fire({
+            show: true,
+            title: "이벤트가 생성되었습니다.",
+            position: "top-center",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          location.reload();
+          handleClose();
+        })
+        .catch((err) => {
+          console.log(err, "등록을 실패하였습니다.");
+        });
+    }
   };
 
   return (
@@ -144,7 +171,7 @@ export default function AddEventModal(props) {
       >
         이벤트 등록
       </InquireAddButton>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
             {/* 헤더 */}
@@ -412,10 +439,7 @@ export default function AddEventModal(props) {
             >
               <AddButton
                 onClick={() => {
-                  handleAddEvent(),
-                    alert("이벤트가 생성되었습니다."),
-                    location.reload(),
-                    handleClose();
+                  handleAddEvent();
                 }}
               >
                 등록

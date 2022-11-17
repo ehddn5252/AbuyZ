@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomerPagination from "../user/CustomerPagination";
-import Pagination from "./Pagination";
+import Swal from "sweetalert2";
 
 // 컴포넌트
 import EditCouponModal from "./EditCouponModal";
@@ -70,13 +70,30 @@ export default function CouponList(props) {
     }
   };
 
-  // 전체 삭제
+  // 쿠폰 삭제
   const handleDel = () => {
     checkItems.forEach((e) => delcoupon(e));
+    Swal.fire({
+      show: true,
+      title: "쿠폰이 삭제되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    location.reload();
   };
 
   // 수정사항 저장
   const handleSave = () => {
+    Swal.fire({
+      show: true,
+      title: "수정 항목이 저장되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     window.location.reload();
   };
 

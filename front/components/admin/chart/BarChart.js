@@ -75,7 +75,7 @@ export default function BarChart({ barChartData }) {
       }
       setBarData(tempdata);
     }
-  }, []);
+  }, [barChartData]);
   return barChartData ? (
     <Container>
       <Bar options={options} data={data} />

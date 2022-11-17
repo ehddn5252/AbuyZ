@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { MyDatePicker } from "./AddEventModal";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 // API
 import { inquirecoupon } from "../../../pages/api/coupon";
@@ -23,7 +24,6 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  //   width: 400,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -60,11 +60,6 @@ export default function EditEventModal(props) {
   // 쿠폰명 셀렉트 했을 때
   const handleChange = (event) => {
     setSelectCoupon(event.target.value);
-  };
-
-  // 이벤트명 입력하면
-  const nameChange = (event) => {
-    setName(event.target.value);
   };
 
   // 사용 가능한 쿠폰 목록
@@ -119,43 +114,68 @@ export default function EditEventModal(props) {
   // 이벤트 수정 API
   const handleEditEvent = () => {
     let formData = new FormData();
-
-    let data = {
-      name: name,
-      start_date: moment(startDate).format().slice(0, 10),
-      end_date: moment(endDate).format().slice(0, 10),
-      coupon_lists: [selectCoupon],
-      content: content,
-    };
-
-    formData.append(
-      "eventDto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    formData.append("thumbnail", profileImg);
-    formData.append("content_img", detailImg);
-
-    const accessToken = sessionStorage.getItem("access-token");
-    axios.defaults.headers.common["access_token"] = accessToken;
-
-    axios
-      .put(
-        `https://k7e201.p.ssafy.io:8081/api/event/${props.eventInfo.uid}`,
-        formData,
-        {
-          headers: {
-            "Contest-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err, "수정을 실패하였습니다.");
+    if (name === "" || content === "") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } else {
+      let data = {
+        name: name,
+        start_date: moment(startDate).format().slice(0, 10),
+        end_date: moment(endDate).format().slice(0, 10),
+        coupon_lists: [selectCoupon],
+        content: content,
+      };
+
+      formData.append(
+        "eventDto",
+        new Blob([JSON.stringify(data)], { type: "application/json" })
+      );
+
+      if (profileImg === props.eventInfo.thumbnail) {
+        formData.append("thumbnail", null);
+      } else {
+        formData.append("thumbnail", profileImg);
+      }
+      if (detailImg === props.eventInfo.contentImg) {
+        formData.append("content_img", null);
+      } else {
+        formData.append("content_img", detailImg);
+      }
+
+      const accessToken = sessionStorage.getItem("access-token");
+      axios.defaults.headers.common["access_token"] = accessToken;
+
+      axios
+        .put(
+          `https://k7e201.p.ssafy.io:8081/api/event/${props.eventInfo.uid}`,
+          formData,
+          {
+            headers: {
+              "Contest-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res) => {
+          Swal.fire({
+            show: true,
+            title: "이벤트가 수정되었습니다.",
+            position: "top-center",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err, "수정을 실패하였습니다.");
+        });
+    }
   };
 
   return (
@@ -166,7 +186,7 @@ export default function EditEventModal(props) {
       >
         수정
       </EditButton>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
             {/* 헤더 */}
@@ -225,7 +245,7 @@ export default function EditEventModal(props) {
             <Grid2 xs={8}>
               <NameInput
                 onChange={(e) => setName(e.target.value)}
-                placeholder={props.eventInfo.name}
+                value={name}
               />
             </Grid2>
             {/* 내용 */}
@@ -244,7 +264,7 @@ export default function EditEventModal(props) {
             <Grid2 xs={8}>
               <ContentInput
                 onChange={(e) => setContent(e.target.value)}
-                placeholder={props.eventInfo.content}
+                value={content}
               />
             </Grid2>
             {/* 기간 */}
@@ -335,7 +355,6 @@ export default function EditEventModal(props) {
                       vertical: "top",
                       horizontal: "left",
                     },
-                    // getContentAnchorEl: null,
                   }}
                   sx={{ border: 1, height: 50, borderRadius: 0 }}
                 >
@@ -433,7 +452,7 @@ export default function EditEventModal(props) {
               }}
             >
               {detailImg ? (
-                typeof profileImg === "string" ? (
+                typeof detailImg === "string" ? (
                   <Description>{detailImg.slice(46)}</Description>
                 ) : (
                   <Description>{detailImg.name}</Description>

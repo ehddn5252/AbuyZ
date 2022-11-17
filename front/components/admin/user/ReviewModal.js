@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -10,7 +11,6 @@ import Rating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
 
 // api
-import { writeInquiryReply } from "../../../pages/api/admin";
 import { replyReview } from "../../../pages/api/review";
 
 const style = {
@@ -48,9 +48,15 @@ export default function ReviewModal({ row }) {
       review_uid: row.uid,
       content: answerContent,
     };
-
     replyReview(answer);
-    alert("답변이 등록되었습니다.");
+    Swal.fire({
+      show: true,
+      title: "답변이 등록되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     location.reload();
   };
 
@@ -75,7 +81,7 @@ export default function ReviewModal({ row }) {
           완료
         </SolvedButton>
       )}
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2
             container
@@ -214,7 +220,11 @@ export default function ReviewModal({ row }) {
           >
             <RefusalButton onClick={handleClose}>취소</RefusalButton>
             {row.answered === false ? (
-              <AcceptButton onClick={() => handleAnswer()}>
+              <AcceptButton
+                onClick={() => {
+                  handleAnswer();
+                }}
+              >
                 답변 등록
               </AcceptButton>
             ) : null}

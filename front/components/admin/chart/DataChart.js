@@ -18,6 +18,7 @@ export default function DataChart({ dataChartData }) {
 
   useEffect(() => {
     let tempList = [];
+    let count = 0;
     if (dataChartData) {
       for (let [key, value] of Object.entries(dataChartData)) {
         let temp = {
@@ -28,11 +29,14 @@ export default function DataChart({ dataChartData }) {
           SaleCount: value.count,
           SalePrice: value.sales_amount,
         };
-        tempList.push(temp);
+        count += 1;
+        if (count < 6) {
+          tempList.push(temp);
+        }
       }
     }
     setrows(tempList);
-  }, []);
+  }, [dataChartData]);
   return dataChartData ? (
     <Container>
       <TableContainer component={Paper}>

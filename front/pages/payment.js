@@ -10,6 +10,9 @@ import PaymentProcess from "../components/payment/PaymentProcess";
 import ProductSaleInfo from "../components/payment/ProductSaleInfo";
 import ProductSimpleInfo from "../components/payment/ProductSimpleInfo";
 
+// Alert
+import Swal from "sweetalert2";
+
 // State
 import {
   paymentProduct,
@@ -130,10 +133,22 @@ export default function Payment() {
     };
     const res = await payProduct(productDto);
     if (res.statusCode) {
-      alert("결제 성공");
-      router.push("/");
+      Swal.fire({
+        title: "결제 성공!",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "확인",
+      }).then((e) => {
+        router.push("/");
+      });
     } else {
-      alert("결제가 실패하였습니다. 다시 시도해주세요.");
+      Swal.fire({
+        title: "결제가 실패하였습니다.",
+        text: "잠시 후 다시 시도해주세요",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "확인",
+      });
     }
   };
 
@@ -201,11 +216,18 @@ export default function Payment() {
   };
   // 장바구니 상품 결제하기
   const PayOther = async () => {
-    console.log("장바구니 상품 결제하기");
     const cartDto = {
       coupons: couponList,
     };
-    payBasket(cartDto);
+    const res = await payBasket(cartDto);
+    Swal.fire({
+      title: "결제 성공!",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "확인",
+    }).then((e) => {
+      router.push("/");
+    });
   };
   // 결제 승인 동작
   useEffect(() => {

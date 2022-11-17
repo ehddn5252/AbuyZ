@@ -13,6 +13,9 @@ import FormControl from "@mui/material/FormControl";
 // router
 import { useRouter } from "next/router";
 
+// Alert
+import Swal from "sweetalert2";
+
 // StyledComponents
 import styled from "styled-components";
 
@@ -61,8 +64,14 @@ export default function MyinfoChange() {
       phoneNumber: userPhone,
     };
     const res = await changeInfo(userDto);
-    alert("회원님의 정보가 수정되었습니다.");
-    router.push("/mypage");
+    Swal.fire({
+      title: "회원 정보 수정 완료!",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "확인",
+    }).then((e) => {
+      router.push("/mypage");
+    });
   };
 
   useEffect(() => {

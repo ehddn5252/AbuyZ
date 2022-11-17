@@ -10,6 +10,8 @@ import styled from "styled-components";
 // 하위 Components
 import DeliveryModifyModal from "./DeliveryModifyModal";
 
+// Alert
+import Swal from "sweetalert2";
 // api
 import { delAddress } from "../../pages/api/user";
 import { useRouter } from "next/router";
@@ -21,9 +23,20 @@ export default function DeliveryAddressItem({ addressItem }) {
   };
 
   const deleteClick = async () => {
-    const res = await delAddress(addressItem.uid);
-    alert("선택한 배송지를 삭제합니다.");
-    router.reload();
+    Swal.fire({
+      title: "정말로 배송지를 삭제하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      confirmButtonColor: "#FF5858",
+      cancelButtonText: "취소",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await delAddress(addressItem.uid);
+        Swal.fire("삭제성공!", "", "success").then((res) => {
+          router.reload();
+        });
+      }
+    });
   };
 
   return (

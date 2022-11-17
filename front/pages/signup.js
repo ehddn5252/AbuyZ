@@ -15,6 +15,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 
+// Alert
+import Swal from "sweetalert2";
+
 // StyledComponent
 import styled from "styled-components";
 
@@ -116,7 +119,9 @@ export default function Signup() {
     } else {
       setEmailValid(false);
     }
-    isDuplicateEmailCheck();
+    if (email) {
+      isDuplicateEmailCheck();
+    }
   };
 
   /** 비밀번호 유효성 */
@@ -145,9 +150,7 @@ export default function Signup() {
   };
   // 이메일 중복체크
   const isDuplicateEmailCheck = async () => {
-    console.log(email);
     const res = await checkEmail(email);
-    console.log(res);
     if (res.data.result === true) {
       setIsDuplicateEmail(true);
     }
@@ -156,7 +159,6 @@ export default function Signup() {
   // 이메일인증번호전송
   const sendEmailNumber = async () => {
     const res = await sendCheckNumber(email);
-    console.log(res);
     setnumberOpen(true);
   };
 
@@ -167,7 +169,6 @@ export default function Signup() {
       certification_number: emailNumber,
     };
     const res = await emailCheck(EmailNumberDto);
-    console.log(res);
     if (res.data.result == true) {
       setCheckEmailNumber1(true);
     } else {
@@ -190,13 +191,19 @@ export default function Signup() {
     };
     const res = await signup(signupDto);
     if (res.status === 200) {
-      router.push("/login");
+      Swal.fire({
+        title: "회원 가입 성공",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "로그인으로",
+      }).then((e) => {
+        router.push("/login");
+      });
     }
   };
 
   // 닉네임 중복확인
   const checkNickname1 = async () => {
-    console.log(nickname);
     const res = await checkNickname(nickname);
     if (res.data.result === true) {
       setisDuplicateNickname(true);
