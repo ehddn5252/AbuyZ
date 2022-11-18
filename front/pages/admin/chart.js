@@ -198,7 +198,7 @@ export default function Chart() {
 }
 
 const Container = styled.div`
-  background: #edf0f5;
+  background: #eeeeee;
   height: 87.5vh;
   padding-left: 15rem;
 `;

@@ -20,6 +20,20 @@ export default function AdminSideNav() {
   const router = useRouter();
   const [location, setLocation] = useState("대시보드");
 
+  const path = {
+    대시보드: "/admin/dashboard",
+    정보수정: "/admin/account",
+    "전시관리 - 쿠폰": "/admin/coupon",
+    "전시관리 - 이벤트": "/admin/event",
+    "상품관리 - 상품조회": "/admin/product",
+    "상품관리 - 상품등록": "/admin/product/add",
+    "상품관리 - 상품수정": "/admin/product/edit",
+    "고객관리 - 문의": "/admin/user/ask",
+    "고객관리 - FAQ": "/admin/user/faq",
+    "고객관리 - 신고": "/admin/user/report",
+    "고객관리 - 리뷰": "/admin/user/review",
+    통계: "/admin/chart",
+  };
   useEffect(() => {
     const pathname = window.location.pathname;
     if (pathname === "/admin/account") setLocation("정보수정");
@@ -36,15 +50,15 @@ export default function AdminSideNav() {
     else if (pathname === "/admin/user/faq") setLocation("고객관리 - FAQ");
     else if (pathname === "/admin/user/report") setLocation("고객관리 - 신고");
     else if (pathname === "/admin/user/review") setLocation("고객관리 - 리뷰");
-  }, [window.location.pathname]);
+  }, [router.pathname]);
 
-  const goHome = () => {
-    router.push("/admin/dashboard");
+  const goHome = (pathname) => {
+    router.push(path[pathname]);
   };
 
   return (
     <SideNavContainer>
-      <LogoDiv onClick={goHome}>
+      <LogoDiv onClick={(e) => goHome("대시보드")}>
         <img src="/images/ABUYZ_LOGO.png" style={{ width: "6rem" }} />
         <p>셀러오피스</p>
       </LogoDiv>
@@ -54,7 +68,7 @@ export default function AdminSideNav() {
         style={location === "대시보드" ? { backgroundColor: "#1A6DFF" } : null}
       >
         <GridViewOutlinedIcon />
-        <TagLink href="/admin/dashboard">대시보드</TagLink>
+        <TagLink onClick={(e) => goHome("대시보드")}>대시보드</TagLink>
       </HighTag>
       <TitleGrid
         style={
@@ -72,7 +86,7 @@ export default function AdminSideNav() {
       <div>
         <LowerTag>
           <LowLink
-            href="/admin/product"
+            onClick={(e) => goHome("상품관리 - 상품조회")}
             style={
               location === "상품관리 - 상품조회" ||
               location === "상품관리 - 상품수정"
@@ -85,7 +99,7 @@ export default function AdminSideNav() {
         </LowerTag>
         <LowerTag>
           <LowLink
-            href="/admin/product/add"
+            onClick={(e) => goHome("상품관리 - 상품등록")}
             style={
               location === "상품관리 - 상품등록"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -112,7 +126,7 @@ export default function AdminSideNav() {
       <div>
         <LowerTag>
           <LowLink
-            href="/admin/user/ask"
+            onClick={(e) => goHome("고객관리 - 문의")}
             style={
               location === "고객관리 - 문의"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -124,7 +138,7 @@ export default function AdminSideNav() {
         </LowerTag>
         <LowerTag>
           <LowLink
-            href="/admin/user/report"
+            onClick={(e) => goHome("고객관리 - 신고")}
             style={
               location === "고객관리 - 신고"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -136,7 +150,7 @@ export default function AdminSideNav() {
         </LowerTag>
         <LowerTag>
           <LowLink
-            href="/admin/user/review"
+            onClick={(e) => goHome("고객관리 - 리뷰")}
             style={
               location === "고객관리 - 리뷰"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -148,7 +162,7 @@ export default function AdminSideNav() {
         </LowerTag>
         <LowerTag>
           <LowLink
-            href="/admin/user/faq"
+            onClick={(e) => goHome("고객관리 - FAQ")}
             style={
               location === "고객관리 - FAQ"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -173,7 +187,7 @@ export default function AdminSideNav() {
       <div>
         <LowerTag>
           <LowLink
-            href="/admin/coupon"
+            onClick={(e) => goHome("전시관리 - 쿠폰")}
             style={
               location === "전시관리 - 쿠폰"
                 ? { color: "#fff", fontWeight: "1000" }
@@ -185,6 +199,7 @@ export default function AdminSideNav() {
         </LowerTag>
         <LowerTag>
           <LowLink
+            onClick={(e) => goHome("전시관리 - 이벤트")}
             href="/admin/event"
             style={
               location === "전시관리 - 이벤트"
@@ -201,7 +216,7 @@ export default function AdminSideNav() {
         style={location === "통계" ? { backgroundColor: "#1A6DFF" } : null}
       >
         <ShowChartOutlinedIcon />
-        <TagLink href="/admin/chart">통계</TagLink>
+        <TagLink onClick={(e) => goHome("통계")}>통계</TagLink>
       </HighTag>
     </SideNavContainer>
   );
@@ -242,10 +257,11 @@ const TitleTag = styled(Typography)`
   font-weight: 1000;
 `;
 
-const TagLink = styled.a`
+const TagLink = styled.div`
   text-decoration: none;
   color: #fff;
   margin-left: 0.5rem;
+  cursor: pointer;
 `;
 
 const HighTag = styled(Typography)`
@@ -260,8 +276,9 @@ const LowerTag = styled(Typography)`
   padding: 0.5rem;
 `;
 
-const LowLink = styled.a`
+const LowLink = styled.div`
   text-decoration: none;
   color: #8e8e8e;
   margin-left: 2rem;
+  cursor: pointer;
 `;

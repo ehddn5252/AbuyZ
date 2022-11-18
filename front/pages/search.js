@@ -35,6 +35,7 @@ export default function Search() {
   const getProductList = async () => {
     let res;
     if (searchValue) {
+      console.log(searchValue);
       const temp = await keywordSearch(searchValue);
       res = temp.data;
     } else if (bigCategory) {
@@ -53,6 +54,7 @@ export default function Search() {
       res = await inquireProduct();
     }
     let temp = [];
+
     for (let i = 0; i < res.length; i++) {
       if (res[i].status !== "SOLD_OUT") {
         temp.push(res[i]);
