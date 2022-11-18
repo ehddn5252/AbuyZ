@@ -199,7 +199,7 @@ export default function Chart() {
 
 const Container = styled.div`
   background: #edf0f5;
-  height: 88vh;
+  height: 87.5vh;
   padding-left: 15rem;
 `;
 
@@ -276,7 +276,7 @@ const ChartTitle = styled.div`
   margin: 0;
   padding: 0;
   padding-top: 0.5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.3rem;
   text-align: center;
   font-size: 1.2rem;
   font-weight: 1000;

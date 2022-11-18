@@ -31,11 +31,10 @@ export default function BasketPayment() {
   // 개인정보 조회
   const getName = async () => {
     const res = await getAddress();
-    console.log("네주소", res.data.data[0]);
-    setAddress(res.data.data[0].address);
+    setAddress(res.data.data[0]?.address);
     // setAddress(res.data.address);
-    setDetailAddress(res.data.data[0].detailAddress);
-    setPostalCode(res.data.data[0].postalCode);
+    setDetailAddress(res.data.data[0]?.detailAddress);
+    setPostalCode(res.data.data[0]?.postalCode);
   };
   const goPayment = () => {
     setpaymentValue("");

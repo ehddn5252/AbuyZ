@@ -57,10 +57,9 @@ export default function ProductItem({ product }) {
                 </CardDiscountCont>
                 <Flexfive>
                   <CardPrice>
-                    {(
-                      product.price *
-                      ((100 - product.discountRate) / 100)
-                    ).toLocaleString("ko-KR")}
+                    {(product.price * ((100 - product.discountRate) / 100))
+                      .toFixed(0)
+                      .toLocaleString("ko-KR")}
                     원
                   </CardPrice>
                 </Flexfive>
@@ -89,7 +88,7 @@ const DiscountContainer = styled.div``;
 const CardDiscount = styled.span`
   font-size: 1rem;
   font-weight: bolder;
-  margin-right: 0rem;
+  margin-right: 0.5rem;
   margin-top: 0;
   margin-bottom: 0;
   color: #56a9f1;
