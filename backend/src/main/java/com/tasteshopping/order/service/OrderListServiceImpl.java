@@ -4,6 +4,7 @@ import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.common.service.UtilService;
 import com.tasteshopping.inventory.dto.InventoryDto;
 import com.tasteshopping.inventory.entity.Inventories;
+import com.tasteshopping.order.dto.CanWriteReviewDto;
 import com.tasteshopping.order.dto.OrderDto;
 import com.tasteshopping.order.dto.OrderListDto;
 import com.tasteshopping.order.entity.OrderLists;
@@ -157,5 +158,37 @@ public class OrderListServiceImpl implements OrderListService {
             orderListDtos.add(orderListDto);
         }
         return orderListDtos;
+    }
+
+    @Override
+    public BaseRes getMyNoReviewOrder(String email) {
+        Users user = userRepository.findByEmail(email).get();
+        CanWriteReviewDto canWriteReviewDto = new CanWriteReviewDto();
+        
+        
+        /*
+        1. 해야 하는 것: 내가 주문한 것 중 리뷰 안 쓴 리뷰 가져오기
+        2. 내 이메일의 order_list 의 order 가져오기 (order_lists의 date 가져옴)
+        3. order 의 inventory 로 option 가져오기 (title)
+        4. 리뷰에서
+        */
+
+        // 내가 주문한 리스트 가져옴
+//        List<OrderLists> orderLists = orderListRepository.findByUser(user);
+
+        //
+        List<Orders> orders = orderRepository.findMyOrderByNoReview(user);
+
+
+
+
+        /*
+            String title;
+            String optionName;
+            String repImg;
+            Date orderDate;
+         */
+
+        return null;
     }
 }

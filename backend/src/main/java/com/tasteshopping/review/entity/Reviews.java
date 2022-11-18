@@ -47,11 +47,11 @@ public class Reviews {
     @JoinColumn(name = "users_uid")
     private Users user;          //사용자 유아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "products_uid")
     private Products product;       //상품 유아이디
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "orders_uid")
     private Orders order;           //주문결제 유아이디
 

@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface ProductOptionRepository extends JpaRepository<ProductOptions,Integer> {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value="select max(o.uid) from ProductOptions o")
     public Optional<Integer> getMaxUid();
 

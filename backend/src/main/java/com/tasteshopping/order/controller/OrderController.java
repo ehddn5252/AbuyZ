@@ -94,6 +94,13 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(baseRes);
     }
 
+    @GetMapping("/my/no-review")
+    public ResponseEntity<BaseRes> getMyNoReviewOrdersFromOrderList(@AuthenticationPrincipal String email) {
+        // 지금까지 구매한 거에 리뷰 안 쓴거 들고 오고 싶습니다!
+        BaseRes baseRes = orderListService.getMyNoReviewOrder(email);
+        return ResponseEntity.status(HttpStatus.OK).body(baseRes);
+    }
+
     @GetMapping("/date")
     public ResponseEntity<BaseRes> getOrdersFromOrderListGroupByDate(@AuthenticationPrincipal String email) {
         BaseRes baseRes = orderListService.getOrdersGroupByDate(email);
