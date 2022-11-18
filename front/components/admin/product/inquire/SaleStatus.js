@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 // mui
@@ -70,13 +70,6 @@ export default function SaleStatus(props) {
           style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
         />
         <Name>판매중</Name>
-        <input
-          name="saleStatusCheck"
-          type="checkbox"
-          onChange={(e) => checkOnlyOne(e.target)}
-          style={{ width: "1.2rem", height: "1.5rem", marginRight: "0.5rem" }}
-        />
-        <Name>승인대기</Name>
         <input
           name="saleStatusCheck"
           type="checkbox"

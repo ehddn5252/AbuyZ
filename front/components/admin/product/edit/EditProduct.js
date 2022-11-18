@@ -122,8 +122,8 @@ export default function EditProduct({ productInfo }) {
   const [noOptionUid, setNoOptionUid] = useState(0);
 
   const getDetail = async () => {
-    const tmp = await productDetail(productInfo.uid);
-    // console.log(tmp, "@@@");
+    const tmp = await productDetail(772);
+
     setMainImg(tmp.data.products.repImg);
     setExtraImg(tmp.data.productPictureDto);
     setDescImg(tmp.data.products.descriptionImg);
@@ -136,7 +136,6 @@ export default function EditProduct({ productInfo }) {
     if (sub[0]) {
       if (Object.keys(sub[0].productOptions[0]).includes("x")) {
         setNoOptionUid(sub[0].productOptionUidString);
-        console.log(sub[0].productOptionUidString, "옵션 선택 안했음");
       }
       for (let i = 0; i < sub.length; i++) {
         sub_c += sub[i].count;

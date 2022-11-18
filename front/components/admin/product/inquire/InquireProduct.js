@@ -114,7 +114,6 @@ export default function SaleProductSearch() {
                   // 판매상태
                   // 전체
                   if (checkStatus === 0) {
-                    // p[i].count = getInventory(p[i].uid);
                     tmp.push(p[i]);
                   }
                   // 판매중
@@ -124,16 +123,9 @@ export default function SaleProductSearch() {
                   ) {
                     tmp.push(p[i]);
                   }
-                  // 승인대기
-                  else if (
-                    checkStatus === 2 &&
-                    p[i].status.toLowerCase() === "getting_ready"
-                  ) {
-                    tmp.push(p[i]);
-                  }
                   // 판매완료
                   else if (
-                    checkStatus === 3 &&
+                    checkStatus === 2 &&
                     p[i].status.toLowerCase() === "sold_out"
                   ) {
                     tmp.push(p[i]);
@@ -145,12 +137,19 @@ export default function SaleProductSearch() {
         }
       }
     }
+    console.log(tmp, "0000000");
     setProductInfo(tmp);
   };
 
   useEffect(() => {
     getProduct();
   }, []);
+
+  useEffect(() => {
+    getProduct();
+  }, [reset]);
+
+  console.log(productInfo, "11");
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
