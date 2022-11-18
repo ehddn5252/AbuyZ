@@ -48,7 +48,7 @@ export default function ProductCarousel() {
   return products ? (
     <Container>
       <BuContainer>
-        <RecSpan>{user}</RecSpan>
+        {user ? <RecSpan>{user}</RecSpan> : <RecSpan>방문자</RecSpan>}
         <span>님을 위한</span>
         <RecbuSpan>추천 상품</RecbuSpan>
         <StyledSlider {...settings} style={{ marginTop: "2rem" }}>
@@ -112,9 +112,10 @@ const Flexfive = styled.div`
   align-items: flex-end;
 `;
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
   height: 30rem;
-  width: 70rem;
-  margin-left: 25rem;
+  width: 100%;
 `;
 
 const Flextwo = styled.div`
@@ -126,11 +127,12 @@ const Flextwo = styled.div`
 
 const BuContainer = styled.div`
   height: 100%;
-  width: 100%;
+  width: 70rem;
 `;
 
 const RecSpan = styled.span`
   margin-left: 1.7rem;
+  margin-right: 0.2rem;
   font-size: 1.5rem;
   font-weight: bold;
   color: #56a9f1;
