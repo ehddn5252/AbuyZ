@@ -335,7 +335,7 @@ export default function AddEditOption(props) {
 
         const accessToken = sessionStorage.getItem("access-token");
         axios.defaults.headers.common["access_token"] = accessToken;
-        console.log(formData, "@@@");
+
         axios
           .post(
             "https://k7e201.p.ssafy.io:8081/api/product/register",
