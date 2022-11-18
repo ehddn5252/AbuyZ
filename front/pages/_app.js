@@ -20,17 +20,10 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   // 관리자 체크
   const [adminCheck, setAdminCheck] = useState(false);
-  // 네브바 유무
-  const [isNav, setIsNav] = useState(false);
 
   useEffect(() => {
     const path = window.location.pathname;
 
-    if (path === "/login" || path === "/pwf" || path === "/signup") {
-      setIsNav(false);
-    } else {
-      setIsNav(true);
-    }
     if (path.substring(6, 0) === "/admin") {
       setAdminCheck(true);
     } else {
@@ -69,11 +62,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <RecoilRoot>
       <MainContainer>
-        {adminCheck === false ? <Nav /> : null}
         {adminCheck ? <AdminSideNav /> : null}
-        {adminCheck ? <AdminNav /> : null}
+        {adminCheck ? <AdminNav /> : <Nav />}
         <Component {...pageProps} />
-        {isNav && adminCheck === false ? <Footer /> : null}
+        {adminCheck ? null : <Footer />}
       </MainContainer>
     </RecoilRoot>
   );

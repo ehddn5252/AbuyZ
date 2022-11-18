@@ -46,7 +46,6 @@ export default function ProductInfo() {
     if (res.data.isWished) {
       setWish(res.data.isWished.wished);
       setWishId(res.data.isWished.uid);
-      console.log(res.data.isWished.uid);
     }
 
     MakeOption(res.data.productOptionListMap);
@@ -162,7 +161,6 @@ export default function ProductInfo() {
     }
     setOptions(temp2);
     setOptionValue(defaulttemp);
-    console.log(temp);
     setOptionList(temp);
   };
 

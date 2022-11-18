@@ -12,9 +12,7 @@ export default function MyReviewItem(product) {
     <ItemContainer>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ flex: "1" }}>
-          <ProductImg
-            src={product.product.inventoryDto.productDto.descriptionImg}
-          />
+          <ProductImg src={product.product.inventoryDto.productDto.repImg} />
         </div>
         <div style={{ flex: "7", marginLeft: "1rem" }}>
           <div>
@@ -64,7 +62,7 @@ export default function MyReviewItem(product) {
           <ReviewAddModel
             productName={product.product.inventoryDto.productDto.name}
             setOpen={setOpen}
-            image={product.product.inventoryDto.productDto.descriptionImg}
+            image={product.product.inventoryDto.productDto.repImg}
             orderUid={product.product.orderUid}
             productUid={product.product.inventoryDto.productDto.uid}
             // productOptions={product.product.options}

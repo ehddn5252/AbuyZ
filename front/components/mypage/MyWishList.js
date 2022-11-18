@@ -15,10 +15,10 @@ import MyWishItem from "./MyWishItem";
 import { listwish } from "../../pages/api/wish";
 
 export default function MyWishList() {
-  const [productList, setProductList] = useState([]);
+  const [productList, setProductList] = useState(null);
   const llistwish = async () => {
     const res = await listwish();
-    setProductList(res.data.products);
+    setProductList(res.data?.products);
   };
 
   useEffect(() => {

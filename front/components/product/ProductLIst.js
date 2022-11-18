@@ -40,7 +40,15 @@ export default function ProductLIst({ productList }) {
     sortable.reverse();
     return sortable;
   }
+  function getCreatePrcie(arr) {
+    let sortable = [];
 
+    sortable = arr.sort(function (a, b) {
+      return a.uid - b.uid;
+    });
+    sortable.reverse();
+    return sortable;
+  }
   // 가격 높은 순
   function getHighPrice(arr) {
     let sortable = [];
@@ -76,7 +84,7 @@ export default function ProductLIst({ productList }) {
     let data;
     if (productList.length >= 1) {
       if (value === "최근 등록 순") {
-        data = productList.reverse();
+        data = getCreatePrcie(productList);
       } else if (value === "가격 낮은 순") {
         data = getLowPrcie(productList);
       } else if (value === "가격 높은 순") {
