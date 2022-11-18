@@ -52,12 +52,14 @@ export default function Search() {
     } else if (!searchValue && !bigCategory && !smallCategory) {
       res = await inquireProduct();
     }
-    console.log(res);
     let temp = [];
     for (let i = 0; i < res.length; i++) {
       if (res[i].status !== "SOLD_OUT") {
         temp.push(res[i]);
       }
+    }
+    if (temp.length > 50) {
+      temp = temp.slice(0, 30);
     }
     setProductList(temp);
   };
@@ -87,6 +89,9 @@ export default function Search() {
       if (res.data[i].status !== "SOLD_OUT") {
         temp.push(res.data[i]);
       }
+    }
+    if (temp.length > 50) {
+      temp = temp.slice(0, 30);
     }
     setProductList(temp);
   };
