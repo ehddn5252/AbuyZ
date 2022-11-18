@@ -26,6 +26,7 @@ import {
 export default function ProductReview() {
   const [productId, setProductId] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
   const [TotalRatingList, setTotalRatingList] = useState([0, 0, 0, 0, 0]);
@@ -35,32 +36,40 @@ export default function ProductReview() {
   // 포토리뷰 가져오기
   const getphotoReview = async (productId) => {
     const res = await photoreviewSome(productId);
-    console.log(res);
     setPhotoList(res.data);
   };
   // 평균 점수랑 점수대 가져오기
-  const getTotalRating = (reviewData) => {
+  const getTotalRating = async (total, id) => {
     let tempTotalRating = 0;
     let five = 0;
     let four = 0;
     let three = 0;
     let two = 0;
     let one = 0;
-    for (let i = 0; i < reviewData.length; i++) {
-      const temp = reviewData[i].rating;
-      tempTotalRating += temp;
-      if (temp === 5) {
-        five += 1;
-      } else if (temp < 5 && temp >= 4) {
-        four += 1;
-      } else if (temp < 4 && temp >= 3) {
-        three += 1;
-      } else if (temp < 3 && temp >= 2) {
-        two += 1;
-      } else one += 1;
+    let count = 0;
+    for (let j = 1; j < total + 1; j++) {
+      const res = await review(id, j);
+      const reviewData = res.data.dto;
+      for (let i = 0; i < reviewData.length; i++) {
+        const temp = reviewData[i].rating;
+        count += 1;
+        tempTotalRating += temp;
+        if (temp === 5) {
+          five += 1;
+        } else if (temp < 5 && temp >= 4) {
+          four += 1;
+        } else if (temp < 4 && temp >= 3) {
+          three += 1;
+        } else if (temp < 3 && temp >= 2) {
+          two += 1;
+        } else one += 1;
+      }
     }
+
+    setTotal(count);
+
     setTotalRatingList([one, two, three, four, five]);
-    setTotalValue(tempTotalRating / reviewData.length);
+    setTotalValue((tempTotalRating / count).toFixed(1));
   };
 
   // 리뷰 신고하기
@@ -81,30 +90,28 @@ export default function ProductReview() {
     };
     if (likeState) {
       const res = await dellikereview(id);
-      console.log("좋아요 취소");
     } else {
       const res = await likereview(reviewDto);
-      console.log("좋아요");
     }
   };
-
+  const changePage = (e, value) => {
+    setPage(value);
+  };
   // 상품 데이터 가져오기
-  const getReview = async (id) => {
+  const getReview = async (id, page) => {
     const res = await review(id, page);
-    console.log(res.data);
-
     const reviewlist = res.data.dto;
-    setTotal(res.data.totalCnt);
+    setTotalPage(res.data.pageCnt);
     setReviewlist(reviewlist);
-    getTotalRating(res.data.dto);
+    getTotalRating(res.data.pageCnt, id);
   };
   useEffect(() => {
     const pathname = window.location.pathname;
     const id = pathname.split("/")[2];
     setProductId(id);
-    getReview(id);
+    getReview(id, page);
     getphotoReview(id);
-  }, []);
+  }, [page]);
   return reviewList.length ? (
     <Container id="reviewView">
       <h1 style={{ fontSize: "3rem" }}>
@@ -122,7 +129,9 @@ export default function ProductReview() {
               <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
             }
           />
-          <p style={{ fontSize: "1.5rem", marginLeft: "1rem" }}>3.8/5</p>
+          <p style={{ fontSize: "1.5rem", marginLeft: "1rem" }}>
+            {totalValue}/5
+          </p>
         </LeftBox>
         <RightBox>
           <ScoreBox>
@@ -216,7 +225,7 @@ export default function ProductReview() {
         {reviewList.map((data, idx) => (
           <ReviewItem key={idx}>
             <TitleBox>
-              <h1 style={{ marginTop: 0 }}>{data.email}</h1>
+              <h1 style={{ marginTop: 0 }}>{data.nickName}</h1>
               <div style={{ display: "flex" }}>
                 <div onClick={(e) => reportReviewItem(data.id)}>
                   <ReportIcon
@@ -307,7 +316,12 @@ export default function ProductReview() {
           </ReviewItem>
         ))}
 
-        <Pagination count={23} size="large" />
+        <Pagination
+          page={page}
+          onChange={changePage}
+          count={totalPage}
+          size="large"
+        />
       </ReviewList>
     </Container>
   ) : (
@@ -402,12 +416,12 @@ const ReviewContent = styled.div`
 
 const ReviewInfo = styled.div`
   width: 75%;
-  height: 10rem;
+  height: auto;
 `;
 
 const ReviewImg = styled.div`
   width: 25%;
-  padding-left: 5rem;
+  padding-left: 3rem;
   height: auto;
 `;
 const IconBox = styled.div`

@@ -90,6 +90,7 @@ export default function ProductLIst({ productList }) {
 
   useEffect(() => {
     const tv = change();
+
     setInputValue(tv);
   }, [inputValue, value, productList]);
   return productList ? (
