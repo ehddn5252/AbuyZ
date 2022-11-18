@@ -74,9 +74,9 @@ export default function Payment() {
           total_amount: paymentList[0].productDto.price,
           vat_amount: 200,
           tax_free_amount: paymentList[0].productDto.deliveryFee,
-          approval_url: "http://localhost:3000/payment",
-          fail_url: "http://localhost:3000/payment",
-          cancel_url: "http://localhost:3000/payment",
+          approval_url: "https://k7e201.p.ssafy.io/payment",
+          fail_url: "https://k7e201.p.ssafy.io/payment",
+          cancel_url: "https://k7e201.p.ssafy.io/payment",
         },
         {
           headers,
