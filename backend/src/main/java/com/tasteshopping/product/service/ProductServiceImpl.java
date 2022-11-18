@@ -7,6 +7,7 @@ import com.tasteshopping.inventory.repository.InventoryRepository;
 import com.tasteshopping.product.dto.*;
 import com.tasteshopping.product.entity.*;
 import com.tasteshopping.categories.entity.SmallCategories;
+import com.tasteshopping.product.exception.InputIsNotCorrectException;
 import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
@@ -985,6 +986,9 @@ public class ProductServiceImpl implements ProductService {
         Brands brands = null;
         if (brandsOptional.isPresent()) {
             brands = brandsOptional.get();
+        }
+        else{
+            throw new InputIsNotCorrectException();
         }
         Integer smallCategoryUid = productCreateDto.getSmallCategoriesUid();//int)param.get("small_categories_uid");
         Optional<SmallCategories> smallCategoriesOptional = smallCategoryRepository.findById(smallCategoryUid);

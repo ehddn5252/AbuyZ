@@ -28,6 +28,6 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o join fetch o.review r where o.status=:status")
     List<Orders> findByStatus(String status);
 
-    @Query("select o from Orders o join fetch o.orderList ol left join o.review ")
-    List<Orders> findMyOrderByNoReview(Users user);
+    @Query(value = "select * from order_lists ol left join orders o on ol.uid = o.order_lists_uid left join reviews r on o.uid = r.orders_uid where o.uid not in (select coalesce(orders_uid ,0) from reviews r2) and ol.users_uid=:userUid",nativeQuery = true)
+    List<Orders> findMyOrderByNoReview(int userUid);
 }

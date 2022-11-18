@@ -12,10 +12,13 @@ import com.tasteshopping.order.entity.Orders;
 import com.tasteshopping.order.repository.OrderListRepository;
 import com.tasteshopping.order.repository.OrderRepository;
 import com.tasteshopping.product.entity.ProductOptions;
+import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.repository.ProductOptionRepository;
 import com.tasteshopping.user.entity.Users;
 import com.tasteshopping.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,6 +32,7 @@ public class OrderListServiceImpl implements OrderListService {
     private final OrderRepository orderRepository;
     private final OrderListRepository orderListRepository;
     private final ProductOptionRepository productOptionRepository;
+
     @Override
     public List<OrderListDto> getOrderLists(String email) {
         Users user = userRepository.findByEmail(email).get();
@@ -61,11 +65,11 @@ public class OrderListServiceImpl implements OrderListService {
                 InventoryDto inventoryDto = inventories.toDto();
                 inventoryDto.setProductDto(inventories.getProduct().toDto());
                 String[] optionUidList = inventories.getProductOptionList().split(" ");
-                List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
-                for(int j=0;j<optionUidList.length;++j){
+                List<HashMap<String, String>> retProductOptions = new ArrayList<HashMap<String, String>>();
+                for (int j = 0; j < optionUidList.length; ++j) {
                     ProductOptions productOptions = productOptionRepository.findById(Integer.parseInt(optionUidList[j].trim())).get();
-                    HashMap<String,String> hashMap = new HashMap<>();
-                    hashMap.put(productOptions.getName(),productOptions.getValue());
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put(productOptions.getName(), productOptions.getValue());
                     retProductOptions.add(hashMap);
                 }
                 inventoryDto.setProductOptions(retProductOptions);
@@ -101,11 +105,11 @@ public class OrderListServiceImpl implements OrderListService {
                     InventoryDto inventoryDto = inventories.toDto();
                     inventoryDto.setProductDto(inventories.getProduct().toDto());
                     String[] optionUidList = inventories.getProductOptionList().split(" ");
-                    List<HashMap<String,String>> retProductOptions = new ArrayList<HashMap<String,String>>();
-                    for(int k=0;k<optionUidList.length;++k){
+                    List<HashMap<String, String>> retProductOptions = new ArrayList<HashMap<String, String>>();
+                    for (int k = 0; k < optionUidList.length; ++k) {
                         ProductOptions productOptions = productOptionRepository.findById(Integer.parseInt(optionUidList[k].trim())).get();
-                        HashMap<String,String> hashMap = new HashMap<>();
-                        hashMap.put(productOptions.getName(),productOptions.getValue());
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put(productOptions.getName(), productOptions.getValue());
                         retProductOptions.add(hashMap);
                     }
                     inventoryDto.setProductOptions(retProductOptions);
@@ -163,32 +167,38 @@ public class OrderListServiceImpl implements OrderListService {
     @Override
     public BaseRes getMyNoReviewOrder(String email) {
         Users user = userRepository.findByEmail(email).get();
-        CanWriteReviewDto canWriteReviewDto = new CanWriteReviewDto();
-        
-        
-        /*
-        1. 해야 하는 것: 내가 주문한 것 중 리뷰 안 쓴 리뷰 가져오기
-        2. 내 이메일의 order_list 의 order 가져오기 (order_lists의 date 가져옴)
-        3. order 의 inventory 로 option 가져오기 (title)
-        4. 리뷰에서
-        */
+        List<CanWriteReviewDto> canWriteReviewDtos= new ArrayList<>();
+        List<Orders> orders = orderRepository.findMyOrderByNoReview(user.getUid());
+        for (int i = 0; i < orders.size(); ++i) {
+            CanWriteReviewDto canWriteReviewDto = new CanWriteReviewDto();
+            canWriteReviewDto.setOrderDate(orders.get(i).getOrderList().getDate());
+            canWriteReviewDto.setRepImg(orders.get(i).getInventory().getProduct().getRepImg());
+            canWriteReviewDto.setTitle(orders.get(i).getInventory().getProduct().getName());
 
-        // 내가 주문한 리스트 가져옴
-//        List<OrderLists> orderLists = orderListRepository.findByUser(user);
-
-        //
-        List<Orders> orders = orderRepository.findMyOrderByNoReview(user);
-
-
-
-
-        /*
-            String title;
-            String optionName;
-            String repImg;
-            Date orderDate;
-         */
-
-        return null;
+            HashMap<String, List> hashMap = new HashMap<>();
+            List<ProductOptions> productOptionsList = orders.get(i).getInventory().getProduct().getProductOptions();
+            if (productOptionsList.isEmpty()) {
+                throw new OptionNotFoundException();
+            }
+            String name = productOptionsList.get(0).getName();
+            ArrayList<String> l = new ArrayList();
+            for (int j = 0; j < productOptionsList.size(); ++j) {
+                if (name.equals(productOptionsList.get(j).getName())) {
+                    l.add(productOptionsList.get(j).getValue());
+                } else {
+                    ArrayList newL = new ArrayList<>();
+                    newL.addAll(l);
+                    hashMap.put(name, newL);
+                    l.clear();
+                    l.add(productOptionsList.get(j).getValue());
+                    name = productOptionsList.get(j).getName();
+                }
+            }
+            // 마지막에 한번 추가해줘야 한다.
+            hashMap.put(name, l);
+            canWriteReviewDto.setProductOptionListMap(hashMap);
+            canWriteReviewDtos.add(canWriteReviewDto);
+        }
+        return new BaseRes(200,"리뷰 쓸 수 있는 상품 반환 성공",canWriteReviewDtos);
     }
 }
