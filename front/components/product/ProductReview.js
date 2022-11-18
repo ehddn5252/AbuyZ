@@ -36,34 +36,40 @@ export default function ProductReview() {
   // 포토리뷰 가져오기
   const getphotoReview = async (productId) => {
     const res = await photoreviewSome(productId);
-    console.log(res);
     setPhotoList(res.data);
   };
   // 평균 점수랑 점수대 가져오기
-  const getTotalRating = (reviewData) => {
+  const getTotalRating = async (total, id) => {
     let tempTotalRating = 0;
     let five = 0;
     let four = 0;
     let three = 0;
     let two = 0;
     let one = 0;
-    for (let i = 0; i < reviewData.length; i++) {
-      const temp = reviewData[i].rating;
-      tempTotalRating += temp;
-      if (temp === 5) {
-        five += 1;
-      } else if (temp < 5 && temp >= 4) {
-        four += 1;
-      } else if (temp < 4 && temp >= 3) {
-        three += 1;
-      } else if (temp < 3 && temp >= 2) {
-        two += 1;
-      } else one += 1;
+    let count = 0;
+    for (let j = 1; j < total + 1; j++) {
+      const res = await review(id, j);
+      const reviewData = res.data.dto;
+      for (let i = 0; i < reviewData.length; i++) {
+        const temp = reviewData[i].rating;
+        count += 1;
+        tempTotalRating += temp;
+        if (temp === 5) {
+          five += 1;
+        } else if (temp < 5 && temp >= 4) {
+          four += 1;
+        } else if (temp < 4 && temp >= 3) {
+          three += 1;
+        } else if (temp < 3 && temp >= 2) {
+          two += 1;
+        } else one += 1;
+      }
     }
-    console.log(one, two, three, four, five);
-    console.log(tempTotalRating);
+
+    setTotal(count);
+
     setTotalRatingList([one, two, three, four, five]);
-    setTotalValue(tempTotalRating / reviewData.length);
+    setTotalValue((tempTotalRating / count).toFixed(1));
   };
 
   // 리뷰 신고하기
@@ -84,10 +90,8 @@ export default function ProductReview() {
     };
     if (likeState) {
       const res = await dellikereview(id);
-      console.log("좋아요 취소");
     } else {
       const res = await likereview(reviewDto);
-      console.log("좋아요");
     }
   };
   const changePage = (e, value) => {
@@ -98,9 +102,8 @@ export default function ProductReview() {
     const res = await review(id, page);
     const reviewlist = res.data.dto;
     setTotalPage(res.data.pageCnt);
-    setTotal(res.data.totalCnt);
     setReviewlist(reviewlist);
-    getTotalRating(res.data.dto);
+    getTotalRating(res.data.pageCnt, id);
   };
   useEffect(() => {
     const pathname = window.location.pathname;
