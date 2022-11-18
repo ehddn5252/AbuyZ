@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface ProductOptionService {
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     ProductOptions createProductOptionList(Products p, String name, String value);
 }

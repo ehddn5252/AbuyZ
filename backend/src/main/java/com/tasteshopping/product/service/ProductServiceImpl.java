@@ -574,6 +574,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public BaseRes deleteProduct(Integer uid) {
         Optional<Products> productsOptional = productRepository.findById(uid);
         if (productsOptional.isPresent()) {
