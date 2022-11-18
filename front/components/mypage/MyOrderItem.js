@@ -31,11 +31,16 @@ export default function MyOrderItem({ uid }) {
   };
 
   const handleClick = async (a, b) => {
+    let options = {};
+    for (let i = 0; i < b.length; i++) {
+      options[Object.keys(b[i])] = Object.values(b[i])[0];
+    }
     const cartDto = {
       productsUid: a,
       productCount: 1,
-      optionValues: b,
+      optionValues: options,
     };
+    console.log(cartDto);
     const res = await regiscart(cartDto);
     Swal.fire({
       title: "장바구니에 담겼습니다.",
@@ -53,7 +58,7 @@ export default function MyOrderItem({ uid }) {
       {orderBundleItem.map((e) => (
         <Container>
           <div style={{ flex: "1" }}>
-            <ProductImg src={e.inventoryDto.productDto.descriptionImg} />
+            <ProductImg src={e.inventoryDto.productDto.repImg} />
           </div>
           <InfoContainer>
             <ProductIntro>{e.inventoryDto.productDto.name}</ProductIntro>

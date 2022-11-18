@@ -124,6 +124,7 @@ export default function ReviewAddModel({
           >
             <Rating
               name="simple-controlled"
+              precision={0.5}
               value={value}
               onChange={(event, newValue) => {
                 setValue(newValue);
