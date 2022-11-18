@@ -55,7 +55,7 @@ export default function BasketItem({ basket, setReload, reload }) {
     <Container>
       <ImageDiv>
         <img
-          src={basket.productDto.descriptionImg}
+          src={basket.productDto.repImg}
           style={{ width: "8rem", height: "8rem", objectFit: "cover" }}
         />
       </ImageDiv>

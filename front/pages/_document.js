@@ -39,6 +39,7 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <title>AbuyZ</title>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
 

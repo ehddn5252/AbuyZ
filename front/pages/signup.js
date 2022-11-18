@@ -159,6 +159,12 @@ export default function Signup() {
   // 이메일인증번호전송
   const sendEmailNumber = async () => {
     const res = await sendCheckNumber(email);
+    Swal.fire({
+      title: "이메일 인증번호 송신 완료",
+      text: "해당 이메일을 확인해주세요",
+      icon: "success",
+      showConfirmButton: false,
+    });
     setnumberOpen(true);
   };
 
@@ -387,7 +393,10 @@ export default function Signup() {
               />
             </Grid>
             {defaultPwd && !passwordValid ? (
-              <ErrorText>유효하지 않은 비밀번호입니다</ErrorText>
+              <ErrorText>
+                8~16자리 영문 대소문자, 숫자, 특수문자가 포한된 조합으로
+                만들어주세요.
+              </ErrorText>
             ) : null}
             {defaultPwd && passwordValid ? (
               <SuccessText>사용가능한 비밀번호입니다</SuccessText>
