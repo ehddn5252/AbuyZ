@@ -23,7 +23,7 @@ export default function LineData({ lineChartData, day }) {
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
         <TitleText>총 기간(일)</TitleText>
         <ResultText className="countNum" style={{ color: "#2daf43" }}>
-          {day}
+          {day.toFixed(0)}
         </ResultText>
       </TotalDiv>
     </Container>
