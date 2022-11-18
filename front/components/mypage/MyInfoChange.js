@@ -70,7 +70,8 @@ export default function MyinfoChange() {
       confirmButtonColor: "#3085d6",
       confirmButtonText: "확인",
     }).then((e) => {
-      router.push("/mypage");
+      // router.push("/mypage");
+      router.reload();
     });
   };
 
@@ -106,7 +107,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                placeholder={userId}
+                value={userId}
                 margin="normal"
                 fullWidth
                 id="id"
@@ -133,7 +134,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                placeholder={userName}
+                value={userName}
                 margin="normal"
                 fullWidth
                 id="name"
@@ -152,7 +153,7 @@ export default function MyinfoChange() {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                placeholder={userEmail}
+                value={userEmail}
                 margin="normal"
                 fullWidth
                 id="email"
@@ -185,7 +186,7 @@ export default function MyinfoChange() {
 
             <Grid item xs={6}>
               <TextField
-                placeholder={userPhone}
+                value={userPhone}
                 margin="normal"
                 fullWidth
                 id="number"
