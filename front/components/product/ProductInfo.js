@@ -162,6 +162,7 @@ export default function ProductInfo() {
     }
     setOptions(temp2);
     setOptionValue(defaulttemp);
+    console.log(temp);
     setOptionList(temp);
   };
 
@@ -244,42 +245,46 @@ export default function ProductInfo() {
         <OptionBox>
           {optionList.map((option) => (
             <Option>
-              <p style={{ width: "20%" }}>{Object.keys(option)}</p>
-              <Autocomplete
-                disablePortal
-                id={Object.keys(option)}
-                options={Object.values(option)[0]}
-                size="small"
-                fullWidth
-                renderInput={(params) => <TextField {...params} />}
-                defaultValue={Object.values(option)[0][0]}
-                onChange={(e, newInputValue) => {
-                  getOptionValue(e.target.id, newInputValue);
-                }}
-              />
+              {Object.keys(option) === "x" ? null : (
+                <p style={{ width: "20%" }}>{Object.keys(option)}</p>
+              )}
+              {Object.keys(option) === "x" ? null : (
+                <Autocomplete
+                  disablePortal
+                  id={Object.keys(option)}
+                  options={Object.values(option)[0]}
+                  size="small"
+                  fullWidth
+                  renderInput={(params) => <TextField {...params} />}
+                  defaultValue={Object.values(option)[0][0]}
+                  onChange={(e, newInputValue) => {
+                    getOptionValue(e.target.id, newInputValue);
+                  }}
+                />
+              )}
             </Option>
           ))}
-          <Option>
-            <p style={{ width: "20%" }}>수량</p>
-            <MinusIcon onClick={minus}></MinusIcon>
-            <CountDiv>
-              <p>{count}</p>
-            </CountDiv>
-            <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
-          </Option>
-
-          <Option>
-            <p style={{ width: "20%" }}>선택옵션</p>
-            {options.length ? (
-              <p>
-                {options.map((data) => (
-                  <span>{data} </span>
-                ))}
-              </p>
-            ) : (
-              <p>기본</p>
-            )}
-          </Option>
+          <Options>
+            <OptionOne>
+              <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p>
+              {options.length ? (
+                <p>
+                  {options.map((data) => (
+                    <span>{data} </span>
+                  ))}
+                </p>
+              ) : (
+                <p>기본</p>
+              )}
+            </OptionOne>
+            <OptionTwo>
+              <MinusIcon onClick={minus}></MinusIcon>
+              <CountDiv>
+                <p>{count}</p>
+              </CountDiv>
+              <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
+            </OptionTwo>
+          </Options>
         </OptionBox>
         <ResultBox>
           <TitleTag>총 금액</TitleTag>
@@ -367,14 +372,31 @@ const PriceBottom = styled.div`
 `;
 
 // Option
-const OptionBox = styled.div``;
+const OptionBox = styled.div`
+  margin-bottom: 1rem;
+`;
 
 const Option = styled.div`
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
 `;
-
+const Options = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-top: 0.5rem;
+`;
+const OptionOne = styled.div`
+  display: flex;
+  width: 80%;
+  align-items: center;
+`;
+const OptionTwo = styled.div`
+  display: flex;
+  width: 40%;
+  align-items: center;
+`;
 const MinusIcon = styled(RemoveOutlinedIcon)`
   border: 1px solid #aaaaaa;
   margin-top: 0.7rem;
@@ -385,7 +407,7 @@ const CountDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 9.5rem;
+  width: 8rem;
   margin-top: 0.7rem;
   height: 1.5rem;
   border: 1px solid #aaaaaa;
