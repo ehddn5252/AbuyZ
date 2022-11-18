@@ -53,6 +53,7 @@ export async function inquireProductStatusCount(Status) {
 
 // 상품 삭제
 export async function delProduct(productUid) {
+  console.log(productUid);
   return new Promise((resolve) => {
     https.delete(`/product/${productUid}`).then((response) => {
       if (response.status === 200) {
@@ -149,7 +150,7 @@ export async function productDetail(product_id) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("상품 상세 페이지 성공", response);
+          // console.log("상품 상세 페이지 성공", response);
           resolve(response.data);
         } else {
           console.log("상품 상세 페이지 실패", response);
@@ -166,7 +167,7 @@ export async function getStockInventory(productUid) {
   return new Promise((resolve) => {
     https.get(`/inventory/${productUid}`).then((response) => {
       if (response.status === 200) {
-        console.log("재고 목록 가져오기 성공", response);
+        // console.log("재고 목록 가져오기 성공", response);
         resolve(response.data.data);
       } else {
         console.log("재고 목록 가져오기 실패", response);

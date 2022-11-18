@@ -68,7 +68,17 @@ export default function AddCoupon() {
       end_date: moment(endDate).format().slice(0, 10),
       big_categories_uid: Number(category),
     };
-    if (category === "" || name === "" || sale === "" || !Number(sale)) {
+
+    if (sale === "" && sale !== "0") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (category === "" || name === "" || !Number(sale)) {
       Swal.fire({
         show: true,
         title: "값을 다시 입력해주세요.",

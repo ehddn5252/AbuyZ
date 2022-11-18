@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 // 컴포넌트
 import Pagination from "../../coupon/Pagination";
@@ -8,7 +9,6 @@ import EditProduct from "../edit/EditProduct";
 
 // API
 import { delProduct } from "../../../../pages/api/product";
-import { changeEdit } from "../../../../pages/api/product";
 
 // MUI
 import Grid2 from "@mui/material/Unstable_Grid2";
@@ -31,6 +31,7 @@ const header = [
 export default function InquireList(props) {
   // 조회한 상품 정보
   const productInfo = props.productInfo;
+  console.log(productInfo, "2222");
 
   // 내림차순정렬
   productInfo.sort(function (a, b) {
@@ -60,6 +61,7 @@ export default function InquireList(props) {
 
   // 체크박스 단일 선택
   const handleSingleCheck = (checked, uid) => {
+    console.log(uid, "uid");
     if (checked) {
       // 단일 선택 시 체크된 아이템을 배열에 추가
       setCheckItems((prev) => [...prev, uid]);
@@ -71,10 +73,21 @@ export default function InquireList(props) {
 
   // 선택 삭제
   const handleDel = () => {
-    checkItems.forEach((e) => delProduct(e));
-    alert("상품이 삭제되었습니다.");
-    location.reload();
+    checkItems.forEach((e) => {
+      delProduct(e), console.log(e, "EEE");
+    });
+    Swal.fire({
+      show: true,
+      title: "상품이 삭제되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    // location.reload();
   };
+
+  console.log(checkItems, ")))))");
 
   return (
     <Grid2
