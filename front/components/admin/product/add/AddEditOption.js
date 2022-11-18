@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 // API
 import axios from "axios";
@@ -236,95 +237,212 @@ export default function AddEditOption(props) {
     }
   };
 
+  // 토스트 메시지
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-center",
+    showConfirmButton: false,
+    timer: 1000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
   // 옵션 있는 상품 등록 API ------------------------------------------
   const handleAddProduct = () => {
     let formData = new FormData();
 
-    let data = {
-      smallCategoriesUid: smallCategoriesUid,
-      name: name,
-      discountRate: discountRate,
-      price: price,
-      deliveryFee: deliveryFee,
-      brandName: brandName,
-      options: options,
-      keywords: keywords,
-    };
-
-    formData.append(
-      "productCreateDto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    formData.append("file", mainImg);
-    for (let i = 0; i < extraImg.length; i++) {
-      formData.append("file", extraImg[i]);
-    }
-    formData.append("descFile", descImg);
-
-    const accessToken = sessionStorage.getItem("access-token");
-    axios.defaults.headers.common["access_token"] = accessToken;
-
-    axios
-      .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res, "상품등록에 성공!");
-        changeShow();
-        setOptionTotal(count1 * count2 * count3);
-        getStock(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err, "상품등록에 실패하였습니다.");
+    if (
+      smallCategoriesUid === 0 ||
+      name === "" ||
+      (!Number(discountRate) && discountRate !== "0") ||
+      (discountRate !== "0" && discountRate === "") ||
+      (!Number(price) && price !== "0") ||
+      (price !== "0" && price === "") ||
+      (!Number(deliveryFee) && deliveryFee !== "0") ||
+      (deliveryFee !== "0" && discountRate === "") ||
+      brandName === "" ||
+      keywords === "" ||
+      mainImg === null ||
+      descImg === null
+    ) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } else if (check === 2) {
+      if (optionName1 === "" || optionValue1 == "") {
+        Swal.fire({
+          show: true,
+          title: "값을 다시 입력해주세요.",
+          position: "top-center",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (
+        Number(optionCount) === 2 &&
+        (optionName2 === "" || optionValue2 == "")
+      ) {
+        Swal.fire({
+          show: true,
+          title: "값을 다시 입력해주세요.",
+          position: "top-center",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else if (
+        optionCount === 3 &&
+        (optionName3 === "" || optionValue3 == "")
+      ) {
+        Swal.fire({
+          show: true,
+          title: "값을 다시 입력해주세요.",
+          position: "top-center",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        let data = {
+          smallCategoriesUid: smallCategoriesUid,
+          name: name,
+          discountRate: discountRate,
+          price: price,
+          deliveryFee: deliveryFee,
+          brandName: brandName,
+          options: options,
+          keywords: keywords,
+        };
+
+        formData.append(
+          "productCreateDto",
+          new Blob([JSON.stringify(data)], { type: "application/json" })
+        );
+
+        formData.append("file", mainImg);
+        for (let i = 0; i < extraImg.length; i++) {
+          formData.append("file", extraImg[i]);
+        }
+        formData.append("descFile", descImg);
+
+        const accessToken = sessionStorage.getItem("access-token");
+        axios.defaults.headers.common["access_token"] = accessToken;
+        console.log(formData, "@@@");
+        axios
+          .post(
+            "https://k7e201.p.ssafy.io:8081/api/product/register",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+          .then((res) => {
+            Toast.fire({
+              icon: "success",
+              title: "상세 옵션을 입력해주세요.",
+            });
+
+            changeShow();
+            setOptionTotal(count1 * count2 * count3);
+            getStock(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err, "상품등록에 실패하였습니다.");
+          });
+      }
+    }
   };
 
   // 옵션 없는 상품 등록 API ------------------------------------------
   const handleNotOptionAddProduct = () => {
     let formData = new FormData();
 
-    let data = {
-      smallCategoriesUid: smallCategoriesUid,
-      name: name,
-      discountRate: discountRate,
-      price: price,
-      deliveryFee: deliveryFee,
-      brandName: brandName,
-      keywords: keywords,
-      count: stock,
-    };
-
-    formData.append(
-      "productCreateDto",
-      new Blob([JSON.stringify(data)], { type: "application/json" })
-    );
-
-    formData.append("file", mainImg);
-    for (let i = 0; i < extraImg.length; i++) {
-      formData.append("file", extraImg[i]);
-    }
-    formData.append("descFile", descImg);
-
-    const accessToken = sessionStorage.getItem("access-token");
-    axios.defaults.headers.common["access_token"] = accessToken;
-
-    axios
-      .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res, "상품등록에 성공!");
-        alert("상품이 등록되었습니다.");
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err, "상품등록에 실패하였습니다.");
+    if (
+      smallCategoriesUid === 0 ||
+      name === "" ||
+      (!Number(discountRate) && discountRate !== "0") ||
+      (discountRate !== "0" && discountRate === "") ||
+      (!Number(price) && price !== "0") ||
+      (price !== "0" && price === "") ||
+      (!Number(deliveryFee) && deliveryFee !== "0") ||
+      (deliveryFee !== "0" && discountRate === "") ||
+      brandName === "" ||
+      keywords === "" ||
+      mainImg === null ||
+      descImg === null
+    ) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
       });
+    } else if (!Number(stock) || stock === 0) {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      let data = {
+        smallCategoriesUid: smallCategoriesUid,
+        name: name,
+        discountRate: discountRate,
+        price: price,
+        deliveryFee: deliveryFee,
+        brandName: brandName,
+        keywords: keywords,
+        count: stock,
+      };
+      formData.append(
+        "productCreateDto",
+        new Blob([JSON.stringify(data)], { type: "application/json" })
+      );
+      formData.append("file", mainImg);
+      if (extraImg) {
+        for (let i = 0; i < extraImg.length; i++) {
+          formData.append("file", extraImg[i]);
+        }
+      }
+      formData.append("descFile", descImg);
+      const accessToken = sessionStorage.getItem("access-token");
+      axios.defaults.headers.common["access_token"] = accessToken;
+      axios
+        .post("https://k7e201.p.ssafy.io:8081/api/product/register", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          Swal.fire({
+            show: true,
+            title: "상품이 등록되었습니다.",
+            position: "top-center",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err, "상품등록에 실패하였습니다.");
+        });
+    }
   };
 
   // 총 옵션의 수
@@ -386,25 +504,56 @@ export default function AddEditOption(props) {
 
     const res = {};
 
+    let stop = 1;
+
     for (let i = 0; i < optionTotal; i++) {
-      res[data[i].productOptionUidString] = {
-        price: optionPrice[i],
-        count: optionStock[i],
-      };
+      if (
+        (!Number(optionPrice[i]) && optionPrice[i] !== "0") ||
+        (optionPrice[i] !== "0" && optionPrice[i] === "") ||
+        (!Number(optionStock[i]) && optionStock[i] !== "0") ||
+        (optionStock[i] !== "0" && optionStock[i] === "")
+      ) {
+        stop = 0;
+        Swal.fire({
+          show: true,
+          title: "값을 다시 입력해주세요.",
+          position: "top-center",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        res[data[i].productOptionUidString] = {
+          price: optionPrice[i],
+          count: optionStock[i],
+        };
+      }
     }
 
-    axios
-      .put("https://k7e201.p.ssafy.io:8081/api/inventory", {
-        inventory_option_list: res,
-      })
-      .then((res) => {
-        console.log(res, "재고 수정에 성공!");
-        alert("상품이 등록되었습니다.");
-        location.reload();
-      })
-      .catch((err) => {
-        console.log(err, "재고 수정에 실패하였습니다.");
-      });
+    if (stop === 1) {
+      axios
+        .put("https://k7e201.p.ssafy.io:8081/api/inventory", {
+          inventory_option_list: res,
+        })
+        .then((res) => {
+          Swal.fire({
+            show: true,
+            title: "상품이 등록되었습니다.",
+            position: "top-center",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err, "재고 수정에 실패하였습니다.");
+        });
+    }
+  };
+
+  const test = async () => {
+    const stocks = await getStockInventory(796);
   };
 
   return (
@@ -552,7 +701,7 @@ export default function AddEditOption(props) {
               }}
             >
               <RowBox>
-                <NameTitle>옵션명</NameTitle>
+                <NameTitle onClick={test}>옵션명</NameTitle>
                 <ValueTitle>옵션값</ValueTitle>
               </RowBox>
             </Grid2>
@@ -619,11 +768,7 @@ export default function AddEditOption(props) {
                 </RowBox>
               ) : null}
             </Grid2>
-            <SearchButton
-              onClick={() => {
-                handleAddProduct();
-              }}
-            >
+            <SearchButton onClick={() => handleAddProduct()}>
               상품 등록 후 상세 옵션 설정
             </SearchButton>
             {show ? (
