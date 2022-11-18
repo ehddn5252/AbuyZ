@@ -137,7 +137,7 @@ export default function SaleProductSearch() {
         }
       }
     }
-    console.log(tmp, "0000000");
+
     setProductInfo(tmp);
   };
 
@@ -148,8 +148,6 @@ export default function SaleProductSearch() {
   useEffect(() => {
     getProduct();
   }, [reset]);
-
-  console.log(productInfo, "11");
 
   return (
     <Grid2 container spacing={2} sx={{ padding: "0", margin: "0" }}>
