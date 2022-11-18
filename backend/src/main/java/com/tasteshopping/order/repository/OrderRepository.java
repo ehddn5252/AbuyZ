@@ -2,6 +2,7 @@ package com.tasteshopping.order.repository;
 
 import com.tasteshopping.order.entity.OrderLists;
 import com.tasteshopping.order.entity.Orders;
+import com.tasteshopping.user.entity.Users;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,7 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
 
     @Query("select o from Orders o join fetch o.review r where o.status=:status")
     List<Orders> findByStatus(String status);
+
+    @Query("select o from Orders o join fetch o.orderList ol left join o.review ")
+    List<Orders> findMyOrderByNoReview(Users user);
 }
