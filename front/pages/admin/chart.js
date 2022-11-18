@@ -199,7 +199,7 @@ export default function Chart() {
 
 const Container = styled.div`
   background: #edf0f5;
-  height: 88vh;
+  height: 87.5vh;
   padding-left: 15rem;
 `;
 
@@ -237,11 +237,12 @@ const LargeChart = styled.div`
 const LargeChartPage = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 95%;
 `;
 
 const LargeOnlyChart = styled.div`
   width: 70%;
+  height: 100%;
 `;
 const LargeChartExplantion = styled.div`
   width: 30%;
@@ -275,7 +276,7 @@ const ChartTitle = styled.div`
   margin: 0;
   padding: 0;
   padding-top: 0.5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 0.3rem;
   text-align: center;
   font-size: 1.2rem;
   font-weight: 1000;
@@ -288,5 +289,6 @@ const MajorTitle = styled.p`
   padding-bottom: 1rem;
   text-align: center;
   font-size: 2.5rem;
+  height: 10%;
   font-weight: 1000;
 `;

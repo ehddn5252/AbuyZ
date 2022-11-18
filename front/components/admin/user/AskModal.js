@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 // MUI
 import Box from "@mui/material/Box";
@@ -45,13 +46,31 @@ export default function AskModal({ row }) {
 
   // 리뷰 답변 작성
   const handleAnswer = () => {
-    const answer = {
-      uid: row.uid,
-      content: answerContent,
-    };
-    writeInquiryReply(answer);
-    alert("답변이 등록되었습니다.");
-    location.reload();
+    if (answerContent === "") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      const answer = {
+        uid: row.uid,
+        content: answerContent,
+      };
+      writeInquiryReply(answer);
+      Swal.fire({
+        show: true,
+        title: "답변이 등록되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      location.reload();
+    }
   };
 
   useEffect(() => {
@@ -79,7 +98,7 @@ export default function AskModal({ row }) {
           완료
         </SolvedButton>
       )}
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} sx={{ zIndex: "1000" }}>
         <Box sx={style}>
           <Grid2
             container
@@ -209,7 +228,11 @@ export default function AskModal({ row }) {
             }}
           >
             <TitleP>답변</TitleP>
-            <AnswerDiv onChange={(e) => setAnswerContent(e.target.value)} />
+            {row.reply ? (
+              <ReplyDiv>{row.reply}</ReplyDiv>
+            ) : (
+              <AnswerDiv onChange={(e) => setAnswerContent(e.target.value)} />
+            )}
           </Grid2>
 
           <Grid2
@@ -221,13 +244,15 @@ export default function AskModal({ row }) {
             }}
           >
             <RefusalButton onClick={handleClose}>취소</RefusalButton>
-            <AcceptButton
-              onClick={() => {
-                handleAnswer();
-              }}
-            >
-              답변 등록
-            </AcceptButton>
+            {row.reply ? null : (
+              <AcceptButton
+                onClick={() => {
+                  handleAnswer();
+                }}
+              >
+                답변 등록
+              </AcceptButton>
+            )}
           </Grid2>
         </Box>
       </Modal>
@@ -244,6 +269,15 @@ const TitleP = styled.p`
 `;
 
 const AnswerDiv = styled.textarea`
+  width: 90%;
+  height: 10rem;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+`;
+
+const ReplyDiv = styled.div`
+  padding: 1rem;
   width: 90%;
   height: 10rem;
   font-size: 1rem;

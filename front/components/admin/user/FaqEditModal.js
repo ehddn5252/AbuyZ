@@ -1,33 +1,91 @@
 import React, { useState } from "react";
 
 import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
+import Swal from "sweetalert2";
+
 // API
 import { updateFAQ, deleteFAQ } from "../../../pages/api/faq";
 
 // Next.js
 import { useRouter } from "next/router";
-export default function FaqEditModal({ faq }) {
+
+export default function FaqEditModal({ faq, setOpenUid }) {
   const router = useRouter();
   const [title, setTitle] = useState(faq.question);
   const [content, setContent] = useState(faq.answer);
   const updatefaq = () => {
-    const faqDto = {
-      question: title,
-      answer: content,
-    };
-    updateFAQ(faq.uid, faqDto);
-    router.reload();
+    if (title === "" || content === "") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      const faqDto = {
+        question: title,
+        answer: content,
+      };
+      console.log(faqDto);
+      updateFAQ(faq.uid, faqDto);
+      Swal.fire({
+        show: true,
+        title: "FAQ가 수정되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      router.reload();
+    }
   };
 
   const deletefaq = () => {
     deleteFAQ(faq.uid);
+    Swal.fire({
+      show: true,
+      title: "FAQ가 삭제되었습니다.",
+      position: "top-center",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     router.reload();
   };
 
   return (
-    <Container>
-      <h1 style={{ margin: 0 }}>상세 FAQ</h1>
+    <Container style={{ display: "flex" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          marginBottom: "2rem",
+        }}
+      >
+        <h2
+          style={{
+            paddingLeft: "2rem",
+            margin: "0",
+            paddingTop: "2rem",
+            paddingBottom: "1rem",
+          }}
+        >
+          쿠폰 수정
+        </h2>
+        <CloseIcon
+          onClick={() => setOpenUid(0)}
+          sx={{
+            cursor: "pointer",
+            marginRight: "2rem",
+            marginTop: "2rem",
+          }}
+        />
+      </div>
       <hr />
       <ContentBox sx={{ display: "flex" }}>
         <TitleBox>FAQ 명</TitleBox>
@@ -48,10 +106,14 @@ export default function FaqEditModal({ faq }) {
         ></ContentTextarea>
       </ContentBox>
       <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <EditButton onClick={updatefaq}>수정</EditButton>
         <DeleteButton onClick={deletefaq}>삭제</DeleteButton>
+        <EditButton onClick={updatefaq}>수정</EditButton>
       </Box>
     </Container>
   );
@@ -79,8 +141,9 @@ const ContentBox = styled.div`
 
 const TitleBox = styled.p`
   font-weight: bold;
-  width: 30%;
-  font-size: 2rem;
+  width: 25%;
+  font-size: 1.5rem;
+  margin-left: 1rem;
 `;
 
 const ContentInput = styled.input`
@@ -93,6 +156,7 @@ const ContentTextarea = styled.textarea`
   width: 70%;
   font-size: 1rem;
   height: 8rem;
+  margin-top: 2rem;
 `;
 
 const EditButton = styled.button`
@@ -105,10 +169,12 @@ const EditButton = styled.button`
   border: none;
   cursor: pointer;
   margin-bottom: 2rem;
+  margin-left: 1rem;
 `;
 
 const DeleteButton = styled.button`
   width: 8rem;
+  margin-right: 1rem;
   height: 2.5rem;
   font-size: 1.3rem;
   margin-top: 2rem;

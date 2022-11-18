@@ -44,20 +44,31 @@ export default function ReviewModal({ row }) {
 
   // 리뷰 답변 작성
   const handleAnswer = () => {
-    const answer = {
-      review_uid: row.uid,
-      content: answerContent,
-    };
-    replyReview(answer);
-    Swal.fire({
-      show: true,
-      title: "답변이 등록되었습니다.",
-      position: "top-center",
-      icon: "success",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    location.reload();
+    if (answerContent === "") {
+      Swal.fire({
+        show: true,
+        title: "값을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      const answer = {
+        review_uid: row.uid,
+        content: answerContent,
+      };
+      replyReview(answer);
+      Swal.fire({
+        show: true,
+        title: "답변이 등록되었습니다.",
+        position: "top-center",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      location.reload();
+    }
   };
 
   return (
