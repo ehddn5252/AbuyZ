@@ -212,16 +212,19 @@ export default function ProductInfo() {
         </TitleBox>
         <PriceBox>
           <PriceTop>
-            <p
-              style={{
-                margin: 0,
-                color: "#56A9F1",
-                marginRight: "0.5rem",
-                fontSize: "1.1rem ",
-              }}
-            >
-              {product.products.discountRate}%
-            </p>
+            {product.products.discountRate === 0 ? null : (
+              <p
+                style={{
+                  margin: 0,
+                  color: "#56A9F1",
+                  marginRight: "0.5rem",
+                  fontSize: "1.1rem ",
+                }}
+              >
+                {product.products.discountRate}%
+              </p>
+            )}
+
             <p style={{ margin: 0 }}>
               {(
                 product.products.price -
@@ -231,15 +234,17 @@ export default function ProductInfo() {
             </p>
           </PriceTop>
           <PriceBottom>
-            <p
-              style={{
-                margin: 0,
-                marginRight: "0.5rem",
-                textDecoration: "line-through",
-              }}
-            >
-              {product.products.price.toLocaleString("ko-KR")}원
-            </p>
+            {product.products.discountRate === 0 ? null : (
+              <p
+                style={{
+                  margin: 0,
+                  marginRight: "0.5rem",
+                  textDecoration: "line-through",
+                }}
+              >
+                {product.products.price.toLocaleString("ko-KR")}원
+              </p>
+            )}
           </PriceBottom>
         </PriceBox>
         <OptionBox>
@@ -363,6 +368,7 @@ const PriceBox = styled.div`
 
 const PriceTop = styled.div`
   display: flex;
+  align-items: flex-end;
   font-size: 1.8rem;
 `;
 const PriceBottom = styled.div`
