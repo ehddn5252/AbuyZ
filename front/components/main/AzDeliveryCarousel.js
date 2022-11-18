@@ -106,13 +106,14 @@ const Flexfive = styled.div`
   align-items: flex-end;
 `;
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
   height: 30rem;
-  width: 70rem;
-  margin-left: 25rem;
+  width: 100%;
 `;
 const BuContainer = styled.div`
   height: 100%;
-  width: 100%;
+  width: 70rem;
 `;
 const DiscountContainer = styled.div`
   margin-top: 1rem;
