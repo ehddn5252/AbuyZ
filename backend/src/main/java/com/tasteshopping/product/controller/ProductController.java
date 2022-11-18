@@ -2,6 +2,7 @@ package com.tasteshopping.product.controller;
 
 import com.tasteshopping.common.dto.BaseRes;
 import com.tasteshopping.product.dto.*;
+import com.tasteshopping.product.exception.InputIsNotCorrectException;
 import com.tasteshopping.product.exception.NoAuthorizationException;
 import com.tasteshopping.product.exception.OptionNotFoundException;
 import com.tasteshopping.product.exception.ProductNotFoundException;
@@ -176,7 +177,12 @@ public class ProductController {
                                             @RequestPart(name = "file", required = false) MultipartFile[] multipartFiles,
                                             @RequestPart(name = "descFile", required = false) MultipartFile descriptionImg
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles, descriptionImg));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.createProductRelated(productCreateDto, multipartFiles, descriptionImg));
+        }
+        catch (InputIsNotCorrectException e){
+            return e.baseResResponseEntity;
+        }
     }
 
 

@@ -3,6 +3,8 @@ package com.tasteshopping.order.dto;
 import lombok.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class CanWriteReviewDto {
     String title;
-    String optionName;
+    HashMap<String, List> productOptionListMap;
     String repImg;
     Date orderDate;
 }
