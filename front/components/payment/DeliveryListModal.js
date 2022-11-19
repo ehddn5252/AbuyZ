@@ -165,6 +165,7 @@ const Button = styled.button`
   height: 3rem;
   width: 7rem;
   font-size: 1.2rem;
+  cursor: pointer;
 `;
 
 const CloseIconDiv = styled.div`

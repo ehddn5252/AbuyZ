@@ -99,4 +99,5 @@ const Button = styled.button`
   height: 2rem;
   width: 7rem;
   font-weight: bold;
+  cursor: pointer;
 `;

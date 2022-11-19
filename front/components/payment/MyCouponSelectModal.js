@@ -195,6 +195,7 @@ const Button = styled.button`
   height: 3rem;
   width: 9rem;
   font-size: 1.2rem;
+  cursor: pointer;
 `;
 
 const NoButton = styled.button`
@@ -206,6 +207,7 @@ const NoButton = styled.button`
   width: 9rem;
   font-size: 1.2rem;
   color: #56a9f1;
+  cursor: pointer;
 `;
 
 const TextDiv = styled.div`
