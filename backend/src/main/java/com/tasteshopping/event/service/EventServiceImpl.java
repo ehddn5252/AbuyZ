@@ -105,8 +105,8 @@ public class EventServiceImpl implements EventService{
         }
 
         Events event = events.get();
-        if(event.getContentImgUrl()!=null)imageUploadService.delete(event.getContentImgUrl());
-        if(event.getThumbnail()!=null)imageUploadService.delete(event.getThumbnail());
+        if(content_img!=null&&event.getContentImgUrl()!=null)imageUploadService.delete(event.getContentImgUrl());
+        if(thumbnail!=null&&event.getThumbnail()!=null)imageUploadService.delete(event.getThumbnail());
 
         updateEventDto(thumbnail,content_img,eventDto,responseDto);
         event.update(eventDto);
