@@ -132,26 +132,6 @@ public class Products {
                 .build();
     }
 
-    public ProductDto toDto2() {
-
-        return ProductDto.builder()
-                .uid(uid)
-                .name(name)
-                .status(status)
-                .discountRate(discountRate)
-                .deliveryFee(deliveryFee)
-                .descriptionImg(descriptionImg)
-                .smallCategoryName(smallCategory.getSmallCategoryName())
-                .brandName(brand.getName())
-                .repImg(repImg)
-                .price(price)
-                .reviewRate(reviewRate)
-                .uid(uid)
-                .date(createdDate)
-                .bigCategoryUid(smallCategory.getBigCategory().getUid())
-                .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
-                .build();
-    }
     public ProductDto toDto() {
 
         return ProductDto.builder()
