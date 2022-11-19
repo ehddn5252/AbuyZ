@@ -33,7 +33,7 @@ export const options = {
     },
     title: {
       display: false,
-      text: "Chart.js Bar Chart - Stacked",
+      text: "장바구니 그래프",
     },
   },
   responsive: true,
@@ -47,39 +47,6 @@ export const options = {
   },
 };
 
-const labels = ["식품", "의류", "가전제품", "전자기기", "뷰티"];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [30, 20, 10, 2, 50],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-    {
-      label: "Dataset 2",
-      data: [10, 20, 50, 2, 10],
-      backgroundColor: "rgb(75, 192, 192)",
-    },
-    {
-      label: "Dataset 3",
-      data: [10, 50, 1, 20, 0],
-      backgroundColor: "rgb(53, 162, 235)",
-    },
-    {
-      label: "Dataset 2",
-      data: [5, 5, 5, 5, 5],
-      backgroundColor: "rgb(75, 192, 192)",
-    },
-    {
-      label: "Dataset 3",
-      data: [10, 10, 10, 52, 10],
-      backgroundColor: "rgb(53, 162, 235)",
-    },
-  ],
-};
-
 export default function StackChart({ stackChartData }) {
   const [stackLabel, setStackLabel] = useState("");
   const [data1, setData1] = useState("");
@@ -87,15 +54,103 @@ export default function StackChart({ stackChartData }) {
   const [data3, setData3] = useState("");
   const [data4, setData4] = useState("");
   const [data5, setData5] = useState("");
+  const [label1, setlabel1] = useState("");
+  const [label2, setlabel2] = useState("");
+  const [label3, setlabel3] = useState("");
+  const [label4, setlabel4] = useState("");
+  const [label5, setlabel5] = useState("");
 
+  const labels = ["식품", "의류", "가전제품", "전자기기", "뷰티"];
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: stackLabel[0],
+        data: data1,
+        backgroundColor: "rgb(53, 162, 235)",
+      },
+      {
+        label: stackLabel[1],
+        data: data2,
+        backgroundColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: stackLabel[2],
+        data: data3,
+        backgroundColor: "rgb(255, 99, 132)",
+      },
+      {
+        label: stackLabel[3],
+        data: data4,
+        backgroundColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: stackLabel[4],
+        data: data5,
+        backgroundColor: "rgb(53, 162, 235)",
+      },
+    ],
+  };
   useEffect(() => {
-    console.log(stackChartData);
+    if (stackChartData) {
+      let tempLabel = [];
+      let count = 0;
+      let tempData1 = [];
+      let tempData2 = [];
+      let tempData3 = [];
+      let tempData4 = [];
+      let tempData5 = [];
+      for (let [key, value] of Object.entries(stackChartData)) {
+        let stempLabel = [];
+        tempLabel.push(key);
+        let count2 = 0;
+        for (let [skey, svalue] of Object.entries(value.smallCategories)) {
+          stempLabel.push(skey);
+          if (count2 === 0) {
+            tempData1.push(svalue);
+          } else if (count2 === 1) {
+            tempData2.push(svalue);
+          } else if (count2 === 2) {
+            tempData3.push(svalue);
+          } else if (count2 === 3) {
+            tempData4.push(svalue);
+          } else if (count2 === 4) {
+            tempData5.push(svalue);
+          }
+          count2 += 1;
+        }
+
+        if (count === 0) {
+          setlabel1(stempLabel);
+        } else if (count === 1) {
+          setlabel2(stempLabel);
+        } else if (count === 2) {
+          setlabel3(stempLabel);
+        } else if (count === 3) {
+          setlabel4(stempLabel);
+        } else if (count === 4) {
+          setlabel5(stempLabel);
+        }
+        count += 1;
+        if (count === 5) {
+          setStackLabel(tempLabel);
+        }
+      }
+      console.log(tempData1, tempData2, tempData3, tempData4, tempData5);
+      setData1(tempData1);
+      setData2(tempData2);
+      setData3(tempData3);
+      setData4(tempData4);
+      setData5(tempData5);
+    }
   }, [stackChartData]);
-  return (
+  console.log(stackLabel);
+  return stackChartData ? (
     <Container>
       <Bar options={options} data={data} />
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`
