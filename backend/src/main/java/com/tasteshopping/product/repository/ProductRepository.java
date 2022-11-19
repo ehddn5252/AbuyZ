@@ -84,4 +84,14 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
             "limit 20", nativeQuery = true)
     List<Products> findByRand();
 
+
+
+    @Query("select distinct(p) " +
+            "from Products p " +
+            "left join Reviews r on r.product = p " +
+            "join fetch Inventories i on i.product=p " +
+            "join fetch SmallCategories s on p.smallCategory=s " +
+            "join fetch BigCategories bc on s.bigCategory=bc " +
+            "join fetch Brands b on p.brand =b where p.uid IN (:uids)")
+    List<Products> findByProductUidIn(List<Integer> uids);
 }

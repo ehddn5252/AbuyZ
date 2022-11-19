@@ -40,7 +40,7 @@ public class Orders {
     @JoinColumn(name = "inventories_uid")
     Inventories inventory;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<CustomerCenters> customerCenters;
 
 
