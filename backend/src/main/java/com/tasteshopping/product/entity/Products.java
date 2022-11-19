@@ -152,6 +152,20 @@ public class Products {
                 .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
                 .build();
     }
+    static public ProductDto setProductDtoReview(Products product){
+        ProductDto productDto = product.toDto();
+        List<Reviews> reviews = product.getReviews();
+        productDto.setReviewNum(reviews.size());
+        Float reviewRate = 0f;
+        for(int j=0;j<reviews.size();++j){
+            reviewRate+=reviews.get(j).getRating();
+        }
+        reviewRate/=reviews.size();
+        reviewRate = (int)(reviewRate * 100) /100f;
+        productDto.setReviewNum(reviews.size());
+        productDto.setReviewRate(reviewRate);
+        return productDto;
+    }
 
     public void modifyEntity(ProductCreateDto p, SmallCategories smallCategory, Brands brand) {
         this.name= p.getName();
