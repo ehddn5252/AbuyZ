@@ -29,15 +29,15 @@ public class Inventories {
     @Column(name = "product_option_list")
     String productOptionList;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "products_uid")
     Products product;
 
     // 양방향 설정해주기
-    @OneToMany(mappedBy = "inventory")
+    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
     List<Carts> cartsList;
 
-    @OneToMany(mappedBy = "inventory",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "inventory",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Orders> ordersList;
 
     public InventoryDto toDto(){

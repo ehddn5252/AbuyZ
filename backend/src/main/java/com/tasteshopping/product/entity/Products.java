@@ -8,6 +8,7 @@ import com.tasteshopping.product.dto.ProductCreateDto;
 import com.tasteshopping.product.dto.ProductCreateModifyDto;
 import com.tasteshopping.product.dto.ProductDto;
 import com.tasteshopping.review.entity.Reviews;
+import com.tasteshopping.wish.entity.WishLists;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,6 +17,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 
 @Entity
@@ -84,8 +87,12 @@ public class Products {
     @OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProductOptions> productOptions;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Reviews> reviews;
+
+    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<WishLists> wishLists;
+
 
     public void addReview(Reviews review){
         reviews.add(review);
@@ -125,7 +132,26 @@ public class Products {
                 .build();
     }
 
+    public ProductDto toDto2() {
 
+        return ProductDto.builder()
+                .uid(uid)
+                .name(name)
+                .status(status)
+                .discountRate(discountRate)
+                .deliveryFee(deliveryFee)
+                .descriptionImg(descriptionImg)
+                .smallCategoryName(smallCategory.getSmallCategoryName())
+                .brandName(brand.getName())
+                .repImg(repImg)
+                .price(price)
+                .reviewRate(reviewRate)
+                .uid(uid)
+                .date(createdDate)
+                .bigCategoryUid(smallCategory.getBigCategory().getUid())
+                .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
+                .build();
+    }
     public ProductDto toDto() {
 
         return ProductDto.builder()

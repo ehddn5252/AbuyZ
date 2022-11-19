@@ -1006,19 +1006,24 @@ public class ProductServiceImpl implements ProductService {
         List<Products> l = productRepository.findAllFetchJoinWithReview();
         List<ProductDto> new_l = new ArrayList<>();
         for (int i = 0; i < l.size(); ++i) {
-            ProductDto productDto = l.get(i).toDto();
-            List<Reviews> reviews = l.get(i).getReviews();
-            productDto.setReviewNum(reviews.size());
-            Float reviewRate = 0f;
-            for(int j=0;j<reviews.size();++j){
-                reviewRate+=reviews.get(j).getRating();
-            }
-            reviewRate/=reviews.size();
-            reviewRate = (int)(reviewRate * 100) /100f;
-            productDto.setReviewNum(reviews.size());
-            productDto.setReviewRate(reviewRate);
+            ProductDto productDto = setProductDtoReview(l.get(i));
             new_l.add(productDto);
         }
         return new_l;
+    }
+
+    public ProductDto setProductDtoReview(Products product){
+        ProductDto productDto = product.toDto();
+        List<Reviews> reviews = product.getReviews();
+        productDto.setReviewNum(reviews.size());
+        Float reviewRate = 0f;
+        for(int j=0;j<reviews.size();++j){
+            reviewRate+=reviews.get(j).getRating();
+        }
+        reviewRate/=reviews.size();
+        reviewRate = (int)(reviewRate * 100) /100f;
+        productDto.setReviewNum(reviews.size());
+        productDto.setReviewRate(reviewRate);
+        return productDto;
     }
 }

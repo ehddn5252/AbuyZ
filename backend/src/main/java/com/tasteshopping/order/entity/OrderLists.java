@@ -39,7 +39,7 @@ public class OrderLists {
     @JoinColumn(name="users_uid")
     Users user;
 
-    @OneToMany(mappedBy = "orderList",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "orderList",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Orders> orders;
 
     String Status;
