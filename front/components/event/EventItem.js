@@ -58,15 +58,14 @@ const CardDiv = styled.div`
   justify-content: center;
   width: 63rem;
   align-items: center;
-  border: #393e46 1px solid;
-  margin-top: 3rem;
+  margin-top: 1rem;
 `;
 
 const DateDiv = styled.div`
   display: flex;
   background-color: #f8f8f8;
   justify-content: flex-start;
-  padding: 1rem;
+  padding: 0.5rem;
   padding-left: 2rem;
   width: 100%;
 `;

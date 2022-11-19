@@ -8,6 +8,7 @@ import Pagination from "@mui/material/Pagination";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ReportIcon from "@mui/icons-material/Report";
+import SubdirectoryArrowRightIcon from "@mui/icons-material/SubdirectoryArrowRight";
 // StyledComponents
 import styled from "styled-components";
 
@@ -22,6 +23,7 @@ import {
   likereview,
   dellikereview,
 } from "../../pages/api/review";
+import { height } from "@mui/system";
 
 export default function ProductReview() {
   const [productId, setProductId] = useState("");
@@ -114,9 +116,11 @@ export default function ProductReview() {
   }, [page]);
   return reviewList.length ? (
     <Container id="reviewView">
-      <h1 style={{ fontSize: "3rem" }}>
+      <h1 style={{ fontSize: "2.5rem" }}>
         리뷰<span style={{ fontSize: "1.5rem" }}>({total})</span>
       </h1>
+      <span>후기 작성은 배송완료일로부터 30일 이내 가능합니다.</span>
+      <br></br>
       <TotalReivew>
         <LeftBox>
           <Rating
@@ -203,12 +207,6 @@ export default function ProductReview() {
       </TotalReivew>
       <PhotoReivew>
         <TitleBox>
-          <h1
-            style={{ fontSize: "3rem", textAlign: "start", fontWeight: "1000" }}
-          >
-            포토리뷰
-            <span style={{ fontSize: "1.5rem" }}>({photoList.totalCnt})</span>
-          </h1>
           {photoList.dto.length > 5 ? (
             <p style={{ textDecoration: "underline" }}>전체보기</p>
           ) : null}
@@ -221,108 +219,87 @@ export default function ProductReview() {
         </PhotoList>
       </PhotoReivew>
 
-      <ReviewList>
+      <ReviewItem>
         {reviewList.map((data, idx) => (
-          <ReviewItem key={idx}>
-            <TitleBox>
-              <h1 style={{ marginTop: 0 }}>{data.nickName}</h1>
-              <div style={{ display: "flex" }}>
-                <div onClick={(e) => reportReviewItem(data.id)}>
-                  <ReportIcon
-                    color="error"
-                    sx={{
-                      fontSize: "2rem",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </div>
-            </TitleBox>
-            <ReviewContent>
-              <Rating
-                name="text-feedback"
-                value={data.rating}
-                readOnly
-                precision={0.5}
-                emptyIcon={
-                  <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
-                }
-              />
-              <p
-                style={{
-                  margin: 0,
-                  marginTop: "0.3rem",
-                  marginLeft: "2rem",
-                }}
-              >
-                {data.date.slice(0, 10)}
-              </p>
-            </ReviewContent>
-
-            <ReviewContent>
-              <ReviewInfo>
-                <p>
-                  <span>옵션 : </span>
-                  {data.options.map((option, idx) => (
-                    <span key={idx}>{Object.values(option)} </span>
-                  ))}
-                </p>
-                <p>{data.content}</p>
-              </ReviewInfo>
-              <ReviewImg>
-                <img
-                  src={data.imgUrl}
-                  style={{
-                    width: "12rem",
-                    height: "12rem",
-                    objectFit: "cover",
-                    border: "1px black solid",
-                  }}
+          <div key={idx}>
+            <ReviewList>
+              <div style={{ flex: 2 }}>
+                <NickName>{data.nickName}</NickName>
+                <br></br>
+                <br></br>
+                <Rating
+                  name="text-feedback"
+                  value={data.rating}
+                  readOnly
+                  precision={0.5}
+                  emptyIcon={
+                    <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+                  }
                 />
-              </ReviewImg>
-            </ReviewContent>
-            <IconBox>
-              <ChatOutlinedIcon sx={{ fontSize: "2.3rem" }} />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <span style={{ fontSize: "1rem" }}>
-                  {data.likeCount} 명에게 도움이 됐어요.
-                </span>
-                {data.like ? (
-                  <div onClick={(e) => changeLike(data.like, data.id)}>
-                    <ThumbUpAltOutlinedIcon
-                      sx={{
-                        fontSize: "3rem",
-                        paddingLeft: "1rem",
-                        color: "red",
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div onClick={(e) => changeLike(data.like, data.id)}>
-                    <ThumbUpAltOutlinedIcon
-                      sx={{ fontSize: "3rem", paddingLeft: "1rem" }}
-                    />
-                  </div>
-                )}
+                <br></br>
+                <br></br>
+                <Date>{data.date.slice(0, 10)}</Date>
               </div>
-            </IconBox>
-            {data.reply ? <ReplyBox>{data.replyContent}</ReplyBox> : null}
-          </ReviewItem>
-        ))}
+              <div style={{ flex: 8 }}>
+                <ReviewInfo>
+                  <span style={{ color: "#aaaaaa" }}>
+                    [
+                    {data.options.map((option, idx) => (
+                      <span key={idx}>{Object.values(option)} </span>
+                    ))}
+                    ]
+                  </span>
+                  <p>{data.content}</p>
+                  {data.imgUrl === null ? null : (
+                    <ReviewImg>
+                      <Img
+                        src={data.imgUrl}
+                        onClick={() => window.open(data.imgUrl)}
+                      />
+                    </ReviewImg>
+                  )}
+                  {data.reply ? (
+                    <ReviewContent>
+                      <SubdirectoryArrowRightIcon
+                        style={{ position: "absolute", top: "25%", left: "2%" }}
+                      ></SubdirectoryArrowRightIcon>
 
-        <Pagination
-          page={page}
-          onChange={changePage}
-          count={totalPage}
-          size="large"
-        />
-      </ReviewList>
+                      <p>{data.replyContent}</p>
+                    </ReviewContent>
+                  ) : null}
+                </ReviewInfo>
+              </div>
+              <div style={{ flex: 2, paddingLeft: "1rem" }}>
+                <Report onClick={(e) => reportReviewItem(data.id)}>
+                  <span>😒신고</span>
+                </Report>
+                <Good>
+                  {data.like ? (
+                    <div onClick={(e) => changeLike(data.like, data.id)}>
+                      <span>😍도움 </span>
+                      <span>{data.likeCount}</span>
+                    </div>
+                  ) : (
+                    <div onClick={(e) => changeLike(data.like, data.id)}>
+                      <span>😍도움 </span>
+                      <span>0</span>
+                    </div>
+                  )}
+                </Good>
+              </div>
+            </ReviewList>
+            <Hr></Hr>
+          </div>
+        ))}
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Pagination
+            page={page}
+            onChange={changePage}
+            count={totalPage}
+            size="large"
+          />
+        </div>
+      </ReviewItem>
     </Container>
   ) : (
     <Container id="reviewView">
@@ -338,7 +315,6 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 1rem;
-  margin-top: 2rem;
   margin-bottom: 2rem;
 `;
 
@@ -372,6 +348,7 @@ const ScoreBox = styled.div`
 const BarDiv = styled.div`
   height: 1rem;
   width: 40%;
+  border: 1px solid rgb(170, 170, 170, 0.5);
 `;
 const PhotoReivew = styled.div`
   width: 100%;
@@ -388,41 +365,78 @@ const PhotoList = styled.div`
 `;
 
 const PhotoImg = styled.img`
-  width: 13rem;
-  height: 13rem;
+  width: 8rem;
+  height: 8rem;
   object-fit: cover;
   margin: 0.5rem;
-  border: 1px black solid;
 `;
 
 const ReviewList = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  flex-direction: row;
+  min-height: 150;
+  padding: 1rem;
 `;
 
 const ReviewItem = styled.div`
-  width: 100%;
-  height: auto;
-  padding-top: 2rem;
-  padding-bottom: 1.5rem;
+  margin-top: 3rem;
 `;
 
+const NickName = styled.span`
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
+const Date = styled.span`
+  margin: 0;
+  margin-top: 0.3rem;
+  color: #aaaaaa;
+`;
+
+const Img = styled.img`
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+`;
 const ReviewContent = styled.div`
-  display: flex;
+  background-color: rgb(120, 120, 120, 0.2);
+  padding: 1rem;
+  padding-left: 2.5rem;
+  border-radius: 5px;
+  position: relative;
 `;
 
 const ReviewInfo = styled.div`
-  width: 75%;
+  width: 100%;
   height: auto;
 `;
 
 const ReviewImg = styled.div`
   width: 25%;
-  padding-left: 3rem;
   height: auto;
+`;
+
+const Report = styled.div`
+  display: flex;
+  justify-content: center;
+  border: 1px solid #aaaaaa;
+  width: 6rem;
+  border-radius: 15px;
+`;
+
+const Good = styled.div`
+  display: flex;
+  justify-content: center;
+  border: 1px solid #aaaaaa;
+  width: 6rem;
+  border-radius: 15px;
+  margin-top: 1rem;
+`;
+
+const Hr = styled.hr`
+  border: solid 1px rgb(170, 170, 170, 0.3);
+  width: 95%;
 `;
 const IconBox = styled.div`
   display: flex;

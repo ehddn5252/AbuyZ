@@ -17,8 +17,8 @@ export default function AzDeliveryCarousel() {
   const settings = {
     // dots: true,
     infinite: true,
-    // autoplay: true,
-    // autoplayspeed: 300,
+    autoplay: true,
+    autoplayspeed: 300,
     slidesToShow: 4,
     slidesToScroll: 4,
   };
