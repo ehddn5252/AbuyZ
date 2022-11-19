@@ -13,6 +13,7 @@ import ProductReview from "../../components/product/ProductReview";
 import ProductInfo from "../../components/product/ProductInfo";
 import ExchangeReturn from "../../components/product/ExchangeReturn";
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
+import ArrowDropUpTwoToneIcon from "@mui/icons-material/ArrowDropUpTwoTone";
 // 스크롤
 import { Link } from "react-scroll";
 
@@ -21,10 +22,11 @@ export default function Detail() {
   const [month, setMonth] = useState("");
   useEffect(() => {
     let temp = new Date();
+    console.log(temp);
     setDay(temp.getDate());
-    setMonth(temp.getMonth());
+    setMonth(temp.getMonth() + 1);
   }, []);
-
+  console.log(day, month);
   const scrollTop = () => {
     window.scrollTo(0, 0);
   };
@@ -71,7 +73,9 @@ export default function Detail() {
         <ExchangeReturn />
       </div>
       <ScrollBox onClick={scrollTop}>
-        <ArrowCircleUpOutlinedIcon sx={{ fontSize: "3rem" }} />
+        <ArrowCircleUpOutlinedIcon
+          sx={{ fontSize: "3rem", color: "#56a9f1" }}
+        />
       </ScrollBox>
     </Container>
   );

@@ -21,7 +21,12 @@ export default function ProductItem({ product }) {
         <img
           onClick={goDetail}
           src={product.repImg}
-          style={{ width: "15rem", height: "17rem", objectFit: "cover" }}
+          style={{
+            width: "15rem",
+            height: "17rem",
+            objectFit: "cover",
+            border: "1px solid rgb(170, 170, 170, 0.5)",
+          }}
         />
       </ImgBox>
       <ContentBox>
@@ -57,9 +62,10 @@ export default function ProductItem({ product }) {
                 </CardDiscountCont>
                 <Flexfive>
                   <CardPrice>
-                    {(product.price * ((100 - product.discountRate) / 100))
-                      .toFixed(0)
-                      .toLocaleString("ko-KR")}
+                    {(
+                      product.price *
+                      ((100 - product.discountRate) / 100)
+                    ).toLocaleString("ko-KR", { maximumFractionDigits: 0 })}
                     원
                   </CardPrice>
                 </Flexfive>
