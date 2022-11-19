@@ -193,7 +193,7 @@ export default function Payment() {
   // 장바구니 상품 결제 승인
   const ApprovalBasket = async (pg_token) => {
     const headers = {
-      Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
+      Authorization: "KakaoAK 8f5016aaaee43d4b35b159c439e8d99c",
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     };
     await axios
