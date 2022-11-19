@@ -19,7 +19,7 @@ import { useRecoilState } from "recoil";
 export default function BasketPayment() {
   const router = useRouter();
   const [basketList, setBasketList] = useRecoilState(basketProducts);
-  const [paymentValue, setpaymentValue] = useRecoilState(basketProducts);
+  const [paymentValue, setpaymentValue] = useRecoilState(paymentProduct);
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
