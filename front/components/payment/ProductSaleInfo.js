@@ -242,6 +242,7 @@ const SelectButton = styled.button`
   color: #56a9f1;
   border: 1px solid #56a9f1;
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const Title = styled.span`
