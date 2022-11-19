@@ -328,8 +328,10 @@ export default function AddEditOption(props) {
         );
 
         formData.append("file", mainImg);
-        for (let i = 0; i < extraImg.length; i++) {
-          formData.append("file", extraImg[i]);
+        if (extraImg) {
+          for (let i = 0; i < extraImg.length; i++) {
+            formData.append("file", extraImg[i]);
+          }
         }
         formData.append("descFile", descImg);
 
@@ -351,7 +353,6 @@ export default function AddEditOption(props) {
               icon: "success",
               title: "상세 옵션을 입력해주세요.",
             });
-
             changeShow();
             setOptionTotal(count1 * count2 * count3);
             getStock(res.data.data);
