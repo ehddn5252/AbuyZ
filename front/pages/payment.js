@@ -50,9 +50,9 @@ export default function Payment() {
 
   const KakaoPay = () => {
     if (paymentValue === "") {
-      PaymentKakao();
-    } else {
       BasketKakao();
+    } else {
+      PaymentKakao();
     }
   };
 
@@ -77,6 +77,9 @@ export default function Payment() {
           approval_url: "https://k7e201.p.ssafy.io/payment",
           fail_url: "https://k7e201.p.ssafy.io/payment",
           cancel_url: "https://k7e201.p.ssafy.io/payment",
+          // approval_url: "http://localhost:3000/payment",
+          // fail_url: "http://localhost:3000/payment",
+          // cancel_url: "http://localhost:3000/payment",
         },
         {
           headers,
@@ -172,6 +175,9 @@ export default function Payment() {
           approval_url: "https://k7e201.p.ssafy.io/payment",
           fail_url: "https://k7e201.p.ssafy.io/payment",
           cancel_url: "https://k7e201.p.ssafy.io/payment",
+          // approval_url: "http://localhost:3000/payment",
+          // fail_url: "http://localhost:3000/payment",
+          // cancel_url: "http://localhost:3000/payment",
         },
         {
           headers,
