@@ -42,8 +42,8 @@ export default function StackData({ stackChartData }) {
               bestValue2 = value;
               bestCatergory2 = key;
             } else {
-              if (value.totalCount > bestValue2) {
-                bestValue2 = value.totalCount;
+              if (value > bestValue2) {
+                bestValue2 = value;
                 bestCatergory2 = key;
               }
             }

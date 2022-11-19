@@ -54,39 +54,34 @@ export default function StackChart({ stackChartData }) {
   const [data3, setData3] = useState("");
   const [data4, setData4] = useState("");
   const [data5, setData5] = useState("");
-  const [label1, setlabel1] = useState("");
-  const [label2, setlabel2] = useState("");
-  const [label3, setlabel3] = useState("");
-  const [label4, setlabel4] = useState("");
-  const [label5, setlabel5] = useState("");
 
-  const labels = ["식품", "의류", "가전제품", "전자기기", "뷰티"];
+  const labels = stackLabel;
 
   const data = {
     labels,
     datasets: [
       {
-        label: stackLabel[0],
+        label: "소분류 1",
         data: data1,
         backgroundColor: "rgb(53, 162, 235)",
       },
       {
-        label: stackLabel[1],
+        label: "소분류 2",
         data: data2,
         backgroundColor: "rgb(75, 192, 192)",
       },
       {
-        label: stackLabel[2],
+        label: "소분류 3",
         data: data3,
         backgroundColor: "rgb(255, 99, 132)",
       },
       {
-        label: stackLabel[3],
+        label: "소분류 4",
         data: data4,
         backgroundColor: "rgb(75, 192, 192)",
       },
       {
-        label: stackLabel[4],
+        label: "소분류 5",
         data: data5,
         backgroundColor: "rgb(53, 162, 235)",
       },
@@ -102,50 +97,76 @@ export default function StackChart({ stackChartData }) {
       let tempData4 = [];
       let tempData5 = [];
       for (let [key, value] of Object.entries(stackChartData)) {
-        let stempLabel = [];
         tempLabel.push(key);
-        let count2 = 0;
-        for (let [skey, svalue] of Object.entries(value.smallCategories)) {
-          stempLabel.push(skey);
-          if (count2 === 0) {
-            tempData1.push(svalue);
-          } else if (count2 === 1) {
-            tempData2.push(svalue);
-          } else if (count2 === 2) {
-            tempData3.push(svalue);
-          } else if (count2 === 3) {
-            tempData4.push(svalue);
-          } else if (count2 === 4) {
-            tempData5.push(svalue);
-          }
-          count2 += 1;
-        }
-
-        if (count === 0) {
-          setlabel1(stempLabel);
-        } else if (count === 1) {
-          setlabel2(stempLabel);
-        } else if (count === 2) {
-          setlabel3(stempLabel);
-        } else if (count === 3) {
-          setlabel4(stempLabel);
-        } else if (count === 4) {
-          setlabel5(stempLabel);
-        }
         count += 1;
         if (count === 5) {
           setStackLabel(tempLabel);
         }
       }
-      console.log(tempData1, tempData2, tempData3, tempData4, tempData5);
-      setData1(tempData1);
-      setData2(tempData2);
-      setData3(tempData3);
-      setData4(tempData4);
-      setData5(tempData5);
+      count = 0;
+      for (let [key, value] of Object.entries(stackChartData)) {
+        let stempLabel = [];
+        for (let [skey, svalue] of Object.entries(value.smallCategories)) {
+          if (key === tempLabel[0]) {
+            tempData1.push(svalue);
+          } else if (key === tempLabel[1]) {
+            tempData2.push(svalue);
+          } else if (key === tempLabel[2]) {
+            tempData3.push(svalue);
+          } else if (key === tempLabel[3]) {
+            tempData4.push(svalue);
+          } else if (key === tempLabel[4]) {
+            tempData5.push(svalue);
+          }
+        }
+      }
+
+      while (tempData1.length < 5) {
+        tempData1.push(0);
+      }
+      while (tempData2.length < 5) {
+        tempData2.push(0);
+      }
+      while (tempData3.length < 5) {
+        tempData3.push(0);
+      }
+      while (tempData4.length < 5) {
+        tempData4.push(0);
+      }
+      while (tempData5.length < 5) {
+        tempData5.push(0);
+      }
+      let dataset1;
+      let dataset2;
+      let dataset3;
+      let dataset4;
+      let dataset5;
+      for (let i = 0; i < 5; i++) {
+        let tempset = [];
+        tempset.push(tempData1[i]);
+        tempset.push(tempData2[i]);
+        tempset.push(tempData3[i]);
+        tempset.push(tempData4[i]);
+        tempset.push(tempData5[i]);
+        if (i === 0) {
+          dataset1 = tempset;
+        } else if (i === 1) {
+          dataset2 = tempset;
+        } else if (i === 2) {
+          dataset3 = tempset;
+        } else if (i === 3) {
+          dataset4 = tempset;
+        } else if (i === 4) {
+          dataset5 = tempset;
+        }
+      }
+      setData1(dataset1);
+      setData2(dataset2);
+      setData3(dataset3);
+      setData4(dataset4);
+      setData5(dataset5);
     }
   }, [stackChartData]);
-  console.log(stackLabel);
   return stackChartData ? (
     <Container>
       <Bar options={options} data={data} />
