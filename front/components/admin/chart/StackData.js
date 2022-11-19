@@ -15,33 +15,44 @@ export default function StackData({ stackChartData }) {
     let bestValue = 0;
     let bestCatergory2;
     let bestValue2 = 0;
-
     if (stackChartData) {
       let count = 0;
-      let count2 = 0;
       for (let [key, value] of Object.entries(stackChartData)) {
+        // 초기값 설정
         if (count === 0) {
           bestValue = value.totalCount;
           bestCategory = key;
+        } else {
+          if (value.totalCount > bestValue) {
+            bestValue = value.totalCount;
+            bestCategory = key;
+          }
         }
         count += 1;
+      }
+    }
+
+    if (stackChartData) {
+      for (let [key, value] of Object.entries(stackChartData)) {
+        let count3 = 0;
         if (key === bestCategory) {
           let temp = value;
           for (let [key, value] of Object.entries(temp.smallCategories)) {
-            if (count2 === 0) {
+            if (count3 === 0) {
               bestValue2 = value;
               bestCatergory2 = key;
+            } else {
+              if (value.totalCount > bestValue2) {
+                bestValue2 = value.totalCount;
+                bestCatergory2 = key;
+              }
             }
-            count2 += 1;
+            count3 += 1;
           }
         }
       }
     }
-    console.log(bestCategory);
-    console.log(bestValue);
-    console.log(bestCatergory2);
-    console.log(bestValue2);
-    console.log(stackChartData);
+
     setBestBigCategory(bestCategory);
     setBestValue(bestValue);
     setBestSmallCategory(bestCatergory2);
