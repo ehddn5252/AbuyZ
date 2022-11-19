@@ -77,9 +77,10 @@ export default function ProductCarousel() {
                     </CardDiscountCont>
                     <Flexfive>
                       <CardPrice>
-                        {(product.price * ((100 - product.discountRate) / 100))
-                          .toFixed(0)
-                          .toLocaleString("ko-KR")}
+                        {(
+                          product.price *
+                          ((100 - product.discountRate) / 100).toFixed(0)
+                        ).toLocaleString("ko-KR")}
                         원
                       </CardPrice>
                     </Flexfive>
