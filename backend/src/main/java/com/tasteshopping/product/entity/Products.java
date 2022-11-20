@@ -157,12 +157,18 @@ public class Products {
         List<Reviews> reviews = product.getReviews();
         productDto.setReviewNum(reviews.size());
         Float reviewRate = 0f;
+        int count = 0;
         for(int j=0;j<reviews.size();++j){
-            reviewRate+=reviews.get(j).getRating();
+            if(reviews.get(j).getRating()!=0) {
+                reviewRate += reviews.get(j).getRating();
+            }
+            else{
+                count+=1;
+            }
         }
-        reviewRate/=reviews.size();
+        reviewRate/=(reviews.size()-count);
         reviewRate = (int)(reviewRate * 100) /100f;
-        productDto.setReviewNum(reviews.size());
+        productDto.setReviewNum(reviews.size()-count);
         productDto.setReviewRate(reviewRate);
         return productDto;
     }
