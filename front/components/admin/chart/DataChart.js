@@ -47,7 +47,7 @@ export default function DataChart({ dataChartData }) {
               <TableCell align="right">상품명</TableCell>
               <TableCell align="right">대분류</TableCell>
               <TableCell align="right">소분류</TableCell>
-              <TableCell align="right">판매 개수&nbsp;(g)</TableCell>
+              <TableCell align="right">판매 개수&nbsp;(개)</TableCell>
               <TableCell align="right">판매 금액&nbsp;(원)</TableCell>
             </TableRow>
           </TableHead>
@@ -61,7 +61,11 @@ export default function DataChart({ dataChartData }) {
                 <TableCell align="right">{row.BigCategory}</TableCell>
                 <TableCell align="right">{row.SmallCategory}</TableCell>
                 <TableCell align="right">{row.SaleCount}</TableCell>
-                <TableCell align="right">{row.SalePrice}</TableCell>
+                <TableCell align="right">
+                  {row.SalePrice.toLocaleString("ko-KR", {
+                    maximumFractionDigits: 0,
+                  })}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

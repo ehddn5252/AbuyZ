@@ -8,10 +8,8 @@ export async function regiswish(product_uid) {
   return new Promise((resolve) => {
     https.get(`/wish/${product_uid}`).then((response) => {
       if (response.status === 200) {
-        console.log("찜하기 성공", response);
         resolve(response.data);
       } else {
-        console.log("찜하기 실패", response);
         resolve(response);
       }
     });
@@ -27,10 +25,8 @@ export async function listwish() {
   return new Promise((resolve) => {
     https.get("/wish/list?page=0&size=12&sort=uid,asc").then((response) => {
       if (response.status === 200) {
-        console.log("찜 목록 조회 완료", response);
         resolve(response.data);
       } else {
-        console.log("찜 목록 조회 실패", response);
         resolve(response);
       }
     });
@@ -47,10 +43,8 @@ export async function delwish(wishId) {
   return new Promise((resolve) => {
     https.delete(`/wish/${wishId}`).then((response) => {
       if (response.status === 200) {
-        console.log("찜 삭제 성공", response);
         resolve(response.data);
       } else {
-        console.log("찜 삭제 실패", response);
         resolve(response);
       }
     });

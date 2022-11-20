@@ -156,7 +156,6 @@ export default function ProductInfo() {
       if (!defaulttemp[key]) {
         defaulttemp[key] = value[0];
       }
-      // console.log("aa", value);
       temp2.push(value[0]);
       tempDto[key] = value;
       temp.push(tempDto);
@@ -165,8 +164,7 @@ export default function ProductInfo() {
     setOptionValue(defaulttemp);
     setOptionList(temp);
   };
-  // console.log(options);
-  // console.log(optionidx);
+
   const changeWish = () => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -183,7 +181,6 @@ export default function ProductInfo() {
       }
     }
   };
-  console.log("옵션 리스트", options);
   return optionList.length !== 0 && product.length !== 0 ? (
     <Container>
       <ImgBox>

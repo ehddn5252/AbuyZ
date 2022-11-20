@@ -15,10 +15,8 @@ export async function registFAQ(faqDto) {
       .post("/faq/create", faqDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("FAQ관리 - 등록 완료", response);
           resolve(response.data);
         } else {
-          console.log("FAQ관리 - 등록 실패", response);
           resolve(response);
         }
       })
@@ -38,10 +36,8 @@ export async function updateFAQ(faq_uid, faqDto) {
       .put(`/faq/${faq_uid}`, faqDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("FAQ관리 - 수정 완료", response);
           resolve(response.data);
         } else {
-          console.log("FAQ관리 - 수정 실패", response);
           resolve(response);
         }
       })
@@ -61,10 +57,8 @@ export async function getFAQ() {
       .get("/faq")
       .then((response) => {
         if (response.status === 200) {
-          console.log("FAQ관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("FAQ관리 - 조회 실패", response);
           resolve(response);
         }
       })
@@ -84,10 +78,8 @@ export async function deleteFAQ(faq_uid) {
       .delete(`/faq/${faq_uid}`)
       .then((response) => {
         if (response.status === 200) {
-          console.log("FAQ관리 - 삭제 완료", response);
           resolve(response.data);
         } else {
-          console.log("FAQ관리 - 삭제 실패", response);
           resolve(response);
         }
       })

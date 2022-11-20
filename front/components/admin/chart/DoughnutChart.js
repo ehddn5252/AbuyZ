@@ -47,7 +47,6 @@ export default function DoughnutChart({ doughnutChartData }) {
       }
       for (let [key, value] of Object.entries(doughnutChartData)) {
         if (key === bestCategory) {
-          console.log(key, value);
           let temp = value;
           for (let [key, value] of Object.entries(temp.small_category)) {
             tempSmallLabel.push(key);

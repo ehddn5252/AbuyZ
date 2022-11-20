@@ -26,8 +26,6 @@ export default function ReviewList({ reviewList }) {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
-  console.log(reviewList, "@@@");
-
   return (
     <Grid2
       xs={12}
