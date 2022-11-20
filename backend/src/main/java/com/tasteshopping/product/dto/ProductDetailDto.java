@@ -3,6 +3,7 @@ package com.tasteshopping.product.dto;
 import com.tasteshopping.wish.dto.IsWished;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ProductDetailDto {
     ProductDto products;
     List<ProductPictureDto> productPictureDto;
     HashMap<String,List> productOptionListMap;
+    List<Integer> inventoryPriceList;
 //    List<ProductOptionListDto> productOptionListDtoList;
     private IsWished isWished;
 }
