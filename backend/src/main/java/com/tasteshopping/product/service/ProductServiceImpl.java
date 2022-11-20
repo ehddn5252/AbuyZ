@@ -687,6 +687,13 @@ public class ProductServiceImpl implements ProductService {
             List<ProductPictures> productPicturesList = p.getProductPictures();
             List<ProductOptions> productOptionsList = p.getProductOptions();
 
+            List<Integer> inventoryPrices = new ArrayList<>();
+            List<Inventories> inventories= p.getInventories();
+
+            for(int i=0;i<inventories.size();++i){
+                inventoryPrices.add(inventories.get(i).getPrice());
+            }
+            productDetailDto.setInventoryPriceList(inventoryPrices);
             /*
             1. 이름에 맞는 list 에 추가한다.
             2. 이름이 달라지면 hashMap 에 추가한다.
@@ -698,6 +705,7 @@ public class ProductServiceImpl implements ProductService {
             if (productOptionsList.isEmpty()) {
                 throw new OptionNotFoundException();
             }
+
             String name = productOptionsList.get(0).getName();
             ArrayList<String> l = new ArrayList();
             for (int i = 0; i < productOptionsList.size(); ++i) {
