@@ -26,6 +26,7 @@ public class ProductBoDto {
     private String brandName;
     private Date date;
     private String status;
+    private String repImg;
     private Integer reviewNum;
     private Integer inventoryTotalNum;
     private List<String> productKeywords;
