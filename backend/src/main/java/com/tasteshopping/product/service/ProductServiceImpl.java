@@ -705,9 +705,6 @@ public class ProductServiceImpl implements ProductService {
             if (productOptionsList.isEmpty()) {
                 throw new OptionNotFoundException();
             }
-            ArrayList<Integer> price_l = new ArrayList();
-
-
 
             String name = productOptionsList.get(0).getName();
             ArrayList<String> l = new ArrayList();
