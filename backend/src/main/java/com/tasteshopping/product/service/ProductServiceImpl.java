@@ -397,8 +397,7 @@ public class ProductServiceImpl implements ProductService {
                 LinkedList<String> l = optionValueUidOuterList.get(start);
                 for (int i = 0; i < sList.length; ++i) {
                     maxUid += 1; // 다음 uid 를 저장해야한다.
-                    l.add(Integer.toString(maxUid));
-                    productOptionService.createProductOptionList(product, key, sList[i].trim());
+                    l.add(Integer.toString(productOptionService.createProductOptionList(product, key, sList[i].trim()).getUid()));
                 }
                 optionValueUidOuterList.set(start, l);
                 start += 1;
