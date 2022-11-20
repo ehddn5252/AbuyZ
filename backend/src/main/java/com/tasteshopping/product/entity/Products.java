@@ -129,6 +129,7 @@ public class Products {
                 .price(price)
                 .bigCategoryUid(smallCategory.getBigCategory().getUid())
                 .bigCategoryName(smallCategory.getBigCategory().getCategoryName())
+                .repImg(repImg)
                 .build();
     }
 
