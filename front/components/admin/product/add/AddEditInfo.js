@@ -91,7 +91,21 @@ export default function AddEditInfo(props) {
           fontWeight: "600",
         }}
       >
-        판매정보
+        <div>
+          판매 정보
+          <p
+            style={{
+              margin: 0,
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            (모두 기입)
+          </p>
+        </div>
       </Grid2>
       <Grid2
         container
