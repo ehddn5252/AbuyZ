@@ -30,6 +30,7 @@ export default function ProductLIst({ productList }) {
   ];
   const [value, setValue] = useRecoilState(filterName);
   const [inputValue, setInputValue] = useState([productList]);
+  console.log(inputValue);
   // 가격 낮은순
   function getLowPrcie(arr) {
     let sortable = [];

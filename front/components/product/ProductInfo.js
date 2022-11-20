@@ -38,11 +38,12 @@ export default function ProductInfo() {
   const [optionValue, setOptionValue] = useState([]);
   const [options, setOptions] = useState("");
   const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
+  const [optionidx, setOptionIdx] = useState(0);
 
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
-    console.log(res.data);
+    console.log("니야니", res.data);
     setProduct(res.data);
     if (res.data.isWished) {
       setWish(res.data.isWished.wished);
@@ -156,6 +157,7 @@ export default function ProductInfo() {
       if (!defaulttemp[key]) {
         defaulttemp[key] = value[0];
       }
+      // console.log("aa", value);
       temp2.push(value[0]);
       tempDto[key] = value;
       temp.push(tempDto);
@@ -164,7 +166,8 @@ export default function ProductInfo() {
     setOptionValue(defaulttemp);
     setOptionList(temp);
   };
-
+  // console.log(options);
+  // console.log(optionidx);
   const changeWish = () => {
     if (typeof window !== "undefined") {
       const accessToken = sessionStorage.getItem("access-token");
@@ -181,7 +184,7 @@ export default function ProductInfo() {
       }
     }
   };
-
+  console.log("옵션 리스트", options);
   return optionList.length !== 0 && product.length !== 0 ? (
     <Container>
       <ImgBox>
@@ -199,15 +202,7 @@ export default function ProductInfo() {
           <div>
             <span style={{ color: "#aaaaaa" }}>az배송</span>
             <br></br>
-            <span
-              style={{
-                margin: 0,
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-              }}
-            >
-              {product.products.name}
-            </span>
+            <PNameSpan>{product.products.name}</PNameSpan>
           </div>
           <div onClick={changeWish}>
             <br></br>
@@ -221,17 +216,7 @@ export default function ProductInfo() {
         <PriceBox>
           <PriceTop>
             {product.products.discountRate === 0 ? null : (
-              <p
-                style={{
-                  margin: 0,
-                  color: "#56A9F1",
-                  marginRight: "0.5rem",
-                  fontSize: "1.4rem ",
-                  fontWeight: "1000",
-                }}
-              >
-                {product.products.discountRate}%
-              </p>
+              <DiscountRate>{product.products.discountRate}%</DiscountRate>
             )}
 
             <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
@@ -259,13 +244,13 @@ export default function ProductInfo() {
         <OptionBox>
           {optionList.map((option) => (
             <Option>
-              {Object.keys(option) === "x" ? null : (
+              {Object.keys(option)[0] === "x" ? null : (
                 <p style={{ width: "20%" }}>
                   {/* {Object.keys(option)} */}
                   상품선택
                 </p>
               )}
-              {Object.keys(option) === "x" ? null : (
+              {Object.keys(option)[0] === "x" ? null : (
                 <Autocomplete
                   disablePortal
                   id={Object.keys(option)}
@@ -283,72 +268,70 @@ export default function ProductInfo() {
           ))}
 
           <Options>
-            <div
-              style={{
-                display: "flex",
-                backgroundColor: "rgb(170,170,170, 0.2)",
-                borderRadius: "5px",
-                padding: "1rem",
-                width: "83%",
-                flexDirection: "column",
-              }}
-            >
-              {/* <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p> */}
+            <OptionOne>
               <div>
-                {options.length ? (
-                  <p>
-                    {options.map((data) => (
-                      <span>{data} </span>
-                    ))}
-                  </p>
+                {options[0] === "x" ? (
+                  <p>{product.products.name}</p>
                 ) : (
-                  <p>기본</p>
+                  <div>
+                    {options.length ? (
+                      <p>
+                        {options.map((data) => (
+                          <span>{data} </span>
+                        ))}
+                      </p>
+                    ) : (
+                      <p>기본</p>
+                    )}
+                  </div>
                 )}
               </div>
               <div style={{ display: "flex", flexDirection: "row" }}>
-                <div style={{ flex: 8, display: "flex", flexDirection: "row" }}>
+                <div style={{ flex: 6, display: "flex", flexDirection: "row" }}>
                   <MinusIcon onClick={minus}></MinusIcon>
                   <CountDiv>
                     <p>{count}</p>
                   </CountDiv>
                   <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
                 </div>
-                <div style={{ flex: 4, marginTop: "0.8rem" }}>
-                  <span>메롱</span>
-                </div>
+                {product.products.discountRate > 0 ? (
+                  <OptionTwo>
+                    <span
+                      style={{
+                        color: "#aaaaaa",
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      {(product.products.price * count).toLocaleString("ko-KR")}
+                      원{" "}
+                    </span>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {(
+                        (product.products.price -
+                          0.01 *
+                            product.products.discountRate *
+                            product.products.price) *
+                        count
+                      ).toLocaleString("ko-KR")}
+                      원
+                    </span>
+                  </OptionTwo>
+                ) : (
+                  <OptionTwo>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {(
+                        (product.products.price -
+                          0.01 *
+                            product.products.discountRate *
+                            product.products.price) *
+                        count
+                      ).toLocaleString("ko-KR")}
+                      원
+                    </span>
+                  </OptionTwo>
+                )}
               </div>
-              {/* <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                }}
-              >
-                <MinusIcon onClick={minus}></MinusIcon>
-                <CountDiv>
-                  <p>{count}</p>
-                </CountDiv>
-                <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
-              </div> */}
-            </div>
-            {/* <OptionOne>
-              <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p>
-              {options.length ? (
-                <p>
-                  {options.map((data) => (
-                    <span>{data} </span>
-                  ))}
-                </p>
-              ) : (
-                <p>기본</p>
-              )}
             </OptionOne>
-            <OptionTwo>
-              <MinusIcon onClick={minus}></MinusIcon>
-              <CountDiv>
-                <p>{count}</p>
-              </CountDiv>
-              <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
-            </OptionTwo> */}
           </Options>
         </OptionBox>
         <ResultBox>
@@ -415,6 +398,12 @@ const InfoBox = styled.div`
   min-height: 40rem;
 `;
 
+const PNameSpan = styled.span`
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+`;
+
 // Title
 const TitleBox = styled.div`
   display: flex;
@@ -422,10 +411,16 @@ const TitleBox = styled.div`
   width: 100%;
 `;
 
-const TitleDiv = styled.div``;
-const IconBox = styled.div``;
 const PriceBox = styled.div`
   margin-top: 1rem;
+`;
+
+const DiscountRate = styled.p`
+  margin: 0;
+  color: #56a9f1;
+  margin-right: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 1000;
 `;
 
 const PriceTop = styled.div`
@@ -458,15 +453,17 @@ const Options = styled.div`
 `;
 const OptionOne = styled.div`
   display: flex;
-  width: 80%;
-  align-items: center;
-  border: 1px solid black;
+  border: 1px solid rgb(170, 170, 170, 0.4);
+  border-radius: 5px;
+  padding: 1rem;
+  width: 83%;
+  flex-direction: column;
 `;
 const OptionTwo = styled.div`
+  flex: 6;
+  margin-top: 0.8rem;
   display: flex;
-  width: 40%;
-  align-items: center;
-  border: 1px solid black;
+  justify-content: end;
 `;
 const MinusIcon = styled(RemoveOutlinedIcon)`
   border: 1px solid #aaaaaa;
