@@ -126,7 +126,21 @@ export default function AddEditCategory(props) {
           fontWeight: "600",
         }}
       >
-        카테고리
+        <div>
+          카테고리
+          <p
+            style={{
+              margin: 0,
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            (모두 기입)
+          </p>
+        </div>
       </Grid2>
       <Grid2
         xs={10}
