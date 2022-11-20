@@ -106,7 +106,21 @@ export default function AddEditImage(props) {
           fontWeight: "600",
         }}
       >
-        상품 이미지
+        <div>
+          상품 이미지
+          <p
+            style={{
+              margin: 0,
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            (추가 이미지만 선택)
+          </p>
+        </div>
       </Grid2>
       <Grid2
         container

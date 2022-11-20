@@ -54,7 +54,21 @@ export default function AddEditMarketing(props) {
           fontWeight: "600",
         }}
       >
-        마케팅 정보
+        <div>
+          마케팅 정보
+          <p
+            style={{
+              margin: 0,
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            (모두 기입)
+          </p>
+        </div>
       </Grid2>
       <Grid2
         container
@@ -128,10 +142,10 @@ const Input = styled.input`
   width: 17rem;
   height: 3rem;
   font-size: 1.3rem;
+  padding-left: 1rem;
 
   &::placeholder {
     color: gray;
     font-size: 1rem;
-    padding-left: 1rem;
   }
 `;
