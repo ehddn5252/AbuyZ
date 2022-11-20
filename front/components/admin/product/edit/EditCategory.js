@@ -25,7 +25,6 @@ export default function EditCategory(props) {
 
   // 소분류 셀렉트 했을 때
   const smallHandleChange = (event) => {
-    console.log(event.target.value);
     setSmallCategory(event.target.value);
     props.setSmallCategoriesUid(small_categories_uid[event.target.value]);
   };

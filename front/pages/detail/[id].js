@@ -22,11 +22,9 @@ export default function Detail() {
   const [month, setMonth] = useState("");
   useEffect(() => {
     let temp = new Date();
-    console.log(temp);
     setDay(temp.getDate());
     setMonth(temp.getMonth() + 1);
   }, []);
-  console.log(day, month);
   const scrollTop = () => {
     window.scrollTo(0, 0);
   };

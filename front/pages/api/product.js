@@ -5,10 +5,8 @@ export async function inquireProduct() {
   return new Promise((resolve) => {
     https.get("/product/bo").then((response) => {
       if (response.status === 200) {
-        console.log("모든 상품 가져오기 성공", response);
         resolve(response.data.data);
       } else {
-        console.log("모든 상품 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -22,10 +20,8 @@ export async function inquireProductStatus() {
   return new Promise((resolve) => {
     https.get("/product/status/selling").then((response) => {
       if (response.status === 200) {
-        console.log("모든 상품 상태 가져오기 성공", response);
         resolve(response.data.data);
       } else {
-        console.log("모든 상품 상태 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -39,10 +35,8 @@ export async function inquireProductStatusCount(Status) {
   return new Promise((resolve) => {
     https.get(`/product/status/num/${Status}`).then((response) => {
       if (response.status === 200) {
-        // console.log("모든 상품 상태 개수 가져오기 성공", response);
         resolve(response.data.data);
       } else {
-        // console.log("모든 상품 상태 개수 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -57,10 +51,8 @@ export async function delProduct(productUid) {
   return new Promise((resolve) => {
     https.delete(`/product/${productUid}`).then((response) => {
       if (response.status === 200) {
-        console.log("상품 삭제 성공", response);
         resolve(response.data);
       } else {
-        console.log("상품 삭제 실패", response);
         resolve(response);
       }
     });
@@ -74,10 +66,8 @@ export async function changeEdit(productUid) {
   return new Promise((resolve) => {
     https.put(`/product/status/${productUid}/sold_out`).then((response) => {
       if (response.status === 200) {
-        console.log("상품 상태 변경 성공", response);
         resolve(response.data);
       } else {
-        console.log("상품 상태 변경 실패", response);
         resolve(response);
       }
     });
@@ -91,10 +81,8 @@ export async function keywordSearch(keyword) {
   return new Promise((resolve) => {
     https.get(`/product/fo-search/basic/${keyword}`).then((response) => {
       if (response.status === 200) {
-        console.log("키워드 검색 성공", response);
         resolve(response.data);
       } else {
-        console.log("키워드 검색 실패", response);
         resolve(response);
       }
     });
@@ -108,10 +96,8 @@ export async function conditionSearch(detailDto) {
   return new Promise((resolve) => {
     https.post("/product/fo-search/detail", detailDto).then((response) => {
       if (response.status === 200) {
-        console.log("fo 조건 상품 조건 검색 성공", response);
         resolve(response.data);
       } else {
-        console.log("fo 조건 상품 조건 검색 실패", response);
         resolve(response);
       }
     });
@@ -127,10 +113,8 @@ export async function kwcdSearch(detailDto) {
       .post("/product/fo-search/keyword/detail", detailDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("fo 조건 상품 조건 검색 성공", response);
           resolve(response.data);
         } else {
-          console.log("fo 조건 상품 조건 검색 실패", response);
           resolve(response);
         }
       });
@@ -150,10 +134,8 @@ export async function productDetail(product_id) {
       })
       .then((response) => {
         if (response.status === 200) {
-          // console.log("상품 상세 페이지 성공", response);
           resolve(response.data);
         } else {
-          console.log("상품 상세 페이지 실패", response);
           resolve(response);
         }
       });
@@ -167,10 +149,8 @@ export async function getStockInventory(productUid) {
   return new Promise((resolve) => {
     https.get(`/inventory/${productUid}`).then((response) => {
       if (response.status === 200) {
-        // console.log("재고 목록 가져오기 성공", response);
         resolve(response.data.data);
       } else {
-        console.log("재고 목록 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -182,10 +162,8 @@ export async function getRandomProducts() {
   return new Promise((resolve) => {
     https.get("/product/random").then((response) => {
       if (response.status === 200) {
-        console.log("추천 상품 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("추천 상품 가져오기 성공", response);
         resolve(response);
       }
     });
@@ -197,10 +175,8 @@ export async function getStockProductsUid(productUid) {
   return new Promise((resolve) => {
     https.get(`/inventory/${productUid}`).then((response) => {
       if (response.status === 200) {
-        console.log("추천 상품 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("추천 상품 가져오기 성공", response);
         resolve(response);
       }
     });

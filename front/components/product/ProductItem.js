@@ -142,6 +142,7 @@ const Container = styled.div`
 
 const ImgBox = styled.div`
   width: 90%;
+  cursor: pointer;
 `;
 
 const ContentBox = styled.div`

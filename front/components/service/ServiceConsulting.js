@@ -76,7 +76,6 @@ export default function ServiceConsulting() {
       };
     }
 
-    console.log(customerCenterWriteReqDto);
     formData.append(
       "customerCenterWriteReqDto",
       new Blob([JSON.stringify(customerCenterWriteReqDto)], {
@@ -97,7 +96,6 @@ export default function ServiceConsulting() {
         },
       })
       .then((res) => {
-        console.log(res, "문의등록 성공!");
         alert("문의를 등록하였습니다.");
         setPageNum(2);
         router.push("/mypage");

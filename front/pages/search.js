@@ -35,7 +35,6 @@ export default function Search() {
   const getProductList = async () => {
     let res;
     if (searchValue) {
-      console.log(searchValue);
       const temp = await keywordSearch(searchValue);
       res = temp.data;
     } else if (bigCategory) {

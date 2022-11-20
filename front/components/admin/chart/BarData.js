@@ -10,6 +10,15 @@ export default function BarData({ barChartData }) {
   const [minValue, setMinValue] = useState("");
   const [maxValue, setMaxValue] = useState("");
 
+  const change = {
+    MONDAY: "월요일",
+    TUESDAY: "화요일",
+    WEDNESDAY: "수요일",
+    THURSDAY: "목요일",
+    FRIDAY: "금요일",
+    SATURDAY: "토요일",
+    SUNDAY: "일요일",
+  };
   useEffect(() => {
     let tempMinDay = "MONDAY";
     let tempMinValue = 99999999999;
@@ -41,22 +50,26 @@ export default function BarData({ barChartData }) {
     <Container>
       <TotalDiv style={{ backgroundColor: "#fff5d6" }}>
         <TitleText>제일 잘 팔리는 요일</TitleText>
-        <ResultText style={{ color: "#fda700" }}>{maxDay}</ResultText>
+        <ResultText style={{ color: "#fda700" }}>{change[maxDay]}</ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#ffe27f" }}>
         <TitleText>최고 금액(원)</TitleText>
         <ResultText style={{ color: "#fda700" }}>
-          {(maxValue / 1000).toLocaleString("ko-KR")}K
+          {maxValue.toLocaleString("ko-KR", {
+            maximumFractionDigits: 0,
+          })}
         </ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
         <TitleText>제일 안 팔리는 요일</TitleText>
-        <ResultText style={{ color: "#2daf43" }}>{minDay}</ResultText>
+        <ResultText style={{ color: "#2daf43" }}>{change[minDay]}</ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#9ce6a9" }}>
         <TitleText>최저 금액(원)</TitleText>
         <ResultText style={{ color: "#2daf43" }}>
-          {(minValue / 1000).toLocaleString("ko-KR")}K
+          {minValue.toLocaleString("ko-KR", {
+            maximumFractionDigits: 0,
+          })}
         </ResultText>
       </TotalDiv>
     </Container>

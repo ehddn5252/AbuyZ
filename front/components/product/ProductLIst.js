@@ -30,7 +30,6 @@ export default function ProductLIst({ productList }) {
   ];
   const [value, setValue] = useRecoilState(filterName);
   const [inputValue, setInputValue] = useState([productList]);
-  console.log(inputValue);
   // 가격 낮은순
   function getLowPrcie(arr) {
     let sortable = [];
@@ -67,6 +66,7 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewNum - b.reviewNum;
     });
+    sortable.reverse();
     return sortable;
   }
 
@@ -77,6 +77,7 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewRate - b.reviewRate;
     });
+    sortable.reverse();
     return sortable;
   }
 
