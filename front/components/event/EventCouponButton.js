@@ -12,7 +12,6 @@ export default function EventCouponButton({ uid, list, setIsGiven, isgiven }) {
       const accessToken = sessionStorage.getItem("access-token");
       if (accessToken) {
         const res = await getCoupon(uid.uid);
-        console.log(res.data);
         Swal.fire({
           title: "쿠폰이 발급되었습니다.",
           icon: "success",

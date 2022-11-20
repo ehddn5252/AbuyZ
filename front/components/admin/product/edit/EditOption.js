@@ -168,7 +168,6 @@ export default function EditOption(props) {
         },
       })
       .then((res) => {
-        console.log(res, "옵션 없는 상품 수정에 성공!");
         alert("상품이 수정되었습니다.");
         location.reload();
       })
@@ -263,7 +262,6 @@ export default function EditOption(props) {
         inventory_option_list: res,
       })
       .then((res) => {
-        console.log(res, "재고 수정에 성공!");
         handleOptionModify();
       })
       .catch((err) => {

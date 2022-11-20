@@ -151,8 +151,6 @@ export default function ReviewCategory() {
       searchDto.endDate = "2032-12-01";
     }
 
-    console.log(searchDto, "~~~~");
-
     const lst = await searchReview(searchDto);
 
     {

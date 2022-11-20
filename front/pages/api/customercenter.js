@@ -9,10 +9,8 @@ export async function mycenter() {
       .get("/customer-center/my")
       .then((response) => {
         if (response.status === 200) {
-          console.log("내 문의 내역 가져오기 성공", response);
           resolve(response.data);
         } else {
-          console.log("내 문의 내역 가져오기 실패", response);
           resolve(response);
         }
       })
@@ -31,10 +29,8 @@ export async function allcenter() {
   return new Promise((resolve) => {
     https.get("/customer-center").then((response) => {
       if (response.status === 200) {
-        console.log("전체 문의 내역 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("전체 문의 내역 가져오기 실패", response);
         return response;
       }
     });
@@ -50,10 +46,8 @@ export async function getnumbercenter(centernumber) {
   return new Promise((resolve) => {
     https.get(`/customer-center/detail/${centernumber}`).then((response) => {
       if (response.status === 200) {
-        console.log("특정 문의 내역 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("특정 문의 내역 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -69,10 +63,8 @@ export async function delnumbercenter(centernumber) {
   return new Promise((resolve) => {
     https.delete(`/customer-center/${centernumber}`).then((response) => {
       if (response.status === 200) {
-        console.log("특정 문의 내역 삭제 성공", response);
         resolve(response.data);
       } else {
-        console.log("특정 문의 내역 삭제 실패", response);
         resolve(response);
       }
     });
@@ -93,10 +85,8 @@ export async function replycenter(replyDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("문의 답변 작성 성공", response);
           resolve(response.data);
         } else {
-          console.log("문의 답변 작성 실패", response);
           resolve(response);
         }
       });
@@ -114,10 +104,8 @@ export async function customercenter(formData) {
   return new Promise((resolve) => {
     https.post("/customer-center/list", formData).then((response) => {
       if (response.status === 200) {
-        console.log("문의 작성 성공", response);
         resolve(response.data);
       } else {
-        console.log("문의 작성 실패", response);
         resolve(response);
       }
     });
