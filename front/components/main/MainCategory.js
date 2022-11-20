@@ -25,15 +25,15 @@ export default function MainCategory() {
   // 나중에 array 지우면 될 듯
   const array = [
     { img: "/images/fruit.png", name: "과일", uid: 1 },
-    { img: "/images/meat.png", name: "고기", uid: 3 },
-    { img: "/images/water.png", name: "생수", uid: 5 },
-    { img: "/images/hair.png", name: "헤어", uid: 23 },
-    { img: "/images/sofa.png", name: "가구", uid: 11 },
-    { img: "/images/shoes.png", name: "욕실용품", uid: 9 },
+    { img: "/images/shoes.png", name: "생활", uid: 10 },
+    { img: "/images/sofa.png", name: "가구", uid: 12 },
+    { img: "/images/puppy.png", name: "반려", uid: 18 },
+    { img: "/images/base.png", name: "뷰티", uid: 24 },
+    { img: "/images/gajeon.png", name: "가전", uid: 33 },
     {
-      img: "/images/base.png",
-      name: "향수",
-      uid: 22,
+      img: "/images/sports.png",
+      name: "스포츠",
+      uid: 8,
     },
   ];
 

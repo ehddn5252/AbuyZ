@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { inquireallEvent } from "../../pages/api/event";
 import ArrowCircleRightSharpIcon from "@mui/icons-material/ArrowCircleRightSharp";
 import ArrowCircleLeftSharpIcon from "@mui/icons-material/ArrowCircleLeftSharp";
 // const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
@@ -32,14 +33,20 @@ const SlickArrowRight = ({ currentSlide, slideCount, ...props }) => (
 
 export default function EventCarousel() {
   // 나중에 array 지우면 될 듯
-  const array = [1, 2, 3, 4, 5];
+  const [array, setArray] = useState([]);
+  const event = async () => {
+    const res = await inquireallEvent();
+    res.data.sort((a, b) => b.uid - a.uid);
+    setArray(res.data);
+  };
 
   const settings = {
     centerPadding: "0px", // 0px 하면 슬라이드 끝쪽 이미지가 안잘림
     centerMode: true, // 1번이 가운데서 시작 하게 함
     // dots: true, // 슬라이드 밑에 점 보이게
+    autoplay: true,
+    autoplayspeed: 300,
     infinite: true, // 무한으로 반복
-    speed: 400, // 넘어가는 속도
     slidesToShow: 1, // n장씩 보이게
     slidesToScroll: 1, // 1장씩 뒤로 넘어가게
     arrows: true,
@@ -47,12 +54,16 @@ export default function EventCarousel() {
     nextArrow: <NextTo></NextTo>,
   };
 
+  useEffect(() => {
+    event();
+  }, []);
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <StyledSlider {...settings}>
         {array.map((e, idx) => (
           <CardBox key={idx}>
-            <CardImg alt="인기 서비스" src="/images/event.png" />
+            <CardImg alt={e.name} src={e.thumbnail} />
             {/* <CardText>{e}</CardText> */}
           </CardBox>
         ))}
@@ -118,7 +129,7 @@ const CardImg = styled.img`
   margin: 0 auto;
   height: 25rem;
   width: 100%;
-  object-fit: cover;
+  object-fit: full;
 `;
 
 const Pre = styled.div`

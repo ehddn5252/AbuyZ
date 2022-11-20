@@ -9,10 +9,8 @@ export async function getAsk() {
       .get("/customer-center")
       .then((response) => {
         if (response.status === 200) {
-          // console.log("전체 문의 내역 가져오기", response);
           resolve(response.data.data);
         } else {
-          // console.log("전체 문의 내역 가져오기 실패", response);
           resolve(response);
         }
       })
@@ -32,10 +30,8 @@ export async function searchCustomerCenter(AskDto) {
       .post("/customer-center/search", AskDto)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("문의관리 - 조회 완료", response);
           resolve(response.data.data);
         } else {
-          // console.log("문의관리 - 조회 실패", response);
           resolve(response);
         }
       })
@@ -55,10 +51,8 @@ export async function detailCustomerCenter(uid) {
       .get(`/customer-center/detail/${uid}`)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("문의관리 - 특정 문의 조회 완료", response);
           resolve(response.data);
         } else {
-          // console.log("문의관리 - 특정 문의 조회 실패", response);
           resolve(response);
         }
       })
@@ -78,10 +72,8 @@ export async function writeInquiryReply(reply) {
       .post(`/customer-center/reply`, reply)
       .then((response) => {
         if (response.status === 200) {
-          console.log("신고관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("신고관리 - 조회 완료", response);
           resolve(response);
         }
       })
@@ -101,10 +93,8 @@ export async function searchReport(searchDto) {
       .post("/", searchDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("신고관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("신고관리 - 조회 실패", response);
           resolve(response);
         }
       })
@@ -129,10 +119,8 @@ export async function searchReview(searchDto) {
       .post("/review/searchReview", searchDto)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("리뷰관리 - 조회 완료", response);
           resolve(response.data);
         } else {
-          // console.log("리뷰관리 - 조회 실패", response);
           resolve(response);
         }
       })
@@ -152,10 +140,8 @@ export async function detailReview(uid) {
       .get(`/review/detail/${uid}`)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("리뷰 상세보기(모달) 완료", response);
           resolve(response.data);
         } else {
-          // console.log("리뷰 상세보기(모달) 실패", response);
           resolve(response);
         }
       })
@@ -175,10 +161,8 @@ export async function writeReviewReply(reply) {
       .post(`/review/reply`, reply)
       .then((response) => {
         if (response.status === 200) {
-          // console.log("리뷰 답글 작성 완료", response);
           resolve(response.data);
         } else {
-          // console.log("리뷰 답글 작성 실패", response);
           resolve(response);
         }
       })

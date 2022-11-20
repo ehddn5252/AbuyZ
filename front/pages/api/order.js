@@ -12,10 +12,8 @@ export async function payBasket(cartDto) {
       .post("/order/cart", cartDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("장바구니 결제 성공", response);
           resolve(response.data);
         } else {
-          console.log("장바구니 결제 실패", response);
           return response;
         }
       })
@@ -40,10 +38,8 @@ export async function payProduct(productDto) {
   return new Promise((resolve) => {
     https.post("/order/basic", productDto).then((response) => {
       if (response.status === 200) {
-        console.log("상품 결제 성공", response);
         resolve(response.data);
       } else {
-        console.log("상품 결제 실패", response);
         resolve(response);
       }
     });
@@ -60,10 +56,8 @@ export async function getOrderList() {
   return new Promise((resolve) => {
     https.get("/order").then((response) => {
       if (response.status === 200) {
-        console.log("결제목록 조회 성공", response);
         resolve(response.data);
       } else {
-        console.log("결제 목록 조회 실패", response);
         resolve(response);
       }
     });
@@ -80,10 +74,8 @@ export async function eachGetOrderList(basketnumber) {
   return new Promise((resolve) => {
     https.get(`/order/${basketnumber}`).then((response) => {
       if (response.status === 200) {
-        console.log("특정 결제 목록의 주문들 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("특정 결제 목록의 주문들 가져오기 실패", response);
         resolve(response);
       }
     });
@@ -99,10 +91,8 @@ export async function weekorder() {
   return new Promise((resolve) => {
     https.get("/order/from-before-week").then((response) => {
       if (response.status === 200) {
-        console.log("해당 유저의 7일간 결제 목록 가져오기 성공", response);
         resolve(response.data);
       } else {
-        console.log("해당 유저의 7일간 결제 목록 가져오기 실패", response);
         resolve(response);
       }
     });

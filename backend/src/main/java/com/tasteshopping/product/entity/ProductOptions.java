@@ -22,7 +22,7 @@ public class ProductOptions {
     @Column(columnDefinition = "varchar(100)")
     String value;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "products_uid")
     Products product;
 

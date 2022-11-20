@@ -27,8 +27,8 @@ export default function ProductCarousel() {
   const settings = {
     // dots: true,
     infinite: true,
-    // autoplay: true,
-    // autoplayspeed: 300,
+    autoplay: true,
+    autoplayspeed: 300,
     slidesToShow: 4,
     slidesToScroll: 4,
   };
@@ -79,7 +79,7 @@ export default function ProductCarousel() {
                       <CardPrice>
                         {(
                           product.price *
-                          ((100 - product.discountRate) / 100)
+                          ((100 - product.discountRate) / 100).toFixed(0)
                         ).toLocaleString("ko-KR")}
                         원
                       </CardPrice>

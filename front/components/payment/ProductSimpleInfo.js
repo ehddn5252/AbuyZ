@@ -11,7 +11,9 @@ export default function ProductSimpleInfo({ paymentList }) {
           <SubTitle>주문 상품</SubTitle>
         </div>
         <div>
-          <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
+          <KeyboardArrowDownIcon
+            sx={{ cursor: "pointer" }}
+          ></KeyboardArrowDownIcon>
         </div>
       </ProductShow>
       <hr></hr>

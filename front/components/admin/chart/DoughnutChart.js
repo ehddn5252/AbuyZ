@@ -55,10 +55,11 @@ export default function DoughnutChart({ doughnutChartData }) {
         }
       }
     }
+
     setBigData(tempBigData);
     setSmaillData(tempSmallData);
     setBigLabel(tempBigLabel);
-    setSmallLabel(tempBigLabel);
+    setSmallLabel(tempSmallLabel);
   }, [doughnutChartData]);
 
   const data1 = {

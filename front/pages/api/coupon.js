@@ -16,10 +16,8 @@ export async function createcoupon(couponDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("쿠폰 생성 완료", response);
           resolve(response.data);
         } else {
-          console.log("쿠폰 생성 실패", response);
           resolve(response);
         }
       })
@@ -38,10 +36,8 @@ export async function inquirecoupon() {
       .get("/coupon/list")
       .then((response) => {
         if (response.status === 200) {
-          console.log("쿠폰 조회 완료", response);
           resolve(response.data);
         } else {
-          console.log("쿠폰 조회 실패", response);
           resolve(response);
         }
       })
@@ -66,10 +62,8 @@ export async function modifycoupon(couponDto, couponNum) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("쿠폰 수정 완료", response);
           resolve(response.data);
         } else {
-          console.log("쿠폰 수정 실패", response);
           resolve(response);
         }
       })
@@ -88,11 +82,9 @@ export async function delcoupon(couponNum) {
       .delete(`/coupon/list/${couponNum}`)
       .then((response) => {
         if (response.status === 200) {
-          console.log("쿠폰 삭제 완료", response);
           resolve(response.data);
           location.reload();
         } else {
-          console.log("쿠폰 삭제 실패", response);
           resolve(response);
         }
       })
@@ -111,10 +103,8 @@ export async function couponlist() {
       .get("/coupon")
       .then((response) => {
         if (response.status === 200) {
-          console.log("쿠폰 조회 성공", response);
           resolve(response.data);
         } else {
-          console.log("쿠폰 조회 실패", response);
           resolve(response);
         }
       })
@@ -134,10 +124,8 @@ export async function getCoupon(couponNumber) {
       .get(`/coupon/${couponNumber}`)
       .then((response) => {
         if (response.data.status === 200) {
-          console.log("쿠폰 발급 요청 성공", response);
           resolve(response.data);
         } else {
-          console.log("쿠폰 발급 요청 실패", response);
           resolve(response);
         }
       })
@@ -157,10 +145,8 @@ export async function cateCoupon(couponNumber) {
       .get(`/coupon/available-coupons/${couponNumber}`)
       .then((response) => {
         if (response.data.status === 200) {
-          console.log("카테고리 쿠폰 조회 성공", response);
           resolve(response.data);
         } else {
-          console.log("카테고리 쿠푼 조회 실패", response);
           resolve(response);
         }
       })

@@ -14,10 +14,8 @@ export async function regisreview(reviewDto) {
   return new Promise((resolve) => {
     https.post("/review", reviewDto).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 작성 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 작성 실패", response);
         resolve(response);
       }
     });
@@ -33,10 +31,8 @@ export async function delreview(reviewId) {
   return new Promise((resolve) => {
     https.delete(`/review/${reviewId}`).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 삭제 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 삭제 실패", response);
         resolve(response);
       }
     });
@@ -52,10 +48,8 @@ export async function likereview(reviewDto) {
   return new Promise((resolve) => {
     https.post("/review/like", reviewDto).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 좋아요 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 좋아요 실패", response);
         resolve(response);
       }
     });
@@ -71,10 +65,8 @@ export async function dellikereview(reviewId) {
   return new Promise((resolve) => {
     https.delete(`/review/like/${reviewId}`).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 좋아요 삭제 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 좋아요 삭제 실패", response);
         resolve(response);
       }
     });
@@ -96,10 +88,8 @@ export async function replyReview(replyDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("리뷰 답글 작성 완료", response);
           resolve(response.data);
         } else {
-          console.log("리뷰 답글 작성 실패", response);
           resolve(response);
         }
       });
@@ -115,10 +105,8 @@ export async function delreplyreview(reviewId) {
   return new Promise((resolve) => {
     https.delete(`/review/reply/${reviewId}`).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 삭제 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 삭제 실패", response);
         resolve(response);
       }
     });
@@ -135,10 +123,8 @@ export async function review(product_uid, page) {
   return new Promise((resolve) => {
     https.get(`/review/${product_uid}/${page}`).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 조회 성공", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 조회 실패", response);
         resolve(response);
       }
     });
@@ -154,10 +140,8 @@ export async function reportreview(reviewDto) {
   return new Promise((resolve) => {
     https.post("/review/report", reviewDto).then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 신고 완료", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 신고 실패", response);
         resolve(response);
       }
     });
@@ -173,10 +157,8 @@ export async function photoreviewSome(photoId) {
   return new Promise((resolve) => {
     https.get(`/review/photo/${photoId}`).then((response) => {
       if (response.status === 200) {
-        console.log("포토 리뷰 모아보기 일부 성공", response);
         resolve(response.data);
       } else {
-        console.log("포토 리뷰 모아보기 일부 실패", response);
         resolve(response);
       }
     });
@@ -191,10 +173,8 @@ export async function photoreviewAll(photoId) {
   return new Promise((resolve) => {
     https.get(`/review/photos/${photoId}`).then((response) => {
       if (response.status === 200) {
-        console.log("포토 리뷰 모아보기 전체 성공", response);
         resolve(response.data);
       } else {
-        console.log("포토 리뷰 모아보기 전체 실패", response);
         resolve(response);
       }
     });
@@ -211,10 +191,8 @@ export async function photoreviewDetail(photoId) {
   return new Promise((resolve) => {
     https.get(`/review/detail/${photoId}`).then((response) => {
       if (response.status === 200) {
-        console.log("포토 리뷰 상세보기 성공", response);
         resolve(response.data);
       } else {
-        console.log("포토 리뷰 상세보기 실패", response);
         resolve(response);
       }
     });
@@ -230,10 +208,8 @@ export async function reviewYet() {
   return new Promise((resolve) => {
     https.get("/order/no-review").then((response) => {
       if (response.status === 200) {
-        console.log("리뷰 안쓴 리스트 성공", response);
         resolve(response.data);
       } else {
-        console.log("리뷰 안쓴 리스트 실패", response);
         resolve(response);
       }
     });
@@ -257,10 +233,8 @@ export async function SearchDeclaration(declarationDto) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("신고 리뷰 조회", response);
           resolve(response.data);
         } else {
-          console.log("신고 리뷰 조회 실패", response);
           resolve(response);
         }
       });
@@ -276,10 +250,8 @@ export async function ReviewDeclaration() {
   return new Promise((resolve) => {
     https.get("/review/reported").then((response) => {
       if (response.status === 200) {
-        console.log("신고 리뷰 조회", response);
         resolve(response.data);
       } else {
-        console.log("신고 리뷰 조회 실패", response);
         resolve(response);
       }
     });
@@ -299,10 +271,8 @@ export async function GetReviewDetail(reviewUid) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("리뷰 디테일 조회", response.data);
           resolve(response.data.data);
         } else {
-          console.log("리뷰 디테일 조회 실패", response);
           resolve(response);
         }
       });
@@ -323,10 +293,8 @@ export async function PutReviewStatus(reportsUid, status) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("신고 상태 변경 성공", response.data);
           resolve(response.data.data);
         } else {
-          console.log("신고 상태 변경 실패", response);
           resolve(response);
         }
       });
@@ -342,10 +310,8 @@ export async function searchReview(reviewDto) {
   return new Promise((resolve) => {
     https.post("/review/searchReview", reviewDto).then((response) => {
       if (response.status === 200) {
-        console.log("조건에 맞는 리뷰 가져오기 성공!", response);
         resolve(response.data.data);
       } else {
-        console.log("조건에 맞는 리뷰 가져오기 실패ㅠㅠ", response);
         resolve(response);
       }
     });

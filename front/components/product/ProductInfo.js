@@ -38,6 +38,7 @@ export default function ProductInfo() {
   const [optionValue, setOptionValue] = useState([]);
   const [options, setOptions] = useState("");
   const [paymentValue, setPaymentValue] = useRecoilState(paymentProduct);
+  const [optionidx, setOptionIdx] = useState(0);
 
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
@@ -180,7 +181,6 @@ export default function ProductInfo() {
       }
     }
   };
-
   return optionList.length !== 0 && product.length !== 0 ? (
     <Container>
       <ImgBox>
@@ -196,11 +196,12 @@ export default function ProductInfo() {
       <InfoBox>
         <TitleBox>
           <div>
-            <p style={{ margin: 0, marginBottom: "0.5rem", fontSize: "2rem" }}>
-              {product.products.name}
-            </p>
+            <span style={{ color: "#aaaaaa" }}>az배송</span>
+            <br></br>
+            <PNameSpan>{product.products.name}</PNameSpan>
           </div>
           <div onClick={changeWish}>
+            <br></br>
             {wish ? (
               <FavoriteIcon color="error" fontSize="large" />
             ) : (
@@ -211,19 +212,10 @@ export default function ProductInfo() {
         <PriceBox>
           <PriceTop>
             {product.products.discountRate === 0 ? null : (
-              <p
-                style={{
-                  margin: 0,
-                  color: "#56A9F1",
-                  marginRight: "0.5rem",
-                  fontSize: "1.1rem ",
-                }}
-              >
-                {product.products.discountRate}%
-              </p>
+              <DiscountRate>{product.products.discountRate}%</DiscountRate>
             )}
 
-            <p style={{ margin: 0 }}>
+            <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
               {(
                 product.products.price -
                 0.01 * product.products.discountRate * product.products.price
@@ -248,10 +240,13 @@ export default function ProductInfo() {
         <OptionBox>
           {optionList.map((option) => (
             <Option>
-              {Object.keys(option) === "x" ? null : (
-                <p style={{ width: "20%" }}>{Object.keys(option)}</p>
+              {Object.keys(option)[0] === "x" ? null : (
+                <p style={{ width: "20%" }}>
+                  {/* {Object.keys(option)} */}
+                  상품선택
+                </p>
               )}
-              {Object.keys(option) === "x" ? null : (
+              {Object.keys(option)[0] === "x" ? null : (
                 <Autocomplete
                   disablePortal
                   id={Object.keys(option)}
@@ -267,30 +262,76 @@ export default function ProductInfo() {
               )}
             </Option>
           ))}
+
           <Options>
             <OptionOne>
-              <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p>
-              {options.length ? (
-                <p>
-                  {options.map((data) => (
-                    <span>{data} </span>
-                  ))}
-                </p>
-              ) : (
-                <p>기본</p>
-              )}
+              <div>
+                {options[0] === "x" ? (
+                  <p>{product.products.name}</p>
+                ) : (
+                  <div>
+                    {options.length ? (
+                      <p>
+                        {options.map((data) => (
+                          <span>{data} </span>
+                        ))}
+                      </p>
+                    ) : (
+                      <p>기본</p>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ flex: 6, display: "flex", flexDirection: "row" }}>
+                  <MinusIcon onClick={minus}></MinusIcon>
+                  <CountDiv>
+                    <p>{count}</p>
+                  </CountDiv>
+                  <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
+                </div>
+                {product.products.discountRate > 0 ? (
+                  <OptionTwo>
+                    <span
+                      style={{
+                        color: "#aaaaaa",
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      {(product.products.price * count).toLocaleString("ko-KR")}
+                      원{" "}
+                    </span>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {(
+                        (product.products.price -
+                          0.01 *
+                            product.products.discountRate *
+                            product.products.price) *
+                        count
+                      ).toLocaleString("ko-KR")}
+                      원
+                    </span>
+                  </OptionTwo>
+                ) : (
+                  <OptionTwo>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {(
+                        (product.products.price -
+                          0.01 *
+                            product.products.discountRate *
+                            product.products.price) *
+                        count
+                      ).toLocaleString("ko-KR")}
+                      원
+                    </span>
+                  </OptionTwo>
+                )}
+              </div>
             </OptionOne>
-            <OptionTwo>
-              <MinusIcon onClick={minus}></MinusIcon>
-              <CountDiv>
-                <p>{count}</p>
-              </CountDiv>
-              <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
-            </OptionTwo>
           </Options>
         </OptionBox>
         <ResultBox>
-          <TitleTag>총 금액</TitleTag>
+          <TitleTag>총 상품금액:</TitleTag>
           <ContentTag>
             {(
               (product.products.price -
@@ -319,11 +360,12 @@ const Container = styled.div`
 const ImgBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 45%;
+  min-height: 30rem;
 `;
 
 const MajorImgBox = styled.div`
-  width: 80%;
+  width: 90%;
 `;
 
 const MajorImg = styled.img`
@@ -348,7 +390,14 @@ const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 50%;
+  width: 55%;
+  min-height: 40rem;
+`;
+
+const PNameSpan = styled.span`
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
 `;
 
 // Title
@@ -358,10 +407,16 @@ const TitleBox = styled.div`
   width: 100%;
 `;
 
-const TitleDiv = styled.div``;
-const IconBox = styled.div``;
 const PriceBox = styled.div`
   margin-top: 1rem;
+`;
+
+const DiscountRate = styled.p`
+  margin: 0;
+  color: #56a9f1;
+  margin-right: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 1000;
 `;
 
 const PriceTop = styled.div`
@@ -373,6 +428,7 @@ const PriceBottom = styled.div`
   display: flex;
   font-size: 1rem;
   color: #aaa;
+  margin-top: 0.5rem;
 `;
 
 // Option
@@ -388,18 +444,22 @@ const Option = styled.div`
 const Options = styled.div`
   display: flex;
   width: 100%;
-  align-items: center;
   margin-top: 0.5rem;
+  justify-content: end;
 `;
 const OptionOne = styled.div`
   display: flex;
-  width: 80%;
-  align-items: center;
+  border: 1px solid rgb(170, 170, 170, 0.4);
+  border-radius: 5px;
+  padding: 1rem;
+  width: 83%;
+  flex-direction: column;
 `;
 const OptionTwo = styled.div`
+  flex: 6;
+  margin-top: 0.8rem;
   display: flex;
-  width: 40%;
-  align-items: center;
+  justify-content: end;
 `;
 const MinusIcon = styled(RemoveOutlinedIcon)`
   border: 1px solid #aaaaaa;
@@ -411,7 +471,7 @@ const CountDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 8rem;
+  width: 5rem;
   margin-top: 0.7rem;
   height: 1.5rem;
   border: 1px solid #aaaaaa;
@@ -429,12 +489,12 @@ const ResultBox = styled.div`
   align-items: center;
 `;
 const TitleTag = styled.div`
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-right: 1rem;
 `;
 const ContentTag = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
+  font-size: 1.7rem;
+  font-weight: 1000;
 `;
 // Button
 
@@ -446,8 +506,8 @@ const ButtonBox = styled.div`
 
 const BasketButton = styled.button`
   border: 1px solid #56a9f1;
-  border-radius: 1rem;
-  width: 40%;
+  border-radius: 5px;
+  width: 45%;
   height: 2.5rem;
   background-color: #fff;
   color: #56a9f1;
@@ -458,8 +518,8 @@ const BasketButton = styled.button`
 
 const BuyButton = styled.button`
   border: none;
-  border-radius: 1rem;
-  width: 40%;
+  border-radius: 5px;
+  width: 45%;
   height: 2.5rem;
   background-color: #56a9f1;
   color: #fff;

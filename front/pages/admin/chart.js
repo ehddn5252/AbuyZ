@@ -33,7 +33,9 @@ export default function Chart() {
   const [startDate, setStartDate] = useState(
     new Date(now.setDate(now.getDate() - 30))
   );
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(
+    new Date(now.setDate(now.getDate() + 31))
+  );
 
   const [day, setday] = useState(1);
   // 각 차트 데이터
@@ -150,7 +152,7 @@ export default function Chart() {
                   />
                 ) : null}
                 {chartType === 4 ? (
-                  <StackChart stackChartData={stackChartData} />
+                  <StackChart stackChartData={stackChartData.big_categories} />
                 ) : null}
               </LargeOnlyChart>
             )}
@@ -189,7 +191,7 @@ export default function Chart() {
             style={{ marginTop: "1rem" }}
           >
             <ChartTitle>장바구니 상품비율</ChartTitle>
-            <StackChart stackChartData={stackChartData} />
+            <StackChart stackChartData={stackChartData.big_categories} />
           </SmallChart2>
         </SmallCategoryBox>
       </CategoryBox2>

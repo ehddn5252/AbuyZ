@@ -11,7 +11,11 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
+// Next.js
+import { useRouter } from "next/router";
+
 export default function AddEditOption(props) {
+  const router = useRouter();
   // 부모 상속 --------------------------------------------
   // 소분류 uid
   const [smallCategoriesUid, setSmallCategoriesUid] = useState(
@@ -254,23 +258,91 @@ export default function AddEditOption(props) {
   const handleAddProduct = () => {
     let formData = new FormData();
 
-    if (
-      smallCategoriesUid === 0 ||
-      name === "" ||
+    if (smallCategoriesUid === 0) {
+      Swal.fire({
+        show: true,
+        title: "카테고리를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (name === "") {
+      Swal.fire({
+        show: true,
+        title: "상품명을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
       (!Number(discountRate) && discountRate !== "0") ||
-      (discountRate !== "0" && discountRate === "") ||
-      (!Number(price) && price !== "0") ||
-      (price !== "0" && price === "") ||
-      (!Number(deliveryFee) && deliveryFee !== "0") ||
-      (deliveryFee !== "0" && discountRate === "") ||
-      brandName === "" ||
-      keywords === "" ||
-      mainImg === null ||
-      descImg === null
+      (discountRate !== "0" && discountRate === "")
     ) {
       Swal.fire({
         show: true,
-        title: "값을 다시 입력해주세요.",
+        title: "할인율을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
+      (!Number(price) && price !== "0") ||
+      (price !== "0" && price === "")
+    ) {
+      Swal.fire({
+        show: true,
+        title: "대표가격을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
+      (!Number(deliveryFee) && deliveryFee !== "0") ||
+      (deliveryFee !== "0" && discountRate === "")
+    ) {
+      Swal.fire({
+        show: true,
+        title: "배송비를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (brandName === "") {
+      Swal.fire({
+        show: true,
+        title: "브랜드를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (keywords === "") {
+      Swal.fire({
+        show: true,
+        title: "키워드를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (mainImg === null) {
+      Swal.fire({
+        show: true,
+        title: "대표이미지를 추가해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (descImg === null) {
+      Swal.fire({
+        show: true,
+        title: "상세이미지를 추가해주세요.",
         position: "top-center",
         icon: "error",
         showConfirmButton: false,
@@ -280,7 +352,7 @@ export default function AddEditOption(props) {
       if (optionName1 === "" || optionValue1 == "") {
         Swal.fire({
           show: true,
-          title: "값을 다시 입력해주세요.",
+          title: "첫 번째 옵션을 다시 입력해주세요.",
           position: "top-center",
           icon: "error",
           showConfirmButton: false,
@@ -292,7 +364,7 @@ export default function AddEditOption(props) {
       ) {
         Swal.fire({
           show: true,
-          title: "값을 다시 입력해주세요.",
+          title: "두 번째 옵션을 다시 입력해주세요.",
           position: "top-center",
           icon: "error",
           showConfirmButton: false,
@@ -304,7 +376,7 @@ export default function AddEditOption(props) {
       ) {
         Swal.fire({
           show: true,
-          title: "값을 다시 입력해주세요.",
+          title: "세 번째 옵션을 다시 입력해주세요.",
           position: "top-center",
           icon: "error",
           showConfirmButton: false,
@@ -328,8 +400,10 @@ export default function AddEditOption(props) {
         );
 
         formData.append("file", mainImg);
-        for (let i = 0; i < extraImg.length; i++) {
-          formData.append("file", extraImg[i]);
+        if (extraImg) {
+          for (let i = 0; i < extraImg.length; i++) {
+            formData.append("file", extraImg[i]);
+          }
         }
         formData.append("descFile", descImg);
 
@@ -351,7 +425,6 @@ export default function AddEditOption(props) {
               icon: "success",
               title: "상세 옵션을 입력해주세요.",
             });
-
             changeShow();
             setOptionTotal(count1 * count2 * count3);
             getStock(res.data.data);
@@ -367,23 +440,91 @@ export default function AddEditOption(props) {
   const handleNotOptionAddProduct = () => {
     let formData = new FormData();
 
-    if (
-      smallCategoriesUid === 0 ||
-      name === "" ||
+    if (smallCategoriesUid === 0) {
+      Swal.fire({
+        show: true,
+        title: "카테고리를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (name === "") {
+      Swal.fire({
+        show: true,
+        title: "상품명을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
       (!Number(discountRate) && discountRate !== "0") ||
-      (discountRate !== "0" && discountRate === "") ||
-      (!Number(price) && price !== "0") ||
-      (price !== "0" && price === "") ||
-      (!Number(deliveryFee) && deliveryFee !== "0") ||
-      (deliveryFee !== "0" && discountRate === "") ||
-      brandName === "" ||
-      keywords === "" ||
-      mainImg === null ||
-      descImg === null
+      (discountRate !== "0" && discountRate === "")
     ) {
       Swal.fire({
         show: true,
-        title: "값을 다시 입력해주세요.",
+        title: "할인율을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
+      (!Number(price) && price !== "0") ||
+      (price !== "0" && price === "")
+    ) {
+      Swal.fire({
+        show: true,
+        title: "대표가격을 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (
+      (!Number(deliveryFee) && deliveryFee !== "0") ||
+      (deliveryFee !== "0" && discountRate === "")
+    ) {
+      Swal.fire({
+        show: true,
+        title: "배송비를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (brandName === "") {
+      Swal.fire({
+        show: true,
+        title: "브랜드를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (keywords === "") {
+      Swal.fire({
+        show: true,
+        title: "키워드를 다시 입력해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (mainImg === null) {
+      Swal.fire({
+        show: true,
+        title: "대표이미지를 추가해주세요.",
+        position: "top-center",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (descImg === null) {
+      Swal.fire({
+        show: true,
+        title: "상세이미지를 추가해주세요.",
         position: "top-center",
         icon: "error",
         showConfirmButton: false,
@@ -392,7 +533,7 @@ export default function AddEditOption(props) {
     } else if (!Number(stock) || stock === 0) {
       Swal.fire({
         show: true,
-        title: "값을 다시 입력해주세요.",
+        title: "재고수량을 다시 입력해주세요.",
         position: "top-center",
         icon: "error",
         showConfirmButton: false,
@@ -437,7 +578,7 @@ export default function AddEditOption(props) {
             showConfirmButton: false,
             timer: 1500,
           });
-          location.reload();
+          router.push("/admin/product");
         })
         .catch((err) => {
           console.log(err, "상품등록에 실패하였습니다.");
@@ -544,7 +685,7 @@ export default function AddEditOption(props) {
             showConfirmButton: false,
             timer: 1500,
           });
-          location.reload();
+          router.push("/admin/product");
         })
         .catch((err) => {
           console.log(err, "재고 수정에 실패하였습니다.");
@@ -572,7 +713,21 @@ export default function AddEditOption(props) {
           fontWeight: "600",
         }}
       >
-        옵션
+        <div>
+          <div style={{ display: "flex", justifyContent: "center" }}>옵션</div>
+          <p
+            style={{
+              margin: 0,
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "0.5rem",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            (체크박스 선택 후 모두 기입)
+          </p>
+        </div>
       </Grid2>
       <Grid2
         container

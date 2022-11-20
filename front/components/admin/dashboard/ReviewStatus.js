@@ -44,7 +44,6 @@ export default function ReviewStatus() {
     loadData();
   }, []);
 
-  // console.log(customerCenters);
   const ServiceListDiv = customerCenters.map((e) => (
     <div key={e.uid}>
       <div style={{ marginLeft: "2rem" }}>

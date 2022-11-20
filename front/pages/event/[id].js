@@ -75,14 +75,15 @@ export default function Detail() {
         <div
           style={{
             display: "flex",
-            justifyContent: "end",
             marginRight: "25rem",
+            justifyContent: "end",
           }}
         >
           <p> 일시:</p>
+          <br></br>
           <p>{currentEvent.start_date.slice(0, 10)}</p>
 
-          <p> - </p>
+          <p> ~ </p>
           <p>{currentEvent.end_date.slice(0, 10)}</p>
         </div>
         <ImgDiv>

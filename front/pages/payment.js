@@ -50,9 +50,9 @@ export default function Payment() {
 
   const KakaoPay = () => {
     if (paymentValue === "") {
-      PaymentKakao();
-    } else {
       BasketKakao();
+    } else {
+      PaymentKakao();
     }
   };
 
@@ -77,6 +77,9 @@ export default function Payment() {
           approval_url: "https://k7e201.p.ssafy.io/payment",
           fail_url: "https://k7e201.p.ssafy.io/payment",
           cancel_url: "https://k7e201.p.ssafy.io/payment",
+          // approval_url: "http://localhost:3000/payment",
+          // fail_url: "http://localhost:3000/payment",
+          // cancel_url: "http://localhost:3000/payment",
         },
         {
           headers,
@@ -121,7 +124,6 @@ export default function Payment() {
   const PayOne = async () => {
     const optionValues = {};
     const options = paymentValue[0].inventoryDto.productOptions;
-    console.log(Object.values(options[0])[0]);
     for (let i = 0; i < options.length; i++) {
       optionValues[Object.keys(options[i])[0]] = Object.values(options[i])[0];
     }
@@ -152,10 +154,8 @@ export default function Payment() {
     }
   };
 
-  console.log(basketValue);
   // 장바구니 상품 결제 준비
   const BasketKakao = async () => {
-    console.log("장바구니 상품 결제 준비");
     const headers = {
       Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -172,9 +172,12 @@ export default function Payment() {
           total_amount: basketValue.totalPrice,
           vat_amount: 200,
           tax_free_amount: basketValue.feePrice,
-          approval_url: "http://localhost:3000/payment",
-          fail_url: "http://localhost:3000/payment",
-          cancel_url: "http://localhost:3000/payment",
+          approval_url: "https://k7e201.p.ssafy.io/payment",
+          fail_url: "https://k7e201.p.ssafy.io/payment",
+          cancel_url: "https://k7e201.p.ssafy.io/payment",
+          // approval_url: "http://localhost:3000/payment",
+          // fail_url: "http://localhost:3000/payment",
+          // cancel_url: "http://localhost:3000/payment",
         },
         {
           headers,
@@ -189,9 +192,8 @@ export default function Payment() {
   };
   // 장바구니 상품 결제 승인
   const ApprovalBasket = async (pg_token) => {
-    console.log("장바구니 상품 결제 승인");
     const headers = {
-      Authorization: "KakaoAK 5d9841cfb2c42933f5314a40436472ff",
+      Authorization: "KakaoAK 8f5016aaaee43d4b35b159c439e8d99c",
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     };
     await axios
@@ -305,4 +307,5 @@ const Button = styled.button`
   width: 7rem;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
 `;

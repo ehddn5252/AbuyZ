@@ -37,7 +37,7 @@ public class ProductKeywordServiceImpl implements ProductKeywordService{
         List<ProductDto> newL = new ArrayList<>();
         // 여기에 옵션 리스트, 사진, 키워드,
         for(int i=0;i<l.size();++i){
-            newL.add(l.get(i).get().toDto());
+            newL.add(Products.setProductDtoReview(l.get(i).get()));
         }
         return newL;
     }

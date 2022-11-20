@@ -9,10 +9,8 @@ export async function modifyEvent(eventDto, eventnumber) {
       .put(`/event/${eventnumber}`, eventDto)
       .then((response) => {
         if (response.status === 200) {
-          console.log("이벤트 수정 성공", response);
           resolve(response.data);
         } else {
-          console.log("이벤트 수정 실패", response);
           resolve(response);
         }
       })
@@ -29,10 +27,8 @@ export async function inquireEvent() {
   return new Promise((resolve) => {
     https.get("/event/all").then((response) => {
       if (response.status === 200) {
-        console.log("이벤트 조회 성공", response.data);
         resolve(response.data);
       } else {
-        console.log("이벤트 조회 실패", response);
         resolve(response);
       }
     });
@@ -50,11 +46,9 @@ export async function delEvent(eventnumber) {
       .delete(`/event/${eventnumber}`)
       .then((response) => {
         if (response.status === 200) {
-          console.log("이벤트 삭제 성공", response);
           resolve(response.data);
           location.reload();
         } else {
-          console.log("이벤트 삭제 실패", response);
           resolve(response);
         }
       })
@@ -71,10 +65,8 @@ export async function detailEvent(eventNum) {
       .get(`/event/detail/${eventNum}`)
       .then((response) => {
         if (response.status === 200) {
-          console.log("이벤트 상세 조회 성공", response);
           resolve(response.data);
         } else {
-          console.log("이벤트 상세조회 실패", response);
           resolve(response);
         }
       })
@@ -91,10 +83,8 @@ export async function inquireallEvent() {
   return new Promise((resolve) => {
     https.get("/event").then((response) => {
       if (response.status === 200) {
-        console.log("이벤트 조회 성공", response.data);
         resolve(response.data);
       } else {
-        console.log("이벤트 조회 실패", response);
         resolve(response);
       }
     });

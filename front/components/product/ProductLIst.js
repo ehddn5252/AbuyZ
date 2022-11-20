@@ -66,6 +66,7 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewNum - b.reviewNum;
     });
+    sortable.reverse();
     return sortable;
   }
 
@@ -76,6 +77,7 @@ export default function ProductLIst({ productList }) {
     sortable = arr.sort(function (a, b) {
       return a.reviewRate - b.reviewRate;
     });
+    sortable.reverse();
     return sortable;
   }
 

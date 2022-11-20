@@ -50,9 +50,11 @@ export default function DoughnutData({ doughnutChartData }) {
         </ResultText>
       </TotalDiv>
       <TotalDiv style={{ backgroundColor: "#c6f29a" }}>
-        <TitleText>인기 카테고리 매출액</TitleText>
+        <TitleText>인기 카테고리 매출액(원)</TitleText>
         <ResultText style={{ color: "#2daf43" }}>
-          {(bestValue / 1000).toLocaleString("ko-KR")}K
+          {bestValue.toLocaleString("ko-KR", {
+            maximumFractionDigits: 0,
+          })}
         </ResultText>
       </TotalDiv>
     </Container>
