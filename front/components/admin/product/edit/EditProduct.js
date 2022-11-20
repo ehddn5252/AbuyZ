@@ -122,7 +122,7 @@ export default function EditProduct({ productInfo }) {
   const [noOptionUid, setNoOptionUid] = useState(0);
 
   const getDetail = async () => {
-    const tmp = await productDetail(772);
+    const tmp = await productDetail(productInfo.uid);
 
     setMainImg(tmp.data.products.repImg);
     setExtraImg(tmp.data.productPictureDto);
@@ -132,6 +132,7 @@ export default function EditProduct({ productInfo }) {
 
   const getStock = async () => {
     const sub = await getStockInventory(productInfo.uid);
+
     let sub_c = 0;
     if (sub[0]) {
       if (Object.keys(sub[0].productOptions[0]).includes("x")) {
