@@ -1,5 +1,9 @@
 # AbuyZ - A부터 Z까지 모든 상품을 구매하다
 
+
+
+[TOC]
+
 ![ABUYZ_LOGO](README.assets/ABUYZ_LOGO.png)
 
 </br>
@@ -196,9 +200,7 @@ AbuyZ와 함께 재밌는 쇼핑을 시작하세요.
 
 ## ✔ 프로젝트 파일 구조
 
----
-
-### Frontend
+### FRONT-END
 
 ```
 front
@@ -403,9 +405,9 @@ backend
 
 ## 🎵 AbuyZ 서비스 화면
 
-## FO
+### FO
 
-### 메인화면
+#### 메인화면
 
 - 이벤트 캐루젤
 - 카테고리 별 이동
@@ -413,20 +415,20 @@ backend
 
 ![fo_main](README.assets/fo_main.gif)
 
-### 로그인
+#### 로그인
 
 * 아이디와 비밀번호 입력 후 로그인 가능
 * 카카오 로그인도 가능
 
 ![fo_login](README.assets/fo_login.gif)
 
-### 회원가입
+#### 회원가입
 
 * 이메일, 비밀번호, 비밀번호 확인, 이름, 휴대폰 번호, 주소, 성별, 닉네임, 생년월일 기입 후 회원 가입
 
 ![fo_signup](README.assets/fo_signup.gif)
 
-### 마이페이지
+#### 마이페이지
 
 - 상단
   - 처리중인 문의: 아직 답변 받지 못한 문의 내역 개수 조회
@@ -448,7 +450,7 @@ backend
 
 ![fo_mypage](README.assets/fo_mypage.gif)
 
-### 상품 검색
+#### 상품검색
 
 * 검색창을 통한 상품 검색 가능
 * 카테고리 별 상품 조회 가능
@@ -460,7 +462,7 @@ backend
 
 ![fo_search](README.assets/fo_search.gif)
 
-### 상품 상세 조회
+#### 상품 상세 조회
 
 * 상품 이미지, 이름, 옵션, 수량, 장바구니, 구매하기 가능
 
@@ -472,7 +474,7 @@ backend
 
 ![fo_detail](README.assets/fo_detail.gif)
 
-### 장바구니
+#### 장바구니
 
 - 장바구니에 담은 상품 조회
 
@@ -480,7 +482,7 @@ backend
 
 ![fo_basket](README.assets/fo_basket.gif)
 
-### 고객센터
+#### 고갠센터
 
 - FAQ: AbuyZ의 공지 사항
 - 1:1 문의하기: 상품, 환불, 배송, 사이트, 주문 결제 카테고리 선택해서 문의 가능
@@ -489,7 +491,7 @@ backend
 
 ![fo_customercenter](README.assets/fo_customercenter.gif)
 
-### 이벤트
+#### 이벤트
 
 - 이벤트 조회 가능
 - 해당 이벤트에서 진행중인 쿠폰 발급 가능 - 쿠폰 발급 일자에 맞춰 쿠폰 발급
@@ -501,21 +503,21 @@ backend
 
 ## BO
 
-### 로그인
+#### 로그인
 
 - admin 계정으로 로그인하면 바로 abuyz 셀러 오피스로 이동
 - 대시보드: 오늘의 할일/ 일자별 요약/ 최근 문의/ 최근 리뷰가 보여짐
 
 ![bo_login](README.assets/bo_login.gif)
 
-### 상품 조회
+#### 상품 조회
 
 - 카테고리, 검색어, 판매상태, 기간으로 상품 조회
 - 상품 속성 수정 가능
 
 ![bo_product_get](README.assets/bo_product_get.gif)
 
-### 상품 등록
+#### 상품 등록
 
 - 카테고리, 상품 이름, 할인율, 가격, 배송비, 브랜드, 키워드, 대표이미지, 추가이미지, 상세이미지 추가
 - 옵션 선택/ 옵션 미선택 가능
@@ -524,31 +526,31 @@ backend
 
 ![bo_product_register](README.assets/bo_product_register.gif)
 
-### 문의 관리
+#### 문의관리
 
 - FO 페이지 1:1 문의에서 받은 문의에 대한 조회, 답변 가능
 
 ![bo_customercenter](README.assets/bo_customercenter.gif)
 
-### 신고관리
+#### 신고관리
 
 - 상품 상세 조회 리뷰 중 신고 된 리뷰에 대한 관리 
 
 ![bo_review_report](README.assets/bo_review_report.gif)
 
-### 리뷰 관리
+#### 리뷰관리
 
 - 상품에 대해 소비자가 작성한 리뷰에 대한 대댓글 작성 가능
 
 ![bo_review](README.assets/bo_review.gif)
 
-### FAQ
+#### FAQ
 
 - FO 페이지의 고객센터 - FAQ에 보여질 공지사항 CRUD 
 
 ![bo_faq](README.assets/bo_faq.gif)
 
-### 이벤트
+#### 이벤트
 
 - 이벤트 조회
 - 이벤트 수정 및 삭제
@@ -556,14 +558,14 @@ backend
 
 ![bo_event](README.assets/bo_event.gif)
 
-### 쿠폰
+#### 쿠폰
 
 - 쿠폰 조회
 - 쿠폰 등록, 수정 가능
 
 ![bo_coupon](README.assets/bo_coupon.gif)
 
-### 통계
+#### 통계
 
 - 조회 기간을 설정하여 그 기간에 맞게 커스텀 된 총 매출현황, 요일별 결제금액, 카테고리별 판매비율, 상품별 결제금액, 장바구니 상품 비율 차트 조회 가능
 
