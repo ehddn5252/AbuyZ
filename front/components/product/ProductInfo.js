@@ -43,7 +43,6 @@ export default function ProductInfo() {
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
-    console.log("니야니", res.data);
     setProduct(res.data);
     if (res.data.isWished) {
       setWish(res.data.isWished.wished);
