@@ -42,6 +42,7 @@ export default function ProductInfo() {
   // 상품 데이터 가져오기
   const getProduct = async (id) => {
     const res = await productDetail(id);
+    console.log(res.data);
     setProduct(res.data);
     if (res.data.isWished) {
       setWish(res.data.isWished.wished);
@@ -196,11 +197,20 @@ export default function ProductInfo() {
       <InfoBox>
         <TitleBox>
           <div>
-            <p style={{ margin: 0, marginBottom: "0.5rem", fontSize: "2rem" }}>
+            <span style={{ color: "#aaaaaa" }}>az배송</span>
+            <br></br>
+            <span
+              style={{
+                margin: 0,
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+              }}
+            >
               {product.products.name}
-            </p>
+            </span>
           </div>
           <div onClick={changeWish}>
+            <br></br>
             {wish ? (
               <FavoriteIcon color="error" fontSize="large" />
             ) : (
@@ -216,14 +226,15 @@ export default function ProductInfo() {
                   margin: 0,
                   color: "#56A9F1",
                   marginRight: "0.5rem",
-                  fontSize: "1.1rem ",
+                  fontSize: "1.4rem ",
+                  fontWeight: "1000",
                 }}
               >
                 {product.products.discountRate}%
               </p>
             )}
 
-            <p style={{ margin: 0 }}>
+            <p style={{ margin: 0, fontSize: "1.6rem", fontWeight: "1000" }}>
               {(
                 product.products.price -
                 0.01 * product.products.discountRate * product.products.price
@@ -249,7 +260,10 @@ export default function ProductInfo() {
           {optionList.map((option) => (
             <Option>
               {Object.keys(option) === "x" ? null : (
-                <p style={{ width: "20%" }}>{Object.keys(option)}</p>
+                <p style={{ width: "20%" }}>
+                  {/* {Object.keys(option)} */}
+                  상품선택
+                </p>
               )}
               {Object.keys(option) === "x" ? null : (
                 <Autocomplete
@@ -267,8 +281,56 @@ export default function ProductInfo() {
               )}
             </Option>
           ))}
+
           <Options>
-            <OptionOne>
+            <div
+              style={{
+                display: "flex",
+                backgroundColor: "rgb(170,170,170, 0.2)",
+                borderRadius: "5px",
+                padding: "1rem",
+                width: "83%",
+                flexDirection: "column",
+              }}
+            >
+              {/* <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p> */}
+              <div>
+                {options.length ? (
+                  <p>
+                    {options.map((data) => (
+                      <span>{data} </span>
+                    ))}
+                  </p>
+                ) : (
+                  <p>기본</p>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                <div style={{ flex: 8, display: "flex", flexDirection: "row" }}>
+                  <MinusIcon onClick={minus}></MinusIcon>
+                  <CountDiv>
+                    <p>{count}</p>
+                  </CountDiv>
+                  <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
+                </div>
+                <div style={{ flex: 4, marginTop: "0.8rem" }}>
+                  <span>메롱</span>
+                </div>
+              </div>
+              {/* <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                <MinusIcon onClick={minus}></MinusIcon>
+                <CountDiv>
+                  <p>{count}</p>
+                </CountDiv>
+                <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
+              </div> */}
+            </div>
+            {/* <OptionOne>
               <p style={{ width: "20%", marginRight: "1.1rem" }}>선택옵션</p>
               {options.length ? (
                 <p>
@@ -286,11 +348,11 @@ export default function ProductInfo() {
                 <p>{count}</p>
               </CountDiv>
               <PlusIcon onClick={() => setCount(count + 1)}></PlusIcon>
-            </OptionTwo>
+            </OptionTwo> */}
           </Options>
         </OptionBox>
         <ResultBox>
-          <TitleTag>총 금액</TitleTag>
+          <TitleTag>총 상품금액:</TitleTag>
           <ContentTag>
             {(
               (product.products.price -
@@ -319,11 +381,12 @@ const Container = styled.div`
 const ImgBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 45%;
+  min-height: 30rem;
 `;
 
 const MajorImgBox = styled.div`
-  width: 80%;
+  width: 90%;
 `;
 
 const MajorImg = styled.img`
@@ -348,7 +411,8 @@ const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 50%;
+  width: 55%;
+  min-height: 40rem;
 `;
 
 // Title
@@ -373,6 +437,7 @@ const PriceBottom = styled.div`
   display: flex;
   font-size: 1rem;
   color: #aaa;
+  margin-top: 0.5rem;
 `;
 
 // Option
@@ -388,18 +453,20 @@ const Option = styled.div`
 const Options = styled.div`
   display: flex;
   width: 100%;
-  align-items: center;
   margin-top: 0.5rem;
+  justify-content: end;
 `;
 const OptionOne = styled.div`
   display: flex;
   width: 80%;
   align-items: center;
+  border: 1px solid black;
 `;
 const OptionTwo = styled.div`
   display: flex;
   width: 40%;
   align-items: center;
+  border: 1px solid black;
 `;
 const MinusIcon = styled(RemoveOutlinedIcon)`
   border: 1px solid #aaaaaa;
@@ -411,7 +478,7 @@ const CountDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 8rem;
+  width: 5rem;
   margin-top: 0.7rem;
   height: 1.5rem;
   border: 1px solid #aaaaaa;
@@ -429,12 +496,12 @@ const ResultBox = styled.div`
   align-items: center;
 `;
 const TitleTag = styled.div`
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-right: 1rem;
 `;
 const ContentTag = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
+  font-size: 1.7rem;
+  font-weight: 1000;
 `;
 // Button
 
@@ -446,8 +513,8 @@ const ButtonBox = styled.div`
 
 const BasketButton = styled.button`
   border: 1px solid #56a9f1;
-  border-radius: 1rem;
-  width: 40%;
+  border-radius: 5px;
+  width: 45%;
   height: 2.5rem;
   background-color: #fff;
   color: #56a9f1;
@@ -458,8 +525,8 @@ const BasketButton = styled.button`
 
 const BuyButton = styled.button`
   border: none;
-  border-radius: 1rem;
-  width: 40%;
+  border-radius: 5px;
+  width: 45%;
   height: 2.5rem;
   background-color: #56a9f1;
   color: #fff;
