@@ -11,7 +11,11 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
+// Next.js
+import { useRouter } from "next/router";
+
 export default function AddEditOption(props) {
+  const router = useRouter();
   // 부모 상속 --------------------------------------------
   // 소분류 uid
   const [smallCategoriesUid, setSmallCategoriesUid] = useState(
@@ -574,7 +578,7 @@ export default function AddEditOption(props) {
             showConfirmButton: false,
             timer: 1500,
           });
-          location.reload();
+          router.push("/admin/product");
         })
         .catch((err) => {
           console.log(err, "상품등록에 실패하였습니다.");
@@ -681,7 +685,7 @@ export default function AddEditOption(props) {
             showConfirmButton: false,
             timer: 1500,
           });
-          location.reload();
+          router.push("/admin/product");
         })
         .catch((err) => {
           console.log(err, "재고 수정에 실패하였습니다.");
