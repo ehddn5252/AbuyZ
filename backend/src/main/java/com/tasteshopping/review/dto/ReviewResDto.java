@@ -20,7 +20,6 @@ public class ReviewResDto {
     private String email; // 유저 이메일
     private Date date;
     private String imgUrl;
-//    private boolean report;  // 신고여부
     private List<HashMap<String,String>> options; // 옵션
     private int likeCount; //좋아요개수
     private boolean like; //로그인한 당사자가 좋아요했는지

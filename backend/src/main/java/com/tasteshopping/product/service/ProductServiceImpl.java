@@ -382,12 +382,6 @@ public class ProductServiceImpl implements ProductService {
         } else {
             ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
             // 상품 옵션 리스트 생성 완료
-            int maxUid = 1;
-            Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
-            if (maxOptionOptional.isPresent()) {
-                maxUid = maxOptionOptional.get();
-            }
-
             int start = 0;
             ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
             for (String key : options.keySet()) {
@@ -396,7 +390,6 @@ public class ProductServiceImpl implements ProductService {
                 optionValueUidOuterList.add(new LinkedList<String>());
                 LinkedList<String> l = optionValueUidOuterList.get(start);
                 for (int i = 0; i < sList.length; ++i) {
-                    maxUid += 1; // 다음 uid 를 저장해야한다.
                     l.add(Integer.toString(productOptionService.createProductOptionList(product, key, sList[i].trim()).getUid()));
                 }
                 optionValueUidOuterList.set(start, l);
@@ -592,30 +585,6 @@ public class ProductServiceImpl implements ProductService {
         return newL;
     }
 
-    @Override
-    public List<ProductDto> getProductByPrice(Integer priceUid) {
-
-        int start = 0;
-        int end = 50000;
-
-        if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 30001;
-            end = 100000;
-        } else if (priceUid == Price.UNDER_300000.ordinal()) {
-            start = 100001;
-            end = 300000;
-        } else if (priceUid == Price.OVER_300000.ordinal()) {
-            start = 300001;
-            end = Integer.MAX_VALUE;
-        }
-
-        List<Optional<Products>> l = productRepository.findByPriceBetween(start, end);
-        List<ProductDto> newL = new ArrayList<>();
-        for (int i = 0; i < l.size(); ++i) {
-            newL.add(l.get(i).get().toDto());
-        }
-        return newL;
-    }
 
     @Override
     public List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid,
@@ -664,16 +633,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return fromDtoAddReview(newL);
-    }
-
-    @Override
-    public ProductDto getOneProduct(Integer productsUid) {
-        Optional<Products> p = productRepository.findById(productsUid);
-        ProductDto productDto = null;
-        if (p.isPresent()) {
-            productDto = p.get().toDto();
-        }
-        return productDto;
     }
 
     @Override

@@ -25,7 +25,6 @@ import java.util.*;
 public class ProductController {
 
     private final ProductService productService;
-
     private final ProductKeywordService productKeywordService;
 
     @GetMapping("/random")

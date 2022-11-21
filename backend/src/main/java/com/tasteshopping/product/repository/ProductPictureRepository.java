@@ -14,7 +14,6 @@ import java.util.Optional;
 @Repository
 public interface ProductPictureRepository extends JpaRepository<ProductPictures,Integer> {
 
-//    List<Optional<ProductPictures>> findByProductsUid(int productsUid);
     @Transactional
     @Modifying
     @Query(value=" delete from product_pictures where products_uid=:productsUid",nativeQuery = true)
