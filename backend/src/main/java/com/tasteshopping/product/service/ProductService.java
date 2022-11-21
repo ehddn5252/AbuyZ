@@ -28,7 +28,6 @@ public interface ProductService {
     @Transactional
     void productStatusSetting();
 
-    // 재고 방식 -> 수정 요함
     void modifyProductOption(ProductCreateDto productCreateDto);
 
     void modifyProductPicture(ProductCreateDto productCreateDto, MultipartFile[] multipartFiles);
@@ -43,13 +42,9 @@ public interface ProductService {
 
     List<ProductDto> getProductByDeliveryFee(Integer deliveryFeeUid);
 
-    List<ProductDto> getProductByPrice(Integer priceUid);
-
     List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid, Integer deliveryFeeUid);
 
     List<ProductDto> getProductBySmallCategoryAndPrice(Integer smallCategoriesUid, Integer priceUid);
-
-    public ProductDto getOneProduct(Integer productsUid);
 
     ProductDetailDto getDetailProduct(String email, int productsUid);
 
