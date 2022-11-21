@@ -382,12 +382,6 @@ public class ProductServiceImpl implements ProductService {
         } else {
             ArrayList<LinkedList<String>> optionValueUidOuterList = new ArrayList<>();
             // 상품 옵션 리스트 생성 완료
-            int maxUid = 1;
-            Optional<Integer> maxOptionOptional = productOptionRepository.getMaxUid();
-            if (maxOptionOptional.isPresent()) {
-                maxUid = maxOptionOptional.get();
-            }
-
             int start = 0;
             ArrayList<Integer> optionKeyValueNum = new ArrayList<>();
             for (String key : options.keySet()) {
@@ -396,7 +390,6 @@ public class ProductServiceImpl implements ProductService {
                 optionValueUidOuterList.add(new LinkedList<String>());
                 LinkedList<String> l = optionValueUidOuterList.get(start);
                 for (int i = 0; i < sList.length; ++i) {
-                    maxUid += 1; // 다음 uid 를 저장해야한다.
                     l.add(Integer.toString(productOptionService.createProductOptionList(product, key, sList[i].trim()).getUid()));
                 }
                 optionValueUidOuterList.set(start, l);
