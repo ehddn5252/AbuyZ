@@ -592,30 +592,6 @@ public class ProductServiceImpl implements ProductService {
         return newL;
     }
 
-    @Override
-    public List<ProductDto> getProductByPrice(Integer priceUid) {
-
-        int start = 0;
-        int end = 50000;
-
-        if (priceUid == Price.UNDER_100000.ordinal()) {
-            start = 30001;
-            end = 100000;
-        } else if (priceUid == Price.UNDER_300000.ordinal()) {
-            start = 100001;
-            end = 300000;
-        } else if (priceUid == Price.OVER_300000.ordinal()) {
-            start = 300001;
-            end = Integer.MAX_VALUE;
-        }
-
-        List<Optional<Products>> l = productRepository.findByPriceBetween(start, end);
-        List<ProductDto> newL = new ArrayList<>();
-        for (int i = 0; i < l.size(); ++i) {
-            newL.add(l.get(i).get().toDto());
-        }
-        return newL;
-    }
 
     @Override
     public List<ProductDto> getProductBySmallCategoryAndDeliveryFee(Integer smallCategoriesUid,
@@ -664,16 +640,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return fromDtoAddReview(newL);
-    }
-
-    @Override
-    public ProductDto getOneProduct(Integer productsUid) {
-        Optional<Products> p = productRepository.findById(productsUid);
-        ProductDto productDto = null;
-        if (p.isPresent()) {
-            productDto = p.get().toDto();
-        }
-        return productDto;
     }
 
     @Override
