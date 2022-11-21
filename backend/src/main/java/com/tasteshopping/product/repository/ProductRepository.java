@@ -43,8 +43,6 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
     @Query(value = "select p from Products p  join fetch SmallCategories s on p.smallCategory=s where s.uid=:categoriesUid and p.price between :start and :end ")
     Optional<List<Products>> findByPriceBetweenAndSmallCategory(int categoriesUid, int start, int end);
 
-
-//    @Query(" select p from Products p  join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch Inventories i on i.product=p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
     List<Products> findAllFetchJoin();
     @Query(" select distinct(p) from Products p left join Reviews r on r.product = p join fetch SmallCategories s on p.smallCategory=s join fetch BigCategories bc on s.bigCategory=bc join fetch Brands b on p.brand =b")
@@ -53,15 +51,6 @@ public interface ProductRepository extends JpaRepository<Products, Integer> {
 
     @Query(value = "select p from Products p join fetch ProductPictures pp on p=pp.product where p.uid=:productsUid")
     Optional<Products> findProductDetailByProductsUid(int productsUid);
-
-//    @EntityGraph(attributePaths ={"productPictures"})
-
-
-//    @Query("select distinct(p) from Products p " +
-//            "join fetch Inventories i on p=i.product " +
-//            "join fetch BigCategories bc on p.smallCategory.bigCategory=bc " +
-//            "join fetch Brands b on p.brand = b")
-//    List<Products> boFiltering();
 
 
     @Query("select distinct(p) from Products p " +
