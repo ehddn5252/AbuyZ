@@ -52,7 +52,7 @@ export default function ProductBundleItem({
               </IconDiv>
 
               <div style={{ flex: "1", marginTop: "0.5rem" }}>
-                <ProductImg src={e.inventoryDto.productDto.descriptionImg} />
+                <ProductImg src={e.inventoryDto.productDto.repImg} />
               </div>
 
               {Object.keys(e.inventoryDto.productOptions[0])[0] !== "x" ? (
